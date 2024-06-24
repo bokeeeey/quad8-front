@@ -13,6 +13,7 @@ interface StarProps {
   onMouseOut: () => void;
   usage?: 'edit' | 'show';
 }
+
 interface RatingProps {
   rating: number;
   onRatingChange?: (rating: number) => void;

@@ -29,6 +29,7 @@ export default function ReviewModalTest() {
   };
 
   const PRODUCT_DATA = {
+    productId: 19384,
     orderId: 12345,
     option: '옵션입니다',
     productImgUrl: '',

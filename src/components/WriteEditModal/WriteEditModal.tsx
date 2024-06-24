@@ -13,8 +13,9 @@ import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI'
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
+import { postProductReviews } from '@/api/productReviewAPI';
 import styles from './WriteEditModal.module.scss';
-import FeedbackToggle from './FeedbackToggle';
+// import FeedbackToggle from './FeedbackToggle';
 
 const cn = classNames.bind(styles);
 
@@ -27,6 +28,7 @@ interface WriteEditModalProps {
 }
 
 interface ProductDataType {
+  productId: number;
   productImgUrl: string;
   productName: string;
   orderId: number;
@@ -47,13 +49,16 @@ export default function WriteEditModal({
   const queryClient = useQueryClient();
 
   const [deletedImageId, setDeleteImageId] = useState<number[]>([]);
-
-  // const [feedbackValue, setFeedbackValue] = useState<string[]>(['', '', '']);
-  // const [typeFeelingFeedback, setTypeFeelingFeedback] = useState<'good' | 'bad' | null>(null);
-  // const [colorFeedback, setColorFeedback] = useState<'good' | 'bad' | null>(null);
-  // const [soundFeedback, setSoundFeedback] = useState<'good' | 'bad' | null>(null);
+  const [clickedFeedback, setClickedFeedback] = useState<Array<number>>([0, 0, 0]);
+  const [rating, setRating] = useState<number>(0);
 
   const isCustom = reviewType === 'customReview' || reviewType === 'customReviewEdit';
+
+  const handleClickFeedback = (optionIndex: number, feedbackIndex: number) => {
+    const updatedClickedFeedback = [...clickedFeedback];
+    updatedClickedFeedback[optionIndex] = feedbackIndex;
+    setClickedFeedback(updatedClickedFeedback);
+  };
 
   const handleSaveDeletedImageId = (id: number) => {
     setDeleteImageId((prevIds) => [...prevIds, id]);
@@ -105,9 +110,26 @@ export default function WriteEditModal({
     },
   });
 
+  const { mutate: postProductReviewMutation } = useMutation({
+    mutationFn: ({ productId, formData }: { productId: number; formData: FormData }) =>
+      postProductReviews({ productId, formData }),
+    onSuccess: (res) => {
+      if (res.status === 'SUCCESS') {
+        // onSuccessReview();
+        // queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+        toast.success('리뷰 등록이 완료되었습니다.');
+      } else {
+        toast.error('데이터를 불러오는 중 오류가 발생하였습니다.');
+      }
+    },
+    onError: () => {
+      toast.error('리뷰 등록 중 오류가 발생했습니다.');
+    },
+  });
+
   const registers = {
     title: register('title', {
-      required: true,
+      required: isCustom && true,
     }),
     content: register('content', {
       minLength: { value: 20, message: '최소 20자 이상 입력해주세요' },
@@ -154,21 +176,27 @@ export default function WriteEditModal({
 
     // 3. 커스텀 외 상품 리뷰 수정
     if (reviewType === 'otherReview') {
-      //   const postDto = {
-      //     title: payload.title,
-      //     content: payload.content,
-      //     deletedFileList: deletedImageId,
-      //   };
-      //   fetchFormData.append('postDto', JSON.stringify(postDto));
+      const createReviewRequest = {
+        orderId: productData?.orderId,
+        content: payload.content,
+        option1: clickedFeedback[0] + 1,
+        option2: clickedFeedback[1] + 1,
+        option3: clickedFeedback[2] + 1,
+        score: rating,
+      };
+      fetchFormData.append('createReviewRequest', JSON.stringify(createReviewRequest));
 
-      //   if (payload.files && payload.files.length > 0) {
-      //     for (let i = 0; i < payload.files.length; i += 1) {
-      //       fetchFormData.append('files', payload.files[i] as File);
-      //     }
-      //   }
-      //   return putEditPostMutation({ id: editCustomData.id, formData: fetchFormData });
-      // }
-      console.log(payload);
+      console.log(createReviewRequest);
+
+      if (payload.files && payload.files.length > 0) {
+        for (let i = 0; i < payload.files.length; i += 1) {
+          fetchFormData.append('reviewImgs', payload.files[i] as File);
+        }
+      }
+
+      if (productData) {
+        return postProductReviewMutation({ productId: productData?.productId, formData: fetchFormData });
+      }
     }
 
     return null;
@@ -218,11 +246,26 @@ export default function WriteEditModal({
           <div className={cn('product-review-wrapper')}>
             <div className={cn('rating-review-wrapper')}>
               <h1 id={cn('rating-label')}>상품을 사용해 보셨나요?</h1>
-              <Rating rating={0} />
+              <Rating rating={rating} onRatingChange={setRating} usage='edit' />
             </div>
             <div className={cn('select-option-wrapper')}>
-              {OPTIONS.map((option) => (
-                <FeedbackToggle label={option} key={option} feedbacks={REVIEW_KEYWORD[productType][option]} />
+              {OPTIONS.map((option, optionIndex) => (
+                <div key={option} className={cn('feedback-container')}>
+                  <h1 id={cn('label')}>{option}</h1>
+                  <div className={cn('option-wrapper')}>
+                    {REVIEW_KEYWORD[productType][option].map((feedback, feedbackIndex) => (
+                      <div
+                        key={feedback}
+                        className={cn(
+                          clickedFeedback[optionIndex] === feedbackIndex ? 'option-clicked' : 'option-not-clicked',
+                        )}
+                        onClick={() => handleClickFeedback(optionIndex, feedbackIndex)}
+                      >
+                        {feedback}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
