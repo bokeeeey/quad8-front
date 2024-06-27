@@ -1,15 +1,16 @@
 'use client';
 
-import { useState } from 'react';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
+import { useState } from 'react';
 
-import { calculateTimeDifference } from '@/libs/calculateDate';
 import { Modal } from '@/components';
+import { calculateTimeDifference } from '@/libs/calculateDate';
 import type { CommunityPostCardDataType } from '@/types/CommunityTypes';
+import { IMAGE_BLUR } from '@/constants/blurImage';
 import AuthorCard from './AuthorCard';
-import { PostInteractions } from './PostInteractions';
 import PostCardDetailModal from './PostCardDetailModal';
+import { PostInteractions } from './PostInteractions';
 
 import styles from './PostCard.module.scss';
 
@@ -23,7 +24,7 @@ interface PostCardProps {
 export default function PostCard({ cardData, isMine }: PostCardProps) {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
-  const { id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage } = cardData;
+  const { id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage, isLiked } = cardData;
 
   const ApdatedDate = new Date(updateAt);
   const timeToString = calculateTimeDifference(ApdatedDate);
@@ -46,11 +47,13 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
           fill
           sizes='(max-width: 1200px) 100%'
           priority
+          placeholder={IMAGE_BLUR.placeholder}
+          blurDataURL={IMAGE_BLUR.blurDataURL}
         />
         {Array.isArray(thumbnail) && <p className={cn('image-count')}>{thumbnail.length}</p>}
       </div>
       <p className={cn('title')}>{title}</p>
-      <PostInteractions likeCount={likeCount} commentCount={commentCount} />
+      <PostInteractions cardId={id} likeCount={likeCount} commentCount={commentCount} isLiked={isLiked} />
       <Modal isOpen={isPostModalOpen} onClose={handleClosePostModal}>
         <PostCardDetailModal cardId={id} onClose={handleClosePostModal} isMine={isMine} />
       </Modal>

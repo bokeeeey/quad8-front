@@ -6,6 +6,7 @@ import classNames from 'classnames/bind';
 import { UseFormRegister, FieldValues, UseFormSetValue } from 'react-hook-form';
 
 import { CameraIcon, DeleteIcon } from '@/public/index';
+import { IMAGE_BLUR } from '@/constants/blurImage';
 import styles from './ImageInput.module.scss';
 
 const cn = classNames.bind(styles);
@@ -72,20 +73,27 @@ export default function ImageInput({ register, setValue, editCustomImages, onSav
       </div>
       <div>
         <div className={cn('input-wrapper')}>
-          {selectedImageUrls &&
-            selectedImageUrls.map((imageUrl, index) => (
-              <div key={imageUrl} className={cn('image-wrapper')}>
-                <Image alt='선택된 이미지' src={imageUrl} fill className={cn('image')} />
-                <div className={cn('delete-image-icon')} onClick={(e) => handleClickDeleteImage(e, index)}>
-                  <DeleteIcon fill='#ffffff' width={42} height={42} />
-                </div>
-                {index === 0 && (
-                  <div className={cn('main-image-tag')}>
-                    <span className={cn('main-tag-text')}>대표</span>
-                  </div>
-                )}
+          {selectedImageUrls?.map((imageUrl, index) => (
+            <div key={imageUrl} className={cn('image-wrapper')}>
+              <Image
+                alt='선택된 이미지'
+                src={imageUrl}
+                fill
+                className={cn('image')}
+                priority
+                placeholder={IMAGE_BLUR.placeholder}
+                blurDataURL={IMAGE_BLUR.blurDataURL}
+              />
+              <div className={cn('delete-image-icon')} onClick={(e) => handleClickDeleteImage(e, index)}>
+                <DeleteIcon fill='#ffffff' width={32} height={32} />
               </div>
-            ))}
+              {index === 0 && (
+                <div className={cn('main-image-tag')}>
+                  <span className={cn('main-tag-text')}>대표</span>
+                </div>
+              )}
+            </div>
+          ))}
           {selectedImageUrls.length < 4 && (
             <label htmlFor='imageInput' className={cn('label-input')}>
               <CameraIcon fill='#999999' width={46} height={40} />

@@ -1,4 +1,4 @@
-import { CustomKeyboardSwitchTypes, CustomKeyboardPointKeyType } from '@/types/CustomKeyboardTypes';
+import type { CustomKeyboardSwitchTypes, CustomKeyboardPointKeyType } from '@/types/CustomKeyboardTypes';
 
 export interface CommunityParamsType {
   sort: string;
@@ -41,8 +41,8 @@ export interface CommentType {
 
 export interface PostCardDetailModalCustomKeyboardType {
   productId: number;
-  type: 'full' | 'tkl';
-  texture: 'metal' | 'plastic';
+  type: string;
+  texture: string;
   boardColor: string;
   switchType: CustomKeyboardSwitchTypes;
   baseKeyColor: string;
