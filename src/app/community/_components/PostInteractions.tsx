@@ -21,7 +21,7 @@ export function PostInteractions({ cardId, likeCount, commentCount, isLiked }: P
   // };
 
   return (
-    <div className={cn('container')}>
+    <div className={cn('container')} onClick={(e) => e.stopPropagation()}>
       <div className={cn('icon-and-count')}>
         <HeartButton id={cardId} isLiked={isLiked} usage='community' likeCount={likeCount} />
       </div>
