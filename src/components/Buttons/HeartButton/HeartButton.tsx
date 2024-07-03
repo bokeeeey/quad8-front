@@ -4,7 +4,7 @@ import { deleteCommunityLikes, deleteProductLikes, postCommunityLikes, postProdu
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { HeartIcon } from '@/public/index';
 import { Users } from '@/types/userType';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { MouseEvent, useState } from 'react';
 import styles from './HeartButton.module.scss';
@@ -26,10 +26,11 @@ interface LikeMutationProps {
 const MAX_COUNT = 99;
 
 export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButtonProps) {
+  const queryClient = useQueryClient();
+
   const [isChecked, setIsChecked] = useState(isLiked);
   const [newLikeCount, setNewLikeCount] = useState(likeCount || 0);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
-
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
   });
@@ -68,6 +69,13 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         },
       },
     );
+
+    queryClient.invalidateQueries({
+      queryKey: ['postCardsList'],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ['postData', 34],
+    });
   };
 
   return (
