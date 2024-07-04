@@ -72,7 +72,7 @@ export default function WriteEditModal({
     watch,
     formState: { isValid },
   } = useForm<FieldValues>({
-    mode: 'onChange',
+    mode: 'onTouched',
     defaultValues: {
       title: editCustomData?.title || '',
       content: editCustomData?.content || '',
@@ -295,13 +295,19 @@ export default function WriteEditModal({
         />
       </div>
       <div className={cn('button-wrapper')}>
-        <Button
-          type='submit'
-          disabled={rating === 0}
-          backgroundColor={isValid && rating > 0 ? 'background-primary' : 'background-gray-40'}
-        >
-          등록
-        </Button>
+        {isCustom ? (
+          <Button type='submit' backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}>
+            등록
+          </Button>
+        ) : (
+          <Button
+            type='submit'
+            disabled={isCustom ? false : rating === 0}
+            backgroundColor={isValid && rating > 0 ? 'background-primary' : 'background-gray-40'}
+          >
+            등록
+          </Button>
+        )}
       </div>
     </form>
   );
