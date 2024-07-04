@@ -29,11 +29,9 @@ interface CartModalProps {
   optionData: OptionDataType[];
   optionPrice: number;
   isOpenConfirmDialog: boolean;
-  isOpenAlertDialog: boolean;
   isOpenLoginModal: boolean;
   onClose: () => void;
   changeConfirmDialog: (value: boolean) => void;
-  changeAlertDialog: (value: boolean) => void;
   changeLoginModal: (value: boolean) => void;
   updateOptionPrice: (value: number) => void;
 }
@@ -60,11 +58,9 @@ export default function CartModal({
   optionData,
   optionPrice,
   isOpenConfirmDialog,
-  isOpenAlertDialog,
   isOpenLoginModal,
   onClose,
   changeConfirmDialog,
-  changeAlertDialog,
   changeLoginModal,
   updateOptionPrice,
 }: CartModalProps) {
@@ -74,7 +70,6 @@ export default function CartModal({
 
   const orderWrapperRef = useRef<HTMLDivElement>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [isDeleteCompleted, setIsDeleteCompleted] = useState(true);
 
   const {
     mutate: createCustomKeybaord,
@@ -226,24 +221,17 @@ export default function CartModal({
 
   const handleClickDeleteConfirm = () => {
     if (!deleteId) {
-      setIsDeleteCompleted(false);
-      changeAlertDialog(true);
+      toast.error('삭제할 제품을 찾지 못하였습니다');
       return;
     }
     deleteOption(deleteId);
     const deleteOptionCost = optionData.find((element) => element.id === deleteId)?.price;
     if (!deleteOptionCost) {
-      setIsDeleteCompleted(false);
-      changeAlertDialog(true);
+      toast.error('삭제할 제품을 찾지 못하였습니다');
       return;
     }
     updateOptionPrice(-deleteOptionCost);
-    setIsDeleteCompleted(true);
-    changeAlertDialog(true);
-  };
-
-  const handleCloseAlert = () => {
-    changeAlertDialog(false);
+    toast.success('상품을 삭제하였습니다');
   };
 
   const handleClickDeleteOption = (id: number) => {
@@ -310,14 +298,6 @@ export default function CartModal({
         type='confirm'
         buttonText={{ left: '닫기', right: '삭제하기' }}
         onClick={{ left: handleClickCloseConfirm, right: handleClickDeleteConfirm }}
-      />
-      <Dialog
-        message={isDeleteCompleted ? '삭제되었습니다' : '해당 옵션을 삭제할 수 없습니다'}
-        isOpen={isOpenAlertDialog}
-        iconType={isDeleteCompleted ? 'accept' : 'warn'}
-        type='alert'
-        buttonText='닫기'
-        onClick={handleCloseAlert}
       />
       <SignInModal isOpen={isOpenLoginModal} onClose={() => changeLoginModal(false)} />
     </div>

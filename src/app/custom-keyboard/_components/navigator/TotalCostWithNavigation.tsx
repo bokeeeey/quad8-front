@@ -82,9 +82,8 @@ export default function TotalCostWithNavigation() {
   const [isOpenCartModal, setIsOpenCartModal] = useState(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false);
-  const [isOpenAlertDialog, setIsOpenAlertDialog] = useState(false);
 
-  const isOpenAnyModalOnCartModal = isOpenAlertDialog || isOpenConfirmDialog || isOpenLoginModal;
+  const isOpenAnyModalOnCartModal = isOpenConfirmDialog || isOpenLoginModal;
 
   const [optionPrice, setOptionPrice] = useState(0);
 
@@ -147,10 +146,6 @@ export default function TotalCostWithNavigation() {
 
   const handleConfirmDialog = (value: boolean) => {
     setIsOpenConfirmDialog(value);
-  };
-
-  const handleAlertDialog = (value: boolean) => {
-    setIsOpenAlertDialog(value);
   };
 
   const handleOpenCartModal = () => {
@@ -239,12 +234,10 @@ export default function TotalCostWithNavigation() {
           optionData={optionData}
           optionPrice={optionPrice}
           isOpenConfirmDialog={isOpenConfirmDialog}
-          isOpenAlertDialog={isOpenAlertDialog}
           isOpenLoginModal={isOpenLoginModal}
           onClose={handleCloseCartMoal}
           updateOptionPrice={updateOptionPrice}
           changeConfirmDialog={handleConfirmDialog}
-          changeAlertDialog={handleAlertDialog}
           changeLoginModal={setIsOpenLoginModal}
         />
       </Modal>
