@@ -189,7 +189,7 @@ export default function WriteEditModal({
       };
       fetchFormData.append('createReviewRequest', JSON.stringify(createReviewRequest));
 
-      console.log(createReviewRequest);
+      // console.log(createReviewRequest);
 
       if (payload.files && payload.files.length > 0) {
         for (let i = 0; i < payload.files.length; i += 1) {

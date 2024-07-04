@@ -6,7 +6,7 @@ import { HeartIcon } from '@/public/index';
 import { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -69,9 +69,24 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         },
       },
     );
-
-    queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
   };
+
+  const displayLikeCount = () => {
+    if (!likeCount) {
+      return '0';
+    }
+
+    if (likeCount > MAX_COUNT) {
+      return '99+';
+    }
+
+    return likeCount.toString();
+  };
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+    queryClient.invalidateQueries({ queryKey: ['postData', id] });
+  }, [newLikeCount, id, queryClient, isChecked]);
 
   return (
     <>
@@ -79,9 +94,13 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         className={cn('count-wrap', { circle: usage === 'detail', 'red-circle': isChecked })}
         onClick={handleClickButton}
       >
-        <HeartIcon className={cn('heart', usage === 'detail' && 'white-stroke', isChecked && 'red-heart')} />
-        {usage === 'community' && (
-          <span className={cn('like-count')}>{newLikeCount > MAX_COUNT ? '99+' : newLikeCount}</span>
+        {usage === 'community' ? (
+          <div className={cn('count-wrap')}>
+            <HeartIcon className={cn('heart', isLiked && 'red-heart')} />
+            <span className={cn('like-count')}>{displayLikeCount()}</span>
+          </div>
+        ) : (
+          <HeartIcon className={cn('heart', usage === 'detail' && 'white-stroke', isChecked && 'red-heart')} />
         )}
       </div>
 
