@@ -21,9 +21,16 @@ interface ImageInputProps {
   setValue: UseFormSetValue<FieldValues>;
   editCustomImages?: CustomImagesType[];
   onSaveDeletedImageId?: (id: number) => void;
+  isCustom: boolean;
 }
 
-export default function ImageInput({ register, setValue, editCustomImages, onSaveDeletedImageId }: ImageInputProps) {
+export default function ImageInput({
+  register,
+  setValue,
+  editCustomImages,
+  onSaveDeletedImageId,
+  isCustom,
+}: ImageInputProps) {
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [selectedImageFiles, setSelectedImageFiles] = useState<File[]>([]);
 
@@ -105,7 +112,7 @@ export default function ImageInput({ register, setValue, editCustomImages, onSav
             id='imageInput'
             {...register('files', {
               onChange: handleChangeImage,
-              validate: () => selectedImageUrls.length > 0 && true,
+              ...(isCustom && { validate: () => selectedImageUrls.length > 0 && true }),
             })}
           />
         </div>

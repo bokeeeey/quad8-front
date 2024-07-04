@@ -16,7 +16,6 @@ import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { postProductReviews } from '@/api/productReviewAPI';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import styles from './WriteEditModal.module.scss';
-// import FeedbackToggle from './FeedbackToggle';
 
 const cn = classNames.bind(styles);
 
@@ -135,6 +134,7 @@ export default function WriteEditModal({
       required: isCustom && true,
     }),
     content: register('content', {
+      required: true,
       minLength: { value: 20, message: '최소 20자 이상 입력해주세요' },
     }),
   };
@@ -287,6 +287,7 @@ export default function WriteEditModal({
           setValue={setValue}
           editCustomImages={editCustomData?.reviewImages}
           onSaveDeletedImageId={handleSaveDeletedImageId}
+          isCustom={isCustom}
         />
         <TextField
           label='내용'
@@ -297,7 +298,11 @@ export default function WriteEditModal({
         />
       </div>
       <div className={cn('button-wrapper')}>
-        <Button type='submit' backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}>
+        <Button
+          type='submit'
+          disabled={rating === 0}
+          backgroundColor={isValid && rating > 0 ? 'background-primary' : 'background-gray-40'}
+        >
           등록
         </Button>
       </div>

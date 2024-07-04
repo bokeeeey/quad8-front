@@ -4,12 +4,20 @@ import { Button, Modal } from '@/components';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
+// import { useQuery } from '@tanstack/react-query';
+// import { getOrdersData } from '@/api/orderAPI';
 import styles from './ReviewModalTest.module.scss';
 
 const cn = classNames.bind(styles);
 
 export default function ReviewModalTest() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // const { data } = useQuery({
+  //   queryKey: ['orderList'],
+  //   queryFn: getOrdersData,
+  // });
+  // console.log(data);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -25,7 +33,7 @@ export default function ReviewModalTest() {
   };
 
   const handleSuccessReview = () => {
-    console.log('리뷰 작성');
+    // console.log('리뷰 작성');
   };
 
   const PRODUCT_DATA = {
