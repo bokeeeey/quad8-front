@@ -5,13 +5,13 @@ import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 
-import { getPaymentItemData } from '@/api/orderAPI';
 import { Button, Dropdown, ItemOverview } from '@/components';
 import { Input, Label } from '@/components/parts';
 import { ROUTER } from '@/constants/route';
 import type { OrderItem } from '@/types/OrderTypes';
 import type { OrderDetailData } from '@/types/paymentTypes';
 
+import { formatNumber } from '@/libs';
 import styles from './CheckoutForm.module.scss';
 
 const cn = classNames.bind(styles);
@@ -19,24 +19,31 @@ const cn = classNames.bind(styles);
 const DELIVERY_OPTIONS = ['부재시 문앞에 놓아주세요.', '경비실에 맡겨 주세요', '직접 입력'];
 
 export default function CheckoutForm() {
-  const queryClient = useQueryClient();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const orderId = queryClient.getQueryData<string>(['orderId']);
-  const { data: paymentItemData } = useQuery<{ data: OrderDetailData | null }>({
+  const { data: paymentItemData } = useQuery<{ data: OrderDetailData }>({
     queryKey: ['paymentItemData'],
-    queryFn: () => getPaymentItemData(orderId),
   });
+
+  console.log(orderId);
 
   const orderDetailData = paymentItemData?.data ?? null;
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  // if (!orderDetailData) {
+  //   router.back();
+  // }
+
+  const formattedTotalPrice = orderDetailData?.totalPrice ? formatNumber(orderDetailData.totalPrice) : 0;
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(ROUTER.MY_PAGE.CHECKOUT_SUCCESS);
   };
 
   return (
-    <form className={cn('checkout-form')} onSubmit={onSubmit}>
+    <form className={cn('checkout-form')} onSubmit={handleSubmit}>
       <article className={cn('form')}>
         <div className={cn('item-box')}>
           <h1>주문 상품</h1>
@@ -48,7 +55,7 @@ export default function CheckoutForm() {
 
         <div className={cn('price-box')}>
           <p>총 주문금액</p>
-          <p className={cn('price')}>{orderDetailData?.totalPrice}원</p>
+          <p className={cn('price')}>{formattedTotalPrice} 원</p>
         </div>
 
         <div className={cn('address-section')}>
