@@ -56,6 +56,7 @@ export default function Comment({
       queryClient.invalidateQueries({
         queryKey: ['postData', cardId],
       });
+      queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
     },
     onError: () => {
       toast.error('댓글 삭제 중 오류가 발생하였습니다.');

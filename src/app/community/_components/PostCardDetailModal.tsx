@@ -64,11 +64,14 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
       queryClient.invalidateQueries({
         queryKey: ['MyCustomReview'],
       });
+      queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+      refetch();
     },
     onError: () => {
       toast.error('게시글 삭제 중 오류가 발생하였습니다.');
     },
   });
+
   useEffect(() => {
     const handleSubmitComment = () => {
       if (commentRef) {

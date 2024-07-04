@@ -70,12 +70,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
       },
     );
 
-    queryClient.invalidateQueries({
-      queryKey: ['postCardsList'],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ['postData', 34],
-    });
+    queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
   };
 
   return (
