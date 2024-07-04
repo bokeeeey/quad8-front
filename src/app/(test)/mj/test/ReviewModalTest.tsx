@@ -4,20 +4,12 @@ import { Button, Modal } from '@/components';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
-// import { useQuery } from '@tanstack/react-query';
-// import { getOrdersData } from '@/api/orderAPI';
 import styles from './ReviewModalTest.module.scss';
 
 const cn = classNames.bind(styles);
 
 export default function ReviewModalTest() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const { data } = useQuery({
-  //   queryKey: ['orderList'],
-  //   queryFn: getOrdersData,
-  // });
-  // console.log(data);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -33,15 +25,15 @@ export default function ReviewModalTest() {
   };
 
   const handleSuccessReview = () => {
-    // console.log('리뷰 작성');
+    setIsModalOpen(false);
   };
 
   const PRODUCT_DATA = {
-    productId: 19384,
-    orderId: 12345,
-    option: '옵션입니다',
-    productImgUrl: '',
-    productName: '상품 이름',
+    productId: 125,
+    orderId: 188,
+    option: '바이올렛축',
+    productImgUrl: 'https://cdn.imweb.me/thumbnail/20220404/12007f769b366.jpg',
+    productName: '게이트론 무보강 스테빌라이저(스크류/나사 체결)',
   };
 
   return (

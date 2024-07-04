@@ -32,7 +32,7 @@ export const postProductReviews = async ({ productId, formData }: { productId: n
   }
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/community/update/${productId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/reviews?productId=${productId}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

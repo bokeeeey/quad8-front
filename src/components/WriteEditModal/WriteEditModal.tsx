@@ -117,8 +117,7 @@ export default function WriteEditModal({
       postProductReviews({ productId, formData }),
     onSuccess: (res) => {
       if (res.status === 'SUCCESS') {
-        // onSuccessReview();
-        // queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+        onSuccessReview();
         toast.success('리뷰 등록이 완료되었습니다.');
       } else {
         toast.error('데이터를 불러오는 중 오류가 발생하였습니다.');
@@ -189,12 +188,10 @@ export default function WriteEditModal({
       };
       fetchFormData.append('createReviewRequest', JSON.stringify(createReviewRequest));
 
-      // console.log(createReviewRequest);
-
       if (payload.files && payload.files.length > 0) {
-        for (let i = 0; i < payload.files.length; i += 1) {
-          fetchFormData.append('reviewImgs', payload.files[i] as File);
-        }
+        payload.files.forEach((file: File) => {
+          fetchFormData.append('reviewImgs', file as File);
+        });
       }
 
       if (productData) {
