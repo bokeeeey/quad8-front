@@ -25,7 +25,7 @@ export default function ReviewModalTest() {
   };
 
   const handleSuccessReview = () => {
-    // console.log('리뷰 작성');
+    console.log('리뷰 작성');
   };
 
   const PRODUCT_DATA = {
@@ -55,7 +55,7 @@ export default function ReviewModalTest() {
         button
       </Button>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <WriteEditModal reviewType='customReview' onSuccessReview={handleSuccessReview} productData={PRODUCT_DATA} />
+        <WriteEditModal reviewType='otherReview' onSuccessReview={handleSuccessReview} productData={PRODUCT_DATA} />
       </Modal>
     </div>
   );
