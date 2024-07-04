@@ -32,7 +32,7 @@ interface CartModalProps {
   isOpenAlertDialog: boolean;
   isOpenLoginModal: boolean;
   onClose: () => void;
-  changeConfrimDialog: (value: boolean) => void;
+  changeConfirmDialog: (value: boolean) => void;
   changeAlertDialog: (value: boolean) => void;
   changeLoginModal: (value: boolean) => void;
   updateOptionPrice: (value: number) => void;
@@ -63,7 +63,7 @@ export default function CartModal({
   isOpenAlertDialog,
   isOpenLoginModal,
   onClose,
-  changeConfrimDialog,
+  changeConfirmDialog,
   changeAlertDialog,
   changeLoginModal,
   updateOptionPrice,
@@ -74,11 +74,11 @@ export default function CartModal({
 
   const orderWrapperRef = useRef<HTMLDivElement>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [isDeleteCompleted, setIsDeletedCompleted] = useState(true);
+  const [isDeleteCompleted, setIsDeleteCompleted] = useState(true);
 
   const {
     mutate: createCustomKeybaord,
-    isSuccess: createMutationSucess,
+    isSuccess: createMutationSuccess,
     isPending: createMutationPending,
   } = useMutation({
     mutationFn: (data: CustomKeyboardAPITypes) => postCustomKeyboardOrder(data),
@@ -221,24 +221,24 @@ export default function CartModal({
   };
 
   const handleClickCloseConfirm = () => {
-    changeConfrimDialog(false);
+    changeConfirmDialog(false);
   };
 
   const handleClickDeleteConfirm = () => {
     if (!deleteId) {
-      setIsDeletedCompleted(false);
+      setIsDeleteCompleted(false);
       changeAlertDialog(true);
       return;
     }
     deleteOption(deleteId);
     const deleteOptionCost = optionData.find((element) => element.id === deleteId)?.price;
     if (!deleteOptionCost) {
-      setIsDeletedCompleted(false);
+      setIsDeleteCompleted(false);
       changeAlertDialog(true);
       return;
     }
     updateOptionPrice(-deleteOptionCost);
-    setIsDeletedCompleted(true);
+    setIsDeleteCompleted(true);
     changeAlertDialog(true);
   };
 
@@ -248,10 +248,10 @@ export default function CartModal({
 
   const handleClickDeleteOption = (id: number) => {
     setDeleteId(id);
-    changeConfrimDialog(true);
+    changeConfirmDialog(true);
   };
 
-  const isDisabled = createMutationPending || createMutationSucess || updateMutationPending || updateMutationSuccess;
+  const isDisabled = createMutationPending || createMutationSuccess || updateMutationPending || updateMutationSuccess;
 
   return (
     <div className={cn('wrapper', { overflow: isOverFlow })}>

@@ -49,11 +49,18 @@ export default function Keyboard() {
 
   const handleClickKey = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
+
+    if (currentStep !== 'keyCap' || pointKeyType !== '내 맘대로 바꾸기') {
+      return;
+    }
+
     const key = e.object.name as CustomKeyboardKeyTypes;
+
     if (key === focusKey) {
       updateFocusKey(null);
       return;
     }
+
     updateFocusKey(key);
     updateCurrentPointKeyColor(individualColor[key] ?? baseKeyColor);
   };
@@ -71,10 +78,7 @@ export default function Keyboard() {
   };
 
   return (
-    <group
-      scale={groupScale}
-      onClick={(e) => currentStep === 'keyCap' && pointKeyType === '내 맘대로 바꾸기' && handleClickKey(e)}
-    >
+    <group scale={groupScale} onClick={handleClickKey}>
       <mesh
         geometry={nodes.Cube.geometry}
         material={materials.Cube}

@@ -243,7 +243,7 @@ export default function TotalCostWithNavigation() {
           isOpenLoginModal={isOpenLoginModal}
           onClose={handleCloseCartMoal}
           updateOptionPrice={updateOptionPrice}
-          changeConfrimDialog={handleConfirmDialog}
+          changeConfirmDialog={handleConfirmDialog}
           changeAlertDialog={handleAlertDialog}
           changeLoginModal={setIsOpenLoginModal}
         />
