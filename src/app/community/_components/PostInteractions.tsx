@@ -16,10 +16,6 @@ interface PostInteractionsProps {
 const MAX_COUNT = 99;
 
 export function PostInteractions({ cardId, likeCount, commentCount, isLiked }: PostInteractionsProps) {
-  // const handleContainerClick = (e: MouseEvent<HTMLDivElement>) => {
-  //   e.stopPropagation();
-  // };
-
   return (
     <div className={cn('container')} onClick={(e) => e.stopPropagation()}>
       <div className={cn('icon-and-count')}>
