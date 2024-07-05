@@ -1,14 +1,14 @@
 @mixin flex-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 100%;
 }
 
 .header {
+  display: flex;
   position: sticky;
-  z-index: $zindex-fixed + 1;
+  z-index: $zindex-tooltip + 1;
   top: 0;
+  align-items: center;
   height: 8rem;
   border-bottom: 0.1rem solid $gray-10;
   background-color: $white;
@@ -24,10 +24,8 @@
   @include flex-wrapper;
   @include poppins-18-600;
 
+  justify-content: space-between;
   width: 100%;
-  min-width: 112rem;
-  max-width: 192rem;
-  margin: 0 auto;
   padding: 0 12rem;
   color: $gray-50;
   gap: 4rem;
@@ -40,31 +38,19 @@
   .right-wrapper {
     @include flex-wrapper;
 
-    flex-grow: 2;
-    width: 100%;
-    max-width: 64.303rem;
-    gap: 2rem;
+    gap: 4rem;
 
-    .logo {
-      flex-grow: 1;
-
-      .logo-icon {
-        fill: $primary;
-      }
+    .logo-icon {
+      fill: $primary;
     }
 
     .button-wrapper {
       @include flex-wrapper;
 
       gap: 4rem;
-      flex-grow: 2;
 
       .current-page {
         color: $primary;
-      }
-
-      .button {
-        flex-shrink: 0;
       }
     }
   }
@@ -72,17 +58,10 @@
   .left-wrapper {
     @include flex-wrapper;
 
-    gap: 4rem;
-    flex-grow: 1;
+    gap: 2rem;
 
-    .status-wrapper {
-      @include flex-wrapper;
-
-      gap: 2rem;
-
-      .user-icon {
-        height: 3.1rem;
-      }
+    .user-icon {
+      height: 3.1rem;
     }
 
     .user-white {

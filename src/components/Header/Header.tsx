@@ -76,13 +76,11 @@ export default function Header() {
           </div>
           <div className={cn('left-wrapper')}>
             <SearchBox isBlack={isBlack} />
-            <div className={cn('status-wrapper')}>
-              {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
-              <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
-                <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={31} height={31} />
-              </button>
-              <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
-            </div>
+            {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
+            <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
+              <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={31} height={31} />
+            </button>
+            <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
           </div>
         </div>
       </header>

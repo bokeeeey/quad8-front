@@ -7,13 +7,13 @@ import TextTickerSection from './_components/TextTicker/TextTickerSection';
 
 export default async function Home() {
   return (
-    <>
+    <div>
       <Hero />
       <CustomGuide />
       <TextTickerSection />
       <KeydeukPick />
       <KeydeukBest />
       <Banner />
-    </>
+    </div>
   );
 }

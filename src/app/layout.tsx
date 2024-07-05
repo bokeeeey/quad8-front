@@ -31,9 +31,9 @@ export default async function RootLayout({
         <Providers>
           <HydrationBoundary state={dehydrate(queryClient)}>
             <Header />
-            {children}
-            <Footer />
           </HydrationBoundary>
+          {children}
+          <Footer />
         </Providers>
       </body>
     </html>
