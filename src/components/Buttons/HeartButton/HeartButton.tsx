@@ -88,6 +88,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
     queryClient.invalidateQueries({ queryKey: ['postData', id] });
+    queryClient.invalidateQueries({ queryKey: ['MyCustomReview'] });
   }, [newLikeCount, id, queryClient, isChecked]);
 
   return (
