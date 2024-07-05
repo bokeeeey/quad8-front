@@ -2,24 +2,21 @@
 
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 
 import { Button, Dropdown, ItemOverview } from '@/components';
 import { Input, Label } from '@/components/parts';
-import { ROUTER } from '@/constants/route';
 import { formatNumber } from '@/libs';
 import type { OrderItem } from '@/types/OrderTypes';
 import type { OrderDetailData } from '@/types/paymentTypes';
+import CheckoutAddress from './parts/CheckoutAddress';
 
 import styles from './CheckoutForm.module.scss';
 
 const cn = classNames.bind(styles);
 
-const DELIVERY_OPTIONS = ['부재시 문앞에 놓아주세요.', '경비실에 맡겨 주세요', '직접 입력'];
-
 export default function CheckoutForm() {
-  const router = useRouter();
+  // const router = useRouter();
 
   const { data: paymentItemData } = useQuery<{ data: OrderDetailData }>({
     queryKey: ['paymentItemData'],
@@ -31,7 +28,12 @@ export default function CheckoutForm() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(ROUTER.MY_PAGE.CHECKOUT_SUCCESS);
+
+    const formData = new FormData(e.currentTarget);
+    const values = Object.fromEntries(formData.entries());
+    console.log(values);
+
+    // router.push(ROUTER.MY_PAGE.CHECKOUT_SUCCESS);
   };
 
   return (
@@ -50,29 +52,7 @@ export default function CheckoutForm() {
           <p className={cn('price')}>{formattedTotalPrice} 원</p>
         </div>
 
-        <div className={cn('address-section')}>
-          <h1>배송 주소</h1>
-          <div className={cn('address-box')}>
-            <div className={cn('address-wrap')}>
-              <div className={cn('address-key')}>
-                <p>받는분</p>
-                <p>연락처</p>
-                <p>배송 주소</p>
-              </div>
-              <div className={cn('address-value')}>
-                <p>{shippingAddressResponse?.name}</p>
-                <p>{shippingAddressResponse?.phone}</p>
-                <p>
-                  {shippingAddressResponse?.address} {shippingAddressResponse?.detailAddress}
-                </p>
-              </div>
-            </div>
-            <Button type='button' paddingVertical={8} width={72} radius={4}>
-              변경
-            </Button>
-          </div>
-          <Dropdown options={DELIVERY_OPTIONS} sizeVariant='sm' placeholder='배송 요청 사항을 선택해 주세요.' />
-        </div>
+        {shippingAddressResponse && <CheckoutAddress item={shippingAddressResponse} />}
 
         <div className={cn('discount-box')}>
           <h1>할인 혜택</h1>
@@ -123,7 +103,7 @@ export default function CheckoutForm() {
           <h1>결제 상세</h1>
           <p className={cn('checkout-method')}>
             <span className={cn('method-title')}>신용카드</span>
-            {formattedTotalPrice}원
+            {formattedTotalPrice} 원
           </p>
         </div>
       </article>
