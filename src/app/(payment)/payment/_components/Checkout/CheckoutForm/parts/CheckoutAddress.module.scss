@@ -10,6 +10,16 @@
 .address-section {
   @include default-layout;
 
+  .address-title-box {
+    display: flex;
+    justify-content: space-between;
+
+    .address-title-button {
+      color: $gray-40;
+      @include pretendard-16-500;
+    }
+  }
+
   .address-box {
     display: flex;
     align-items: center;
