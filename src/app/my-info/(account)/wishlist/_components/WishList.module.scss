@@ -1,0 +1,15 @@
+.item-list {
+  @include flex-column(2rem);
+}
+
+.check-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button-area {
+  @include flex-center;
+
+  gap: 1.2rem;
+}

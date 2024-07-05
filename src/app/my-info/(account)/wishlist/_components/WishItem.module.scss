@@ -1,0 +1,71 @@
+.select-item-input {
+  display: none;
+}
+
+.select-item-input:checked + .select-item-label {
+  background-color: $primary;
+}
+
+.select-item-label {
+  position: relative;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 0.2rem;
+  background-color: $gray-40;
+}
+
+.select-item-label::before {
+  content: '';
+  position: absolute;
+  top: 0.1rem;
+  left: 0.5rem;
+  width: 0.6rem;
+  height: 1rem;
+  transform: rotate(45deg) scale(0.8);
+  border: solid $white;
+  border-width: 0 0.3rem 0.3rem 0;
+  border-radius: 2%;
+}
+
+.item-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-area {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.img {
+  position: relative;
+  width: 10.4rem;
+  height: 10.4rem;
+  overflow: hidden;
+  border: 0.1rem solid $gray-7;
+  border-radius: 0.8rem;
+
+  & img {
+    object-fit: cover;
+  }
+}
+
+.name {
+  @include pretendard-16-600;
+
+  color: $black;
+}
+
+.price {
+  @include pretendard-14-400;
+
+  color: $black;
+}
+
+.cart-delete {
+  @include flex-center;
+
+  gap: 2rem;
+}
