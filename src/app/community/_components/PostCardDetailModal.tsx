@@ -150,9 +150,32 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
       queryKey: ['postData', cardId],
     });
   };
+
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
   };
+
+  const handleClickReport = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
+  const MY_POPOVER_OPTION = [
+    {
+      label: '삭제하기',
+      onClick: handleClickDeleteAlertButon,
+    },
+    {
+      label: '수정하기',
+      onClick: handleClickEditModalButton,
+    },
+  ];
+
+  const OTHERS_POPOVER_OPTION = [
+    {
+      label: '신고하기',
+      onClick: handleClickReport,
+    },
+  ];
 
   return (
     <div className={cn('container')} ref={containerRef}>
@@ -209,6 +232,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
               onClickPopOver={handleClickPopup}
               onClosePopOver={handleClosePopOver}
               isOpenPopOver={isPopupOpen}
+              popOverOptions={isMine ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
             />
             <CustomOption wrapperRef={containerRef} customData={custom} />
             <p className={cn('content')}>{content}</p>
