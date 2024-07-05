@@ -4,9 +4,9 @@ import { deleteCommunityLikes, deleteProductLikes, postCommunityLikes, postProdu
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { HeartIcon } from '@/public/index';
 import { Users } from '@/types/userType';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -26,11 +26,12 @@ interface LikeMutationProps {
 const MAX_COUNT = 99;
 
 export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButtonProps) {
+  const queryClient = useQueryClient();
+
   const [isChecked, setIsChecked] = useState(isLiked);
   const [animate, setAnimate] = useState(false);
   const [newLikeCount, setNewLikeCount] = useState(likeCount || 0);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
-
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
   });
@@ -72,6 +73,23 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
     );
   };
 
+  const displayLikeCount = () => {
+    if (!likeCount) {
+      return '0';
+    }
+
+    if (likeCount > MAX_COUNT) {
+      return '99+';
+    }
+
+    return likeCount.toString();
+  };
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+    queryClient.invalidateQueries({ queryKey: ['postData', id] });
+  }, [newLikeCount, id, queryClient, isChecked]);
+
   return (
     <>
       <div
@@ -82,9 +100,13 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         })}
         onClick={handleClickButton}
       >
-        <HeartIcon className={cn('heart', usage === 'detail' && 'white-stroke', isChecked && 'red-heart')} />
-        {usage === 'community' && (
-          <span className={cn('like-count')}>{newLikeCount > MAX_COUNT ? '99+' : newLikeCount}</span>
+        {usage === 'community' ? (
+          <div className={cn('count-wrap')}>
+            <HeartIcon className={cn('heart', isLiked && 'red-heart')} />
+            <span className={cn('like-count')}>{displayLikeCount()}</span>
+          </div>
+        ) : (
+          <HeartIcon className={cn('heart', usage === 'detail' && 'white-stroke', isChecked && 'red-heart')} />
         )}
       </div>
 

@@ -188,6 +188,8 @@ export default function WriteEditModal({
       };
       fetchFormData.append('createReviewRequest', JSON.stringify(createReviewRequest));
 
+      // console.log(createReviewRequest);
+
       if (payload.files && payload.files.length > 0) {
         payload.files.forEach((file: File) => {
           fetchFormData.append('reviewImgs', file as File);
