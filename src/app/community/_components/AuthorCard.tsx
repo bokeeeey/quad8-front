@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -18,11 +18,22 @@ interface AuthorCardProps {
   nickname: string;
   dateText: string;
   userImage: string | null;
+  onClickPopOver: (e: MouseEvent<SVGElement>) => void;
+  onClosePopOver: () => void;
+  isOpenPopOver: boolean;
 }
 
-export default function AuthorCard({ id, isMine, nickname, dateText, userImage }: AuthorCardProps) {
+export default function AuthorCard({
+  id,
+  isMine,
+  nickname,
+  dateText,
+  userImage,
+  onClickPopOver,
+  onClosePopOver,
+  isOpenPopOver,
+}: AuthorCardProps) {
   const queryClient = useQueryClient();
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const { mutate: deletePostCardMutation } = useMutation({
     mutationFn: deletePostCard,
@@ -36,15 +47,6 @@ export default function AuthorCard({ id, isMine, nickname, dateText, userImage }
       toast.error('리뷰 삭제 중 오류가 발생하였습니다.');
     },
   });
-
-  const handleClickPopup = (e: MouseEvent<SVGElement>) => {
-    e.stopPropagation();
-    setIsPopupOpen(!isPopupOpen);
-  };
-
-  const handleClosePopOver = () => {
-    setIsPopupOpen(false);
-  };
 
   // const handleClickEdit = (e: MouseEvent<HTMLDivElement>) => {
   //   e.stopPropagation();
@@ -89,12 +91,9 @@ export default function AuthorCard({ id, isMine, nickname, dateText, userImage }
         <p className={cn('sub-info')}>{dateText}</p>
       </div>
       <div className={cn('show-more-icon')}>
-        <VerticalTripleDotIcon onClick={handleClickPopup} />
-        {isPopupOpen && (
-          <PopOver
-            optionsData={isMine ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
-            onHandleClose={handleClosePopOver}
-          />
+        <VerticalTripleDotIcon onClick={onClickPopOver} />
+        {isOpenPopOver && (
+          <PopOver optionsData={isMine ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION} onHandleClose={onClosePopOver} />
         )}
       </div>
     </div>

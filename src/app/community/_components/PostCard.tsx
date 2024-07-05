@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 
 import { Modal } from '@/components';
 import { calculateTimeDifference } from '@/libs/calculateDate';
@@ -23,14 +23,25 @@ interface PostCardProps {
 
 export default function PostCard({ cardData, isMine }: PostCardProps) {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const { id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage, isLiked } = cardData;
 
   const ApdatedDate = new Date(updateAt);
   const timeToString = calculateTimeDifference(ApdatedDate);
 
+  const handleClickPopup = (e: MouseEvent<SVGElement>) => {
+    e.stopPropagation();
+    setIsPopupOpen(!isPopupOpen);
+  };
+
+  const handleClosePopOver = () => {
+    setIsPopupOpen(false);
+  };
+
   const handleClickPostModal = () => {
     setIsPostModalOpen(true);
+    handleClosePopOver();
   };
   const handleClosePostModal = () => {
     setIsPostModalOpen(false);
@@ -38,7 +49,16 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
 
   return (
     <div className={cn('container')} onClick={handleClickPostModal}>
-      <AuthorCard id={id} isMine={isMine} nickname={nickName} dateText={timeToString} userImage={userImage} />
+      <AuthorCard
+        id={id}
+        isMine={isMine}
+        nickname={nickName}
+        dateText={timeToString}
+        userImage={userImage}
+        onClickPopOver={handleClickPopup}
+        onClosePopOver={handleClosePopOver}
+        isOpenPopOver={isPopupOpen}
+      />
       <div className={cn('keyboard-image-wrapper')}>
         <Image
           src={Array.isArray(thumbnail) ? thumbnail[0] : thumbnail}
