@@ -71,8 +71,8 @@ export default function AuthorCard({
       onClick: handleClickDelete,
     },
     {
-      label: '신고하기',
-      onClick: handleClickReport,
+      label: '수정하기',
+      onClick: handleClickDelete,
     },
   ];
 

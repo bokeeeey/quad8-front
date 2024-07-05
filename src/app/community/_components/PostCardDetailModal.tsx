@@ -212,7 +212,9 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
             />
             <CustomOption wrapperRef={containerRef} customData={custom} />
             <p className={cn('content')}>{content}</p>
-            <PostInteractions likeCount={likeCount} commentCount={commentCount} cardId={cardId} isLiked={isLiked} />
+            <div className={cn('post-iteractions-wrapper')}>
+              <PostInteractions likeCount={likeCount} commentCount={commentCount} cardId={cardId} isLiked={isLiked} />
+            </div>
             <div className={cn('comment-wrapper')}>
               {comments.map((comment) => (
                 <Comment

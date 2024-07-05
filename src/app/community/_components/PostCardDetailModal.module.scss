@@ -64,7 +64,7 @@
   position: relative;
   width: 48rem;
   height: 53.6rem;
-  overflow-y: scroll;
+  overflow: auto scroll;
 
   & > * {
     width: 44.5rem;
@@ -88,6 +88,10 @@
 
 .content {
   @include pretendard-16-400;
+}
+
+.post-iteractions-wrapper {
+  padding-left: 0.3rem;
 }
 
 .keyboard-option-wrapper {
