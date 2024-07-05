@@ -32,7 +32,7 @@ export default function CheckoutAddress({ item }: CheckoutAddressProps) {
 
   const queryClient = useQueryClient();
 
-  const { address, detailAddress, name, phone } = selectedAddress;
+  const { address, detailAddress, name, phone, zoneCode } = selectedAddress;
 
   const { mutate: postAddressesMutate } = useMutation({
     mutationFn: postAddress,
@@ -104,7 +104,7 @@ export default function CheckoutAddress({ item }: CheckoutAddressProps) {
               <p>{name}</p>
               <p>{phone}</p>
               <p>
-                {address} {detailAddress}
+                ({zoneCode}){address} {detailAddress}
               </p>
             </div>
           </div>

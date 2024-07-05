@@ -28,6 +28,7 @@ export default function CheckoutForm() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
 
     const formData = new FormData(e.currentTarget);
     const values = Object.fromEntries(formData.entries());
