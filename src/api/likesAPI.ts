@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import { GetProductLikesParams, GetProductLikesResponse, ProductLike } from '@/types/LikeTyped';
+import { GetProductLikesParams, ProductLike } from '@/types/LikeTypes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -19,7 +19,7 @@ export const postProductLikes = async (productId: number) => {
   }
 };
 
-export async function getProductLikes({ page = 0, size = 10 }: GetProductLikesParams): Promise<ProductLike[]> {
+export async function getProductLikes({ page, size }: GetProductLikesParams): Promise<ProductLike[]> {
   const token = await getCookie('accessToken');
 
   try {
@@ -30,13 +30,9 @@ export async function getProductLikes({ page = 0, size = 10 }: GetProductLikesPa
         Authorization: token ? `Bearer ${token}` : '',
       },
     });
-    const responseData: GetProductLikesResponse = await response.json();
+    const rawData = await response.json();
 
-    if (responseData.status === 'SUCCESS') {
-      return responseData.data;
-    } else {
-      throw new Error(responseData.message || 'Failed to fetch product likes');
-    }
+    return rawData.data;
   } catch (error) {
     throw error;
   }
