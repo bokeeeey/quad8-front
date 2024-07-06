@@ -5,11 +5,13 @@ import { deleteProductLikes } from '@/api/likesAPI';
 import { Dialog } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { QUERY_KEYS } from '@/constants/queryKey';
+import { ROUTER } from '@/constants/route';
 import { CartIcon, DeleteIcon } from '@/public/index';
 import { ProductLike } from '@/types/LikeTypes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import WishCheckBox from './WishCheckBox';
@@ -63,21 +65,23 @@ export default function WishItem({ productId, productImg, productName, price, ch
     <li className={cn('item-container')}>
       <div className={cn('info-area')}>
         <WishCheckBox productId={productId} onChange={onChange} isChecked={checked} />
-        <div className={cn('info-wrap')}>
-          <div className={cn('img')}>
-            <Image
-              src={productImg}
-              alt={productName}
-              placeholder={IMAGE_BLUR.placeholder}
-              blurDataURL={IMAGE_BLUR.blurDataURL}
-              fill
-            />
+        <Link href={`${ROUTER.SHOP.ALL}/detail/${productId}`}>
+          <div className={cn('info-wrap')}>
+            <div className={cn('img')}>
+              <Image
+                src={productImg}
+                alt={productName}
+                placeholder={IMAGE_BLUR.placeholder}
+                blurDataURL={IMAGE_BLUR.blurDataURL}
+                fill
+              />
+            </div>
+            <div>
+              <h3 className={cn('name')}>{productName}</h3>
+              <span className={cn('price')}>{price.toLocaleString()}원</span>
+            </div>
           </div>
-          <div>
-            <h3 className={cn('name')}>{productName}</h3>
-            <span className={cn('price')}>{price.toLocaleString()}원</span>
-          </div>
-        </div>
+        </Link>
       </div>
       <div className={cn('cart-delete')}>
         <button className={cn('cart')} type='button' onClick={handleCartClick}>
