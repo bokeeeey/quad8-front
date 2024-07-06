@@ -97,7 +97,7 @@
 }
 
 .input {
-  @include poppins-18-500;
+  @include poppins-22-500;
 
   width: 100%;
   border: none;
@@ -105,25 +105,28 @@
   color: $black;
 
   &::placeholder {
-    @include poppins-18-500;
+    @include poppins-22-500;
 
     color: $gray-50;
   }
+}
+
+.search-button {
+  fill: $black;
+}
+
+.search-button-black {
+  fill: $white;
 }
 
 .border-black {
   border-top: 0.1rem solid $gray-40;
 }
 
-.suggest-wrapper {
+.auto-list-wrapper {
   position: absolute;
-  top: 12rem;
+  top: 13rem;
   width: 40%;
-  height: 20rem;
-  padding: 2rem;
-  border: 0.1rem solid $gray-20;
-  border-radius: 2rem;
-  background-color: $white;
 }
 
 .bg-black {
