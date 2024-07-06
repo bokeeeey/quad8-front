@@ -6,23 +6,23 @@ import { Dialog } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { CartIcon, DeleteIcon } from '@/public/index';
+import { ProductLike } from '@/types/LikeTypes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import WishCheckBox from './WishCheckBox';
 import styles from './WishItem.module.scss';
 
 const cn = classNames.bind(styles);
 
-interface WishItemProps {
-  productId: number;
-  productImg: string;
-  productName: string;
-  price: number;
+interface WishItemProps extends ProductLike {
+  checked: boolean;
+  onChange: (id: number) => void;
 }
 
-export default function WishItem({ productId, productImg, productName, price }: WishItemProps) {
+export default function WishItem({ productId, productImg, productName, price, checked, onChange }: WishItemProps) {
   const queryClient = useQueryClient();
 
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
@@ -62,20 +62,21 @@ export default function WishItem({ productId, productImg, productName, price }: 
   return (
     <li className={cn('item-container')}>
       <div className={cn('info-area')}>
-        <input type='checkbox' id={`select-item-${productId}`} className={cn('select-item-input')} />
-        <label htmlFor={`select-item-${productId}`} className={cn('select-item-label')} />
-        <div className={cn('img')}>
-          <Image
-            src={productImg}
-            alt={productName}
-            placeholder={IMAGE_BLUR.placeholder}
-            blurDataURL={IMAGE_BLUR.blurDataURL}
-            fill
-          />
-        </div>
-        <div>
-          <h3 className={cn('name')}>{productName}</h3>
-          <span className={cn('price')}>{price.toLocaleString()}원</span>
+        <WishCheckBox productId={productId} onChange={onChange} isChecked={checked} />
+        <div className={cn('info-wrap')}>
+          <div className={cn('img')}>
+            <Image
+              src={productImg}
+              alt={productName}
+              placeholder={IMAGE_BLUR.placeholder}
+              blurDataURL={IMAGE_BLUR.blurDataURL}
+              fill
+            />
+          </div>
+          <div>
+            <h3 className={cn('name')}>{productName}</h3>
+            <span className={cn('price')}>{price.toLocaleString()}원</span>
+          </div>
         </div>
       </div>
       <div className={cn('cart-delete')}>
