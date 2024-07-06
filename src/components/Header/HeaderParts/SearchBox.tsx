@@ -1,13 +1,16 @@
 'use client';
 
-import classNames from 'classnames/bind';
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { SearchIcon } from '@/public/index';
 import { usePathname, useRouter } from 'next/navigation';
+import classNames from 'classnames/bind';
+
+import { SearchIcon } from '@/public/index';
+
 import { ROUTER } from '@/constants/route';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
-import styles from './SearchBox.module.scss';
 import SearchHistory from './SearchHistory';
+
+import styles from './SearchBox.module.scss';
 
 const cn = classNames.bind(styles);
 
@@ -19,7 +22,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   const router = useRouter();
   const pathName = usePathname();
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestRef = useRef<HTMLDivElement>(null);
@@ -42,21 +44,18 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
 
   const handleClickButton = () => {
     setIsOpen((prev) => {
-      if (prev) {
-        if (timerRef.current) {
-          clearTimeout(timerRef.current);
-          timerRef.current = null;
-        }
-        timerRef.current = setTimeout(() => {
-          setIsRender(!prev);
-          timerRef.current = null;
-        }, 300);
-      } else {
-        setIsRender(!prev);
+      if (!prev) {
+        setIsRender(true);
       }
 
       return !prev;
     });
+  };
+
+  const handleAnimationEnd = () => {
+    if (!isOpen) {
+      setIsRender(false);
+    }
   };
 
   const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -172,6 +171,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
         <div
           className={cn('search-wrapper', { 'fade-out': !isOpen, 'border-black': isBlack })}
           onClick={handleClickOutside}
+          onAnimationEnd={handleAnimationEnd}
         >
           <div className={cn('wrapper', { 'slide-out': !isOpen, 'bg-black': isBlack })} ref={wrapperRef}>
             <div className={cn('content-wrapper')} onFocus={handleInputFocus}>
