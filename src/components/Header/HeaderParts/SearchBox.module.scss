@@ -4,7 +4,7 @@
 
 .search-wrapper {
   position: absolute;
-  z-index: $zindex-tooltip + 1;
+  z-index: $zindex-dropdown - 1;
   top: 8rem;
   left: 0;
   width: 100%;
@@ -23,9 +23,12 @@
   fill: $white;
 }
 
-.content-wrapper {
+.wrapper {
+  @include flex-center;
+
+  position: relative;
   width: 100%;
-  height: 16rem;
+  padding: 7rem 0;
   animation: slide-in 0.3s ease forwards;
   background-color: $white;
 }
@@ -79,5 +82,56 @@
 
   to {
     opacity: 1;
+  }
+}
+
+.content-wrapper {
+  width: 40%;
+}
+
+.form {
+  display: flex;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-bottom: 0.1rem solid $black;
+}
+
+.input {
+  @include poppins-18-500;
+
+  width: 100%;
+  border: none;
+  outline: none;
+  color: $black;
+
+  &::placeholder {
+    @include poppins-18-500;
+
+    color: $gray-50;
+  }
+}
+
+.border-black {
+  border-top: 0.1rem solid $gray-40;
+}
+
+.suggest-wrapper {
+  position: absolute;
+  top: 12rem;
+  width: 40%;
+  height: 20rem;
+  padding: 2rem;
+  border: 0.1rem solid $gray-20;
+  border-radius: 2rem;
+  background-color: $white;
+}
+
+.bg-black {
+  border-color: $white;
+  background-color: $black;
+  color: $gray-10;
+
+  &::placeholder {
+    color: $gray-10;
   }
 }

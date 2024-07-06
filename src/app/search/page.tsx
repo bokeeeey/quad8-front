@@ -3,7 +3,7 @@ interface SearchProps {
 }
 
 export default function Search({ searchParams }: SearchProps) {
-  const key = searchParams.search as string;
+  const key = searchParams.keyword as string;
   return (
     <div>
       <div>search페이지 - {key}</div>
