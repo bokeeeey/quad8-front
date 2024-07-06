@@ -5,7 +5,7 @@ export const QUERY_KEYS = {
     LIST: (filter: string) => [...QUERY_KEYS.PRODUCT.LISTS(), filter],
   },
   LIKE: {
-    ALL: ['all'],
+    ALL: ['likes'],
     LISTS: () => [...QUERY_KEYS.LIKE.ALL, 'lists'],
   },
 };

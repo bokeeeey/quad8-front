@@ -2,9 +2,10 @@
 
 import { deleteCommunityLikes, deleteProductLikes, postCommunityLikes, postProductLikes } from '@/api/likesAPI';
 import SignInModal from '@/components/SignInModal/SignInModal';
+import { QUERY_KEYS } from '@/constants/queryKey';
 import { HeartIcon } from '@/public/index';
 import { Users } from '@/types/userType';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { MouseEvent, useState } from 'react';
 import styles from './HeartButton.module.scss';
@@ -30,6 +31,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   const [newLikeCount, setNewLikeCount] = useState(likeCount || 0);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 
+  const queryClient = useQueryClient();
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
   });
@@ -65,6 +67,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         onSuccess: () => {
           setIsChecked((prev) => !prev);
           setNewLikeCount((prev) => (isChecked ? prev - 1 : prev + 1));
+          queryClient.invalidateQueries({ queryKey: [...QUERY_KEYS.LIKE.LISTS()] });
         },
       },
     );
