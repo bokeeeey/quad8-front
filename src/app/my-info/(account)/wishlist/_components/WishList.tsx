@@ -71,8 +71,9 @@ export default function WishList({ searchParams }: WishlistPageProps) {
             id='all-check'
             onChange={toggleAllCheckedById}
             checked={data?.length === selectedList.size}
+            className={cn('select-item-input')}
           />
-          <label htmlFor='all-check'>전체 선택</label>
+          <label htmlFor='all-check' className={cn('select-item-label')} />
         </div>
         <div className={cn('button-area')}>
           <Button backgroundColor='outline-primary' fontSize={14} width={90} paddingVertical={8} radius={4}>
