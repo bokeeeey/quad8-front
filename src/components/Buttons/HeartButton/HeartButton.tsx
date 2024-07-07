@@ -6,7 +6,7 @@ import { HeartIcon } from '@/public/index';
 import { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -29,7 +29,6 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   const queryClient = useQueryClient();
 
   const [isChecked, setIsChecked] = useState(isLiked);
-  const [newLikeCount, setNewLikeCount] = useState(likeCount || 0);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
@@ -49,6 +48,11 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         await postProductLikes(itemId);
       }
     },
+    onSettled: async () => {
+      queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+      queryClient.invalidateQueries({ queryKey: ['postData', id] });
+      return null;
+    },
   });
 
   const handleClickButton = (e: MouseEvent) => {
@@ -65,7 +69,6 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
       {
         onSuccess: () => {
           setIsChecked((prev) => !prev);
-          setNewLikeCount((prev) => (isChecked ? prev - 1 : prev + 1));
         },
       },
     );
@@ -82,11 +85,6 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
 
     return likeCount.toString();
   };
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
-    queryClient.invalidateQueries({ queryKey: ['postData', id] });
-  }, [newLikeCount, id, queryClient, isChecked]);
 
   return (
     <>
