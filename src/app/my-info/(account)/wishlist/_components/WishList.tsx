@@ -7,7 +7,7 @@ import { QUERY_KEYS } from '@/constants/queryKey';
 import { GetProductLikesParams, WishlistPageProps } from '@/types/LikeTypes';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import WishItem from './WishItem';
 import styles from './WishList.module.scss';
 
@@ -15,6 +15,8 @@ const cn = classNames.bind(styles);
 
 export default function WishList({ searchParams }: WishlistPageProps) {
   const [selectedList, setSelectedList] = useState<Set<number>>(new Set());
+
+  console.log(selectedList);
 
   const getProductLikesParams: GetProductLikesParams = {
     page: searchParams.page || '0',
@@ -25,6 +27,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
     queryKey: [...QUERY_KEYS.LIKE.LISTS(), searchParams],
     queryFn: () => getProductLikes(getProductLikesParams),
   });
+  console.log(data?.length);
 
   if (isLoading) {
     return null;
@@ -49,13 +52,27 @@ export default function WishList({ searchParams }: WishlistPageProps) {
   const handleOnChange = (id: number) => {
     setSelectedList((prevSet) => updateSet(prevSet, id));
   };
+  const toggleAllCheckedById = (e: ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target;
+    if (checked) {
+      const allChecked = new Set(data?.map(({ productId }) => productId));
+      setSelectedList(allChecked);
+    } else {
+      setSelectedList(new Set());
+    }
+  };
 
   return (
     <div className={cn('container')}>
       <div className={cn('check-container')}>
         <div className={cn('check-area')}>
-          <input type='checkbox' />
-          <span>전체 선택</span>
+          <input
+            type='checkbox'
+            id='all-check'
+            onChange={toggleAllCheckedById}
+            checked={data?.length === selectedList.size}
+          />
+          <label htmlFor='all-check'>전체 선택</label>
         </div>
         <div className={cn('button-area')}>
           <Button backgroundColor='outline-primary' fontSize={14} width={90} paddingVertical={8} radius={4}>
