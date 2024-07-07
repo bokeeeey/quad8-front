@@ -11,8 +11,8 @@ interface SearchHistoryProps {
   historyData: string[];
   focusIndex: number;
   isBlack: boolean;
-  onClickKeyword: (value: number) => void;
-  onClickDelete: (value: number) => void;
+  onClickKeyword: (value: string) => void;
+  onClickDelete: (value: string) => void;
   onClickDeleteAll: () => void;
   onFocusKeyword: (value: number) => void;
 }
@@ -26,11 +26,11 @@ export default function SearchHistory({
   onClickDeleteAll,
   onFocusKeyword,
 }: SearchHistoryProps) {
-  const handleClickKeyword = (value: number) => {
+  const handleClickKeyword = (value: string) => {
     onClickKeyword(value);
   };
 
-  const handleClickDelete = (e: MouseEvent<HTMLButtonElement>, value: number) => {
+  const handleClickDelete = (e: MouseEvent<HTMLButtonElement>, value: string) => {
     e.stopPropagation();
     onClickDelete(value);
   };
@@ -51,7 +51,7 @@ export default function SearchHistory({
       </div>
       {historyData.length ? (
         <div className={cn('history-wrapper')}>
-          {historyData.map((keyword, index) => (
+          {historyData.slice(0, 7).map((keyword, index) => (
             <div
               key={keyword}
               className={cn('history-item-wrapper', {
@@ -61,10 +61,10 @@ export default function SearchHistory({
               })}
               onMouseEnter={() => onFocusKeyword(index)}
               onMouseLeave={() => onFocusKeyword(-1)}
-              onClick={() => handleClickKeyword(index)}
+              onClick={() => handleClickKeyword(keyword)}
             >
               <div className={cn('keyword')}>{keyword}</div>
-              <button type='button' onClick={(e) => handleClickDelete(e, index)} className={cn('delete-button')}>
+              <button type='button' onClick={(e) => handleClickDelete(e, keyword)} className={cn('delete-button')}>
                 <DeleteIcon width={24} height={24} className={cn('delete-icon')} />
               </button>
             </div>

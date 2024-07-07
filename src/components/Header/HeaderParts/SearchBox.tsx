@@ -146,7 +146,11 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsRender(false);
-    setKeywordHistory((prev) => [...prev.filter((keyword) => keyword !== searchKeyword), searchKeyword]);
+    setKeywordHistory((prev) => {
+      const newValue = [searchKeyword, ...prev.filter((keyword) => keyword !== searchKeyword)];
+      localStorage.setItem('recentSearch', JSON.stringify(newValue));
+      return newValue;
+    });
     router.push(`${ROUTER.SEARCH}?keyword=${searchKeyword}`, { scroll: false });
   };
 
@@ -159,20 +163,34 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     마찬가지로 해당 값으로 search페이지 이동.
     최근 검색어 저장(순서 변경?)
   */
-  const handleClickHistoryKeyword = (index: number) => {
+  const handleClickHistoryKeyword = (value: string) => {
     setIsRender(false);
-    setKeywordHistory((prev) => [...prev.filter((keyword) => keyword !== searchKeyword), searchKeyword]);
-    router.push(`${ROUTER.SEARCH}?keyword=${keywordHistory[index]}`, { scroll: false });
+    localStorage.setItem(
+      'recentSearch',
+      JSON.stringify([value, ...keywordHistory.filter((keyword) => keyword !== value)]),
+    );
+    setKeywordHistory((prev) => {
+      const newValue = [value, ...prev.filter((keyword) => keyword !== value)];
+      localStorage.setItem('recentSearch', JSON.stringify(newValue));
+      return newValue;
+    });
+    router.push(`${ROUTER.SEARCH}?keyword=${value}`, { scroll: false });
   };
 
   /* 최근 검색어 요소 하나 삭제 함수 */
-  const handleClickDeleteHistory = (index: number) => {
-    setKeywordHistory((prev) => prev.filter((_, i) => i !== index));
+  const handleClickDeleteHistory = (value: string) => {
+    localStorage.setItem('recentSearch', JSON.stringify([...keywordHistory.filter((keyword) => keyword !== value)]));
+    setKeywordHistory((prev) => {
+      const newValue = [...prev.filter((keyword) => keyword !== value)];
+      localStorage.setItem('recentSearch', JSON.stringify(newValue));
+      return newValue;
+    });
   };
 
   /* 최근 검색어 전체 삭제 함수 */
   const handleClickDeleteAllHistory = () => {
     setKeywordHistory([]);
+    localStorage.setItem('recentSearch', '[]');
   };
 
   /* mouse hover시에 focusIndex 업데이트를 위한 함수 */
@@ -196,6 +214,10 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   useEffect(() => {
     setFocusIndex(-1);
   }, [isFocus, autoListType]);
+
+  useEffect(() => {
+    setKeywordHistory(JSON.parse(localStorage.getItem('recentSearch') ?? '[]'));
+  }, []);
 
   return (
     <div>
@@ -230,11 +252,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
                 </button>
               </form>
               {isFocus && (
-                <div
-                  className={cn('auto-list-wrapper', { 'bg-black': isBlack })}
-                  onClick={handleSugestionClick}
-                  ref={suggestRef}
-                >
+                <div className={cn('auto-list-wrapper')} onClick={handleSugestionClick} ref={suggestRef}>
                   {autoListType === 'suggestion' ? (
                     <div>검색어 제안</div>
                   ) : (
