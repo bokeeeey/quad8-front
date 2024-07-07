@@ -31,7 +31,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <h1>{product.name}</h1>
           <div className={cn('buttons')}>
             <HeartButton usage='detail' id={product.id} isLiked={product.isLiked} />
-            <ShareButton />
+            <ShareButton data={product} />
           </div>
         </div>
         <div className={cn('rate-section')}>

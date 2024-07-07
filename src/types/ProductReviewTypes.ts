@@ -47,8 +47,16 @@ type Keyword = Record<string, string[]>;
 export type ReviewKeywordType = Record<'키보드' | '키캡' | '스위치' | '기타용품', Keyword>;
 
 export interface ProductReviewParams {
-  productId: string;
+  productId?: string;
   sort?: string;
   page?: number;
   size?: number;
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface MyReviewParamsType {
+  sort: string;
+  page?: string;
+  size?: string;
 }

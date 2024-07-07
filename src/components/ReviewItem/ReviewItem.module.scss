@@ -1,6 +1,5 @@
 .review-item {
   display: flex;
-  min-height: 26rem;
   padding: 4rem 6.8rem;
   border-collapse: collapse;
   border-bottom: 0.1rem solid $gray-10;
@@ -76,6 +75,7 @@
 }
 
 .content {
+  min-height: 3rem;
   margin-bottom: 1rem;
 
   @include pretendard-16-400;
@@ -89,7 +89,6 @@
   @include flex-column(0);
 
   justify-content: space-between;
-  min-height: 15rem;
 }
 
 .image-section {

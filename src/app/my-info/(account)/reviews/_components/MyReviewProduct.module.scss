@@ -1,0 +1,39 @@
+.total-review-container {
+  margin-top: 4rem;
+  border-top: 0.1rem solid $gray-10;
+}
+
+.container {
+  padding: 2rem;
+}
+
+.top-section {
+  @include pretendard-14-500;
+
+  display: flex;
+  justify-content: space-between;
+  color: $gray-50;
+}
+
+.image {
+  border-radius: 0.8rem;
+}
+
+.product-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: -1rem;
+  padding-bottom: 2rem;
+  border-bottom: 0.1rem dashed $gray-10;
+  gap: 2rem;
+}
+
+.name {
+  @include pretendard-16-600;
+}
+
+.option {
+  @include pretendard-14-500;
+
+  color: $gray-50;
+}

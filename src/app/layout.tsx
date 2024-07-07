@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
+import Script from 'next/script';
 import { Providers } from './providers';
 
 import '@/styles/reset.css';
@@ -36,6 +37,7 @@ export default async function RootLayout({
           </HydrationBoundary>
         </Providers>
       </body>
+      <Script src='https://developers.kakao.com/sdk/js/kakao.js' strategy='afterInteractive' />
     </html>
   );
 }
