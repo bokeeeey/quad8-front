@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useState, forwardRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
@@ -16,14 +16,18 @@ import styles from './Comment.module.scss';
 
 const cn = classNames.bind(styles);
 
+interface CommentDataType {
+  id: number;
+  userId: number;
+  nickName: string;
+  imgUrl: string | null;
+  content: string;
+  createdAt: string;
+}
+
 interface CommentProps {
   cardId: number;
-  commentUserId: number;
-  commentId: number;
-  nickname: string;
-  profile: string | null;
-  createdTime: string;
-  comment: string;
+  commentData: CommentDataType;
 }
 
 interface UserDataType {
@@ -32,16 +36,17 @@ interface UserDataType {
   message: string;
 }
 
-export default function Comment({
-  cardId,
-  commentUserId,
-  commentId,
-  nickname,
-  profile,
-  createdTime,
-  comment,
-}: CommentProps) {
+const Comment = forwardRef<HTMLDivElement, CommentProps>(({ cardId, commentData }, ref) => {
   const queryClient = useQueryClient();
+
+  const {
+    id: commentId,
+    userId: commentUserId,
+    nickName: nickname,
+    imgUrl: profile,
+    content: comment,
+    createdAt: createdTime,
+  } = commentData;
   const createdTimeToDate = new Date(createdTime);
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
 
@@ -101,7 +106,7 @@ export default function Comment({
 
   const timeAgo = calculateTimeDifference(createdTimeToDate);
   return (
-    <div className={cn('container')}>
+    <div className={cn('container')} ref={ref}>
       <ProfileImage profileImage={profile || null} />
       <div className={cn('content-wrapper')}>
         <div className={cn('user-info-wrapper')}>
@@ -123,4 +128,8 @@ export default function Comment({
       </div>
     </div>
   );
-}
+});
+
+export default Comment;
+
+Comment.displayName = 'Comment';

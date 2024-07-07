@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState, MouseEvent } from 'react';
 import { toast } from 'react-toastify';
 
-import { deletePostCard, getPostDetail, postComment } from '@/api/communityAPI';
+import { deletePostCard, getCommentsInfiniteScroll, getPostDetail, postComment } from '@/api/communityAPI';
 import { Button, CustomOption, InputField, Modal } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
@@ -13,6 +13,9 @@ import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
 import { formatDateToString } from '@/libs/formatDateToString';
 import { keydeukImg } from '@/public/index';
 import type { CommunityPostCardDetailDataType } from '@/types/CommunityTypes';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import Loading from '@/app/loading';
+import { CommentType } from '@/types/CommunityTypes';
 import AuthorCard from './AuthorCard';
 import Comment from './Comment';
 import { PostInteractions } from './PostInteractions';
@@ -28,13 +31,18 @@ interface PostCardDetailModalProps {
 
 export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCardDetailModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastCommentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
+
   const [commentRef, setCommentRef] = useState<HTMLInputElement | null>(null);
   const [clickedImage, setClickedImage] = useState('');
   const [isEditAlertOpen, setIsEditAlertOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const [lastCommentId, setLastCommentId] = useState(0);
+  const [visibleComments, setVisibleComments] = useState<CommentType[]>([]);
 
   const handleClickPopup = (e: MouseEvent<SVGElement>) => {
     e.stopPropagation();
@@ -48,6 +56,12 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const { data, refetch, isPending } = useQuery({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
+  });
+
+  const { data: infiniteCommentData, refetch: infiniteCommentRefetch } = useQuery({
+    queryKey: ['infiniteCommentData'],
+    enabled: false,
+    queryFn: () => getCommentsInfiniteScroll(lastCommentId),
   });
 
   const handleSuccessSubmitComment = () => {
@@ -96,31 +110,45 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
     };
   }, [cardId, postCommentMutation, commentRef]);
 
+  const isLastCommentIntersecting = useIntersectionObserver(lastCommentRef, { threshold: 1 });
+
+  useEffect(() => {
+    if (lastCommentRef.current && isLastCommentIntersecting && lastCommentId !== 0 && visibleComments.length !== 0) {
+      infiniteCommentRefetch();
+
+      if (infiniteCommentData?.data[0]) {
+        const restComments = infiniteCommentData.data;
+        if (visibleComments[visibleComments.length - 1].id !== restComments[restComments.length - 1].id) {
+          setVisibleComments((prev) => [...prev, ...restComments]);
+          setLastCommentId(restComments[restComments.length - 1].id);
+        }
+      }
+    }
+  }, [isLastCommentIntersecting, infiniteCommentData, infiniteCommentRefetch, lastCommentId]);
+
+  useEffect(() => {
+    // 처음에 마지막 댓글 지정
+    if (data?.data) {
+      const commentDatas = data.data.comments;
+      const lastCommentData = commentDatas[commentDatas.length - 1];
+      setVisibleComments(commentDatas);
+      setLastCommentId(lastCommentData?.id);
+    }
+  }, [data]);
+
   if (isPending) {
-    return null;
+    return <Loading />;
   }
 
   const { data: postData, status, message } = data;
-
   if (status === 'FAIL') {
     toast.error(message);
     onClose();
     return null;
   }
 
-  const {
-    commentCount,
-    comments,
-    content,
-    likeCount,
-    nickName,
-    reviewImages,
-    title,
-    updatedAt,
-    userImage,
-    custom,
-    isLiked,
-  } = postData as CommunityPostCardDetailDataType;
+  const { commentCount, content, likeCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } =
+    postData as CommunityPostCardDetailDataType;
 
   const createdDateString = formatDateToString(new Date(updatedAt));
 
@@ -240,16 +268,12 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
               <PostInteractions likeCount={likeCount} commentCount={commentCount} cardId={cardId} isLiked={isLiked} />
             </div>
             <div className={cn('comment-wrapper')}>
-              {comments.map((comment) => (
+              {visibleComments.map((comment) => (
                 <Comment
                   key={comment.id}
                   cardId={cardId}
-                  commentId={comment.id}
-                  commentUserId={comment.userId}
-                  createdTime={comment.createdAt}
-                  nickname={comment.nickName}
-                  comment={comment.content}
-                  profile={comment.imgUrl}
+                  commentData={comment}
+                  ref={lastCommentId === comment.id ? lastCommentRef : null}
                 />
               ))}
             </div>
