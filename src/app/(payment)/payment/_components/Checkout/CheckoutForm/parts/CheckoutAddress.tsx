@@ -11,6 +11,7 @@ import type { UserAddress } from '@/types/shippingType';
 
 import AddAddressModal from '@/app/my-info/(account)/addresses/_components/AddAddresseModal/AddAddressModal';
 import { Button, Dropdown, Modal } from '@/components';
+import { formatPhoneNumber } from '@/libs';
 import CheckoutAddressModal from './CheckoutAddressModal';
 
 import styles from './CheckoutAddress.module.scss';
@@ -102,7 +103,7 @@ export default function CheckoutAddress({ item }: CheckoutAddressProps) {
             </div>
             <div className={cn('address-value')}>
               <p>{name}</p>
-              <p>{phone}</p>
+              <p>010-{formatPhoneNumber(phone)}</p>
               <p>
                 ({zoneCode}){address} {detailAddress}
               </p>

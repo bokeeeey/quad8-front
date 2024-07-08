@@ -10,9 +10,9 @@ import { formatNumber } from '@/libs';
 import type { OrderItem } from '@/types/OrderTypes';
 import type { OrderDetailData } from '@/types/paymentTypes';
 import CheckoutAddress from './parts/CheckoutAddress';
+import { PaymentContainer } from './parts/PaymentContainer';
 
 import styles from './CheckoutForm.module.scss';
-import { PaymentContainer } from './parts/PaymentContainer';
 
 const cn = classNames.bind(styles);
 
