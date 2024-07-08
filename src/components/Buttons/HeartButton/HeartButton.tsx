@@ -35,18 +35,22 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
     queryKey: ['userData'],
   });
 
-  const { mutate: likeMutation } = useMutation({
+  const { mutate: likeDetailMutation } = useMutation({
     mutationFn: async ({ itemId, itemIsLiked }: LikeMutationProps) => {
-      if (usage === 'community') {
-        if (itemIsLiked) {
-          await deleteCommunityLikes(itemId);
-        } else {
-          await postCommunityLikes(itemId);
-        }
-      } else if (itemIsLiked) {
+      if (itemIsLiked) {
         await deleteProductLikes(itemId);
       } else {
         await postProductLikes(itemId);
+      }
+    },
+  });
+
+  const { mutate: likeCommunityMutation } = useMutation({
+    mutationFn: async ({ itemId, itemIsLiked }: LikeMutationProps) => {
+      if (itemIsLiked) {
+        await deleteCommunityLikes(itemId);
+      } else {
+        await postCommunityLikes(itemId);
       }
     },
     onMutate: async ({ itemId, itemIsLiked }) => {
@@ -111,14 +115,25 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
       return;
     }
 
-    likeMutation(
-      { itemId: id, itemIsLiked: isChecked },
-      {
-        onSuccess: () => {
-          setIsChecked((prev) => !prev);
+    if (usage === 'community') {
+      likeCommunityMutation(
+        { itemId: id, itemIsLiked: isChecked },
+        {
+          onSuccess: () => {
+            setIsChecked((prev) => !prev);
+          },
         },
-      },
-    );
+      );
+    } else {
+      likeDetailMutation(
+        { itemId: id, itemIsLiked: isChecked },
+        {
+          onSuccess: () => {
+            setIsChecked((prev) => !prev);
+          },
+        },
+      );
+    }
   };
 
   const displayLikeCount = () => {
