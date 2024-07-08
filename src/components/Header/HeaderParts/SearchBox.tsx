@@ -280,7 +280,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   const handleClickSuggestionKeyword = (value: string) => {
     setIsRender(false);
     setKeywordHistory((prev) => {
-      const newValue = [value, ...prev.filter((keyword) => keyword !== searchKeyword)];
+      const newValue = [value, ...prev.filter((keyword) => keyword !== value)];
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
       return newValue;
     });
