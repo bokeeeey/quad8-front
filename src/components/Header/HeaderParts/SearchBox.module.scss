@@ -1,5 +1,6 @@
 .icon {
-  fill: $primary;
+  fill: $gray-50;
+  cursor: pointer;
 }
 
 .search-wrapper {
@@ -28,7 +29,7 @@
 
   position: relative;
   width: 100%;
-  padding: 7rem 0;
+  padding: 5rem 0;
   animation: slide-in 0.3s ease forwards;
   background-color: $white;
 }
@@ -125,7 +126,7 @@
 
 .auto-list-wrapper {
   position: absolute;
-  top: 13rem;
+  top: 11rem;
   width: 40%;
 }
 

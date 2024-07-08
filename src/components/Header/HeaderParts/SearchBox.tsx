@@ -2,14 +2,18 @@
 
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
+import { getSearchSuggestion } from '@/api/search';
 import { SearchIcon } from '@/public/index';
 import { ROUTER } from '@/constants/route';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { charMatcher } from '@/libs/charMatcher';
 import SearchHistory from './SearchHistory';
 
 import styles from './SearchBox.module.scss';
+import SearchSuggestion from './SearchSuggestion';
 
 const cn = classNames.bind(styles);
 
@@ -21,19 +25,27 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   const router = useRouter();
   const pathName = usePathname();
 
+  const { data: SearchSuggestionData } = useQuery<string[]>({
+    queryFn: getSearchSuggestion,
+    queryKey: ['searchSuggestionData'],
+  });
+
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isRender, setIsRender] = useState(false);
 
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [originKeyword, setOriginKeyword] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [autoListType, setAutoListType] = useState<'history' | 'suggestion'>('history');
   const [focusIndex, setFocusIndex] = useState(-1);
 
   const [keywordHistory, setKeywordHistory] = useState<string[]>([]);
+  const [keywordSuggestion, setKeywordSuggestion] = useState<string[]>([]);
 
   /* 외부 클릭 시 focus 해제(자동 완성 리스트 안 뜨도록 설정 => 클릭한 곳이 suggestRef 내부일 경우 제외) */
   useOutsideClick(inputRef, (e?: MouseEvent) => {
@@ -48,7 +60,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
       if (!prev) {
         setIsRender(true);
       }
-
       return !prev;
     });
   };
@@ -75,6 +86,21 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     }
   };
 
+  const suggestionFilter = (keyword: string) => {
+    if (!SearchSuggestionData) {
+      return;
+    }
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      setKeywordSuggestion(
+        SearchSuggestionData.filter((name) => charMatcher(keyword.toLowerCase()).test(name.toLocaleLowerCase())),
+      );
+      timerRef.current = null;
+    }, 200);
+  };
+
   /* input 값 변경 함수. 만약 값이 비어있을 경우, 최근 검색어 내역이 뜨도록 설정 */
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
@@ -83,6 +109,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
       return;
     }
     setAutoListType('suggestion');
+    suggestionFilter(e.target.value);
   };
 
   const handleInputFocus = () => {
@@ -102,7 +129,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
       e.preventDefault();
       setFocusIndex((prev) => {
         if (autoListType === 'history') {
-          if (keywordHistory.length - 1 <= prev) {
+          if (Math.min(keywordHistory.length - 1, 6) <= prev) {
             setSearchKeyword('');
             return -1;
           }
@@ -111,6 +138,17 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
           inputRef.current?.setSelectionRange(keywordHistory[prev + 1].length, null);
           return prev + 1;
         }
+
+        if (prev === -1) {
+          setOriginKeyword(searchKeyword);
+        }
+
+        if (Math.min(keywordSuggestion.length - 1, 6) <= prev) {
+          setSearchKeyword(originKeyword);
+          return -1;
+        }
+        setSearchKeyword(keywordSuggestion[prev + 1]);
+        inputRef.current?.setSelectionRange(keywordSuggestion[prev + 1].length, null);
         return prev + 1;
       });
     }
@@ -124,16 +162,31 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
             return -1;
           }
           if (prev === -1) {
-            const lastIndex = keywordHistory.length - 1;
+            const lastIndex = Math.min(keywordHistory.length - 1, 6);
             setSearchKeyword(keywordHistory[lastIndex]);
             inputRef.current?.setSelectionRange(null, keywordHistory[lastIndex].length);
             return lastIndex;
           }
+
           setSearchKeyword(keywordHistory[prev - 1]);
           inputRef.current?.setSelectionRange(null, keywordHistory[prev - 1].length);
 
           return prev - 1;
         }
+        if (prev === 0) {
+          setSearchKeyword(originKeyword);
+          inputRef.current?.setSelectionRange(null, originKeyword.length);
+          return -1;
+        }
+        if (prev === -1) {
+          const lastIndex = Math.min(keywordSuggestion.length - 1, 6);
+          setSearchKeyword(keywordSuggestion[lastIndex]);
+          inputRef.current?.setSelectionRange(null, keywordSuggestion[lastIndex].length);
+          return lastIndex;
+        }
+        setSearchKeyword(keywordSuggestion[prev - 1]);
+        inputRef.current?.setSelectionRange(null, keywordSuggestion[prev - 1].length);
+
         return prev - 1;
       });
     }
@@ -165,10 +218,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   */
   const handleClickHistoryKeyword = (value: string) => {
     setIsRender(false);
-    localStorage.setItem(
-      'recentSearch',
-      JSON.stringify([value, ...keywordHistory.filter((keyword) => keyword !== value)]),
-    );
     setKeywordHistory((prev) => {
       const newValue = [value, ...prev.filter((keyword) => keyword !== value)];
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
@@ -179,7 +228,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
 
   /* 최근 검색어 요소 하나 삭제 함수 */
   const handleClickDeleteHistory = (value: string) => {
-    localStorage.setItem('recentSearch', JSON.stringify([...keywordHistory.filter((keyword) => keyword !== value)]));
     setKeywordHistory((prev) => {
       const newValue = [...prev.filter((keyword) => keyword !== value)];
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
@@ -194,8 +242,18 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   };
 
   /* mouse hover시에 focusIndex 업데이트를 위한 함수 */
-  const handleFocuseHistoryKeyword = (index: number) => {
+  const handleFocusKeyword = (index: number) => {
     setFocusIndex(index);
+  };
+
+  const handleClickSuggestionKeyword = (value: string) => {
+    setIsRender(false);
+    setKeywordHistory((prev) => {
+      const newValue = [value, ...prev.filter((keyword) => keyword !== searchKeyword)];
+      localStorage.setItem('recentSearch', JSON.stringify(newValue));
+      return newValue;
+    });
+    router.push(`${ROUTER.SEARCH}?keyword=${value}`, { scroll: false });
   };
 
   /* 페이지 이동 시 검색 컴포넌트 안보이도록 변경 */
@@ -221,10 +279,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
 
   return (
     <div>
-      <button type='button' onClick={handleClickButton}>
-        <SearchIcon width={31} height={31} className={cn('icon', { black: isBlack })} />
-      </button>
-
+      <SearchIcon width={24} height={24} className={cn('icon', { black: isBlack })} onClick={handleClickButton} />
       {isRender && (
         <div
           className={cn('search-wrapper', { 'fade-out': !isOpen, 'border-black': isBlack })}
@@ -254,7 +309,15 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
               {isFocus && (
                 <div className={cn('auto-list-wrapper')} onClick={handleSugestionClick} ref={suggestRef}>
                   {autoListType === 'suggestion' ? (
-                    <div>검색어 제안</div>
+                    keywordSuggestion.length > 0 && (
+                      <SearchSuggestion
+                        suggestionData={keywordSuggestion}
+                        focusIndex={focusIndex}
+                        isBlack={isBlack}
+                        onClickKeyword={handleClickSuggestionKeyword}
+                        onFocusKeyword={handleFocusKeyword}
+                      />
+                    )
                   ) : (
                     <SearchHistory
                       historyData={keywordHistory}
@@ -263,7 +326,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
                       onClickKeyword={handleClickHistoryKeyword}
                       onClickDelete={handleClickDeleteHistory}
                       onClickDeleteAll={handleClickDeleteAllHistory}
-                      onFocusKeyword={handleFocuseHistoryKeyword}
+                      onFocusKeyword={handleFocusKeyword}
                     />
                   )}
                 </div>
