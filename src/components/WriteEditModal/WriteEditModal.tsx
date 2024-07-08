@@ -188,6 +188,8 @@ export default function WriteEditModal({
       };
       fetchFormData.append('createReviewRequest', JSON.stringify(createReviewRequest));
 
+      // console.log(createReviewRequest);
+
       if (payload.files && payload.files.length > 0) {
         payload.files.forEach((file: File) => {
           fetchFormData.append('reviewImgs', file as File);
@@ -254,13 +256,13 @@ export default function WriteEditModal({
         ) : (
           <div className={cn('product-review-wrapper')}>
             <div className={cn('rating-review-wrapper')}>
-              <h1 id={cn('rating-label')}>상품을 사용해 보셨나요?</h1>
+              <h1 className={cn('rating-label')}>상품을 사용해 보셨나요?</h1>
               <Rating rating={rating} onRatingChange={setRating} usage='edit' />
             </div>
             <div className={cn('select-option-wrapper')}>
               {OPTIONS.map((option, optionIndex) => (
                 <div key={option} className={cn('feedback-container')}>
-                  <h1 id={cn('label')}>{option}</h1>
+                  <h1 className={cn('label')}>{option}</h1>
                   <div className={cn('option-wrapper')}>
                     {REVIEW_KEYWORD[productType][option].map((feedback, feedbackIndex) => (
                       <div

@@ -4,7 +4,7 @@
   width: 90vw;
   max-width: 78.8rem;
   height: 90vh;
-  max-height: 95.5rem;
+  max-height: 120rem;
   padding: 4rem;
   overflow-y: scroll;
   border-radius: 1.6rem;
@@ -64,7 +64,7 @@
   align-items: center;
   margin-bottom: 1.6rem;
 
-  & > #rating-label {
+  & > .rating-label {
     @include pretendard-20-600;
   }
 }
@@ -117,12 +117,11 @@
 
 .feedback-container {
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 1.8rem;
 }
 
-#label {
+.label {
   @include pretendard-18-400;
 
   width: 5rem;

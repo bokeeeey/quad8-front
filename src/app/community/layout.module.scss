@@ -1,8 +1,14 @@
 .container {
   width: 100%;
-  margin-bottom: 9rem;
+  height: 100vh;
   padding: 12.8rem 12rem 0;
   overflow: auto;
+}
+
+.filter-write-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .page-name-wrapper {
