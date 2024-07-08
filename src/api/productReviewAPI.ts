@@ -23,3 +23,25 @@ export const getProductReviews = async (params: ProductReviewParams): Promise<Pr
     throw new Error(`상품을 조회할 수 없습니다. `);
   }
 };
+
+export const postProductReviews = async ({ productId, formData }: { productId: number; formData: FormData }) => {
+  const token = await getCookie('accessToken');
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/community/update/${productId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

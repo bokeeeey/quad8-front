@@ -9,7 +9,7 @@ import { ToastContainer, Zoom } from 'react-toastify';
 
 import '@/styles/toast/toastAnimation.scss';
 import '@/styles/toast/toastContainer.scss';
-import styles from './Providers.module.scss';
+import styles from './providers.module.scss';
 
 const cn = classNames.bind(styles);
 
