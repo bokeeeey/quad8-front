@@ -7,6 +7,7 @@ import { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { MouseEvent, useState } from 'react';
+import { CommunityPostCardDataType } from '@/types/CommunityTypes';
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -48,10 +49,56 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         await postProductLikes(itemId);
       }
     },
-    onSettled: async () => {
+    onMutate: async ({ itemId, itemIsLiked }) => {
+      await queryClient.cancelQueries({ queryKey: ['postData', itemId] });
+      await queryClient.cancelQueries({ queryKey: ['postCardsList'] });
+
+      const previousPostData = queryClient.getQueryData<{ data: { isLiked: boolean; likeCount: number } }>([
+        'postData',
+        itemId,
+      ]);
+      const previousPostCardsList = queryClient.getQueryData<{ content: CommunityPostCardDataType[] }>([
+        'postCardsList',
+      ]);
+
+      if (previousPostData) {
+        queryClient.setQueryData(['postData', itemId], {
+          ...previousPostData,
+          data: {
+            ...previousPostData.data,
+            isLiked: !itemIsLiked,
+            likeCount: itemIsLiked ? previousPostData.data.likeCount - 1 : previousPostData.data.likeCount + 1,
+          },
+        });
+      }
+
+      if (previousPostCardsList) {
+        const updatedPostCardsList = previousPostCardsList.content.map((post) =>
+          post.id === itemId
+            ? {
+                ...post,
+                isLiked: !itemIsLiked,
+                likeCount: itemIsLiked ? post.likeCount - 1 : post.likeCount + 1,
+              }
+            : post,
+        );
+        queryClient.setQueryData(['postCardsList'], {
+          ...previousPostCardsList,
+          content: updatedPostCardsList,
+        });
+      }
+
+      return { previousPostData, previousPostCardsList };
+    },
+
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['postData', variables.itemId], context?.previousPostData);
+      queryClient.setQueryData(['postCardsList'], context?.previousPostCardsList);
+    },
+
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
       queryClient.invalidateQueries({ queryKey: ['postData', id] });
-      return null;
     },
   });
 
@@ -75,8 +122,12 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   };
 
   const displayLikeCount = () => {
-    if (!likeCount) {
+    if (!likeCount || likeCount < 0) {
       return '0';
+    }
+
+    if (likeCount > 1) {
+      return '1';
     }
 
     if (likeCount > MAX_COUNT) {
