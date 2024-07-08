@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
 import { getSearchSuggestion } from '@/api/search';
+import type { SuggestionDataType } from '@/types/SearchType';
 import { SearchIcon } from '@/public/index';
 import { ROUTER } from '@/constants/route';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
@@ -45,16 +46,23 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   const [focusIndex, setFocusIndex] = useState(-1);
 
   const [keywordHistory, setKeywordHistory] = useState<string[]>([]);
-  const [keywordSuggestion, setKeywordSuggestion] = useState<string[]>([]);
+  const [keywordSuggestion, setKeywordSuggestion] = useState<SuggestionDataType[]>([]);
 
-  /* 외부 클릭 시 focus 해제(자동 완성 리스트 안 뜨도록 설정 => 클릭한 곳이 suggestRef 내부일 경우 제외) */
+  /* 
+    외부 클릭 시 focus 해제
+    자동 완성 리스트 안 뜨도록 설정 => 클릭한 곳이 suggestRef 내부일 경우 제외
+   */
   useOutsideClick(inputRef, (e?: MouseEvent) => {
     if (e && suggestRef.current && !suggestRef.current.contains(e.target as Node)) {
       setIsFocus(false);
     }
   });
 
-  /* 헤더 검색버튼 눌렀을 때 검색 컴포넌트 뜨도록 설정(열 때는 isRender도 같이 true로 바로 바뀌도록 설정) */
+  /* 
+    헤더 검색버튼 눌렀을 때 함수
+    검색 컴포넌트 열 때는 isRender도 같이 true로 바로 바뀌도록 설정/ 닫혔을 때는 비활성
+    => 애니메이션이 끝난 후에 isRender 값이 false로 바뀌도록 하기 위해
+  */
   const handleClickButton = () => {
     setIsOpen((prev) => {
       if (!prev) {
@@ -86,6 +94,12 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     }
   };
 
+  /* 
+    검색 제안 필터
+    debounce 적용: timerRef에 현재 timerID 저장. timerRef의 값이 있는 경우(타이머가 진행 중인 경우) 타이머 중지 후 다시 타이머 시작 => 타이머가 끝나면 필터 적용되도록 설정
+    입력한 keyword가 name과 일치하는 부분이 존재할 때, 해당 name과 일치하는 범위를 함께 저장 => highlighting
+  */
+
   const suggestionFilter = (keyword: string) => {
     if (!SearchSuggestionData) {
       return;
@@ -94,14 +108,26 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
       clearTimeout(timerRef.current);
     }
     timerRef.current = setTimeout(() => {
-      setKeywordSuggestion(
-        SearchSuggestionData.filter((name) => charMatcher(keyword.toLowerCase()).test(name.toLocaleLowerCase())),
-      );
+      setKeywordSuggestion(() => {
+        const value: SuggestionDataType[] = [];
+        SearchSuggestionData.forEach((name) => {
+          const match = charMatcher(keyword.toLowerCase()).exec(name.toLocaleLowerCase());
+          if (match) {
+            const data = { name, range: [match.index, match.index + keyword.length] };
+            value.push(data);
+          }
+        });
+        return value;
+      });
       timerRef.current = null;
     }, 200);
   };
 
-  /* input 값 변경 함수. 만약 값이 비어있을 경우, 최근 검색어 내역이 뜨도록 설정 */
+  /* 
+    input 값 변경 함수
+    만약 값이 비어있을 경우, 최근 검색어 내역이 뜨도록 설정,
+    값을 넣을 경우(키보드로 입력한 경우 -> 자동 완성은 제외), 검색어 제안이 뜨도록 설정
+  */
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
     if (!e.target.value) {
@@ -147,8 +173,8 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
           setSearchKeyword(originKeyword);
           return -1;
         }
-        setSearchKeyword(keywordSuggestion[prev + 1]);
-        inputRef.current?.setSelectionRange(keywordSuggestion[prev + 1].length, null);
+        setSearchKeyword(keywordSuggestion[prev + 1].name);
+        inputRef.current?.setSelectionRange(keywordSuggestion[prev + 1].name.length, null);
         return prev + 1;
       });
     }
@@ -180,12 +206,12 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
         }
         if (prev === -1) {
           const lastIndex = Math.min(keywordSuggestion.length - 1, 6);
-          setSearchKeyword(keywordSuggestion[lastIndex]);
-          inputRef.current?.setSelectionRange(null, keywordSuggestion[lastIndex].length);
+          setSearchKeyword(keywordSuggestion[lastIndex].name);
+          inputRef.current?.setSelectionRange(null, keywordSuggestion[lastIndex].name.length);
           return lastIndex;
         }
-        setSearchKeyword(keywordSuggestion[prev - 1]);
-        inputRef.current?.setSelectionRange(null, keywordSuggestion[prev - 1].length);
+        setSearchKeyword(keywordSuggestion[prev - 1].name);
+        inputRef.current?.setSelectionRange(null, keywordSuggestion[prev - 1].name.length);
 
         return prev - 1;
       });
@@ -246,6 +272,11 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     setFocusIndex(index);
   };
 
+  /* 
+    검색어 제안 클릭 함수
+    마찬가지로 해당 값으로 search페이지 이동
+    최근 검색어 저장
+  */
   const handleClickSuggestionKeyword = (value: string) => {
     setIsRender(false);
     setKeywordHistory((prev) => {
@@ -256,7 +287,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     router.push(`${ROUTER.SEARCH}?keyword=${value}`, { scroll: false });
   };
 
-  /* 페이지 이동 시 검색 컴포넌트 안보이도록 변경 */
+  /* 페이지 이동 시 검색 컴포넌트 안 보이도록 변경 */
   useEffect(() => {
     setIsRender(false);
   }, [pathName]);
@@ -273,6 +304,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     setFocusIndex(-1);
   }, [isFocus, autoListType]);
 
+  /* 페이지 렌더링 되었을 때, localStorage 값 가져오도록 설정 */
   useEffect(() => {
     setKeywordHistory(JSON.parse(localStorage.getItem('recentSearch') ?? '[]'));
   }, []);

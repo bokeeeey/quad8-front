@@ -1,11 +1,12 @@
 import classNames from 'classnames/bind';
 
+import type { SuggestionDataType } from '@/types/SearchType';
 import styles from './SearchSuggestion.module.scss';
 
 const cn = classNames.bind(styles);
 
 interface SearchSuggestionProps {
-  suggestionData: string[];
+  suggestionData: SuggestionDataType[];
   focusIndex: number;
   isBlack: boolean;
   onFocusKeyword: (value: number) => void;
@@ -25,7 +26,7 @@ export default function SearchSuggestion({
 
   return (
     <div className={cn('wrapper', { 'bg-black': isBlack })}>
-      {suggestionData.slice(0, 7).map((keyword, i) => (
+      {suggestionData.slice(0, 7).map(({ name: keyword, range }, i) => (
         <div
           className={cn('suggestion-wrapper', {
             focus: focusIndex === i,
@@ -37,7 +38,9 @@ export default function SearchSuggestion({
           onMouseLeave={() => onFocusKeyword(-1)}
           onClick={() => handleClickKeyword(keyword)}
         >
-          {keyword}
+          {range[0] !== 0 && keyword.substring(0, range[0])}
+          <span className={cn(isBlack ? 'highlight-black' : 'highlight')}>{keyword.substring(range[0], range[1])}</span>
+          {range[1] !== keyword.length - 1 && keyword.substring(range[1])}
         </div>
       ))}
     </div>
