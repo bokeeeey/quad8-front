@@ -1,14 +1,17 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 'use client';
 
+import { Button } from '@/components';
 import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
 import type { OrderDetailData } from '@/types/paymentTypes';
 import type { Users } from '@/types/userType';
 import { useQuery } from '@tanstack/react-query';
 import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk';
+import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+
+import styles from './PaymentContainer.module.scss';
+
+const cn = classNames.bind(styles);
 
 interface PaymentContainerProps {
   amountValue: number;
@@ -35,16 +38,11 @@ interface TossPaymentsWidgets {
   }) => Promise<void>;
 }
 
-// const generateRandomString = () => window.btoa(Math.random().toString()).slice(0, 20);
 const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 
 export function PaymentContainer({ amountValue, paymentData }: PaymentContainerProps) {
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
-  // const [amount, setAmount] = useState({
-  //   currency: 'KRW',
-  //   value: 0,
-  // });
 
   const { data: userDataResponse } = useQuery<{ data: Users }>({ queryKey: ['userData'] });
 
@@ -107,14 +105,14 @@ export function PaymentContainer({ amountValue, paymentData }: PaymentContainerP
   };
 
   return (
-    <div className='wrapper w-100'>
-      <div className='max-w-540 w-100'>
-        <div id='payment-method' className='w-100' />
-        <div id='agreement' className='w-100' />
-        <div className='btn-wrapper w-100'>
-          <button type='button' className='btn primary w-100' onClick={handlePayment}>
+    <div className={cn('container')}>
+      <div className={cn('payment')}>
+        <div className={cn('payment-method')} id='payment-method' />
+        <div className={cn('payment-agreement')} id='agreement' />
+        <div className={cn('payment-button-wrap')}>
+          <Button className={cn('payment-button')} type='button' onClick={handlePayment}>
             결제하기
-          </button>
+          </Button>
         </div>
       </div>
     </div>
