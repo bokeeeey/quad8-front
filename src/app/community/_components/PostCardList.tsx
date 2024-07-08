@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getAllCommunityPost } from '@/api/communityAPI';
 import type {
@@ -10,8 +10,6 @@ import type {
   CommunityPostCardDetailDataType,
 } from '@/types/CommunityTypes';
 import PostCard from './PostCard';
-import WritePostButton from './WritePostButton';
-import SortDropdown from './SortDropdown';
 
 import styles from './PostCardList.module.scss';
 
@@ -23,29 +21,39 @@ interface CommunityPageProps {
 }
 
 export default function PostCardList({ searchParams, initialData }: CommunityPageProps) {
+  const queryClient = useQueryClient();
+
   const getAllCommunityParams: CommunityParamsType = {
     sort: searchParams.sort || 'new',
     page: searchParams.page || '0',
     size: searchParams.size || '16',
   };
 
-  const { data: communityData, isLoading } = useQuery({
-    queryKey: ['postCardsList', searchParams],
+  const {
+    data: communityData,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['postCardsList'],
     queryFn: () => getAllCommunityPost(getAllCommunityParams),
   });
+
+  const handleUpdateCardlist = () => {
+    refetch();
+    queryClient.invalidateQueries({
+      queryKey: ['post'],
+    });
+  };
 
   const content = isLoading || !communityData ? initialData : communityData.content;
 
   return (
-    <div className={cn('container')}>
-      <div className={cn('filter-write-button-wrapper')}>
-        <SortDropdown />
-        <WritePostButton />
-      </div>
+    <div>
+      <button type='button' onClick={handleUpdateCardlist}>
+        새로 가져와보자
+      </button>
       <div className={cn('post-wrapper')}>
-        {content.map((cardData: CommunityPostCardDataType) => (
-          <PostCard key={cardData.id} cardData={cardData} />
-        ))}
+        {content?.map((cardData: CommunityPostCardDataType) => <PostCard key={cardData.id} cardData={cardData} />)}
       </div>
     </div>
   );
