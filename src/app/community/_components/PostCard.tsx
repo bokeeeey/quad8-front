@@ -148,7 +148,7 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
       <p className={cn('title')}>{title}</p>
       <PostInteractions cardId={id} likeCount={likeCount} commentCount={commentCount} isLiked={isLiked} />
       <Modal isOpen={isPostModalOpen} onClose={handleClosePostModal}>
-        <PostCardDetailModal cardId={id} onClose={handleClosePostModal} isMine={isMine} />
+        <PostCardDetailModal cardId={id} onClose={handleClosePostModal} isMine={isMine} commentCount={commentCount} />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
         <div onClick={(e) => e.stopPropagation()}>

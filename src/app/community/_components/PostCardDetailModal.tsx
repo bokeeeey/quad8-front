@@ -27,9 +27,10 @@ interface PostCardDetailModalProps {
   cardId: number;
   onClose: () => void;
   isMine?: boolean;
+  commentCount: number;
 }
 
-export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCardDetailModalProps) {
+export default function PostCardDetailModal({ cardId, onClose, isMine, commentCount }: PostCardDetailModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const lastCommentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
@@ -61,7 +62,8 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const { data: infiniteCommentData, refetch: infiniteCommentRefetch } = useQuery({
     queryKey: ['infiniteCommentData'],
     enabled: false,
-    queryFn: () => getCommentsInfiniteScroll(lastCommentId),
+    queryFn: () => getCommentsInfiniteScroll({ communityId: cardId, commentId: lastCommentId }),
+    initialData: null,
   });
 
   const handleSuccessSubmitComment = () => {
@@ -113,28 +115,38 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const isLastCommentIntersecting = useIntersectionObserver(lastCommentRef, { threshold: 1 });
 
   useEffect(() => {
-    if (lastCommentRef.current && isLastCommentIntersecting && lastCommentId !== 0 && visibleComments.length !== 0) {
-      infiniteCommentRefetch();
-
-      if (infiniteCommentData?.data[0]) {
-        const restComments = infiniteCommentData.data;
-        if (visibleComments[visibleComments.length - 1].id !== restComments[restComments.length - 1].id) {
-          setVisibleComments((prev) => [...prev, ...restComments]);
-          setLastCommentId(restComments[restComments.length - 1].id);
-        }
+    if (lastCommentRef.current && isLastCommentIntersecting) {
+      const restComments = infiniteCommentData?.data;
+      if (!restComments) {
+        infiniteCommentRefetch();
+      } else if (restComments.length !== 0) {
+        infiniteCommentRefetch();
       }
     }
-  }, [isLastCommentIntersecting, infiniteCommentData, infiniteCommentRefetch, lastCommentId]);
+  }, [isLastCommentIntersecting, infiniteCommentData, infiniteCommentRefetch]);
 
   useEffect(() => {
-    // 처음에 마지막 댓글 지정
+    const restComments = infiniteCommentData?.data;
+    if (
+      restComments &&
+      visibleComments[visibleComments.length - 1]?.id !== restComments[restComments.length - 1]?.id &&
+      restComments.length !== 0
+    ) {
+      setVisibleComments((prev) => [...prev, ...restComments]);
+      setLastCommentId(restComments[restComments.length - 1].id);
+    }
+  }, [infiniteCommentRefetch, infiniteCommentData?.data, visibleComments]);
+
+  useEffect(() => {
+    // 처음에 가져온 댓글 데이터
+    queryClient.setQueryData(['infiniteCommentData'], null);
     if (data?.data) {
-      const commentDatas = data.data.comments;
-      const lastCommentData = commentDatas[commentDatas.length - 1];
-      setVisibleComments(commentDatas);
+      const initialComments = data.data.comments;
+      const lastCommentData = initialComments[initialComments.length - 1];
+      setVisibleComments(initialComments);
       setLastCommentId(lastCommentData?.id);
     }
-  }, [data]);
+  }, [data, queryClient]);
 
   if (isPending) {
     return <Loading />;
@@ -147,7 +159,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
     return null;
   }
 
-  const { commentCount, content, likeCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } =
+  const { content, likeCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } =
     postData as CommunityPostCardDetailDataType;
 
   const createdDateString = formatDateToString(new Date(updatedAt));
