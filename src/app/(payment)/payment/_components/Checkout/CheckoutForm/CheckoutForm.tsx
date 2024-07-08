@@ -31,9 +31,9 @@ export default function CheckoutForm() {
     e.preventDefault();
     e.stopPropagation();
 
-    const formData = new FormData(e.currentTarget);
-    const values = Object.fromEntries(formData.entries());
-    console.log(values);
+    // const formData = new FormData(e.currentTarget);
+    // const values = Object.fromEntries(formData.entries());
+    // console.log(values);
 
     // router.push(ROUTER.MY_PAGE.CHECKOUT_SUCCESS);
   };
