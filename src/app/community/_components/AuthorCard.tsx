@@ -1,13 +1,15 @@
 import classNames from 'classnames/bind';
-import { MouseEvent } from 'react';
+import { MouseEvent, useRef } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
 import { VerticalTripleDotIcon } from '@/public/index';
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { deletePostCard } from '@/api/communityAPI';
-
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { PopOver } from '@/components';
+import UserProfileCard from './UserProfileCard';
+
 import styles from './AuthorCard.module.scss';
 
 const cn = classNames.bind(styles);
@@ -21,6 +23,9 @@ interface AuthorCardProps {
   onClickPopOver: (e: MouseEvent<SVGElement>) => void;
   onClosePopOver: () => void;
   isOpenPopOver: boolean;
+  onClickProfile: (e: MouseEvent<HTMLDivElement>) => void;
+  onCloseProfileCard: () => void;
+  isOpenProfileCard: boolean;
 }
 
 export default function AuthorCard({
@@ -32,8 +37,15 @@ export default function AuthorCard({
   onClickPopOver,
   onClosePopOver,
   isOpenPopOver,
+  onClickProfile,
+  onCloseProfileCard,
+  isOpenProfileCard,
 }: AuthorCardProps) {
   const queryClient = useQueryClient();
+
+  const userProfileCardRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(userProfileCardRef, onCloseProfileCard);
 
   const { mutate: deletePostCardMutation } = useMutation({
     mutationFn: deletePostCard,
@@ -47,10 +59,6 @@ export default function AuthorCard({
       toast.error('리뷰 삭제 중 오류가 발생하였습니다.');
     },
   });
-
-  // const handleClickEdit = (e: MouseEvent<HTMLDivElement>) => {
-  //   e.stopPropagation();
-  // };
 
   const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -85,7 +93,10 @@ export default function AuthorCard({
 
   return (
     <div className={cn('container')}>
-      <ProfileImage profileImage={userImage} />
+      <div onClick={onClickProfile} className={cn('user-profile')} ref={userProfileCardRef}>
+        <ProfileImage profileImage={userImage} />
+        <UserProfileCard isOpenProfileCard={isOpenProfileCard} />
+      </div>
       <div className={cn('info-textbox')}>
         <p className={cn('user-name')}>{nickname}</p>
         <p className={cn('sub-info')}>{dateText}</p>

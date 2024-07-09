@@ -5,6 +5,10 @@
   height: 6.4rem;
 }
 
+.user-profile {
+  position: relative;
+}
+
 .info-textbox {
   @include flex-column(0);
 

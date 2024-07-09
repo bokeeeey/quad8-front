@@ -24,6 +24,7 @@ interface PostCardProps {
 export default function PostCard({ cardData, isMine }: PostCardProps) {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isClickedProfile, setIsClickedProfile] = useState(false);
 
   const { id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage, isLiked } = cardData;
 
@@ -39,9 +40,19 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
     setIsPopupOpen(false);
   };
 
+  const handleClickProfile = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setIsClickedProfile(!isClickedProfile);
+  };
+
+  const handleCloseProfileCard = () => {
+    setIsClickedProfile(false);
+  };
+
   const handleClickPostModal = () => {
     setIsPostModalOpen(true);
     handleClosePopOver();
+    handleCloseProfileCard();
   };
   const handleClosePostModal = () => {
     setIsPostModalOpen(false);
@@ -58,6 +69,9 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
         onClickPopOver={handleClickPopup}
         onClosePopOver={handleClosePopOver}
         isOpenPopOver={isPopupOpen}
+        onClickProfile={handleClickProfile}
+        onCloseProfileCard={handleCloseProfileCard}
+        isOpenProfileCard={isClickedProfile}
       />
       <div className={cn('keyboard-image-wrapper')}>
         <Image

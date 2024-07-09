@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
@@ -9,9 +9,11 @@ import { calculateTimeDifference } from '@/libs/calculateDate';
 import { VerticalTripleDotIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
 import { PopOver } from '@/components';
-
 import { deleteComment } from '@/api/communityAPI';
 import { toast } from 'react-toastify';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+import UserProfileCard from './UserProfileCard';
+
 import styles from './Comment.module.scss';
 
 const cn = classNames.bind(styles);
@@ -42,8 +44,10 @@ export default function Comment({
   comment,
 }: CommentProps) {
   const queryClient = useQueryClient();
+  const userProfileCardRef = useRef<HTMLDivElement>(null);
   const createdTimeToDate = new Date(createdTime);
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
+  const [isClickedProfile, setIsClickedProfile] = useState(false);
 
   const userData = queryClient.getQueryData<UserDataType>(['userData']);
 
@@ -71,6 +75,16 @@ export default function Comment({
   const handleClosePopOver = () => {
     setIsOpenPopOver(false);
   };
+
+  const handleClickProfile = () => {
+    setIsClickedProfile(!isClickedProfile);
+  };
+
+  const handleCloseProfileCard = () => {
+    setIsClickedProfile(false);
+  };
+
+  useOutsideClick(userProfileCardRef, handleCloseProfileCard);
 
   const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {
     deleteCommentMutation(commentId);
@@ -102,7 +116,10 @@ export default function Comment({
   const timeAgo = calculateTimeDifference(createdTimeToDate);
   return (
     <div className={cn('container')}>
-      <ProfileImage profileImage={profile || null} />
+      <div onClick={handleClickProfile} className={cn('user-profile')} ref={userProfileCardRef}>
+        <ProfileImage profileImage={profile || null} />
+        <UserProfileCard isOpenProfileCard={isClickedProfile} />
+      </div>
       <div className={cn('content-wrapper')}>
         <div className={cn('user-info-wrapper')}>
           <div className={cn('user-info')}>

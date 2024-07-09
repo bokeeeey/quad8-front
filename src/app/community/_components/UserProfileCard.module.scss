@@ -1,0 +1,16 @@
+.user-detail-profile-card {
+  position: absolute;
+  z-index: $zindex-popover;
+  top: 0;
+  left: 7rem;
+  width: 20rem;
+  height: 20rem;
+  padding: 1rem;
+  border: 0.1rem solid black;
+  border-radius: 1rem;
+  background-color: white;
+}
+
+.display-none {
+  display: none;
+}

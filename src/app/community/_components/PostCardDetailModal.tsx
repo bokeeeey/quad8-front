@@ -35,6 +35,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isClickedProfile, setIsClickedProfile] = useState(false);
 
   const handleClickPopup = (e: MouseEvent<SVGElement>) => {
     e.stopPropagation();
@@ -43,6 +44,15 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
 
   const handleClosePopOver = () => {
     setIsPopupOpen(false);
+  };
+
+  const handleClickProfile = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setIsClickedProfile(!isClickedProfile);
+  };
+
+  const handleCloseProfileCard = () => {
+    setIsClickedProfile(false);
   };
 
   const { data, refetch, isPending } = useQuery({
@@ -209,6 +219,9 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
               onClickPopOver={handleClickPopup}
               onClosePopOver={handleClosePopOver}
               isOpenPopOver={isPopupOpen}
+              onClickProfile={handleClickProfile}
+              onCloseProfileCard={handleCloseProfileCard}
+              isOpenProfileCard={isClickedProfile}
             />
             <CustomOption wrapperRef={containerRef} customData={custom} />
             <p className={cn('content')}>{content}</p>

@@ -4,6 +4,10 @@
   gap: 1.2rem;
 }
 
+.user-profile {
+  position: relative;
+}
+
 .profile-image {
   @include flex-center;
 
