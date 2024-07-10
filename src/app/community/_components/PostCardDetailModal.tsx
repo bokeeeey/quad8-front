@@ -42,25 +42,49 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [isClickedAuthorProfile, setIsClickedAuthorProfile] = useState(false);
+
   const [isClickedCommentProfile, setIsClickedCommentProfile] = useState(false);
   const [triggerCommentProfileCardAnimate, setTriggerCommentProfileCardAnimate] = useState(true);
   const [clickedCommentId, setIsClickedCommentId] = useState<number | null>(null);
   const [clickedCommenetProfileCardTop, setClickedCommenetProfileTop] = useState(0);
   const [clickedUserId, setClickedUserId] = useState(0);
+  const [clickedPopOverCommentId, setClickedPopOverCommentId] = useState(0);
 
-  const handleClickPopup = (e: MouseEvent<SVGElement>) => {
+  const handleOpenAuthorPopOver = (e: MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    setIsPopupOpen(!isPopupOpen);
+    setIsPopupOpen((prevIsOpen) => !prevIsOpen);
+
+    setClickedPopOverCommentId(0);
+    setIsClickedAuthorProfile(false);
+    setIsClickedCommentProfile(false);
   };
+
   const handleClosePopOver = () => {
     setIsPopupOpen(false);
+  };
+
+  const handleOpenCommentPopOver = (e: MouseEvent<HTMLDivElement>, commentId: number) => {
+    e.stopPropagation();
+    setClickedPopOverCommentId(commentId);
+
+    setIsClickedAuthorProfile(false);
+    setIsClickedCommentProfile(false);
+    setIsPopupOpen(false);
+  };
+
+  const handleCloseCommentPopOver = () => {
+    setClickedPopOverCommentId(0);
   };
 
   const handleClickAuthorProfile = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setIsClickedAuthorProfile(!isClickedAuthorProfile);
+
+    setIsPopupOpen(false);
     setIsClickedCommentProfile(false);
+    setClickedPopOverCommentId(0);
   };
+
   const handleCloseAuthorProfileCard = () => {
     setIsClickedAuthorProfile(false);
   };
@@ -76,10 +100,13 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   }) => {
     setClickedCommenetProfileTop(top);
     setIsClickedCommentId(commentId);
-    setIsClickedAuthorProfile(false);
     setClickedUserId(userId);
-    setIsClickedCommentProfile(true);
     setTriggerCommentProfileCardAnimate(!triggerCommentProfileCardAnimate);
+
+    setIsClickedAuthorProfile(false);
+    setIsClickedCommentProfile(true);
+    setClickedPopOverCommentId(0);
+    setIsPopupOpen(false);
   };
 
   const handleCloseCommentProfileCard = () => {
@@ -254,7 +281,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
               nickname={nickName}
               dateText={createdDateString}
               userImage={userImage}
-              onClickPopOver={handleClickPopup}
+              onClickPopOver={handleOpenAuthorPopOver}
               onClosePopOver={handleClosePopOver}
               isOpenPopOver={isPopupOpen}
               onClickProfile={handleClickAuthorProfile}
@@ -277,6 +304,9 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
                   profile={comment.imgUrl}
                   onClickProfile={handleClickCommentProfile}
                   ref={clickedCommentId === comment.id ? clickedCommentRef : null}
+                  onOpenPopOver={handleOpenCommentPopOver}
+                  onClosePopOver={handleCloseCommentPopOver}
+                  isOpenPopOver={clickedPopOverCommentId === comment.id}
                 />
               ))}
             </div>

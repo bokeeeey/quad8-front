@@ -56,13 +56,13 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
       )}
       onClick={(e) => e.stopPropagation()}
     >
-      {isLoading || !userInfo ? (
+      {isLoading ? (
         <div>Loading..</div>
       ) : (
         <>
           <div className={cn('profile-image')} />
           <div className={cn('info-wrapper')}>
-            <p className={cn('nickname')}>{userInfo?.nickname}</p>
+            <p className={cn('nickname')}>{userInfo?.nickname || '사용자를 찾을 수 없습니다.'}</p>
             <p>
               <strong>email:</strong> {userInfo?.email}
             </p>

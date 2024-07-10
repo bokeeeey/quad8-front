@@ -48,6 +48,10 @@
   @include pretendard-20-700;
 }
 
+.not-found-text {
+  @include pretendard-20-700;
+}
+
 @keyframes shadow-drop-center {
   0% {
     box-shadow: 0 0 0 0 rgb(0 0 0 / 0%);

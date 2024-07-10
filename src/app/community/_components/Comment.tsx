@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { MouseEvent, useState, forwardRef } from 'react';
+import { MouseEvent, forwardRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
@@ -25,6 +25,9 @@ interface CommentProps {
   createdTime: string;
   comment: string;
   onClickProfile: ({ top, commentId, userId }: { top: number; commentId: number; userId: number }) => void;
+  onOpenPopOver: (e: MouseEvent<HTMLDivElement>, commentId: number) => void;
+  onClosePopOver: () => void;
+  isOpenPopOver: boolean;
 }
 
 interface UserDataType {
@@ -34,13 +37,24 @@ interface UserDataType {
 }
 
 export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
-  { cardId, commentUserId, commentId, nickname, profile, createdTime, comment, onClickProfile },
+  {
+    cardId,
+    commentUserId,
+    commentId,
+    nickname,
+    profile,
+    createdTime,
+    comment,
+    onClickProfile,
+    onOpenPopOver,
+    onClosePopOver,
+    isOpenPopOver,
+  },
   ref,
 ) {
   const queryClient = useQueryClient();
 
   const createdTimeToDate = new Date(createdTime);
-  const [isOpenPopOver, setIsOpenPopOver] = useState(false);
 
   const userData = queryClient.getQueryData<UserDataType>(['userData']);
 
@@ -59,15 +73,6 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
       toast.error('댓글 삭제 중 오류가 발생하였습니다.');
     },
   });
-
-  const handleClickPopOver = (e: MouseEvent<HTMLDivElement>) => {
-    setIsOpenPopOver(!isOpenPopOver);
-    e.stopPropagation();
-  };
-
-  const handleClosePopOver = () => {
-    setIsOpenPopOver(false);
-  };
 
   const handleClickProfile = (e: MouseEvent<HTMLElement>) => {
     const { top } = e.currentTarget.getBoundingClientRect();
@@ -114,12 +119,12 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
             <p className={cn('nickname')}>{nickname}</p>
             <p className={cn('time-ago')}>{timeAgo}</p>
           </div>
-          <div className={cn('dot-icon')} onClick={(e) => handleClickPopOver(e)}>
+          <div className={cn('dot-icon')} onClick={(e) => onOpenPopOver(e, commentId)}>
             <VerticalTripleDotIcon />
             {isOpenPopOver && (
               <PopOver
                 optionsData={userID === commentUserId ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
-                onHandleClose={handleClosePopOver}
+                onHandleClose={onClosePopOver}
               />
             )}
           </div>
