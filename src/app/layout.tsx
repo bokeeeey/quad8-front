@@ -1,12 +1,16 @@
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
+import classNames from 'classnames/bind';
 
 import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
 import { Providers } from './providers';
 
 import '@/styles/reset.css';
+import styles from './layout.module.scss';
+
+const cn = classNames.bind(styles);
 
 export const metadata: Metadata = {
   title: '키보드 득템 :: KeyDeuk',
@@ -29,11 +33,13 @@ export default async function RootLayout({
     <html lang='ko'>
       <body>
         <Providers>
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <Header />
-          </HydrationBoundary>
-          {children}
-          <Footer />
+          <div className={cn('wrapper')}>
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Header />
+            </HydrationBoundary>
+            <div className={cn('content-wrapper')}>{children}</div>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

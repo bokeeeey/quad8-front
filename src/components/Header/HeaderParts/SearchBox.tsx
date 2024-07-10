@@ -5,16 +5,16 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
-import { getSearchSuggestion } from '@/api/search';
+import { getSearchSuggestion } from '@/api/searchAPI';
 import type { SuggestionDataType } from '@/types/SearchType';
 import { SearchIcon } from '@/public/index';
 import { ROUTER } from '@/constants/route';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { charMatcher } from '@/libs/charMatcher';
 import SearchHistory from './SearchHistory';
+import SearchSuggestion from './SearchSuggestion';
 
 import styles from './SearchBox.module.scss';
-import SearchSuggestion from './SearchSuggestion';
 
 const cn = classNames.bind(styles);
 
