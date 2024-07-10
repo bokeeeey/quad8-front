@@ -1,8 +1,10 @@
 import classNames from 'classnames/bind';
 import { forwardRef, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 
 import { getOthersInfo } from '@/api/usersAPI';
+import { keydeukProfileImg } from '@/public/index';
 
 import styles from './UserProfileCard.module.scss';
 
@@ -36,6 +38,7 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
     if (isOpenProfileCard) {
       refetch();
       setAnimate(true);
+      console.log(userInfo);
       const timer = setTimeout(() => {
         setAnimate(false);
       }, 300);
@@ -60,7 +63,9 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
         <div>Loading..</div>
       ) : (
         <>
-          <div className={cn('profile-image')} />
+          <div className={cn('profile-image')}>
+            <Image src={userInfo?.imgUrl || keydeukProfileImg} alt='프로필 이미지' fill />
+          </div>
           <div className={cn('info-wrapper')}>
             <p className={cn('nickname')}>{userInfo?.nickname || '사용자를 찾을 수 없습니다.'}</p>
             <p>
