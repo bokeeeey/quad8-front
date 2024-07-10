@@ -55,6 +55,7 @@
 .right-wrapper {
   @include flex-column(0);
 
+  position: relative;
   justify-content: space-between;
 }
 

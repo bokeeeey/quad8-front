@@ -1,14 +1,27 @@
 import classNames from 'classnames/bind';
+import { forwardRef } from 'react';
 import styles from './UserProfileCard.module.scss';
 
 const cn = classNames.bind(styles);
 
 interface UserProfileCardProps {
   isOpenProfileCard: boolean;
+  top?: number;
 }
 
-export default function UserProfileCard({ isOpenProfileCard }: UserProfileCardProps) {
+const UserProfileCard = forwardRef<HTMLDivElement, UserProfileCardProps>(({ isOpenProfileCard, top }, ref) => {
   return (
-    <div className={cn('user-detail-profile-card', { 'display-none': !isOpenProfileCard })}>다른 유저 프로필 보기</div>
+    <div
+      ref={ref}
+      style={{ top: top ? top - 170 : 0 }}
+      className={cn('user-detail-profile-card', { 'display-none': !isOpenProfileCard })}
+      onClick={(e) => e.stopPropagation()}
+    >
+      다른 유저 프로필 보기
+    </div>
   );
-}
+});
+
+export default UserProfileCard;
+
+UserProfileCard.displayName = 'UserProfileCard';

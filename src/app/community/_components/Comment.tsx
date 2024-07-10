@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { MouseEvent, useRef, useState } from 'react';
+import { MouseEvent, useState, forwardRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
@@ -11,8 +11,6 @@ import type { Users } from '@/types/userType';
 import { PopOver } from '@/components';
 import { deleteComment } from '@/api/communityAPI';
 import { toast } from 'react-toastify';
-import { useOutsideClick } from '@/hooks/useOutsideClick';
-import UserProfileCard from './UserProfileCard';
 
 import styles from './Comment.module.scss';
 
@@ -26,6 +24,7 @@ interface CommentProps {
   profile: string | null;
   createdTime: string;
   comment: string;
+  onClickProfile: ({ top, commentId }: { top: number; commentId: number }) => void;
 }
 
 interface UserDataType {
@@ -34,20 +33,14 @@ interface UserDataType {
   message: string;
 }
 
-export default function Comment({
-  cardId,
-  commentUserId,
-  commentId,
-  nickname,
-  profile,
-  createdTime,
-  comment,
-}: CommentProps) {
+export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
+  { cardId, commentUserId, commentId, nickname, profile, createdTime, comment, onClickProfile },
+  ref,
+) {
   const queryClient = useQueryClient();
-  const userProfileCardRef = useRef<HTMLDivElement>(null);
+
   const createdTimeToDate = new Date(createdTime);
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
-  const [isClickedProfile, setIsClickedProfile] = useState(false);
 
   const userData = queryClient.getQueryData<UserDataType>(['userData']);
 
@@ -76,15 +69,11 @@ export default function Comment({
     setIsOpenPopOver(false);
   };
 
-  const handleClickProfile = () => {
-    setIsClickedProfile(!isClickedProfile);
+  const handleClickProfile = (e: MouseEvent<HTMLElement>) => {
+    const { top } = e.currentTarget.getBoundingClientRect();
+    e.stopPropagation();
+    onClickProfile({ top, commentId });
   };
-
-  const handleCloseProfileCard = () => {
-    setIsClickedProfile(false);
-  };
-
-  useOutsideClick(userProfileCardRef, handleCloseProfileCard);
 
   const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {
     deleteCommentMutation(commentId);
@@ -116,9 +105,8 @@ export default function Comment({
   const timeAgo = calculateTimeDifference(createdTimeToDate);
   return (
     <div className={cn('container')}>
-      <div onClick={handleClickProfile} className={cn('user-profile')} ref={userProfileCardRef}>
+      <div onClick={handleClickProfile} className={cn('user-profile')} ref={ref}>
         <ProfileImage profileImage={profile || null} />
-        <UserProfileCard isOpenProfileCard={isClickedProfile} />
       </div>
       <div className={cn('content-wrapper')}>
         <div className={cn('user-info-wrapper')}>
@@ -140,4 +128,4 @@ export default function Comment({
       </div>
     </div>
   );
-}
+});

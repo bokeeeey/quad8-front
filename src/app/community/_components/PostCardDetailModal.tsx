@@ -13,11 +13,13 @@ import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
 import { formatDateToString } from '@/libs/formatDateToString';
 import { keydeukImg } from '@/public/index';
 import type { CommunityPostCardDetailDataType } from '@/types/CommunityTypes';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 import AuthorCard from './AuthorCard';
 import Comment from './Comment';
 import { PostInteractions } from './PostInteractions';
 
 import styles from './PostCardDetailModal.module.scss';
+import UserProfileCard from './UserProfileCard';
 
 const cn = classNames.bind(styles);
 interface PostCardDetailModalProps {
@@ -28,32 +30,49 @@ interface PostCardDetailModalProps {
 
 export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCardDetailModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const clickedCommentRef = useRef<HTMLDivElement>(null);
+
   const queryClient = useQueryClient();
   const [commentRef, setCommentRef] = useState<HTMLInputElement | null>(null);
   const [clickedImage, setClickedImage] = useState('');
+
   const [isEditAlertOpen, setIsEditAlertOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isClickedProfile, setIsClickedProfile] = useState(false);
+
+  const [isClickedAuthorProfile, setIsClickedAuthorProfile] = useState(false);
+  const [clickedCommentId, setIsClickedCommentId] = useState<number | null>(null);
+  const [clickedCommenetProfileCardTop, setClickedCommenetProfileTop] = useState(0);
 
   const handleClickPopup = (e: MouseEvent<SVGElement>) => {
     e.stopPropagation();
     setIsPopupOpen(!isPopupOpen);
   };
-
   const handleClosePopOver = () => {
     setIsPopupOpen(false);
   };
 
-  const handleClickProfile = (e: MouseEvent<HTMLDivElement>) => {
+  const handleClickAuthorProfile = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    setIsClickedProfile(!isClickedProfile);
+    setIsClickedAuthorProfile(!isClickedAuthorProfile);
+    setIsClickedCommentId(null);
+  };
+  const handleCloseAuthorProfileCard = () => {
+    setIsClickedAuthorProfile(false);
   };
 
-  const handleCloseProfileCard = () => {
-    setIsClickedProfile(false);
+  const handleClickCommentProfile = ({ top, commentId }: { top: number; commentId: number }) => {
+    setClickedCommenetProfileTop(top);
+    setIsClickedCommentId(commentId);
+    setIsClickedAuthorProfile(false);
   };
+
+  const handleCloseCommentProfileCard = () => {
+    setIsClickedCommentId(null);
+  };
+
+  useOutsideClick(clickedCommentRef, handleCloseCommentProfileCard);
 
   const { data, refetch, isPending } = useQuery({
     queryKey: ['postData', cardId],
@@ -137,6 +156,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const handleClickThumbnail = (i: number) => {
     setClickedImage(reviewImages[i].imgUrl);
   };
+
   const handleClickDeleteAlertButon = () => {
     deletePostMutation(cardId);
     setIsDeleteAlertOpen(false);
@@ -144,13 +164,16 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const handleCloseDeleteAlert = () => {
     setIsDeleteAlertOpen(false);
   };
+
   const handleClickEditAlertButton = () => {
     setIsEditModalOpen(true);
     setIsEditAlertOpen(false);
   };
+
   const handleCloseEditAlert = () => {
     setIsEditAlertOpen(false);
   };
+
   const handleClickEditModalButton = () => {
     setIsEditModalOpen(false);
     queryClient.invalidateQueries({
@@ -219,9 +242,9 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
               onClickPopOver={handleClickPopup}
               onClosePopOver={handleClosePopOver}
               isOpenPopOver={isPopupOpen}
-              onClickProfile={handleClickProfile}
-              onCloseProfileCard={handleCloseProfileCard}
-              isOpenProfileCard={isClickedProfile}
+              onClickProfile={handleClickAuthorProfile}
+              onCloseProfileCard={handleCloseAuthorProfileCard}
+              isOpenProfileCard={isClickedAuthorProfile}
             />
             <CustomOption wrapperRef={containerRef} customData={custom} />
             <p className={cn('content')}>{content}</p>
@@ -237,6 +260,8 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
                   nickname={comment.nickName}
                   comment={comment.content}
                   profile={comment.imgUrl}
+                  onClickProfile={handleClickCommentProfile}
+                  ref={clickedCommentId === comment.id ? clickedCommentRef : null}
                 />
               ))}
             </div>
@@ -244,6 +269,10 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
           <div className={cn('comment-input')}>
             <InputField placeholder='댓글을 입력해주세요' ref={(ref) => setCommentRef(ref)} />
           </div>
+          <UserProfileCard
+            isOpenProfileCard={typeof clickedCommentId === 'number'}
+            top={clickedCommenetProfileCardTop}
+          />
         </div>
       </div>
       <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
