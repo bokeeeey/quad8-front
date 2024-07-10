@@ -164,6 +164,14 @@
 }
 
 // Poppins Mixin들
+@mixin poppins-14-400 {
+  @include font-mixin('Poppins', 1.4, 400);
+}
+
+@mixin poppins-16-500 {
+  @include font-mixin('Poppins', 1.6, 500);
+}
+
 @mixin poppins-18-400 {
   @include font-mixin('Poppins', 1.8, 400);
 }
@@ -174,4 +182,8 @@
 
 @mixin poppins-18-600 {
   @include font-mixin('Poppins', 1.8, 600);
+}
+
+@mixin poppins-22-500 {
+  @include font-mixin('Poppins', 2.2, 500);
 }
