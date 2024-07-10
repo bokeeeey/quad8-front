@@ -37,3 +37,12 @@
 
   color: $gray-50;
 }
+
+.no-review {
+  display: flex;
+  justify-content: center;
+  margin-top: 15rem;
+  color: $gray-40;
+
+  @include pretendard-20-600;
+}

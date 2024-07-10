@@ -10,7 +10,7 @@
 }
 
 .expand {
-  background-color: $gray-10;
+  background-color: $gray-5;
 }
 
 .review-box {
@@ -102,19 +102,13 @@
   object-fit: cover;
 }
 
-.big-image {
-  max-width: 60rem;
-  max-height: 60rem;
-  object-fit: cover;
-}
-
 .mypage-review-image {
   width: 8rem;
   height: 8rem;
   margin-right: 1.2rem;
   border: 0.1rem solid $gray-10;
   border-radius: 0.8rem;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .image-count {
@@ -139,4 +133,52 @@
   @include flex-center;
 
   margin-left: 17rem;
+}
+
+.render-image {
+  width: 100%;
+  max-width: 60rem;
+  height: auto;
+  max-height: 60rem;
+  object-fit: contain;
+}
+
+.review-item.modal-review {
+  @include flex-column(0);
+
+  flex-grow: 1;
+  padding: 2rem 0;
+}
+
+.modal-top-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 1.2rem;
+  border-bottom: 0.1rem solid $gray-10;
+}
+
+.modal-top-left-section {
+  display: flex;
+  align-items: center;
+}
+
+.modal-info-section {
+  @include flex-column(0.6rem);
+
+  margin-left: 2rem;
+}
+
+.modal-option-section {
+  @include flex-column(1.2rem);
+
+  padding: 1.2rem 0;
+  border-bottom: 0.1rem solid $gray-10;
+}
+
+.modal-content {
+  flex-grow: 1;
+  margin-top: 1.2rem;
+  @include pretendard-16-400;
 }

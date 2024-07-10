@@ -1,13 +1,53 @@
 .all-review-image {
-  width: 22.8rem;
-  height: 22.8rem;
+  width: 20rem;
+  height: 20rem;
   border: 0.1rem solid $gray-10;
   border-radius: 0.8rem;
   object-fit: cover;
+  cursor: pointer;
+}
+
+.all-review-images {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 5rem;
+  gap: 1.4rem;
 }
 
 .all-review-image-lists {
+  @include flex-column(2rem);
+}
+
+.arrow-buttons {
   display: flex;
-  gap: 1.4rem;
-  margin-bottom: 5rem;
+  gap: 1.2rem;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.arrow-box {
+  padding: 0.5rem 0.8rem;
+  border: 0.1rem solid $black;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.arrow {
+  width: 1rem;
+  height: 1.5rem;
+  fill: $black;
+  rotate: 90deg;
+}
+
+.arrow.right {
+  rotate: -90deg;
+}
+
+.arrow.disabled {
+  fill: $gray-30;
+}
+
+.arrow-box.disabled {
+  border: 0.1rem solid $gray-30;
+  cursor: default;
 }

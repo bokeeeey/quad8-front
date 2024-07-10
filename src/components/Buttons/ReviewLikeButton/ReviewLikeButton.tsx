@@ -58,6 +58,10 @@ export default function ReviewLikeButton({ id, isLiked, likeCount }: ReviewLikeB
     );
   };
 
+  const handleCloseModal = () => {
+    setIsSignInModalOpen(false);
+  };
+
   return (
     <>
       <button type='button' className={cn('like-circle', { 'red-circle': isChecked })} onClick={handleClickButton}>
@@ -65,7 +69,7 @@ export default function ReviewLikeButton({ id, isLiked, likeCount }: ReviewLikeB
         <span>{newLikeCount}</span>
       </button>
 
-      <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
+      <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseModal} />
     </>
   );
 }
