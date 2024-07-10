@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { calculateTimeDifference } from '@/libs/calculateDate';
-import { VerticalTripleDotIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
 import { PopOver } from '@/components';
 import { deleteComment } from '@/api/communityAPI';
@@ -68,7 +67,7 @@ const Comment = forwardRef<HTMLDivElement, CommentProps>(({ cardId, commentData 
     },
   });
 
-  const handleClickPopOver = (e: MouseEvent<HTMLDivElement>) => {
+  const handleClickPopOver = (e: MouseEvent<SVGElement>) => {
     setIsOpenPopOver(!isOpenPopOver);
     e.stopPropagation();
   };
@@ -114,15 +113,12 @@ const Comment = forwardRef<HTMLDivElement, CommentProps>(({ cardId, commentData 
             <p className={cn('nickname')}>{nickname}</p>
             <p className={cn('time-ago')}>{timeAgo}</p>
           </div>
-          <div className={cn('dot-icon')} onClick={(e) => handleClickPopOver(e)}>
-            <VerticalTripleDotIcon />
-            {isOpenPopOver && (
-              <PopOver
-                optionsData={userID === commentUserId ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
-                onHandleClose={handleClosePopOver}
-              />
-            )}
-          </div>
+          <PopOver
+            optionsData={userID === commentUserId ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
+            onHandleClose={handleClosePopOver}
+            isOpenPopOver={isOpenPopOver}
+            onHandleOpen={handleClickPopOver}
+          />
         </div>
         <div className={cn('content')}>{comment}</div>
       </div>

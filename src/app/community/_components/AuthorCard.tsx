@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import { MouseEvent } from 'react';
 
-import { VerticalTripleDotIcon } from '@/public/index';
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { PopOver } from '@/components';
 
@@ -39,8 +38,12 @@ export default function AuthorCard({
         <p className={cn('sub-info')}>{dateText}</p>
       </div>
       <div className={cn('show-more-icon')}>
-        <VerticalTripleDotIcon onClick={onClickPopOver} />
-        {isOpenPopOver && <PopOver optionsData={popOverOptions} onHandleClose={onClosePopOver} />}
+        <PopOver
+          optionsData={popOverOptions}
+          onHandleClose={onClosePopOver}
+          isOpenPopOver={isOpenPopOver}
+          onHandleOpen={onClickPopOver}
+        />
       </div>
     </div>
   );
