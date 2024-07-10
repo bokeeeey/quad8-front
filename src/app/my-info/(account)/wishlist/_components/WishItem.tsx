@@ -1,20 +1,22 @@
 'use client';
 
-import { postCart } from '@/api/cartAPI';
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
+
 import { deleteProductLikes } from '@/api/likesAPI';
-import { Dialog } from '@/components';
+import { ProductLike } from '@/types/LikeTypes';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { ROUTER } from '@/constants/route';
 import { CartIcon, DeleteIcon } from '@/public/index';
-import { ProductLike } from '@/types/LikeTypes';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { Dialog, Modal } from '@/components';
 import WishCheckBox from './WishCheckBox';
+import AddCartModal from './AddCartModal';
+
 import styles from './WishItem.module.scss';
 
 const cn = classNames.bind(styles);
@@ -27,8 +29,9 @@ interface WishItemProps extends ProductLike {
 export default function WishItem({ productId, productImg, productName, price, checked, onChange }: WishItemProps) {
   const queryClient = useQueryClient();
 
+  const [isOpenAddCartModal, setIsOpenAddCartModal] = useState(false);
+
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
-  const [isOpenCartAlert, setIsOpenCartAlert] = useState(false);
 
   const { mutate: deleteWishItem } = useMutation({
     mutationFn: deleteProductLikes,
@@ -42,23 +45,16 @@ export default function WishItem({ productId, productImg, productName, price, ch
     },
   });
 
-  const { mutate: postCartItem } = useMutation({
-    mutationFn: postCart,
-    onSuccess: () => {
-      setIsOpenCartAlert(true);
-    },
-  });
-
   const handleDeleteClick = () => {
     deleteWishItem(productId);
   };
 
   const handleCartClick = () => {
-    postCartItem({
-      productId,
-      count: 1,
-      switchOptionId: undefined,
-    });
+    setIsOpenAddCartModal(true);
+  };
+
+  const handleCloseCartModal = () => {
+    setIsOpenAddCartModal(false);
   };
 
   return (
@@ -91,6 +87,9 @@ export default function WishItem({ productId, productImg, productName, price, ch
           <DeleteIcon fill='#4968f6' width={30} height={30} />
         </button>
       </div>
+      <Modal isOpen={isOpenAddCartModal} onClose={handleCloseCartModal}>
+        <AddCartModal productId={productId} closeModal={handleCloseCartModal} />
+      </Modal>
       <Dialog
         type='confirm'
         iconType='warn'
@@ -98,14 +97,6 @@ export default function WishItem({ productId, productImg, productName, price, ch
         isOpen={isOpenConfirm}
         onClick={{ left: () => setIsOpenConfirm(false), right: handleDeleteClick }}
         buttonText={{ left: '취소', right: '확인' }}
-      />
-      <Dialog
-        type='alert'
-        iconType='accept'
-        message='장바구니에 담겼습니다.'
-        isOpen={isOpenCartAlert}
-        onClick={() => setIsOpenCartAlert(false)}
-        buttonText='확인'
       />
     </li>
   );
