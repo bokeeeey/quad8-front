@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import { VerticalTripleDotIcon } from '@/public/index';
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { deletePostCard } from '@/api/communityAPI';
-
 import { PopOver } from '@/components';
+
 import styles from './AuthorCard.module.scss';
 
 const cn = classNames.bind(styles);
@@ -54,6 +54,7 @@ export default function AuthorCard({
 
   const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+
     if (id) {
       deletePostCardMutation(id);
     } else {

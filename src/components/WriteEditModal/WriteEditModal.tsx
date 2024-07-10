@@ -5,16 +5,16 @@ import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
 import { Button, ImageInput, InputField, Rating, TextField, CustomOption } from '@/components';
 import { keydeukImg } from '@/public/index';
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
-
-import { toast } from 'react-toastify';
 import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { postProductReviews } from '@/api/productReviewAPI';
 import { IMAGE_BLUR } from '@/constants/blurImage';
+
 import styles from './WriteEditModal.module.scss';
 
 const cn = classNames.bind(styles);
@@ -187,8 +187,6 @@ export default function WriteEditModal({
         score: rating,
       };
       fetchFormData.append('createReviewRequest', JSON.stringify(createReviewRequest));
-
-      // console.log(createReviewRequest);
 
       if (payload.files && payload.files.length > 0) {
         payload.files.forEach((file: File) => {

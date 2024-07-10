@@ -34,7 +34,6 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
     e.stopPropagation();
     setIsPopupOpen(!isPopupOpen);
   };
-
   const handleClosePopOver = () => {
     setIsPopupOpen(false);
   };
