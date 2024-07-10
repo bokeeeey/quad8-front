@@ -11,10 +11,10 @@ import { postCreateOrder } from '@/api/orderAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { CartDataContext } from '@/context/CartDataContext';
+import { setCookie } from '@/libs/manageCookie';
 import type { CartAPIDataType } from '@/types/CartTypes';
 import type { CreateOrderResponseType } from '@/types/OrderTypes';
 
-import { setCookie } from '@/libs/manageCookie';
 import styles from './PurchaseButton.module.scss';
 
 const cn = classNames.bind(styles);

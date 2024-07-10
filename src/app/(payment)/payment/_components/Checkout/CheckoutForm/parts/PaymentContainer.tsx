@@ -1,13 +1,15 @@
 'use client';
 
-import { Button } from '@/components';
-import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
-import type { OrderDetailData } from '@/types/paymentTypes';
-import type { Users } from '@/types/userType';
 import { useQuery } from '@tanstack/react-query';
 import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+
+import { Button } from '@/components';
+import { ROUTER } from '@/constants/route';
+import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
+import type { OrderDetailData } from '@/types/paymentTypes';
+import type { Users } from '@/types/userType';
 
 import styles from './PaymentContainer.module.scss';
 
@@ -38,7 +40,7 @@ interface TossPaymentsWidgets {
   }) => Promise<void>;
 }
 
-const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
+const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string;
 
 export function PaymentContainer({ amountValue, paymentData }: PaymentContainerProps) {
   const [ready, setReady] = useState(false);
@@ -64,7 +66,9 @@ export function PaymentContainer({ amountValue, paymentData }: PaymentContainerP
 
   useEffect(() => {
     const renderPaymentWidgets = async () => {
-      if (widgets == null) return;
+      if (widgets == null) {
+        return;
+      }
 
       await widgets.setAmount({
         currency: 'KRW',
@@ -96,11 +100,12 @@ export function PaymentContainer({ amountValue, paymentData }: PaymentContainerP
         orderName,
         customerName: customerName || '',
         customerEmail: customerEmail || '',
-        successUrl: `${window.location.origin}/sandbox/success${window.location.search}`,
+        successUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_SUCCESS}`,
         failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
       });
     } catch (error) {
       // TODO: 에러 처리
+      throw error;
     }
   };
 
@@ -110,7 +115,7 @@ export function PaymentContainer({ amountValue, paymentData }: PaymentContainerP
         <div className={cn('payment-method')} id='payment-method' />
         <div className={cn('payment-agreement')} id='agreement' />
         <div className={cn('payment-button-wrap')}>
-          <Button className={cn('payment-button')} type='button' onClick={handlePayment}>
+          <Button className={cn('payment-button')} type='submit' onClick={handlePayment}>
             결제하기
           </Button>
         </div>

@@ -29,11 +29,11 @@ export default function CheckoutForm() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    e.stopPropagation();
+    // e.stopPropagation();
 
-    // const formData = new FormData(e.currentTarget);
-    // const values = Object.fromEntries(formData.entries());
-    // console.log(values);
+    const formData = new FormData(e.currentTarget);
+    const values = Object.fromEntries(formData.entries());
+    console.log(values);
 
     // router.push(ROUTER.MY_PAGE.CHECKOUT_SUCCESS);
   };
