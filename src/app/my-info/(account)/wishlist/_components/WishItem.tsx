@@ -9,7 +9,6 @@ import classNames from 'classnames/bind';
 
 import { deleteProductLikes } from '@/api/likesAPI';
 import { ProductLike } from '@/types/LikeTypes';
-
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { ROUTER } from '@/constants/route';

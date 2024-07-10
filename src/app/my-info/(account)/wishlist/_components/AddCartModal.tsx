@@ -25,7 +25,7 @@ export default function AddCartModal({ productId, closeModal }: AddCartModalProp
   const [optionId, setOptionId] = useState<number | undefined>(undefined);
   const [count, setCount] = useState(1);
 
-  const { data: productData } = useQuery<ProductType>({
+  const { data: productData, isPending: isPendingProductData } = useQuery<ProductType>({
     queryKey: [`product-${productId}`],
     queryFn: () => getProductDetail(String(productId)),
   });
@@ -42,6 +42,10 @@ export default function AddCartModal({ productId, closeModal }: AddCartModalProp
   });
 
   if (!productData) {
+    if (!isPendingProductData) {
+      toast.error('해당 상품을 불러올 수 없습니다');
+      closeModal();
+    }
     return <div />;
   }
 
