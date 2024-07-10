@@ -1,7 +1,8 @@
 .card-wrap {
   display: flex;
   justify-content: space-between;
-  width: 141.6rem;
+
+  // padding: 0 4.6rem;
   overflow: hidden;
   border: 0.1rem solid #eee;
   border-radius: 3.6rem;
@@ -10,8 +11,8 @@
 }
 
 .text-area {
-  margin-top: 9.5rem;
-  margin-left: 4.6rem;
+  min-width: 55rem;
+  padding: 9.5rem 4.6rem;
 }
 
 .badge {
@@ -40,6 +41,11 @@
 
 .img-area {
   position: relative;
-  width: 78rem;
-  height: 40.4rem;
+  min-width: 70rem;
+
+  // height: 100%;
+}
+
+.img-area img {
+  object-fit: cover;
 }
