@@ -6,7 +6,8 @@ import { HeartIcon } from '@/public/index';
 import { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useState } from 'react';
+import { CommunityPostCardDataType } from '@/types/CommunityTypes';
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -26,29 +27,83 @@ interface LikeMutationProps {
 const MAX_COUNT = 99;
 
 export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButtonProps) {
-  const queryClient = useQueryClient();
-
   const [isChecked, setIsChecked] = useState(isLiked);
   const [animate, setAnimate] = useState(false);
-  const [newLikeCount, setNewLikeCount] = useState(likeCount || 0);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+
+  const queryClient = useQueryClient();
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
   });
 
-  const { mutate: likeMutation } = useMutation({
+  const { mutate: likeDetailMutation } = useMutation({
     mutationFn: async ({ itemId, itemIsLiked }: LikeMutationProps) => {
-      if (usage === 'community') {
-        if (itemIsLiked) {
-          await deleteCommunityLikes(itemId);
-        } else {
-          await postCommunityLikes(itemId);
-        }
-      } else if (itemIsLiked) {
+      if (itemIsLiked) {
         await deleteProductLikes(itemId);
       } else {
         await postProductLikes(itemId);
       }
+    },
+  });
+
+  const { mutate: likeCommunityMutation } = useMutation({
+    mutationFn: async ({ itemId, itemIsLiked }: LikeMutationProps) => {
+      if (itemIsLiked) {
+        await deleteCommunityLikes(itemId);
+      } else {
+        await postCommunityLikes(itemId);
+      }
+    },
+    onMutate: async ({ itemId, itemIsLiked }) => {
+      await queryClient.cancelQueries({ queryKey: ['postData', itemId] });
+      await queryClient.cancelQueries({ queryKey: ['postCardsList'] });
+
+      const previousPostData = queryClient.getQueryData<{ data: { isLiked: boolean; likeCount: number } }>([
+        'postData',
+        itemId,
+      ]);
+      const previousPostCardsList = queryClient.getQueryData<{ content: CommunityPostCardDataType[] }>([
+        'postCardsList',
+      ]);
+
+      if (previousPostData) {
+        queryClient.setQueryData(['postData', itemId], {
+          ...previousPostData,
+          data: {
+            ...previousPostData.data,
+            isLiked: !itemIsLiked,
+            likeCount: itemIsLiked ? previousPostData.data.likeCount - 1 : previousPostData.data.likeCount + 1,
+          },
+        });
+      }
+
+      if (previousPostCardsList) {
+        const updatedPostCardsList = previousPostCardsList.content.map((post) =>
+          post.id === itemId
+            ? {
+                ...post,
+                isLiked: !itemIsLiked,
+                likeCount: itemIsLiked ? post.likeCount - 1 : post.likeCount + 1,
+              }
+            : post,
+        );
+        queryClient.setQueryData(['postCardsList'], {
+          ...previousPostCardsList,
+          content: updatedPostCardsList,
+        });
+      }
+
+      return { previousPostData, previousPostCardsList };
+    },
+
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['postData', variables.itemId], context?.previousPostData);
+      queryClient.setQueryData(['postCardsList'], context?.previousPostCardsList);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+      queryClient.invalidateQueries({ queryKey: ['postData', id] });
     },
   });
 
@@ -62,20 +117,34 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
       return;
     }
 
-    likeMutation(
-      { itemId: id, itemIsLiked: isChecked },
-      {
-        onSuccess: () => {
-          setIsChecked((prev) => !prev);
-          setNewLikeCount((prev) => (isChecked ? prev - 1 : prev + 1));
+    if (usage === 'community') {
+      likeCommunityMutation(
+        { itemId: id, itemIsLiked: isChecked },
+        {
+          onSuccess: () => {
+            setIsChecked((prev) => !prev);
+          },
         },
-      },
-    );
+      );
+    } else {
+      likeDetailMutation(
+        { itemId: id, itemIsLiked: isChecked },
+        {
+          onSuccess: () => {
+            setIsChecked((prev) => !prev);
+          },
+        },
+      );
+    }
   };
 
   const displayLikeCount = () => {
-    if (!likeCount) {
+    if (!likeCount || likeCount < 0) {
       return '0';
+    }
+
+    if (likeCount > 1) {
+      return '1';
     }
 
     if (likeCount > MAX_COUNT) {
@@ -84,12 +153,6 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
 
     return likeCount.toString();
   };
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
-    queryClient.invalidateQueries({ queryKey: ['postData', id] });
-    queryClient.invalidateQueries({ queryKey: ['MyCustomReview'] });
-  }, [newLikeCount, id, queryClient, isChecked]);
 
   return (
     <>

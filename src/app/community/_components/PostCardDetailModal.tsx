@@ -167,20 +167,25 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
   const handleClickThumbnail = (i: number) => {
     setClickedImage(reviewImages[i].imgUrl);
   };
+
   const handleClickDeleteAlertButon = () => {
     deletePostMutation(cardId);
     setIsDeleteAlertOpen(false);
   };
+
   const handleCloseDeleteAlert = () => {
     setIsDeleteAlertOpen(false);
   };
+
   const handleClickEditAlertButton = () => {
     setIsEditModalOpen(true);
     setIsEditAlertOpen(false);
   };
+
   const handleCloseEditAlert = () => {
     setIsEditAlertOpen(false);
   };
+
   const handleClickEditModalButton = () => {
     setIsEditModalOpen(false);
     queryClient.invalidateQueries({

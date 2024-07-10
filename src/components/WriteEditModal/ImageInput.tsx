@@ -7,6 +7,7 @@ import { UseFormRegister, FieldValues, UseFormSetValue } from 'react-hook-form';
 
 import { CameraIcon, DeleteIcon } from '@/public/index';
 import { IMAGE_BLUR } from '@/constants/blurImage';
+
 import styles from './ImageInput.module.scss';
 
 const cn = classNames.bind(styles);

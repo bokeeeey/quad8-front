@@ -28,7 +28,7 @@ export default function PostCardList({ searchParams, initialData }: CommunityPag
   };
 
   const { data: communityData, isLoading } = useQuery({
-    queryKey: ['postCardsList', searchParams],
+    queryKey: ['postCardsList'],
     queryFn: () => getAllCommunityPost(getAllCommunityParams),
   });
 

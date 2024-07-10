@@ -122,30 +122,32 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
   ];
 
   return (
-    <div className={cn('container')} onClick={handleClickPostModal}>
-      <AuthorCard
-        nickname={nickName}
-        dateText={timeToString}
-        userImage={userImage}
-        onClickPopOver={handleClickPopup}
-        onClosePopOver={handleClosePopOver}
-        isOpenPopOver={isPopupOpen}
-        popOverOptions={isMine ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
-      />
-      <div className={cn('keyboard-image-wrapper')}>
-        <Image
-          src={Array.isArray(thumbnail) ? thumbnail[0] : thumbnail}
-          className={cn('keyboard-image')}
-          alt='키보드 이미지'
-          fill
-          sizes='(max-width: 1200px) 100%'
-          priority
-          placeholder={IMAGE_BLUR.placeholder}
-          blurDataURL={IMAGE_BLUR.blurDataURL}
+    <div className={cn('container')}>
+      <div className={cn('container')} onClick={handleClickPostModal}>
+        <AuthorCard
+          nickname={nickName}
+          dateText={timeToString}
+          userImage={userImage}
+          onClickPopOver={handleClickPopup}
+          onClosePopOver={handleClosePopOver}
+          isOpenPopOver={isPopupOpen}
+          popOverOptions={isMine ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
         />
-        {Array.isArray(thumbnail) && <p className={cn('image-count')}>{thumbnail.length}</p>}
+        <div className={cn('keyboard-image-wrapper')}>
+          <Image
+            src={Array.isArray(thumbnail) ? thumbnail[0] : thumbnail}
+            className={cn('keyboard-image')}
+            alt='키보드 이미지'
+            fill
+            sizes='(max-width: 1200px) 100%'
+            priority
+            placeholder={IMAGE_BLUR.placeholder}
+            blurDataURL={IMAGE_BLUR.blurDataURL}
+          />
+          {Array.isArray(thumbnail) && <p className={cn('image-count')}>{thumbnail.length}</p>}
+        </div>
+        <p className={cn('title')}>{title}</p>
       </div>
-      <p className={cn('title')}>{title}</p>
       <PostInteractions cardId={id} likeCount={likeCount} commentCount={commentCount} isLiked={isLiked} />
       <Modal isOpen={isPostModalOpen} onClose={handleClosePostModal}>
         <PostCardDetailModal cardId={id} onClose={handleClosePostModal} isMine={isMine} commentCount={commentCount} />

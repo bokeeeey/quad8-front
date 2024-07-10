@@ -5,16 +5,16 @@ import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
 import { Button, ImageInput, InputField, Rating, TextField, CustomOption } from '@/components';
 import { keydeukImg } from '@/public/index';
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
-
-import { toast } from 'react-toastify';
 import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { postProductReviews } from '@/api/productReviewAPI';
 import { IMAGE_BLUR } from '@/constants/blurImage';
+
 import styles from './WriteEditModal.module.scss';
 
 const cn = classNames.bind(styles);
@@ -188,8 +188,6 @@ export default function WriteEditModal({
       };
       fetchFormData.append('createReviewRequest', JSON.stringify(createReviewRequest));
 
-      // console.log(createReviewRequest);
-
       if (payload.files && payload.files.length > 0) {
         payload.files.forEach((file: File) => {
           fetchFormData.append('reviewImgs', file as File);
@@ -256,13 +254,13 @@ export default function WriteEditModal({
         ) : (
           <div className={cn('product-review-wrapper')}>
             <div className={cn('rating-review-wrapper')}>
-              <h1 id={cn('rating-label')}>상품을 사용해 보셨나요?</h1>
+              <h1 className={cn('rating-label')}>상품을 사용해 보셨나요?</h1>
               <Rating rating={rating} onRatingChange={setRating} usage='edit' />
             </div>
             <div className={cn('select-option-wrapper')}>
               {OPTIONS.map((option, optionIndex) => (
                 <div key={option} className={cn('feedback-container')}>
-                  <h1 id={cn('label')}>{option}</h1>
+                  <h1 className={cn('label')}>{option}</h1>
                   <div className={cn('option-wrapper')}>
                     {REVIEW_KEYWORD[productType][option].map((feedback, feedbackIndex) => (
                       <div
