@@ -5,18 +5,17 @@ import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
 import { Button, ImageInput, InputField, Rating, TextField, CustomOption } from '@/components';
 import { keydeukImg } from '@/public/index';
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
-
-import { toast } from 'react-toastify';
 import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { postProductReviews } from '@/api/productReviewAPI';
 import { IMAGE_BLUR } from '@/constants/blurImage';
+
 import styles from './WriteEditModal.module.scss';
-// import FeedbackToggle from './FeedbackToggle';
 
 const cn = classNames.bind(styles);
 
@@ -73,7 +72,7 @@ export default function WriteEditModal({
     watch,
     formState: { isValid },
   } = useForm<FieldValues>({
-    mode: 'onChange',
+    mode: 'onTouched',
     defaultValues: {
       title: editCustomData?.title || '',
       content: editCustomData?.content || '',
@@ -118,8 +117,7 @@ export default function WriteEditModal({
       postProductReviews({ productId, formData }),
     onSuccess: (res) => {
       if (res.status === 'SUCCESS') {
-        // onSuccessReview();
-        // queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+        onSuccessReview();
         toast.success('리뷰 등록이 완료되었습니다.');
       } else {
         toast.error('데이터를 불러오는 중 오류가 발생하였습니다.');
@@ -135,6 +133,7 @@ export default function WriteEditModal({
       required: isCustom && true,
     }),
     content: register('content', {
+      required: true,
       minLength: { value: 20, message: '최소 20자 이상 입력해주세요' },
     }),
   };
@@ -189,12 +188,10 @@ export default function WriteEditModal({
       };
       fetchFormData.append('createReviewRequest', JSON.stringify(createReviewRequest));
 
-      // console.log(createReviewRequest);
-
       if (payload.files && payload.files.length > 0) {
-        for (let i = 0; i < payload.files.length; i += 1) {
-          fetchFormData.append('reviewImgs', payload.files[i] as File);
-        }
+        payload.files.forEach((file: File) => {
+          fetchFormData.append('reviewImgs', file as File);
+        });
       }
 
       if (productData) {
@@ -287,6 +284,7 @@ export default function WriteEditModal({
           setValue={setValue}
           editCustomImages={editCustomData?.reviewImages}
           onSaveDeletedImageId={handleSaveDeletedImageId}
+          isCustom={isCustom}
         />
         <TextField
           label='내용'
@@ -297,9 +295,19 @@ export default function WriteEditModal({
         />
       </div>
       <div className={cn('button-wrapper')}>
-        <Button type='submit' backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}>
-          등록
-        </Button>
+        {isCustom ? (
+          <Button type='submit' backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}>
+            등록
+          </Button>
+        ) : (
+          <Button
+            type='submit'
+            disabled={isCustom ? false : rating === 0}
+            backgroundColor={isValid && rating > 0 ? 'background-primary' : 'background-gray-40'}
+          >
+            등록
+          </Button>
+        )}
       </div>
     </form>
   );
