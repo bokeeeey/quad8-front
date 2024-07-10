@@ -24,7 +24,7 @@ interface CommentProps {
   profile: string | null;
   createdTime: string;
   comment: string;
-  onClickProfile: ({ top, commentId }: { top: number; commentId: number }) => void;
+  onClickProfile: ({ top, commentId, userId }: { top: number; commentId: number; userId: number }) => void;
 }
 
 interface UserDataType {
@@ -72,7 +72,7 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   const handleClickProfile = (e: MouseEvent<HTMLElement>) => {
     const { top } = e.currentTarget.getBoundingClientRect();
     e.stopPropagation();
-    onClickProfile({ top, commentId });
+    onClickProfile({ top, commentId, userId: commentUserId });
   };
 
   const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {

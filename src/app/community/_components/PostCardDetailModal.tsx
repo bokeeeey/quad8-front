@@ -42,8 +42,11 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [isClickedAuthorProfile, setIsClickedAuthorProfile] = useState(false);
+  const [isClickedCommentProfile, setIsClickedCommentProfile] = useState(false);
+  const [triggerCommentProfileCardAnimate, setTriggerCommentProfileCardAnimate] = useState(true);
   const [clickedCommentId, setIsClickedCommentId] = useState<number | null>(null);
   const [clickedCommenetProfileCardTop, setClickedCommenetProfileTop] = useState(0);
+  const [clickedUserId, setClickedUserId] = useState(0);
 
   const handleClickPopup = (e: MouseEvent<SVGElement>) => {
     e.stopPropagation();
@@ -56,20 +59,32 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const handleClickAuthorProfile = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setIsClickedAuthorProfile(!isClickedAuthorProfile);
-    setIsClickedCommentId(null);
+    setIsClickedCommentProfile(false);
   };
   const handleCloseAuthorProfileCard = () => {
     setIsClickedAuthorProfile(false);
   };
 
-  const handleClickCommentProfile = ({ top, commentId }: { top: number; commentId: number }) => {
+  const handleClickCommentProfile = ({
+    top,
+    commentId,
+    userId,
+  }: {
+    top: number;
+    commentId: number;
+    userId: number;
+  }) => {
     setClickedCommenetProfileTop(top);
     setIsClickedCommentId(commentId);
     setIsClickedAuthorProfile(false);
+    setClickedUserId(userId);
+    setIsClickedCommentProfile(true);
+    setTriggerCommentProfileCardAnimate(!triggerCommentProfileCardAnimate);
   };
 
   const handleCloseCommentProfileCard = () => {
     setIsClickedCommentId(null);
+    setIsClickedCommentProfile(false);
   };
 
   useOutsideClick(clickedCommentRef, handleCloseCommentProfileCard);
@@ -270,8 +285,10 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
             <InputField placeholder='댓글을 입력해주세요' ref={(ref) => setCommentRef(ref)} />
           </div>
           <UserProfileCard
-            isOpenProfileCard={typeof clickedCommentId === 'number'}
+            isOpenProfileCard={isClickedCommentProfile}
             top={clickedCommenetProfileCardTop}
+            userId={clickedUserId || 0}
+            triggerAnimate={triggerCommentProfileCardAnimate}
           />
         </div>
       </div>

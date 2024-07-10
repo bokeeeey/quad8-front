@@ -95,7 +95,7 @@ export default function AuthorCard({
     <div className={cn('container')}>
       <div onClick={onClickProfile} className={cn('user-profile')} ref={userProfileCardRef}>
         <ProfileImage profileImage={userImage} />
-        <UserProfileCard isOpenProfileCard={isOpenProfileCard} />
+        <UserProfileCard isOpenProfileCard={isOpenProfileCard} userId={0} />
       </div>
       <div className={cn('info-textbox')}>
         <p className={cn('user-name')}>{nickname}</p>

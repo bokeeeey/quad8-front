@@ -1,15 +1,71 @@
 .user-detail-profile-card {
+  display: flex;
   position: absolute;
   z-index: $zindex-popover;
   left: 7rem;
-  width: 20rem;
-  height: 20rem;
+  width: max-content;
+  height: 15rem;
   padding: 1rem;
-  border: 0.1rem solid black;
+  animation: shadow-drop-center 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  border: 0.2rem solid $primary-60;
   border-radius: 1rem;
   background-color: white;
+  gap: 1rem;
+}
+
+.entrance-animation {
+  animation: tilt-in-left-2 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .display-none {
   display: none;
+}
+
+.profile-image {
+  width: 9rem;
+  height: 100%;
+  border-radius: 0.4rem;
+  background-color: $gray-10;
+}
+
+.info-wrapper {
+  @include flex-column(0.2rem);
+
+  height: 100%;
+  padding-left: 1rem;
+  border-left: 0.2rem solid $primary-60;
+}
+
+.info-wrapper p {
+  @include pretendard-14-400;
+
+  & > strong {
+    @include pretendard-14-600;
+  }
+}
+
+.info-wrapper .nickname {
+  @include pretendard-20-700;
+}
+
+@keyframes shadow-drop-center {
+  0% {
+    box-shadow: 0 0 0 0 rgb(0 0 0 / 0%);
+  }
+
+  100% {
+    box-shadow: 0 0 1.5rem 0 rgb(0 0 0 / 25%);
+  }
+}
+
+@keyframes tilt-in-left-2 {
+  0% {
+    transform: rotateX(30deg) translateX(-30px) skewX(30deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: rotateX(0deg) translateX(0) skewX(0deg);
+    opacity: 1;
+  }
 }

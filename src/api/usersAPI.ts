@@ -75,3 +75,18 @@ export const checkNickname = async (nickname: string) => {
     throw error;
   }
 };
+
+/**
+ * 클릭한 사용자의 정보를 반환합니다.
+ */
+
+export const getOthersInfo = async (userId: number) => {
+  try {
+    const res = await fetch(`${BASE_URL}/api/v1/users/${userId}`);
+    const result = await res.json();
+    const { data } = result;
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
