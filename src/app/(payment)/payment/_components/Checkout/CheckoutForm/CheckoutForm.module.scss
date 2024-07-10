@@ -87,30 +87,6 @@
       }
     }
 
-    // .method-box {
-    //   @include default-layout;
-
-    //   .method-default {
-    //     @include pretendard-16-400;
-    //   }
-
-    //   .method-wrap {
-    //     @include pretendard-14-400;
-
-    //     display: flex;
-    //     align-items: center;
-    //     gap: 0.4rem;
-
-    //     .method-button {
-    //       padding: 1rem 2rem;
-    //       border: 0.1rem solid $gray-40;
-    //       border-radius: 0.4rem;
-    //       background-color: $white;
-    //       color: $black;
-    //     }
-    //   }
-    // }
-
     .checkout-detail {
       @include default-layout;
 
@@ -127,18 +103,4 @@
       }
     }
   }
-
-  // .submit-box {
-  //   @include pretendard-16-400;
-  //   @include flex-column(2rem);
-
-  //   align-items: center;
-
-  //   .submit-button {
-  //     @include pretendard-18-500;
-
-  //     width: 34.8rem;
-  //     padding: 2rem 4rem;
-  //   }
-  // }
 }

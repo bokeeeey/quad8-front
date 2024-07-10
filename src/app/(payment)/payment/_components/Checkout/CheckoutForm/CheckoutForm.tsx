@@ -89,22 +89,6 @@ export default function CheckoutForm() {
           </p>
         </div>
 
-        {/* <div className={cn('method-box')}>
-          <h1>결제 수단</h1>
-          <h2 className={cn('method-default')}>일반 결제</h2>
-          <div className={cn('method-wrap')}>
-            {METHOD_OPTION.map((option) => (
-              <Button className={cn('method-button')} type='button' key={option}>
-                {option}
-              </Button>
-            ))}
-          </div>
-          <p className={cn('discount-point')}>
-            <span className={cn('point-title')}>보유 포인트</span>
-            0P
-          </p>
-        </div> */}
-
         <div className={cn('checkout-detail')}>
           <h1>결제 상세</h1>
           <p className={cn('checkout-method')}>
@@ -115,13 +99,6 @@ export default function CheckoutForm() {
 
         <PaymentContainer amountValue={Number(totalPrice)} paymentData={paymentData?.data} />
       </article>
-
-      {/* <div className={cn('submit-box')}>
-        <p>주문 내역을 확인하였으며, 정보 제공등에 동의합니다.</p>
-        <Button className={cn('submit-button')} type='submit'>
-          결제하기
-        </Button>
-      </div> */}
     </form>
   );
 }
