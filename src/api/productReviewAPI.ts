@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import type { ProductReviewParams, ProductReviewType, ReviewDto } from '@/types/ProductReviewTypes';
+import type { ProductReviewParams, ProductReviewType, ReviewResponse } from '@/types/ProductReviewTypes';
 
 export const getProductReviews = async (params: ProductReviewParams): Promise<ProductReviewType> => {
   const { productId, sort = 'likes', page = 0, size = 10 } = params;
@@ -24,7 +24,7 @@ export const getProductReviews = async (params: ProductReviewParams): Promise<Pr
   }
 };
 
-export const getUserProductReviews = async (params: ProductReviewParams): Promise<ReviewDto[]> => {
+export const getUserProductReviews = async (params: ProductReviewParams): Promise<ReviewResponse> => {
   const {
     sort = 'createdAt',
     page = 0,

@@ -20,7 +20,14 @@ interface ProductReviewListProps {
 
 export default function ProductReviewList({ data, productId }: ProductReviewListProps) {
   const { reviewDtoList, ...previewData } = data;
-  const allReviewImgs = reviewDtoList.flatMap((review) => review.reviewImgs);
+  const allReviewImgs = reviewDtoList.flatMap((review) =>
+    review.reviewImgs.map((img) => ({
+      reviewId: review.id,
+      id: img.id,
+      imageUrl: img.imageUrl,
+    })),
+  );
+
   const [dropdownValue, setDropdownValue] = useState(PRODUCT_REVIEW_SORT_OPTIONS[1].label);
   const [sortQuery, setSortQuery] = useState<string | undefined>(PRODUCT_REVIEW_SORT_OPTIONS[1].value);
 
@@ -50,7 +57,7 @@ export default function ProductReviewList({ data, productId }: ProductReviewList
       {reviewDtoList.length > 0 && !isPending ? (
         <div className={cn('review-container')}>
           <ReviewPreview previewData={previewData} />
-          <ReviewImageList reviewImgs={allReviewImgs} />
+          <ReviewImageList reviewImgs={allReviewImgs} data={reviewDtoList} />
           <Dropdown
             options={PRODUCT_REVIEW_SORT_OPTIONS.map((option) => option.label)}
             sizeVariant='xs'

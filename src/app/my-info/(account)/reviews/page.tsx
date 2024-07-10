@@ -7,7 +7,11 @@ export default async function ReviewsPage() {
 
   return (
     <div>
-      {Array.isArray(data) ? <MyReviewList data={data} /> : <MyInfoEmptyCase message='구매 후기가 없습니다.' />}
+      {Array.isArray(data.reviewDtoList) ? (
+        <MyReviewList data={data} />
+      ) : (
+        <MyInfoEmptyCase message='구매 후기가 없습니다.' />
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 export interface ReviewImage {
   id: number;
   imageUrl: string;
+  reviewId: number;
 }
 
 export interface ReviewWriter {
@@ -28,13 +29,24 @@ export interface ReviewDto {
   updatedAt: Date;
 }
 
+export interface ReviewResponse extends ReviewSearchParams {
+  reviewDtoList: ReviewDto[];
+}
+
+export interface ReviewSearchParams {
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+}
+
 export type OptionRatio = Record<string, number>;
 
 export type KeywordStatistics = Record<string, OptionRatio>;
 
 export type ProductReviewPreview = {
   averageScore: number;
-  reviewCounts: number;
+  totalElements: number;
   reviewStatistics: KeywordStatistics & { scoreRatios: OptionRatio };
 };
 
