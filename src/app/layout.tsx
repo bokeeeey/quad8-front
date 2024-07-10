@@ -7,6 +7,7 @@ import { Footer, Header } from '@/components';
 import { Providers } from './providers';
 
 import '@/styles/reset.css';
+import AOSWrapper from './_components/Aos/AOSWrapper';
 
 export const metadata: Metadata = {
   title: '키보드 득템 :: KeyDeuk',
@@ -31,7 +32,7 @@ export default async function RootLayout({
         <Providers>
           <HydrationBoundary state={dehydrate(queryClient)}>
             <Header />
-            {children}
+            <AOSWrapper>{children}</AOSWrapper>
             <Footer />
           </HydrationBoundary>
         </Providers>
