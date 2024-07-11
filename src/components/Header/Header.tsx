@@ -9,6 +9,8 @@ import { useState } from 'react';
 
 import { LogoIcon, UserIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
+import Image from 'next/image';
+import { CartAPIDataType } from '@/types/CartTypes';
 import SignInModal from '../SignInModal/SignInModal';
 import { CartButton, LoginButton, LogoutButton, SearchBox, ShopButton } from './HeaderParts';
 
@@ -27,9 +29,14 @@ export default function Header() {
     queryKey: ['userData'],
   });
 
-  const cartCount = 0;
+  const { data: cartData } = useQuery<CartAPIDataType>({
+    queryKey: ['cartData'],
+  });
+
+  const cartCount = cartData?.totalCount ?? 0;
 
   const users = userData?.data ?? null;
+  const profileImage = userData?.data?.imgUrl ?? null;
 
   const handleLoginButtonClick = () => {
     setIsModalOpen((prevIsOpen) => !prevIsOpen);
@@ -78,7 +85,11 @@ export default function Header() {
             <SearchBox isBlack={isBlack} />
             {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
             <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
-              <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={31} height={31} />
+              {profileImage ? (
+                <Image src={profileImage} alt='profile' width={31} height={31} className={cn('profile-image')} />
+              ) : (
+                <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={31} height={31} />
+              )}
             </button>
             <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
           </div>

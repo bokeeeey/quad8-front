@@ -12,7 +12,16 @@ import styles from './CustomCardList.module.scss';
 const cn = classNames.bind(styles);
 
 export default function CustomCardList() {
-  const { data: cartData } = useQuery<CartAPIDataType>({ queryKey: ['cartData'], queryFn: getCartData });
+  const {
+    data: cartData,
+    isFetching,
+    isPending,
+  } = useQuery<CartAPIDataType>({ queryKey: ['cartData'], queryFn: getCartData });
+
+  if (isFetching || isPending) {
+    return <div />;
+  }
+
   const customData = cartData?.CUSTOM ?? [];
 
   return (

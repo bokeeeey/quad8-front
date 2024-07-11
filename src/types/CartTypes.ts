@@ -17,7 +17,7 @@ export interface ShopDataType {
   thumbsnail: string;
   count: number;
   classification: 'SHOP';
-  category: 'keyboard' | 'keycap' | 'etc';
+  category: 'keyboard' | 'keycap' | 'switch' | 'etc';
 }
 
 export interface CartAPIDataType {
