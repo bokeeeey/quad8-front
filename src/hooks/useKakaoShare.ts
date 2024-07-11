@@ -27,7 +27,7 @@ const useKakaoShare = (shareUrl: string) => {
     kakao.Share.sendDefault({
       objectType: 'commerce',
       content: {
-        title: '커스텀 키보드를 쉽게 구매하고 싶다면? 키득으로 오세요!',
+        title: '나만의 커스텀 키보드를 만들고 싶다면? 키보드 득템 KEYDEUK ⌨',
         imageUrl: data.thubmnailList[0].imgUrl,
         link: {
           mobileWebUrl: shareUrl,
