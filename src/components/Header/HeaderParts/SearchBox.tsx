@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, KeyboardEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
@@ -88,7 +88,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     회색 배경 부분 클릭 했을 경우 검색 컴포넌트 닫히도록 설정
     만약 헤더 클릭 했을 때도 닫히도록 하려면 그냥 useOutsideClick으로 하면 됨.
   */
-  const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClickOutside = (e: SyntheticEvent<HTMLDivElement>) => {
     if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
       handleClickButton();
     }
@@ -233,7 +233,7 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     router.push(`${ROUTER.SEARCH}?keyword=${searchKeyword}`, { scroll: false });
   };
 
-  const handleSugestionClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleSugestionClick = (e: SyntheticEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
