@@ -36,10 +36,10 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
     queryKey: ['userData'],
   });
 
-  const { mutate: likeDetailMutation } = useMutation({
+  const { mutate: likeProductMutation } = useMutation({
     mutationFn: async ({ itemId, itemIsLiked }: LikeMutationProps) => {
       if (itemIsLiked) {
-        await deleteProductLikes(itemId);
+        await deleteProductLikes([itemId]);
       } else {
         await postProductLikes(itemId);
       }
@@ -127,7 +127,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         },
       );
     } else {
-      likeDetailMutation(
+      likeProductMutation(
         { itemId: id, itemIsLiked: isChecked },
         {
           onSuccess: () => {
