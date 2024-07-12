@@ -1,21 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { toast } from 'react-toastify';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { deleteProductLikes } from '@/api/likesAPI';
-import { ProductLike } from '@/types/LikeTypes';
+import { Dialog, Modal } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { ROUTER } from '@/constants/route';
 import { CartIcon, DeleteIcon } from '@/public/index';
-import { Dialog, Modal } from '@/components';
-import WishCheckBox from './WishCheckBox';
+import { ProductLike } from '@/types/LikeTypes';
 import AddCartModal from './AddCartModal';
+import WishCheckBox from './WishCheckBox';
 
 import styles from './WishItem.module.scss';
 
@@ -28,9 +28,7 @@ interface WishItemProps extends ProductLike {
 
 export default function WishItem({ productId, productImg, productName, price, checked, onChange }: WishItemProps) {
   const queryClient = useQueryClient();
-
   const [isOpenAddCartModal, setIsOpenAddCartModal] = useState(false);
-
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
 
   const { mutate: deleteWishItem } = useMutation({
@@ -46,7 +44,7 @@ export default function WishItem({ productId, productImg, productName, price, ch
   });
 
   const handleDeleteClick = () => {
-    deleteWishItem(productId);
+    deleteWishItem([productId]);
   };
 
   const handleCartClick = () => {
@@ -93,7 +91,7 @@ export default function WishItem({ productId, productImg, productName, price, ch
       <Dialog
         type='confirm'
         iconType='warn'
-        message='상품 찜목록에서 삭제 하시겠습니까?'
+        message='찜목록에서 삭제 하시겠습니까?'
         isOpen={isOpenConfirm}
         onClick={{ left: () => setIsOpenConfirm(false), right: handleDeleteClick }}
         buttonText={{ left: '취소', right: '확인' }}

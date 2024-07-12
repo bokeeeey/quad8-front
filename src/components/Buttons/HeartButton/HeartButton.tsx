@@ -45,7 +45,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
           await postCommunityLikes(itemId);
         }
       } else if (itemIsLiked) {
-        await deleteProductLikes(itemId);
+        await deleteProductLikes([itemId]);
       } else {
         await postProductLikes(itemId);
       }
