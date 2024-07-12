@@ -19,7 +19,7 @@ interface TabData {
 interface DetailTabProps {
   detailsImg: string;
   reviewData: ProductReviewType;
-  productId: string;
+  productId: number;
 }
 
 export default function DetailTab({ detailsImg, reviewData, productId }: DetailTabProps) {

@@ -14,7 +14,7 @@ interface ProductDetailParams {
 export default async function ProductDetailPage({ params }: ProductDetailParams) {
   const { productId } = params;
   const productDetailData = await getProductDetail(productId);
-  const productReviewData = await getProductReviews({ productId });
+  const productReviewData = await getProductReviews({ productId: Number(productId) });
 
   if (!productDetailData) {
     redirect(ROUTER.MAIN);
@@ -23,7 +23,11 @@ export default async function ProductDetailPage({ params }: ProductDetailParams)
   return (
     <div>
       <ProductDetail product={productDetailData} />
-      <DetailTab detailsImg={productDetailData.detailsImg} reviewData={productReviewData} productId={productId} />
+      <DetailTab
+        detailsImg={productDetailData.detailsImg}
+        reviewData={productReviewData}
+        productId={Number(productId)}
+      />
     </div>
   );
 }
