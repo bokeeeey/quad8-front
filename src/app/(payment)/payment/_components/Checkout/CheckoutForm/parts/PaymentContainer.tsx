@@ -18,6 +18,7 @@ const cn = classNames.bind(styles);
 interface PaymentContainerProps {
   amountValue: number;
   paymentData?: OrderDetailData;
+  isPutPaymentSuccessed: boolean;
 }
 
 interface WidgetPaymentMethodWidget {
@@ -42,8 +43,12 @@ interface TossPaymentsWidgets {
 
 const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string;
 
-export default function PaymentContainer({ amountValue, paymentData }: PaymentContainerProps) {
-  const [ready, setReady] = useState(false);
+export default function PaymentContainer({
+  amountValue,
+  paymentData,
+  isPutPaymentSuccessed = false,
+}: PaymentContainerProps) {
+  const [ready, setReady] = useState(isPutPaymentSuccessed);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
   const { data: userDataResponse } = useQuery<{ data: Users }>({ queryKey: ['userData'] });

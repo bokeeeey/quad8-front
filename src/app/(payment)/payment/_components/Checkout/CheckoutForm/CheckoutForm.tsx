@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
 import { putPayment } from '@/api/orderAPI';
@@ -12,6 +12,7 @@ import { formatNumber } from '@/libs';
 import type { OrderItem } from '@/types/OrderTypes';
 import type { OrderDetailData, ShippingAddressResponse } from '@/types/paymentTypes';
 import type { UserAddress } from '@/types/shippingType';
+import { toast } from 'react-toastify';
 import CheckoutAddress from './parts/CheckoutAddress';
 import PaymentContainer from './parts/PaymentContainer';
 
@@ -20,8 +21,16 @@ import styles from './CheckoutForm.module.scss';
 const cn = classNames.bind(styles);
 
 export default function CheckoutForm() {
-  // const router = useRouter();
-  const [selectedAddress, setSelectedAddress] = useState<ShippingAddressResponse | null>(null);
+  const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
+    queryKey: ['paymentResponse'],
+  });
+
+  const { totalPrice = 0, orderItemResponses, shippingAddressResponse, orderId } = paymentResponse?.data ?? {};
+
+  const [selectedAddress, setSelectedAddress] = useState<ShippingAddressResponse | null>(
+    shippingAddressResponse ?? null,
+  );
+  const [isPutPaymentSuccessed, setIsPutPaymentSuccessed] = useState(false);
 
   const { handleSubmit, control, setValue } = useForm<FieldValues>({
     mode: 'onTouched',
@@ -31,19 +40,6 @@ export default function CheckoutForm() {
     },
   });
 
-  const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
-    queryKey: ['paymentResponse'],
-  });
-
-  const { totalPrice = 0, orderItemResponses, shippingAddressResponse, orderId } = paymentResponse?.data ?? {};
-
-  useEffect(() => {
-    if (shippingAddressResponse) {
-      setSelectedAddress(shippingAddressResponse);
-      setValue('shippingAddressId', shippingAddressResponse.id);
-    }
-  }, [setValue, shippingAddressResponse]);
-
   const formattedTotalPrice = totalPrice > 0 ? formatNumber(totalPrice) : 0;
 
   const { mutate: putPaymentMutation } = useMutation({
@@ -52,21 +48,20 @@ export default function CheckoutForm() {
 
   const handleAddressClick = (selectItem: UserAddress) => {
     setSelectedAddress(selectItem);
+    setValue('shippingAddressId', selectItem.id);
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (payload) => {
-    if (selectedAddress) {
-      setValue('shippingAddressId', selectedAddress.id);
-    }
-    console.log(payload);
-
     putPaymentMutation(payload, {
       onSuccess: (res) => {
-        console.log(res);
+        if (res.status === 'SUCCESS') {
+          setIsPutPaymentSuccessed(true);
+          return;
+        }
+
+        toast.error('결제 진행중 문제가 발생하였습니다.');
       },
     });
-
-    // router.push(ROUTER.MY_PAGE.CHECKOUT_SUCCESS);
   };
 
   return (
@@ -128,7 +123,11 @@ export default function CheckoutForm() {
           </p>
         </div>
 
-        <PaymentContainer amountValue={Number(totalPrice)} paymentData={paymentResponse?.data} />
+        <PaymentContainer
+          amountValue={Number(totalPrice)}
+          paymentData={paymentResponse?.data}
+          isPutPaymentSuccessed={isPutPaymentSuccessed}
+        />
       </article>
     </form>
   );
