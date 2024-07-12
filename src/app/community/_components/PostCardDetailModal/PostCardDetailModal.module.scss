@@ -103,6 +103,12 @@
   @include flex-column(1.6rem);
 }
 
+.spin-loading {
+  @include flex-center;
+
+  width: 100%;
+}
+
 .comment-input {
   position: sticky;
   bottom: 0;
