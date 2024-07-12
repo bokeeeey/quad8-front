@@ -1,22 +1,24 @@
 'use client';
 
-import { getProductLikes } from '@/api/likesAPI';
+import { deleteProductLikes, getProductLikes } from '@/api/likesAPI';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
-import { Button } from '@/components';
+import { Button, Dialog } from '@/components';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { GetProductLikesParams, WishlistPageProps } from '@/types/LikeTypes';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { ChangeEvent, useState } from 'react';
+import { toast } from 'react-toastify';
 import WishItem from './WishItem';
 import styles from './WishList.module.scss';
 
 const cn = classNames.bind(styles);
 
 export default function WishList({ searchParams }: WishlistPageProps) {
+  const queryClient = useQueryClient();
   const [selectedList, setSelectedList] = useState<Set<number>>(new Set());
-
-  console.log(selectedList);
+  const [isOpenConfirm, setIsOpenConfirm] = useState(false);
+  const [isOpenConfirm2, setIsOpenConfirm2] = useState(false);
 
   const getProductLikesParams: GetProductLikesParams = {
     page: searchParams.page || '0',
@@ -27,7 +29,20 @@ export default function WishList({ searchParams }: WishlistPageProps) {
     queryKey: [...QUERY_KEYS.LIKE.LISTS(), searchParams],
     queryFn: () => getProductLikes(getProductLikesParams),
   });
-  console.log(data?.length);
+
+  const { mutate: deleteWishItem } = useMutation({
+    mutationFn: deleteProductLikes,
+    onSuccess: () => {
+      toast.success('삭제를 완료 했습니다.');
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.LIKE.LISTS(),
+      });
+
+      setIsOpenConfirm(false);
+      setIsOpenConfirm2(false);
+      setSelectedList(new Set());
+    },
+  });
 
   if (isLoading) {
     return null;
@@ -62,6 +77,22 @@ export default function WishList({ searchParams }: WishlistPageProps) {
     }
   };
 
+  const isAllChecked = () => data?.every((v) => selectedList.has(v.productId));
+
+  const handleAllDelete = () => {
+    if (!data) {
+      return;
+    }
+    deleteWishItem(data.map(({ productId }) => productId));
+  };
+
+  const handleSeleteDelete = () => {
+    if (!data) {
+      return;
+    }
+    deleteWishItem([...selectedList]);
+  };
+
   return (
     <div className={cn('container')}>
       <div className={cn('check-container')}>
@@ -70,16 +101,30 @@ export default function WishList({ searchParams }: WishlistPageProps) {
             type='checkbox'
             id='all-check'
             onChange={toggleAllCheckedById}
-            checked={data?.length === selectedList.size}
+            checked={isAllChecked()}
             className={cn('select-item-input')}
           />
           <label htmlFor='all-check' className={cn('select-item-label')} />
         </div>
         <div className={cn('button-area')}>
-          <Button backgroundColor='outline-primary' fontSize={14} width={90} paddingVertical={8} radius={4}>
+          <Button
+            backgroundColor='outline-primary'
+            fontSize={14}
+            width={90}
+            paddingVertical={8}
+            radius={4}
+            onClick={() => setIsOpenConfirm2(true)}
+          >
             선택 삭제
           </Button>
-          <Button backgroundColor='outline-primary' fontSize={14} width={90} paddingVertical={8} radius={4}>
+          <Button
+            backgroundColor='outline-primary'
+            fontSize={14}
+            width={90}
+            paddingVertical={8}
+            radius={4}
+            onClick={() => setIsOpenConfirm(true)}
+          >
             전체 삭제
           </Button>
         </div>
@@ -94,6 +139,22 @@ export default function WishList({ searchParams }: WishlistPageProps) {
           />
         ))}
       </ul>
+      <Dialog
+        type='confirm'
+        iconType='warn'
+        message='전체 삭제 하시겠습니까?'
+        isOpen={isOpenConfirm}
+        onClick={{ left: () => setIsOpenConfirm(false), right: handleAllDelete }}
+        buttonText={{ left: '취소', right: '확인' }}
+      />
+      <Dialog
+        type='confirm'
+        iconType='warn'
+        message='선택 삭제 하시겠습니까?'
+        isOpen={isOpenConfirm2}
+        onClick={{ left: () => setIsOpenConfirm2(false), right: handleSeleteDelete }}
+        buttonText={{ left: '취소', right: '확인' }}
+      />
     </div>
   );
 }
