@@ -58,6 +58,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
     queryKey: ['infiniteCommentData'],
     queryFn: () => getCommentsInfiniteScroll({ communityId: cardId, commentId: lastCommentId }),
     enabled: false,
+    initialData: null,
   });
 
   const handleSuccessSubmitComment = () => {
