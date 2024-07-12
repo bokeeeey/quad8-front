@@ -1,34 +1,36 @@
 'use client';
 
-import { useContext } from 'react';
-import { useRouter } from 'next/navigation';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { useRouter } from 'next/navigation';
+import { useContext } from 'react';
+import { toast } from 'react-toastify';
 
 import { getCartData } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
+import { Button } from '@/components';
+import { ROUTER } from '@/constants/route';
+import { CartDataContext } from '@/context/CartDataContext';
 import type { CartAPIDataType } from '@/types/CartTypes';
 import type { CreateOrderResponseType } from '@/types/OrderTypes';
-import { Button } from '@/components';
-import { CartDataContext } from '@/context/CartDataContext';
-import { ROUTER } from '@/constants/route';
 
-import { toast } from 'react-toastify';
+import { setCookie } from '@/libs/manageCookie';
 import styles from './PurchaseButton.module.scss';
 
 const cn = classNames.bind(styles);
 
 export default function PurchaseButton() {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const { checkedCustomList, checkedShopList } = useContext(CartDataContext);
 
   const { data: cartData } = useQuery<CartAPIDataType>({ queryKey: ['cartData'], queryFn: getCartData });
+
   const { mutate: createOrder } = useMutation({
     mutationFn: postCreateOrder,
     onSuccess: (response: CreateOrderResponseType) => {
-      queryClient.setQueryData(['orderId'], response.data);
+      setCookie('orderId', response.data.toString());
+
       router.push(ROUTER.MY_PAGE.CHECKOUT);
     },
     onError: () => {
