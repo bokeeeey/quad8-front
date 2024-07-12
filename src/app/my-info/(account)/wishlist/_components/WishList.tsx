@@ -17,8 +17,8 @@ const cn = classNames.bind(styles);
 export default function WishList({ searchParams }: WishlistPageProps) {
   const queryClient = useQueryClient();
   const [selectedList, setSelectedList] = useState<Set<number>>(new Set());
-  const [isOpenConfirm, setIsOpenConfirm] = useState(false);
-  const [isOpenConfirm2, setIsOpenConfirm2] = useState(false);
+  const [isDeleteSelectedOpen, setIsDeleteSelectedOpen] = useState(false);
+  const [isDeleteAllOpen, setIsDeleteAllOpen] = useState(false);
 
   const getProductLikesParams: GetProductLikesParams = {
     page: searchParams.page || '0',
@@ -38,8 +38,8 @@ export default function WishList({ searchParams }: WishlistPageProps) {
         queryKey: QUERY_KEYS.LIKE.LISTS(),
       });
 
-      setIsOpenConfirm(false);
-      setIsOpenConfirm2(false);
+      setIsDeleteSelectedOpen(false);
+      setIsDeleteAllOpen(false);
       setSelectedList(new Set());
     },
   });
@@ -77,7 +77,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
     }
   };
 
-  const isAllChecked = () => data?.every((v) => selectedList.has(v.productId));
+  const isAllSelected = () => data?.every((v) => selectedList.has(v.productId));
 
   const handleAllDelete = () => {
     if (!data) {
@@ -86,7 +86,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
     deleteWishItem(data.map(({ productId }) => productId));
   };
 
-  const handleSeleteDelete = () => {
+  const handleSelectedDelete = () => {
     if (!data) {
       return;
     }
@@ -101,7 +101,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
             type='checkbox'
             id='all-check'
             onChange={toggleAllCheckedById}
-            checked={isAllChecked()}
+            checked={isAllSelected()}
             className={cn('select-item-input')}
           />
           <label htmlFor='all-check' className={cn('select-item-label')} />
@@ -113,7 +113,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
             width={90}
             paddingVertical={8}
             radius={4}
-            onClick={() => setIsOpenConfirm2(true)}
+            onClick={() => setIsDeleteAllOpen(true)}
           >
             선택 삭제
           </Button>
@@ -123,7 +123,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
             width={90}
             paddingVertical={8}
             radius={4}
-            onClick={() => setIsOpenConfirm(true)}
+            onClick={() => setIsDeleteSelectedOpen(true)}
           >
             전체 삭제
           </Button>
@@ -143,16 +143,16 @@ export default function WishList({ searchParams }: WishlistPageProps) {
         type='confirm'
         iconType='warn'
         message='전체 삭제 하시겠습니까?'
-        isOpen={isOpenConfirm}
-        onClick={{ left: () => setIsOpenConfirm(false), right: handleAllDelete }}
+        isOpen={isDeleteSelectedOpen}
+        onClick={{ left: () => setIsDeleteSelectedOpen(false), right: handleAllDelete }}
         buttonText={{ left: '취소', right: '확인' }}
       />
       <Dialog
         type='confirm'
         iconType='warn'
         message='선택 삭제 하시겠습니까?'
-        isOpen={isOpenConfirm2}
-        onClick={{ left: () => setIsOpenConfirm2(false), right: handleSeleteDelete }}
+        isOpen={isDeleteAllOpen}
+        onClick={{ left: () => setIsDeleteAllOpen(false), right: handleSelectedDelete }}
         buttonText={{ left: '취소', right: '확인' }}
       />
     </div>
