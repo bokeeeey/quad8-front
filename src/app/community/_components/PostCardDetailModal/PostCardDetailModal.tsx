@@ -265,7 +265,7 @@ export default function PostCardDetailModal({
                 alt='키보드 이미지'
                 fill
                 onError={() => setClickedImage('')}
-                className={cn('selected-image-wrapper')}
+                className={cn('selected-image')}
                 sizes='(max-width: 1200px) 100%'
                 priority
                 placeholder={IMAGE_BLUR.placeholder}

@@ -59,7 +59,7 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
       ) : (
         <>
           <div className={cn('profile-image')}>
-            <Image src={userInfo?.imgUrl || keydeukProfileImg} alt='프로필 이미지' fill />
+            <Image src={userInfo?.imgUrl || keydeukProfileImg} alt='프로필 이미지' fill sizes='12rem' />
           </div>
           <div className={cn('info-wrapper')}>
             <p className={cn('nickname')}>{userInfo?.nickname || '사용자를 찾을 수 없습니다.'}</p>

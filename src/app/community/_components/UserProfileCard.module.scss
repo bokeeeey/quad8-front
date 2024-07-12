@@ -7,9 +7,10 @@
   width: 45rem;
   height: 15rem;
   padding: 1rem;
-  border: 0.2rem solid $primary-60;
+  border: 0.2rem solid $gray-20;
   border-radius: 1rem;
   background-color: white;
+  box-shadow: 0 0 1.5rem 0 rgb(0 0 0 / 35%);
   gap: 1rem;
 }
 
@@ -40,6 +41,7 @@
   overflow: hidden;
   border-radius: 0.8rem;
   background-color: $gray-10;
+  object-fit: cover;
 }
 
 .info-wrapper {
@@ -47,7 +49,7 @@
 
   height: 100%;
   padding-left: 1rem;
-  border-left: 0.2rem solid $primary-60;
+  border-left: 0.2rem solid $gray-20;
 }
 
 .info-wrapper p {
