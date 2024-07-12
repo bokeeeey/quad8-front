@@ -10,7 +10,7 @@ import { Button, Modal } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import { ROUTER } from '@/constants/route';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
-import { PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
+import type { PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
 import { getCustomOrderList } from '@/api/communityAPI';
 import styles from './WritePostButton.module.scss';
 import OrderListModal from './OrderListModal';

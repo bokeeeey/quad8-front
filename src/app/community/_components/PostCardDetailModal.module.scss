@@ -1,5 +1,6 @@
 .container {
   padding: 4rem;
+  animation: scale-in-center 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   border-radius: 1.6rem;
   background-color: $white;
 }
@@ -105,4 +106,16 @@
   padding-top: 1rem;
   padding-bottom: 0.1rem;
   background-color: $white;
+}
+
+@keyframes scale-in-center {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
