@@ -1,4 +1,6 @@
 .wrapper {
+  @include poppins-18-600;
+
   position: relative;
   width: 100%;
 }
@@ -35,6 +37,7 @@
 
 .auto-list-wrapper {
   position: absolute;
+  z-index: $zindex-dropdown;
   top: 6rem;
   width: 100%;
 }
