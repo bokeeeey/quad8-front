@@ -35,7 +35,7 @@ interface UserDataType {
   message: string;
 }
 
-const Comment = forwardRef<HTMLDivElement, CommentProps>(({ cardId, commentData }, ref) => {
+export default forwardRef<HTMLDivElement, CommentProps>(function Comment({ cardId, commentData }, ref) {
   const queryClient = useQueryClient();
 
   const {
@@ -104,9 +104,10 @@ const Comment = forwardRef<HTMLDivElement, CommentProps>(({ cardId, commentData 
   ];
 
   const timeAgo = calculateTimeDifference(createdTimeToDate);
+
   return (
     <div className={cn('container')} ref={ref}>
-      <ProfileImage profileImage={profile || null} />
+      <ProfileImage profileImage={profile && profile} />
       <div className={cn('content-wrapper')}>
         <div className={cn('user-info-wrapper')}>
           <div className={cn('user-info')}>
@@ -125,7 +126,3 @@ const Comment = forwardRef<HTMLDivElement, CommentProps>(({ cardId, commentData 
     </div>
   );
 });
-
-export default Comment;
-
-Comment.displayName = 'Comment';

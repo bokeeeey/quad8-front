@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import { useState, MouseEvent, useEffect } from 'react';
+import { useState, MouseEvent, useEffect, Suspense } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -12,9 +12,12 @@ import type { CommunityPostCardDataType } from '@/types/CommunityTypes';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { deletePostCard, getPostDetail } from '@/api/communityAPI';
+import { ErrorBoundary } from 'react-error-boundary';
 import AuthorCard from './AuthorCard';
-import PostCardDetailModal from './PostCardDetailModal';
+import PostCardDetailModal from './PostCardDetailModal/PostCardDetailModal';
 import { PostInteractions } from './PostInteractions';
+import DetailModalSkeleton from './PostCardDetailModal/DetailModalSkeleton';
+import ErrorFallbackDetailModal from './PostCardDetailModal/ErrorFallbackDetailModal';
 
 import styles from './PostCard.module.scss';
 
@@ -39,13 +42,13 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
 
   const handleClickPopup = (e: MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    setIsPopupOpen(!isPopupOpen);
+    setIsPopupOpen((prevIsOpen) => !prevIsOpen);
   };
 
   const { refetch, data: detailData } = useQuery({
     queryKey: ['editingPostData', id],
     queryFn: () => getPostDetail(id),
-    enabled: false, // 비활성화된 상태로 시작
+    enabled: false,
   });
 
   useEffect(() => {
@@ -76,7 +79,7 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
     onSuccess: () => {
       toast.success('게시글을 삭제하였습니다.');
       queryClient.invalidateQueries({
-        queryKey: ['MyCustomReview'],
+        queryKey: ['myCustomReview'],
       });
     },
     onError: () => {
@@ -150,7 +153,16 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
       </div>
       <PostInteractions cardId={id} likeCount={likeCount} commentCount={commentCount} isLiked={isLiked} />
       <Modal isOpen={isPostModalOpen} onClose={handleClosePostModal}>
-        <PostCardDetailModal cardId={id} onClose={handleClosePostModal} isMine={isMine} commentCount={commentCount} />
+        <ErrorBoundary FallbackComponent={ErrorFallbackDetailModal}>
+          <Suspense fallback={<DetailModalSkeleton />}>
+            <PostCardDetailModal
+              cardId={id}
+              onClose={handleClosePostModal}
+              isMine={isMine}
+              commentCount={commentCount}
+            />
+          </Suspense>
+        </ErrorBoundary>
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
         <div onClick={(e) => e.stopPropagation()}>

@@ -1,8 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useSuspenseQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { useEffect, useRef, useState, MouseEvent, Suspense } from 'react';
 import { toast } from 'react-toastify';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { deletePostCard, getCommentsInfiniteScroll, getPostDetail, postComment } from '@/api/communityAPI';
 import { Button, CustomOption, InputField, Modal } from '@/components';
@@ -12,15 +13,15 @@ import { IMAGE_BLUR } from '@/constants/blurImage';
 import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
 import { formatDateToString } from '@/libs/formatDateToString';
 import { keydeukImg } from '@/public/index';
-import type { CommunityPostCardDetailDataType } from '@/types/CommunityTypes';
+import type { CommunityPostCardDetailDataType, CommentType } from '@/types/CommunityTypes';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import Loading from '@/app/loading';
-import { CommentType } from '@/types/CommunityTypes';
-import AuthorCard from './AuthorCard';
-import Comment from './Comment';
-import { PostInteractions } from './PostInteractions';
+import AuthorCard from '../AuthorCard';
+import Comment from '../Comment';
+import { PostInteractions } from '../PostInteractions';
+import DetailModalSkeleton from './DetailModalSkeleton';
 
 import styles from './PostCardDetailModal.module.scss';
+import FallbackDetailModal from './ErrorFallbackDetailModal';
 
 const cn = classNames.bind(styles);
 interface PostCardDetailModalProps {
@@ -47,14 +48,14 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
 
   const handleClickPopup = (e: MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    setIsPopupOpen(!isPopupOpen);
+    setIsPopupOpen((prevIsOpen) => !prevIsOpen);
   };
 
   const handleClosePopOver = () => {
     setIsPopupOpen(false);
   };
 
-  const { data, refetch, isPending } = useQuery({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
   });
@@ -89,7 +90,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
     onSuccess: () => {
       toast.success('게시글이 삭제되었습니다.');
       queryClient.invalidateQueries({
-        queryKey: ['MyCustomReview'],
+        queryKey: ['myCustomReview'],
       });
       queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
       refetch();
@@ -117,9 +118,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
   useEffect(() => {
     if (lastCommentRef.current && isLastCommentIntersecting) {
       const restComments = infiniteCommentData?.data;
-      if (!restComments) {
-        infiniteCommentRefetch();
-      } else if (restComments.length !== 0) {
+      if (!restComments || restComments.length !== 0) {
         infiniteCommentRefetch();
       }
     }
@@ -127,11 +126,12 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
 
   useEffect(() => {
     const restComments = infiniteCommentData?.data;
-    if (
+    const haveRestComments =
       restComments &&
       visibleComments[visibleComments.length - 1]?.id !== restComments[restComments.length - 1]?.id &&
-      restComments.length !== 0
-    ) {
+      restComments.length !== 0;
+
+    if (haveRestComments) {
       setVisibleComments((prev) => [...prev, ...restComments]);
       setLastCommentId(restComments[restComments.length - 1].id);
     }
@@ -147,10 +147,6 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
       setLastCommentId(lastCommentData?.id);
     }
   }, [data, queryClient]);
-
-  if (isPending) {
-    return <Loading />;
-  }
 
   const { data: postData, status, message } = data;
   if (status === 'FAIL') {
@@ -189,7 +185,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
   const handleClickEditModalButton = () => {
     setIsEditModalOpen(false);
     queryClient.invalidateQueries({
-      queryKey: ['MyCustomReview'],
+      queryKey: ['myCustomReview'],
     });
     queryClient.invalidateQueries({
       queryKey: ['postData', cardId],
@@ -223,117 +219,126 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
   ];
 
   return (
-    <div className={cn('container')} ref={containerRef}>
-      {isMine && (
-        <div className={cn('edit-button-wrapper')}>
-          <Button width={72} paddingVertical={8} onClick={() => setIsEditAlertOpen(true)}>
-            수정
-          </Button>
-          <Button width={72} paddingVertical={8} onClick={() => setIsDeleteAlertOpen(true)}>
-            삭제
-          </Button>
-        </div>
-      )}
-      <div className={cn('image-content-wrapper')}>
-        <div className={cn('left-wrapper')}>
-          <div className={cn('selected-image')}>
-            <Image
-              src={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
-              alt='키보드 이미지'
-              fill
-              onError={() => setClickedImage('')}
-              sizes='(max-width: 1200px) 100%'
-              priority
-              placeholder={IMAGE_BLUR.placeholder}
-              blurDataURL={IMAGE_BLUR.blurDataURL}
-            />
-          </div>
-          {reviewImages.length > 1 && (
-            <div className={cn('unselected-image-wrapper')}>
-              {reviewImages.map((image, i: number) => (
-                <div onClick={() => handleClickThumbnail(i)} key={image.id}>
-                  <Image
-                    src={image.imgUrl}
-                    alt='키보드 이미지'
-                    className={cn('images')}
-                    width={48}
-                    height={48}
-                    priority
-                    placeholder={IMAGE_BLUR.placeholder}
-                    blurDataURL={IMAGE_BLUR.blurDataURL}
-                  />
-                </div>
-              ))}
+    <ErrorBoundary FallbackComponent={FallbackDetailModal}>
+      <Suspense fallback={<DetailModalSkeleton />}>
+        <div className={cn('container')} ref={containerRef}>
+          {isMine && (
+            <div className={cn('edit-button-wrapper')}>
+              <Button width={72} paddingVertical={8} onClick={() => setIsEditAlertOpen(true)}>
+                수정
+              </Button>
+              <Button width={72} paddingVertical={8} onClick={() => setIsDeleteAlertOpen(true)}>
+                삭제
+              </Button>
             </div>
           )}
-        </div>
-        <div className={cn('right-wrapper')}>
-          <div className={cn('content-wrapper')}>
-            <p className={cn('title')}>{title}</p>
-            <AuthorCard
-              nickname={nickName}
-              dateText={createdDateString}
-              userImage={userImage}
-              onClickPopOver={handleClickPopup}
-              onClosePopOver={handleClosePopOver}
-              isOpenPopOver={isPopupOpen}
-              popOverOptions={isMine ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
-            />
-            <CustomOption wrapperRef={containerRef} customData={custom} />
-            <p className={cn('content')}>{content}</p>
-            <div className={cn('post-iteractions-wrapper')}>
-              <PostInteractions likeCount={likeCount} commentCount={commentCount} cardId={cardId} isLiked={isLiked} />
-            </div>
-            <div className={cn('comment-wrapper')}>
-              {visibleComments.map((comment) => (
-                <Comment
-                  key={comment.id}
-                  cardId={cardId}
-                  commentData={comment}
-                  ref={lastCommentId === comment.id ? lastCommentRef : null}
+          <div className={cn('image-content-wrapper')}>
+            <div className={cn('left-wrapper')}>
+              <div className={cn('selected-image')}>
+                <Image
+                  src={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
+                  alt='키보드 이미지'
+                  fill
+                  onError={() => setClickedImage('')}
+                  sizes='(max-width: 1200px) 100%'
+                  priority
+                  placeholder={IMAGE_BLUR.placeholder}
+                  blurDataURL={IMAGE_BLUR.blurDataURL}
                 />
-              ))}
+              </div>
+              {reviewImages.length > 1 && (
+                <div className={cn('unselected-image-wrapper')}>
+                  {reviewImages.map((image, i: number) => (
+                    <div onClick={() => handleClickThumbnail(i)} key={image.id}>
+                      <Image
+                        src={image.imgUrl}
+                        alt='키보드 이미지'
+                        className={cn('images')}
+                        width={48}
+                        height={48}
+                        priority
+                        placeholder={IMAGE_BLUR.placeholder}
+                        blurDataURL={IMAGE_BLUR.blurDataURL}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className={cn('right-wrapper')}>
+              <div className={cn('content-wrapper')}>
+                <p className={cn('title')}>{title}</p>
+                <AuthorCard
+                  nickname={nickName}
+                  dateText={createdDateString}
+                  userImage={userImage}
+                  onClickPopOver={handleClickPopup}
+                  onClosePopOver={handleClosePopOver}
+                  isOpenPopOver={isPopupOpen}
+                  popOverOptions={isMine ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
+                />
+                <CustomOption wrapperRef={containerRef} customData={custom} />
+                <p className={cn('content')}>{content}</p>
+                <div className={cn('post-iteractions-wrapper')}>
+                  <PostInteractions
+                    likeCount={likeCount}
+                    commentCount={commentCount}
+                    cardId={cardId}
+                    isLiked={isLiked}
+                  />
+                </div>
+                <div className={cn('comment-wrapper')}>
+                  {visibleComments.map((comment) => (
+                    <Comment
+                      key={comment.id}
+                      cardId={cardId}
+                      commentData={comment}
+                      ref={lastCommentId === comment.id ? lastCommentRef : null}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className={cn('comment-input')}>
+                <InputField placeholder='댓글을 입력해주세요' ref={(ref) => setCommentRef(ref)} />
+              </div>
             </div>
           </div>
-          <div className={cn('comment-input')}>
-            <InputField placeholder='댓글을 입력해주세요' ref={(ref) => setCommentRef(ref)} />
+          <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
+            <div onClick={(e) => e.stopPropagation()}>
+              <WriteEditModal
+                reviewType={postData ? 'customReviewEdit' : 'customReview'}
+                editCustomData={postData}
+                keyboardInfo={custom}
+                onSuccessReview={handleClickEditModalButton}
+              />
+            </div>
+          </Modal>
+          <div onClick={(e) => e.stopPropagation()}>
+            <Dialog
+              type='confirm'
+              message='수정하시겠습니까'
+              isOpen={isEditAlertOpen}
+              iconType='warn'
+              buttonText={{ left: '댣기', right: '확인' }}
+              onClick={{
+                left: () => handleCloseEditAlert(),
+                right: () => handleClickEditAlertButton(),
+              }}
+            />
+            <Dialog
+              type='confirm'
+              message='삭제하시겠습니까'
+              isOpen={isDeleteAlertOpen}
+              iconType='warn'
+              buttonText={{ left: '닫기', right: '확인' }}
+              onClick={{
+                left: () => handleCloseDeleteAlert(),
+                right: () => handleClickDeleteAlertButon(),
+              }}
+            />
           </div>
         </div>
-      </div>
-      <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
-        <div onClick={(e) => e.stopPropagation()}>
-          <WriteEditModal
-            reviewType={postData ? 'customReviewEdit' : 'customReview'}
-            editCustomData={postData}
-            keyboardInfo={custom}
-            onSuccessReview={handleClickEditModalButton}
-          />
-        </div>
-      </Modal>
-      <div onClick={(e) => e.stopPropagation()}>
-        <Dialog
-          type='confirm'
-          message='수정하시겠습니까'
-          isOpen={isEditAlertOpen}
-          iconType='warn'
-          buttonText={{ left: '댣기', right: '확인' }}
-          onClick={{
-            left: () => handleCloseEditAlert(),
-            right: () => handleClickEditAlertButton(),
-          }}
-        />
-        <Dialog
-          type='confirm'
-          message='삭제하시겠습니까'
-          isOpen={isDeleteAlertOpen}
-          iconType='warn'
-          buttonText={{ left: '닫기', right: '확인' }}
-          onClick={{
-            left: () => handleCloseDeleteAlert(),
-            right: () => handleClickDeleteAlertButon(),
-          }}
-        />
-      </div>
-    </div>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
