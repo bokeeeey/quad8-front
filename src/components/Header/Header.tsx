@@ -12,7 +12,7 @@ import { LogoIcon, UserIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
 import type { CartAPIDataType } from '@/types/CartTypes';
 import SignInModal from '../SignInModal/SignInModal';
-import { CartButton, LoginButton, LogoutButton, SearchBox, ShopButton } from './HeaderParts';
+import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
 
@@ -82,7 +82,7 @@ export default function Header() {
             </div>
           </div>
           <div className={cn('left-wrapper')}>
-            <SearchBox isBlack={isBlack} />
+            <SearchButton isBlack={isBlack} />
             {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
             <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
               {profileImage ? (

@@ -15,10 +15,6 @@
   background-color: rgb(0 0 0 / 70%);
 }
 
-.open {
-  visibility: visible;
-}
-
 .black {
   background-color: $black;
   fill: $white;
@@ -32,6 +28,10 @@
   padding: 5rem 0;
   animation: slide-in 0.3s ease forwards;
   background-color: $white;
+}
+
+.search-box-wrapper {
+  width: 40%;
 }
 
 .slide-out {
@@ -86,48 +86,8 @@
   }
 }
 
-.content-wrapper {
-  width: 40%;
-}
-
-.form {
-  display: flex;
-  width: 100%;
-  padding: 0.6rem 1rem;
-  border-bottom: 0.1rem solid $black;
-}
-
-.input {
-  @include poppins-22-500;
-
-  width: 100%;
-  border: none;
-  outline: none;
-  color: $black;
-
-  &::placeholder {
-    @include poppins-22-500;
-
-    color: $gray-50;
-  }
-}
-
-.search-button {
-  fill: $black;
-}
-
-.search-button-black {
-  fill: $white;
-}
-
 .border-black {
   border-top: 0.1rem solid $gray-40;
-}
-
-.auto-list-wrapper {
-  position: absolute;
-  top: 11rem;
-  width: 40%;
 }
 
 .bg-black {

@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, FormEvent, KeyboardEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
@@ -11,8 +11,8 @@ import { SearchIcon } from '@/public/index';
 import { ROUTER } from '@/constants/route';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { charMatcher } from '@/libs/charMatcher';
-import SearchHistory from './SearchHistory';
 import SearchSuggestion from './SearchSuggestion';
+import SearchHistory from './SearchHistory';
 
 import styles from './SearchBox.module.scss';
 
@@ -24,20 +24,15 @@ interface SearchBoxProps {
 
 export default function SearchBox({ isBlack }: SearchBoxProps) {
   const router = useRouter();
-  const pathName = usePathname();
 
   const { data: SearchSuggestionData } = useQuery<string[]>({
     queryFn: getSearchSuggestion,
     queryKey: ['searchSuggestionData'],
   });
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [isRender, setIsRender] = useState(false);
 
   const [searchKeyword, setSearchKeyword] = useState('');
   const [originKeyword, setOriginKeyword] = useState('');
@@ -57,42 +52,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
       setIsFocus(false);
     }
   });
-
-  /* 
-    헤더 검색버튼 눌렀을 때 함수
-    검색 컴포넌트 열 때는 isRender도 같이 true로 바로 바뀌도록 설정/ 닫혔을 때는 비활성
-    => 애니메이션이 끝난 후에 isRender 값이 false로 바뀌도록 하기 위해
-  */
-  const handleClickButton = () => {
-    setIsOpen((prev) => {
-      if (!prev) {
-        setIsRender(true);
-      }
-      return !prev;
-    });
-  };
-
-  /* 
-    검색 컴포넌트 unmount 요청 시(isOpen값이 false로 바뀔 때)에 animation이 발생하고 다 끝난 후에 unmount되도록 하기 위한 코드. 
-    애니메이션이 종료된 후 isOpen이 false 일 때(사용자가 닫는 조건을 발동시켰을 때 - 외부 클릭 또는 헤더 검색 버튼을 누른 경우 ) unmount 되도록 설정
-    참고로 애니메이션은 처음에 isOpen이 true로 변경될 때 또는 false로 변경될 때 발동되며(slide-in, slide-out),
-    닫히는 경우, isOpen이 false로 변경되고, 애니메이션이 일어난 후, unmount되어야 함(isRender가 false)
-  */
-  const handleAnimationEnd = () => {
-    if (!isOpen) {
-      setIsRender(false);
-    }
-  };
-
-  /* 
-    회색 배경 부분 클릭 했을 경우 검색 컴포넌트 닫히도록 설정
-    만약 헤더 클릭 했을 때도 닫히도록 하려면 그냥 useOutsideClick으로 하면 됨.
-  */
-  const handleClickOutside = (e: SyntheticEvent<HTMLDivElement>) => {
-    if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-      handleClickButton();
-    }
-  };
 
   /* 
     검색 제안 필터
@@ -224,7 +183,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   */
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsRender(false);
     setKeywordHistory((prev) => {
       const newValue = [searchKeyword, ...prev.filter((keyword) => keyword !== searchKeyword)];
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
@@ -243,7 +201,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     최근 검색어 저장(순서 변경?)
   */
   const handleClickHistoryKeyword = (value: string) => {
-    setIsRender(false);
     setKeywordHistory((prev) => {
       const newValue = [value, ...prev.filter((keyword) => keyword !== value)];
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
@@ -278,7 +235,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     최근 검색어 저장
   */
   const handleClickSuggestionKeyword = (value: string) => {
-    setIsRender(false);
     setKeywordHistory((prev) => {
       const newValue = [value, ...prev.filter((keyword) => keyword !== value)];
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
@@ -286,18 +242,6 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
     });
     router.push(`${ROUTER.SEARCH}?keyword=${value}`, { scroll: false });
   };
-
-  /* 페이지 이동 시 검색 컴포넌트 안 보이도록 변경 */
-  useEffect(() => {
-    setIsRender(false);
-  }, [pathName]);
-
-  /* 검색 컴포넌트가 열고 닫힐 때, 값이 초기화 되도록 설정 */
-  useEffect(() => {
-    setIsFocus(false);
-    setSearchKeyword('');
-    setAutoListType('history');
-  }, [isRender]);
 
   /* 아웃 포커스 되었을 때, 자동 완성창이 사라졌을 때 focusIndex 값도 초기화 되도록 설정 */
   useEffect(() => {
@@ -310,61 +254,44 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
   }, []);
 
   return (
-    <div>
-      <SearchIcon width={24} height={24} className={cn('icon', { black: isBlack })} onClick={handleClickButton} />
-      {isRender && (
-        <div
-          className={cn('search-wrapper', { 'fade-out': !isOpen, 'border-black': isBlack })}
-          onClick={handleClickOutside}
-          onAnimationEnd={handleAnimationEnd}
-        >
-          <div className={cn('wrapper', { 'slide-out': !isOpen, 'bg-black': isBlack })} ref={wrapperRef}>
-            <div className={cn('content-wrapper')} onFocus={handleInputFocus}>
-              <form className={cn('form', { 'bg-black': isBlack })} onSubmit={handleFormSubmit}>
-                <input
-                  ref={inputRef}
-                  value={searchKeyword}
-                  className={cn('input', { 'bg-black': isBlack })}
-                  placeholder='검색어를 입력해주세요'
-                  onFocus={handleInputFocus}
-                  onChange={handleInputChange}
-                  onKeyDown={handleInputKeyDown}
-                />
-                <button type='submit'>
-                  <SearchIcon
-                    width={31}
-                    height={31}
-                    className={cn('search-button', { 'search-button-black': isBlack })}
-                  />
-                </button>
-              </form>
-              {isFocus && (
-                <div className={cn('auto-list-wrapper')} onClick={handleSugestionClick} ref={suggestRef}>
-                  {autoListType === 'suggestion' ? (
-                    keywordSuggestion.length > 0 && (
-                      <SearchSuggestion
-                        suggestionData={keywordSuggestion}
-                        focusIndex={focusIndex}
-                        isBlack={isBlack}
-                        onClickKeyword={handleClickSuggestionKeyword}
-                        onFocusKeyword={handleFocusKeyword}
-                      />
-                    )
-                  ) : (
-                    <SearchHistory
-                      historyData={keywordHistory}
-                      isBlack={isBlack}
-                      focusIndex={focusIndex}
-                      onClickKeyword={handleClickHistoryKeyword}
-                      onClickDelete={handleClickDeleteHistory}
-                      onClickDeleteAll={handleClickDeleteAllHistory}
-                      onFocusKeyword={handleFocusKeyword}
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
+    <div className={cn('wrapper')} onFocus={handleInputFocus}>
+      <form className={cn('form', { 'bg-black': isBlack })} onSubmit={handleFormSubmit}>
+        <input
+          ref={inputRef}
+          value={searchKeyword}
+          className={cn('input', { 'bg-black': isBlack })}
+          placeholder='검색어를 입력해주세요'
+          onFocus={handleInputFocus}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+        />
+        <button type='submit'>
+          <SearchIcon width={31} height={31} className={cn('search-button', { 'search-button-black': isBlack })} />
+        </button>
+      </form>
+      {isFocus && (
+        <div className={cn('auto-list-wrapper')} onClick={handleSugestionClick} ref={suggestRef}>
+          {autoListType === 'suggestion' ? (
+            keywordSuggestion.length > 0 && (
+              <SearchSuggestion
+                suggestionData={keywordSuggestion}
+                focusIndex={focusIndex}
+                isBlack={isBlack}
+                onClickKeyword={handleClickSuggestionKeyword}
+                onFocusKeyword={handleFocusKeyword}
+              />
+            )
+          ) : (
+            <SearchHistory
+              historyData={keywordHistory}
+              isBlack={isBlack}
+              focusIndex={focusIndex}
+              onClickKeyword={handleClickHistoryKeyword}
+              onClickDelete={handleClickDeleteHistory}
+              onClickDeleteAll={handleClickDeleteAllHistory}
+              onFocusKeyword={handleFocusKeyword}
+            />
+          )}
         </div>
       )}
     </div>
