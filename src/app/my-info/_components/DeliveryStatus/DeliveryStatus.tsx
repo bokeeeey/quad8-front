@@ -3,13 +3,13 @@
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 
 import { getOrdersData } from '@/api/orderAPI';
 import { ROUTER } from '@/constants/route';
 import { ChevronIcon } from '@/public/index';
 import { Order, OrderStatus } from '@/types/OrderTypes';
 
-import { Fragment, useEffect, useMemo, useState } from 'react';
 import styles from './DeliveryStatus.module.scss';
 
 const cn = classNames.bind(styles);
