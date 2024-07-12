@@ -7,6 +7,7 @@
   width: 45rem;
   height: 15rem;
   padding: 1rem;
+  animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   border: 0.2rem solid $gray-20;
   border-radius: 1rem;
   background-color: white;

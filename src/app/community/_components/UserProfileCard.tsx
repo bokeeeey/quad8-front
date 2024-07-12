@@ -1,3 +1,5 @@
+'use client';
+
 import classNames from 'classnames/bind';
 import { forwardRef, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -13,11 +15,10 @@ const cn = classNames.bind(styles);
 interface UserProfileCardProps {
   isOpenProfileCard: boolean;
   userId: number;
-  isAboveCursor?: boolean;
+  positionTop?: number;
 }
-
 export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserProfileCard(
-  { isOpenProfileCard, userId, isAboveCursor },
+  { isOpenProfileCard, userId, positionTop },
   ref,
 ) {
   const {
@@ -29,26 +30,27 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
     queryFn: () => getOthersInfo(userId),
     enabled: false,
   });
-  const [animationClass, setAnimationClass] = useState('');
+  const [isAboveProfile, setIsAboveProfile] = useState(false);
 
   useEffect(() => {
+    const VIEWPORT_HEIGHT = window.innerHeight;
+
     if (isOpenProfileCard) {
       refetch();
-      setAnimationClass('entrance-animation');
-    } else {
-      setAnimationClass('');
+      if (positionTop && positionTop > VIEWPORT_HEIGHT / 2) {
+        setIsAboveProfile(true);
+      }
     }
-  }, [isOpenProfileCard, userId, refetch]);
+  }, [isOpenProfileCard, userId, refetch, positionTop, isAboveProfile]);
 
-  return (
+  return positionTop && positionTop === 0 ? null : (
     <div
       ref={ref}
       className={cn(
         'user-detail-profile-card',
         { 'display-none': !isOpenProfileCard },
         { 'loading-div': isFetching },
-        { 'above-cursor': isAboveCursor },
-        animationClass,
+        { 'above-cursor': isAboveProfile },
       )}
       onClick={(e) => e.stopPropagation()}
     >

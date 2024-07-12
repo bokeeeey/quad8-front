@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { forwardRef, useState, MouseEvent } from 'react';
+import { forwardRef, useState, MouseEvent, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -59,7 +59,7 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   const createdTimeToDate = new Date(createdTime);
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
   const [isOpenProfileCard, setIsOpenProfileCard] = useState(false);
-  const [userCardDirection, setUserCardDirection] = useState<'top' | 'bottom'>('bottom');
+  const [commentPositionTop, setCommentPositionTop] = useState(0);
 
   const userData = queryClient.getQueryData<UserDataType>(['userData']);
   const userID = userData?.data?.id;
@@ -82,13 +82,11 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   const handleOpenProfile = (e: MouseEvent<HTMLDivElement>) => {
     onOpenProfileCard();
     const { top } = e.currentTarget.getBoundingClientRect();
-    const viewPortHeight = window.innerHeight;
-    if (top > viewPortHeight / 2) {
-      setUserCardDirection('top');
-    }
-
+    setCommentPositionTop(top);
     setIsOpenProfileCard(true);
   };
+
+  useEffect(() => {}, [commentPositionTop]);
 
   const handleCloseProfile = () => {
     setIsOpenProfileCard(false);
@@ -114,7 +112,8 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
         <UserProfileCard
           isOpenProfileCard={isOpenProfileCard}
           userId={commentUserId}
-          isAboveCursor={userCardDirection === 'top'}
+          // isAboveCursor={userCardDirection === 'top'}
+          positionTop={commentPositionTop}
         />
       </div>
       <div className={cn('content-wrapper')}>
