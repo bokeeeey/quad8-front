@@ -6,9 +6,8 @@ import Pagination from '@/components/Pagination/Pagination';
 import { getSearchResult } from '@/api/searchAPI';
 import { SearchResultType } from '@/types/SearchType';
 import { ROUTER } from '@/constants/route';
-import Title from './_components/Title';
-import NoResult from './_components/NoResult';
-import CardList from './_components/CardList';
+import SearchBox from '@/components/SearchBox/SearchBox';
+import { Title, NoResult, CardList } from './_components';
 
 import styles from './page.module.scss';
 
@@ -36,6 +35,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className={cn('wrapper')}>
+        <div className={cn('search-wrapper')}>
+          <SearchBox isBlack={false} initialValue={keyword} />
+        </div>
         {data ? (
           <div className={cn('content-wrapper')}>
             <Title keyword={keyword} count={data.totalElements} />

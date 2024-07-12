@@ -6,6 +6,7 @@ import classNames from 'classnames/bind';
 
 import { SearchIcon } from '@/public/index';
 import SearchBox from '@/components/SearchBox/SearchBox';
+
 import styles from './SearchButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -73,7 +74,7 @@ export default function SearchButton({ isBlack }: SearchBoxProps) {
         >
           <div className={cn('wrapper', { 'slide-out': !isOpen, 'bg-black': isBlack })} ref={wrapperRef}>
             <div className={cn('search-box-wrapper')}>
-              <SearchBox isBlack={isBlack} />
+              <SearchBox isBlack={isBlack} onSubmit={() => setIsOpen(false)} />
             </div>
           </div>
         </div>

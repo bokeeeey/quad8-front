@@ -11,6 +11,7 @@ import { SearchIcon } from '@/public/index';
 import { ROUTER } from '@/constants/route';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { charMatcher } from '@/libs/charMatcher';
+import { toast } from 'react-toastify';
 import SearchSuggestion from './SearchSuggestion';
 import SearchHistory from './SearchHistory';
 
@@ -19,11 +20,12 @@ import styles from './SearchBox.module.scss';
 const cn = classNames.bind(styles);
 
 interface SearchBoxProps {
-  isBlack: boolean;
+  isBlack?: boolean;
+  initialValue?: string;
   onSubmit?: () => void;
 }
 
-export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
+export default function SearchBox({ isBlack = false, initialValue, onSubmit }: SearchBoxProps) {
   const router = useRouter();
 
   const { data: SearchSuggestionData } = useQuery<string[]>({
@@ -35,7 +37,7 @@ export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
   const suggestRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState(initialValue ?? '');
   const [originKeyword, setOriginKeyword] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [autoListType, setAutoListType] = useState<'history' | 'suggestion'>('history');
@@ -100,6 +102,10 @@ export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
 
   const handleInputFocus = () => {
     setIsFocus(true);
+    if (searchKeyword) {
+      setAutoListType('suggestion');
+      suggestionFilter(searchKeyword);
+    }
   };
 
   /* 
@@ -176,6 +182,9 @@ export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
         return prev - 1;
       });
     }
+    if (inputRef.current) {
+      inputRef.current.scrollLeft = inputRef.current?.scrollWidth;
+    }
   };
 
   /* 
@@ -184,6 +193,10 @@ export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
   */
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (searchKeyword === '') {
+      toast.error('검색어를 입력해주세요');
+      return;
+    }
     setKeywordHistory((prev) => {
       const newValue = [searchKeyword, ...prev.filter((keyword) => keyword !== searchKeyword)];
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
@@ -211,6 +224,7 @@ export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
       return newValue;
     });
+    setSearchKeyword(value);
     setIsFocus(false);
     if (onSubmit) {
       onSubmit();
@@ -249,6 +263,7 @@ export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
       return newValue;
     });
+    setSearchKeyword(value);
     setIsFocus(false);
     if (onSubmit) {
       onSubmit();
@@ -265,6 +280,12 @@ export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
   useEffect(() => {
     setKeywordHistory(JSON.parse(localStorage.getItem('recentSearch') ?? '[]'));
   }, []);
+
+  useEffect(() => {
+    if (initialValue) {
+      setSearchKeyword(initialValue);
+    }
+  }, [initialValue]);
 
   return (
     <div className={cn('wrapper')} onFocus={handleInputFocus}>
