@@ -7,18 +7,18 @@
 }
 
 .cart-count {
-  display: flex;
+  @include pretendard-14-400;
+  @include flex-center;
+
   position: absolute;
   top: -0.5rem;
   right: -0.7rem;
-  align-items: center;
-  justify-content: center;
   width: 1.9rem;
   height: 1.9rem;
   border-radius: 30rem;
   background-color: $red;
   color: $white;
-  @include pretendard-14-400;
+  cursor: pointer;
 }
 
 .count-more-digit {

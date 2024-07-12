@@ -1,16 +1,16 @@
 'use client';
 
-import { ROUTER } from '@/constants/route';
-import { useQuery } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
+import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 
+import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
-import Image from 'next/image';
-import { CartAPIDataType } from '@/types/CartTypes';
+import type { CartAPIDataType } from '@/types/CartTypes';
 import SignInModal from '../SignInModal/SignInModal';
 import { CartButton, LoginButton, LogoutButton, SearchBox, ShopButton } from './HeaderParts';
 
