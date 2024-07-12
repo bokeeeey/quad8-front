@@ -20,9 +20,10 @@ const cn = classNames.bind(styles);
 
 interface SearchBoxProps {
   isBlack: boolean;
+  onSubmit?: () => void;
 }
 
-export default function SearchBox({ isBlack }: SearchBoxProps) {
+export default function SearchBox({ isBlack, onSubmit }: SearchBoxProps) {
   const router = useRouter();
 
   const { data: SearchSuggestionData } = useQuery<string[]>({
@@ -188,6 +189,10 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
       return newValue;
     });
+    inputRef.current?.blur();
+    if (onSubmit) {
+      onSubmit();
+    }
     router.push(`${ROUTER.SEARCH}?keyword=${searchKeyword}`, { scroll: false });
   };
 
@@ -206,6 +211,10 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
       return newValue;
     });
+    setIsFocus(false);
+    if (onSubmit) {
+      onSubmit();
+    }
     router.push(`${ROUTER.SEARCH}?keyword=${value}`, { scroll: false });
   };
 
@@ -240,6 +249,10 @@ export default function SearchBox({ isBlack }: SearchBoxProps) {
       localStorage.setItem('recentSearch', JSON.stringify(newValue));
       return newValue;
     });
+    setIsFocus(false);
+    if (onSubmit) {
+      onSubmit();
+    }
     router.push(`${ROUTER.SEARCH}?keyword=${value}`, { scroll: false });
   };
 
