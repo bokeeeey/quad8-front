@@ -102,13 +102,25 @@
   object-fit: cover;
 }
 
+.big-image {
+  width: 100%;
+  max-width: 60rem;
+  height: auto;
+  max-height: 60rem;
+  object-fit: contain;
+}
+
+.mypage-review-section {
+  display: flex;
+}
+
 .mypage-review-image {
   width: 8rem;
   height: 8rem;
   margin-right: 1.2rem;
   border: 0.1rem solid $gray-10;
   border-radius: 0.8rem;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .image-count {
@@ -133,14 +145,6 @@
   @include flex-center;
 
   margin-left: 17rem;
-}
-
-.render-image {
-  width: 100%;
-  max-width: 60rem;
-  height: auto;
-  max-height: 60rem;
-  object-fit: contain;
 }
 
 .review-item.modal-review {

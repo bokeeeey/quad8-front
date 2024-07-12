@@ -1,9 +1,11 @@
 'use client';
 
+import { getProductReviews } from '@/api/productReviewAPI';
 import ReviewItem from '@/components/ReviewItem/ReviewItem';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { ChevronIcon } from '@/public/index';
-import { ReviewDto } from '@/types/ProductReviewTypes';
+import { ProductReviewType, ReviewDto } from '@/types/ProductReviewTypes';
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -12,33 +14,51 @@ import styles from './ReviewImageModal.module.scss';
 const cn = classNames.bind(styles);
 
 interface ReviewImageModalProps {
-  data: ReviewDto[];
-  id: number;
+  productId: number;
+  reviewId: number;
 }
 
-export default function ReviewImageModal({ data, id }: ReviewImageModalProps) {
-  const [currentReviewIndex, setCurrentReviewIndex] = useState<number>(() =>
-    data.findIndex((review) => review.id === id),
-  );
+export default function ReviewImageModal({ productId, reviewId }: ReviewImageModalProps) {
+  const [currentReviewIndex, setCurrentReviewIndex] = useState<number>(0);
   const [currentImage, setCurrentImage] = useState<string>('');
+  const [currentReviewId, setCurrentReviewId] = useState<number>(reviewId);
+  const [currentReview, setCurrentReview] = useState<ReviewDto>();
+
+  const { data } = useQuery<ProductReviewType>({
+    queryKey: ['review', productId, currentReviewId],
+    queryFn: () => getProductReviews({ productId }),
+  });
 
   useEffect(() => {
-    setCurrentImage(data[currentReviewIndex]?.reviewImgs[0]?.imageUrl || '');
-  }, [currentReviewIndex, data]);
+    if (data) {
+      const index = data.reviewDtoList.findIndex((review) => review.id === currentReviewId);
+      if (index !== -1) {
+        setCurrentReviewIndex(index);
+        setCurrentImage(data.reviewDtoList[index]?.reviewImgs[0]?.imageUrl || '');
+        setCurrentReview(data.reviewDtoList[currentReviewIndex]);
+      }
+    }
+  }, [data, currentReviewId, currentReviewIndex]);
 
   const handleClickImage = (value: string) => {
     setCurrentImage(value);
   };
 
   const handlePreviousReview = () => {
-    setCurrentReviewIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : data.length - 1));
+    setCurrentReviewIndex((prevIndex) => {
+      const newIndex = prevIndex > 0 ? prevIndex - 1 : (data?.reviewDtoList.length ?? 1) - 1;
+      setCurrentReviewId(data?.reviewDtoList[newIndex]?.id ?? reviewId);
+      return newIndex;
+    });
   };
 
   const handleNextReview = () => {
-    setCurrentReviewIndex((prevIndex) => (prevIndex < data.length - 1 ? prevIndex + 1 : 0));
+    setCurrentReviewIndex((prevIndex) => {
+      const newIndex = prevIndex < (data?.reviewDtoList.length ?? 1) - 1 ? prevIndex + 1 : 0;
+      setCurrentReviewId(data?.reviewDtoList[newIndex]?.id ?? reviewId);
+      return newIndex;
+    });
   };
-
-  const currentReview = data[currentReviewIndex];
 
   return (
     <div>
@@ -79,7 +99,6 @@ export default function ReviewImageModal({ data, id }: ReviewImageModalProps) {
               </div>
             </div>
           </div>
-
           <ChevronIcon className={cn('chevron', 'right')} onClick={handleNextReview} />
         </div>
       ) : (

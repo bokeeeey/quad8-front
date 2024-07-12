@@ -3,7 +3,7 @@
 import { Modal } from '@/components';
 import RenderImages from '@/components/ReviewItem/RenderImages';
 import { ChevronIcon } from '@/public/index';
-import type { ReviewDto, ReviewImage } from '@/types/ProductReviewTypes';
+import type { ReviewImage } from '@/types/ProductReviewTypes';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import styles from './ReviewImageList.module.scss';
@@ -11,16 +11,19 @@ import ReviewImageModal from './ReviewImageModal';
 
 const cn = classNames.bind(styles);
 interface ReviewImageListProps {
+  productId: number;
   reviewImgs: ReviewImage[];
-  data: ReviewDto[];
 }
 
-const SECTION_SIZE = 6;
+const SECTION_SIZE = 7;
 
-export default function ReviewImageList({ reviewImgs, data }: ReviewImageListProps) {
+export default function ReviewImageList({ productId, reviewImgs }: ReviewImageListProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [reviewId, setReviewId] = useState<number>(0);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+
+  const isPrevDisabled = currentSectionIndex === 0;
+  const isNextDisabled = currentSectionIndex === Math.floor(reviewImgs.length / SECTION_SIZE) - 1;
 
   const handleModalOpen = (id: number) => {
     setIsOpen(true);
@@ -41,18 +44,21 @@ export default function ReviewImageList({ reviewImgs, data }: ReviewImageListPro
   return (
     <div className={cn('all-review-image-lists')}>
       <div className={cn('arrow-buttons')}>
-        <div className={cn('arrow-box', { disabled: currentSectionIndex === 0 })} onClick={handleMovePrevSection}>
-          <ChevronIcon className={cn('arrow', { disabled: currentSectionIndex === 0 })}>{'<'}</ChevronIcon>
+        <div
+          className={cn('arrow-box', { disabled: isPrevDisabled })}
+          onClick={!isPrevDisabled ? handleMovePrevSection : undefined}
+        >
+          <ChevronIcon className={cn('arrow', { disabled: isPrevDisabled })}>{'<'}</ChevronIcon>
         </div>
         <div
           className={cn('arrow-box', {
-            disabled: currentSectionIndex === Math.floor(reviewImgs.length / SECTION_SIZE),
+            disabled: isNextDisabled,
           })}
-          onClick={handleMoveNextSection}
+          onClick={!isNextDisabled ? handleMoveNextSection : undefined}
         >
           <ChevronIcon
             className={cn('arrow', 'right', {
-              disabled: currentSectionIndex === Math.floor(reviewImgs.length / SECTION_SIZE),
+              disabled: isNextDisabled,
             })}
           >
             {'>'}
@@ -70,7 +76,7 @@ export default function ReviewImageList({ reviewImgs, data }: ReviewImageListPro
         />
       </div>
       <Modal isOpen={isOpen} onClose={handleModalClose}>
-        <ReviewImageModal data={data} id={reviewId} />
+        <ReviewImageModal productId={productId} reviewId={reviewId} />
       </Modal>
     </div>
   );

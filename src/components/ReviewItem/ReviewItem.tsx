@@ -124,17 +124,25 @@ export default function ReviewItem({ usage, data }: ReviewItemProps) {
               )}
               {usage !== 'mypage' && isExpanded && (
                 <div className={cn('expand-image-section')}>
-                  <RenderImages reviewImgs={reviewImgs} width={600} height={600} altPrefix='펼친 리뷰 이미지' />
+                  <RenderImages
+                    className={cn('big-image')}
+                    reviewImgs={reviewImgs}
+                    width={600}
+                    height={600}
+                    altPrefix='펼친 리뷰 이미지'
+                  />
                 </div>
               )}
               {usage === 'mypage' && (
-                <RenderImages
-                  className={cn('mypage-review-image')}
-                  reviewImgs={reviewImgs}
-                  width={80}
-                  height={80}
-                  altPrefix='마이페이지 리뷰 이미지'
-                />
+                <div className={cn('mypage-review-section')}>
+                  <RenderImages
+                    className={cn('mypage-review-image')}
+                    reviewImgs={reviewImgs}
+                    width={80}
+                    height={80}
+                    altPrefix='마이페이지 리뷰 이미지'
+                  />
+                </div>
               )}
             </div>
           </div>

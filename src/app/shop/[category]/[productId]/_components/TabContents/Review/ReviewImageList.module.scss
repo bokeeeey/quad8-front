@@ -1,5 +1,7 @@
 .all-review-image {
-  width: 20rem;
+  // width: 20rem;
+  // height: 20rem;
+
   height: 20rem;
   border: 0.1rem solid $gray-10;
   border-radius: 0.8rem;
@@ -8,8 +10,8 @@
 }
 
 .all-review-images {
-  display: flex;
-  justify-content: flex-start;
+  display: grid;
+  grid-auto-flow: column;
   margin-bottom: 5rem;
   gap: 1.4rem;
 }
