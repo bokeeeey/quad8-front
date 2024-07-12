@@ -6,7 +6,7 @@ import { ThumbIcon } from '@/public/index';
 import { Users } from '@/types/userType';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './ReviewLikeButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -30,6 +30,11 @@ export default function ReviewLikeButton({ id, isLiked, likeCount }: ReviewLikeB
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
   });
+
+  useEffect(() => {
+    setIsChecked(isLiked);
+    setNewLikeCount(likeCount);
+  }, [isLiked, likeCount]);
 
   const { mutate: reviewLikeMutation } = useMutation({
     mutationFn: async ({ reviewId, reviewIsLiked }: ReviewLikeMutationProps) => {
