@@ -54,7 +54,7 @@ export const getOrdersData = async () => {
   }
 };
 
-export const getPaymentItemData = async (orderId: string | undefined) => {
+export const getPaymentData = async (orderId: string | undefined) => {
   const token = await getCookie('accessToken');
 
   if (!token) {

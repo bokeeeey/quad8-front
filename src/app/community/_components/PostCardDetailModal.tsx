@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
 import { toast } from 'react-toastify';
 
 import { deletePostCard, getPostDetail, postComment } from '@/api/communityAPI';
@@ -10,7 +9,6 @@ import { Button, CustomOption, InputField, Modal } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { IMAGE_BLUR } from '@/constants/blurImage';
-
 import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
 import { formatDateToString } from '@/libs/formatDateToString';
 import { keydeukImg } from '@/public/index';
@@ -36,11 +34,22 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const [isEditAlertOpen, setIsEditAlertOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleClickPopup = (e: MouseEvent<SVGElement>) => {
+    e.stopPropagation();
+    setIsPopupOpen(!isPopupOpen);
+  };
+
+  const handleClosePopOver = () => {
+    setIsPopupOpen(false);
+  };
 
   const { data, refetch, isPending } = useQuery({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
   });
+
   const handleSuccessSubmitComment = () => {
     if (commentRef) {
       commentRef.value = '';
@@ -48,6 +57,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
     queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
     refetch();
   };
+
   const { mutate: postCommentMutation } = useMutation({
     mutationFn: postComment,
     onSuccess: () => {
@@ -57,6 +67,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
       toast.error('댓글 등록 중 오류가 발생하였습니다.');
     },
   });
+
   const { mutate: deletePostMutation } = useMutation({
     mutationFn: deletePostCard,
     onSuccess: () => {
@@ -116,20 +127,25 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const handleClickThumbnail = (i: number) => {
     setClickedImage(reviewImages[i].imgUrl);
   };
+
   const handleClickDeleteAlertButon = () => {
     deletePostMutation(cardId);
     setIsDeleteAlertOpen(false);
   };
+
   const handleCloseDeleteAlert = () => {
     setIsDeleteAlertOpen(false);
   };
+
   const handleClickEditAlertButton = () => {
     setIsEditModalOpen(true);
     setIsEditAlertOpen(false);
   };
+
   const handleCloseEditAlert = () => {
     setIsEditAlertOpen(false);
   };
+
   const handleClickEditModalButton = () => {
     setIsEditModalOpen(false);
     queryClient.invalidateQueries({
@@ -139,6 +155,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
       queryKey: ['postData', cardId],
     });
   };
+
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
   };
@@ -191,7 +208,14 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
         <div className={cn('right-wrapper')}>
           <div className={cn('content-wrapper')}>
             <p className={cn('title')}>{title}</p>
-            <AuthorCard nickname={nickName} dateText={createdDateString} userImage={userImage} />
+            <AuthorCard
+              nickname={nickName}
+              dateText={createdDateString}
+              userImage={userImage}
+              onClickPopOver={handleClickPopup}
+              onClosePopOver={handleClosePopOver}
+              isOpenPopOver={isPopupOpen}
+            />
             <CustomOption wrapperRef={containerRef} customData={custom} />
             <p className={cn('content')}>{content}</p>
             <PostInteractions likeCount={likeCount} commentCount={commentCount} cardId={cardId} isLiked={isLiked} />

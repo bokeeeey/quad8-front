@@ -1,8 +1,9 @@
 'use client';
 
+import classNames from 'classnames/bind';
+
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { CameraIcon, keydeukProfileImg } from '@/public/index';
-import classNames from 'classnames/bind';
 import Image, { StaticImageData } from 'next/image';
 import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
 
@@ -22,10 +23,15 @@ export default forwardRef<HTMLInputElement, ProfileImageProp>(function ProfileIm
   { profileImage, width = 64, height = 64, isEditable = false, onChange, ...rest },
   ref,
 ) {
-  const [currentImageFile, setCurrentImageFile] = useState<string | StaticImageData | null>(profileImage);
+  const [currentImageFile, setCurrentImageFile] = useState<string | StaticImageData>(profileImage || keydeukProfileImg);
   const [isImageError, setIsImageError] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!profileImage || profileImage === 'null') {
+      setIsImageError(true);
+      return;
+    }
+
     setCurrentImageFile(profileImage);
   }, [profileImage]);
 
@@ -37,6 +43,7 @@ export default forwardRef<HTMLInputElement, ProfileImageProp>(function ProfileIm
 
     const imageUrl = URL.createObjectURL(files[0]);
     setCurrentImageFile(imageUrl);
+    setIsImageError(false);
 
     if (onChange) {
       onChange(e);

@@ -27,10 +27,11 @@ interface LikeMutationProps {
 const MAX_COUNT = 99;
 
 export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButtonProps) {
-  const queryClient = useQueryClient();
-
   const [isChecked, setIsChecked] = useState(isLiked);
+  const [animate, setAnimate] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+
+  const queryClient = useQueryClient();
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
   });
@@ -109,6 +110,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   const handleClickButton = (e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
+    setAnimate(true);
 
     if (!userData?.data) {
       setIsSignInModalOpen(true);
@@ -155,7 +157,11 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   return (
     <>
       <div
-        className={cn('count-wrap', { circle: usage === 'detail', 'red-circle': isChecked })}
+        className={cn('count-wrap', {
+          circle: usage === 'detail',
+          'red-circle': isChecked,
+          'jello-animate': animate && isChecked,
+        })}
         onClick={handleClickButton}
       >
         {usage === 'community' ? (
