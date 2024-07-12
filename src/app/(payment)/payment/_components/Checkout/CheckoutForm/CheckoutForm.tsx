@@ -21,16 +21,15 @@ const cn = classNames.bind(styles);
 
 export default function CheckoutForm() {
   // const router = useRouter();
+  const [selectedAddress, setSelectedAddress] = useState<ShippingAddressResponse | null>(null);
 
   const { handleSubmit, control, setValue } = useForm<FieldValues>({
     mode: 'onTouched',
     defaultValues: {
-      shippingAddressId: -1,
+      shippingAddressId: selectedAddress?.id || -1,
       deliveryMessage: '',
     },
   });
-
-  const [selectedAddress, setSelectedAddress] = useState<ShippingAddressResponse | null>(null);
 
   const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
     queryKey: ['paymentResponse'],
@@ -41,29 +40,31 @@ export default function CheckoutForm() {
   useEffect(() => {
     if (shippingAddressResponse) {
       setSelectedAddress(shippingAddressResponse);
+      setValue('shippingAddressId', shippingAddressResponse.id);
     }
-  }, [shippingAddressResponse]);
+  }, [setValue, shippingAddressResponse]);
 
   const formattedTotalPrice = totalPrice > 0 ? formatNumber(totalPrice) : 0;
 
   const { mutate: putPaymentMutation } = useMutation({
-    mutationFn: () => putPayment(orderId),
+    mutationFn: (payload: FieldValues) => putPayment(orderId, payload),
   });
 
   const handleAddressClick = (selectItem: UserAddress) => {
     setSelectedAddress(selectItem);
   };
 
-  // const handleDropdownClick = (e: MouseEvent<HTMLInputElement>) => {
-  //   setValue('deliveryMessage', e.currentTarget.value);
-  // };
-
   const onSubmit: SubmitHandler<FieldValues> = (payload) => {
     if (selectedAddress) {
       setValue('shippingAddressId', selectedAddress.id);
     }
     console.log(payload);
-    putPaymentMutation();
+
+    putPaymentMutation(payload, {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+    });
 
     // router.push(ROUTER.MY_PAGE.CHECKOUT_SUCCESS);
   };

@@ -1,6 +1,7 @@
 import { getCookie } from '@/libs/manageCookie';
 
 import type { CreateOrderAPIType } from '@/types/OrderTypes';
+import { FieldValues } from 'react-hook-form';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -79,7 +80,7 @@ export const getPayment = async (orderId?: string) => {
   }
 };
 
-export const putPayment = async (orderId?: number) => {
+export const putPayment = async (orderId?: number, payload?: FieldValues) => {
   const token = await getCookie('accessToken');
 
   if (!token) {
@@ -93,6 +94,7 @@ export const putPayment = async (orderId?: number) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(payload),
     });
 
     const result = await res.json();
