@@ -1,4 +1,4 @@
-import { useMutation, useSuspenseQuery, useQueryClient, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
@@ -20,12 +20,13 @@ import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
 
 import styles from './PostCardDetailModal.module.scss';
-import FallbackDetailModal from './ErrorFallbackDetailModal';
+import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
+import DetailModalSkeleton from './DetailModalSkeleton';
 
 const cn = classNames.bind(styles);
 
 interface PostCardListResponseData {
-  data: CommunityPostCardDetailDataType | null;
+  data: CommunityPostCardDetailDataType;
   status: 'ERROR' | 'SUCCESS';
   message: string;
 }
@@ -52,7 +53,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
   const [lastCommentId, setLastCommentId] = useState(0);
   const [visibleComments, setVisibleComments] = useState<CommentType[]>([]);
 
-  const { data, refetch } = useSuspenseQuery<PostCardListResponseData>({
+  const { data, refetch } = useQuery<PostCardListResponseData>({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
   });
@@ -150,6 +151,8 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
     }
   }, [data, queryClient]);
 
+  if (!data) return <DetailModalSkeleton />;
+
   const { data: postData, status, message } = data;
 
   if (status === 'ERROR' || postData === null) {
@@ -227,7 +230,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
       ];
 
   return (
-    <ErrorBoundary FallbackComponent={FallbackDetailModal}>
+    <ErrorBoundary FallbackComponent={ErrorFallbackDetailModal}>
       <div className={cn('container')} ref={containerRef}>
         {isMine && (
           <div className={cn('edit-button-wrapper')}>
