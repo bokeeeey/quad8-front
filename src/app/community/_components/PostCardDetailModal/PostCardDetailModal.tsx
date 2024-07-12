@@ -23,6 +23,13 @@ import styles from './PostCardDetailModal.module.scss';
 import FallbackDetailModal from './ErrorFallbackDetailModal';
 
 const cn = classNames.bind(styles);
+
+interface PostCardListResponseData {
+  data: CommunityPostCardDetailDataType | null;
+  status: 'ERROR' | 'SUCCESS';
+  message: string;
+}
+
 interface PostCardDetailModalProps {
   cardId: number;
   onClose: () => void;
@@ -45,7 +52,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
   const [lastCommentId, setLastCommentId] = useState(0);
   const [visibleComments, setVisibleComments] = useState<CommentType[]>([]);
 
-  const { data, refetch } = useSuspenseQuery({
+  const { data, refetch } = useSuspenseQuery<PostCardListResponseData>({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
   });
@@ -144,14 +151,14 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
   }, [data, queryClient]);
 
   const { data: postData, status, message } = data;
-  if (status === 'FAIL') {
+
+  if (status === 'ERROR' || postData === null) {
     toast.error(message);
     onClose();
     return null;
   }
 
-  const { content, likeCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } =
-    postData as CommunityPostCardDetailDataType;
+  const { content, likeCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } = postData;
 
   const createdDateString = formatDateToString(new Date(updatedAt));
 
@@ -241,7 +248,9 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
               <Image
                 src={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
                 alt='키보드 이미지'
+                layout='fill'
                 fill
+                objectFit='contain'
                 onError={() => setClickedImage('')}
                 sizes='(max-width: 1200px) 100%'
                 priority

@@ -9,6 +9,7 @@
   position: relative;
   width: 100%;
   height: 27rem;
+  object-fit: cover;
 
   & > .image-count {
     @include pretendard-16-400;

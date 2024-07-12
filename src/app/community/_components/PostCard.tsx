@@ -138,10 +138,12 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
         />
         <div className={cn('keyboard-image-wrapper')}>
           <Image
+            layout='fill'
+            fill
+            objectFit='cover'
             src={Array.isArray(thumbnail) ? thumbnail[0] : thumbnail}
             className={cn('keyboard-image')}
             alt='키보드 이미지'
-            fill
             sizes='(max-width: 1200px) 100%'
             priority
             placeholder={IMAGE_BLUR.placeholder}
