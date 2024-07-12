@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { deleteAddress, putAddress } from '@/api/shippingAPI';
 import { Modal } from '@/components';
 import type { UserAddress } from '@/types/shippingType';
-import AddAddressModal from '../../AddAddresseModal/AddAddressModal';
+import AddAddressModal from '../../../../../../../components/AddAddresseModal/AddAddressModal';
 
 import styles from './Address.module.scss';
 

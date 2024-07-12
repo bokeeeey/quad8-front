@@ -2,7 +2,7 @@ import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query
 import classNames from 'classnames/bind';
 import { ReactNode } from 'react';
 
-import { getPaymentData } from '@/api/orderAPI';
+import { getPayment } from '@/api/orderAPI';
 import { getAddresses } from '@/api/shippingAPI';
 import { getUserData } from '@/api/usersAPI';
 import { ROUTER } from '@/constants/route';
@@ -29,7 +29,7 @@ export default async function PaymentPageLayout({ children }: CheckoutLayoutProp
     redirect(ROUTER.MAIN);
   }
 
-  await queryClient.prefetchQuery({ queryKey: ['paymentData'], queryFn: () => getPaymentData(orderId) });
+  await queryClient.prefetchQuery({ queryKey: ['paymentResponse'], queryFn: () => getPayment(orderId) });
 
   await queryClient.prefetchQuery({ queryKey: ['addressesData'], queryFn: getAddresses });
 

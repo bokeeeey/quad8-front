@@ -51,7 +51,7 @@ export const getOrdersData = async () => {
   }
 };
 
-export const getPaymentData = async (orderId: string | undefined) => {
+export const getPayment = async (orderId?: string) => {
   const token = await getCookie('accessToken');
 
   if (!token) {
@@ -74,6 +74,29 @@ export const getPaymentData = async (orderId: string | undefined) => {
     }
 
     return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const putPayment = async (orderId?: number) => {
+  const token = await getCookie('accessToken');
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/v1/order/${orderId}/payment`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const result = await res.json();
+    return result;
   } catch (error) {
     throw error;
   }

@@ -2,15 +2,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { BaseSyntheticEvent, useState } from 'react';
 import DaumPostcodeEmbed, { Address } from 'react-daum-postcode';
-import { FieldValues, SubmitHandler } from 'react-hook-form';
+import { Control, Controller, FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { postAddress } from '@/api/shippingAPI';
 import type { ShippingAddressResponse } from '@/types/paymentTypes';
 import type { UserAddress } from '@/types/shippingType';
 
-import AddAddressModal from '@/app/my-info/(account)/addresses/_components/AddAddresseModal/AddAddressModal';
 import { Button, Dropdown, Modal } from '@/components';
+import AddAddressModal from '@/components/AddAddresseModal/AddAddressModal';
 import { formatPhoneNumber } from '@/libs';
 import CheckoutAddressModal from './CheckoutAddressModal';
 
@@ -22,20 +22,21 @@ const DELIVERY_OPTIONS = ['부재시 문앞에 놓아주세요.', '경비실에 
 
 interface CheckoutAddressProps {
   item: ShippingAddressResponse;
+  onClick: (selectItem: UserAddress) => void;
+  control: Control<FieldValues>;
 }
 
-export default function CheckoutAddress({ item }: CheckoutAddressProps) {
+export default function CheckoutAddress({ item, onClick, control }: CheckoutAddressProps) {
+  const queryClient = useQueryClient();
+
   const [isAddressChangeModalOpen, setIsAddressChangeModalOpen] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(item);
-  const [isAddAddressModal, setIsAddAddressModal] = useState(false);
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [isPostcodeEmbedOpen, setIsPostcodeEmbedOpen] = useState(false);
   const [addressData, setAddressData] = useState<Address | null>(null);
 
-  const queryClient = useQueryClient();
+  const { address, detailAddress, name, phone, zoneCode } = item;
 
-  const { address, detailAddress, name, phone, zoneCode } = selectedAddress;
-
-  const { mutate: postAddressesMutate } = useMutation({
+  const { mutate: postAddressMutate } = useMutation({
     mutationFn: postAddress,
   });
 
@@ -44,16 +45,16 @@ export default function CheckoutAddress({ item }: CheckoutAddressProps) {
   };
 
   const handleAddAddressButtonClick = () => {
-    setIsAddAddressModal((prevIsOpen) => !prevIsOpen);
+    setIsAddAddressModalOpen((prevIsOpen) => !prevIsOpen);
   };
 
   const handleAddressClick = (selectItem: UserAddress) => {
-    setSelectedAddress(selectItem);
+    onClick(selectItem);
     setIsAddressChangeModalOpen((prevIsOpen) => !prevIsOpen);
   };
 
-  const onSuccessClose = () => {
-    setIsAddAddressModal((prevIsOpen) => !prevIsOpen);
+  const handleSuccessClose = () => {
+    setIsAddAddressModalOpen((prevIsOpen) => !prevIsOpen);
     setAddressData(null);
   };
 
@@ -63,7 +64,7 @@ export default function CheckoutAddress({ item }: CheckoutAddressProps) {
   };
 
   const handleAddAddressModalClose = () => {
-    setIsAddAddressModal(false);
+    setIsAddAddressModalOpen(false);
     setAddressData(null);
   };
 
@@ -74,13 +75,19 @@ export default function CheckoutAddress({ item }: CheckoutAddressProps) {
   const handleAddressPostSubmit: SubmitHandler<FieldValues> = (payload, e?: BaseSyntheticEvent) => {
     e?.stopPropagation();
 
-    postAddressesMutate(payload, {
+    postAddressMutate(payload, {
       onSuccess: (res) => {
         if (res.status === 'SUCCESS') {
           toast('배송지를 추가하였습니다.');
           queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-          onSuccessClose();
+          handleSuccessClose();
+          return;
         }
+
+        toast('배송지 추가에 실패하였습니다.');
+      },
+      onError: () => {
+        toast('배송지 추가에 실패하였습니다.');
       },
     });
   };
@@ -113,11 +120,18 @@ export default function CheckoutAddress({ item }: CheckoutAddressProps) {
             변경
           </Button>
         </div>
-        <Dropdown
-          options={DELIVERY_OPTIONS}
-          name='드롭다운2'
-          sizeVariant='sm'
-          placeholder='배송 요청 사항을 선택해 주세요.'
+        <Controller
+          name='deliveryMessage'
+          control={control}
+          render={({ field: { onChange, ...field } }) => (
+            <Dropdown
+              options={DELIVERY_OPTIONS}
+              sizeVariant='sm'
+              placeholder='배송 요청 사항을 선택해 주세요.'
+              onChange={onChange}
+              {...field}
+            />
+          )}
         />
       </div>
 
@@ -132,7 +146,7 @@ export default function CheckoutAddress({ item }: CheckoutAddressProps) {
           onComplete={handleComplete}
         />
       </Modal>
-      <Modal isOpen={isAddAddressModal} onClose={handleAddAddressModalClose}>
+      <Modal isOpen={isAddAddressModalOpen} onClose={handleAddAddressModalClose}>
         <AddAddressModal
           newAddressData={addressData}
           onClick={handleSearchPostClick}

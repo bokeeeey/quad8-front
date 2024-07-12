@@ -42,7 +42,7 @@ interface TossPaymentsWidgets {
 
 const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string;
 
-export function PaymentContainer({ amountValue, paymentData }: PaymentContainerProps) {
+export default function PaymentContainer({ amountValue, paymentData }: PaymentContainerProps) {
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
@@ -50,7 +50,7 @@ export function PaymentContainer({ amountValue, paymentData }: PaymentContainerP
 
   const { nickname: customerName, email: customerEmail } = userDataResponse?.data ?? {};
 
-  const { paymentOrderId: orderId, orderItemResponses = [] } = paymentData ?? {};
+  const { paymentOrderId, orderItemResponses = [] } = paymentData ?? {};
 
   const orderName = renderPaymentProductName({ orderItemResponses });
 
@@ -92,11 +92,13 @@ export function PaymentContainer({ amountValue, paymentData }: PaymentContainerP
   }, [widgets, amountValue]);
 
   const handlePayment = async () => {
-    if (!ready || widgets == null) return;
+    if (!ready || widgets == null) {
+      return;
+    }
 
     try {
       await widgets.requestPayment({
-        orderId: orderId || '',
+        orderId: paymentOrderId || '',
         orderName,
         customerName: customerName || '',
         customerEmail: customerEmail || '',

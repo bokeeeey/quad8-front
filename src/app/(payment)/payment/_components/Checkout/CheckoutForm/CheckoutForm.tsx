@@ -1,16 +1,19 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
+import { putPayment } from '@/api/orderAPI';
 import { Button, Dropdown, ItemOverview } from '@/components';
 import { Input, Label } from '@/components/parts';
 import { formatNumber } from '@/libs';
 import type { OrderItem } from '@/types/OrderTypes';
-import type { OrderDetailData } from '@/types/paymentTypes';
+import type { OrderDetailData, ShippingAddressResponse } from '@/types/paymentTypes';
+import type { UserAddress } from '@/types/shippingType';
 import CheckoutAddress from './parts/CheckoutAddress';
-import { PaymentContainer } from './parts/PaymentContainer';
+import PaymentContainer from './parts/PaymentContainer';
 
 import styles from './CheckoutForm.module.scss';
 
@@ -19,27 +22,54 @@ const cn = classNames.bind(styles);
 export default function CheckoutForm() {
   // const router = useRouter();
 
-  const { data: paymentData } = useQuery<{ data: OrderDetailData }>({
-    queryKey: ['paymentData'],
+  const { handleSubmit, control, setValue } = useForm<FieldValues>({
+    mode: 'onTouched',
+    defaultValues: {
+      shippingAddressId: -1,
+      deliveryMessage: '',
+    },
   });
 
-  const { totalPrice = 0, orderItemResponses, shippingAddressResponse } = paymentData?.data || {};
+  const [selectedAddress, setSelectedAddress] = useState<ShippingAddressResponse | null>(null);
+
+  const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
+    queryKey: ['paymentResponse'],
+  });
+
+  const { totalPrice = 0, orderItemResponses, shippingAddressResponse, orderId } = paymentResponse?.data ?? {};
+
+  useEffect(() => {
+    if (shippingAddressResponse) {
+      setSelectedAddress(shippingAddressResponse);
+    }
+  }, [shippingAddressResponse]);
 
   const formattedTotalPrice = totalPrice > 0 ? formatNumber(totalPrice) : 0;
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // e.stopPropagation();
+  const { mutate: putPaymentMutation } = useMutation({
+    mutationFn: () => putPayment(orderId),
+  });
 
-    const formData = new FormData(e.currentTarget);
-    const values = Object.fromEntries(formData.entries());
-    console.log(values);
+  const handleAddressClick = (selectItem: UserAddress) => {
+    setSelectedAddress(selectItem);
+  };
+
+  // const handleDropdownClick = (e: MouseEvent<HTMLInputElement>) => {
+  //   setValue('deliveryMessage', e.currentTarget.value);
+  // };
+
+  const onSubmit: SubmitHandler<FieldValues> = (payload) => {
+    if (selectedAddress) {
+      setValue('shippingAddressId', selectedAddress.id);
+    }
+    console.log(payload);
+    putPaymentMutation();
 
     // router.push(ROUTER.MY_PAGE.CHECKOUT_SUCCESS);
   };
 
   return (
-    <form className={cn('checkout-form')} onSubmit={handleSubmit}>
+    <form className={cn('checkout-form')} onSubmit={handleSubmit(onSubmit)}>
       <article className={cn('form')}>
         <div className={cn('item-box')}>
           <h1>주문 상품</h1>
@@ -54,7 +84,7 @@ export default function CheckoutForm() {
           <p className={cn('price')}>{formattedTotalPrice} 원</p>
         </div>
 
-        {shippingAddressResponse && <CheckoutAddress item={shippingAddressResponse} />}
+        {selectedAddress && <CheckoutAddress item={selectedAddress} onClick={handleAddressClick} control={control} />}
 
         <div className={cn('discount-box')}>
           <h1>할인 혜택</h1>
@@ -97,7 +127,7 @@ export default function CheckoutForm() {
           </p>
         </div>
 
-        <PaymentContainer amountValue={Number(totalPrice)} paymentData={paymentData?.data} />
+        <PaymentContainer amountValue={Number(totalPrice)} paymentData={paymentResponse?.data} />
       </article>
     </form>
   );
