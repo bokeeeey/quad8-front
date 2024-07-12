@@ -12,7 +12,7 @@ interface PageType {
   paged: boolean;
 }
 
-interface ContentType {
+export interface ContentType {
   productId: number;
   name: string;
   thumbnail: string;
@@ -26,9 +26,10 @@ export interface SearchResultType {
   content: ContentType[];
   pageable: PageType;
   totalElements: number;
-  totalPage: number;
+  totalPages: number;
   last: boolean;
   size: number;
+  number: number;
   sort: Record<'empty' | 'unsorted' | 'sorted', boolean>;
   numberOfElements: number;
   first: boolean;

@@ -1,0 +1,16 @@
+.title {
+  @include pretendard-30-700;
+
+  display: flex;
+}
+
+.keyword {
+  max-width: 30rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text {
+  @include pretendard-30-500;
+}

@@ -1,0 +1,34 @@
+.wrapper {
+  @include flex-center;
+  @include flex-column(2rem);
+
+  width: fit-content;
+  margin: auto;
+}
+
+.title-wrapper {
+  @include pretendard-30-600;
+
+  display: flex;
+  width: 100%;
+}
+
+.title-text {
+  @include pretendard-30-400;
+}
+
+.keyword {
+  max-width: 30rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content-wrapper {
+  @include pretendard-16-400;
+
+  width: 100%;
+  color: $gray-40;
+  list-style: circle;
+  text-align: left;
+}
