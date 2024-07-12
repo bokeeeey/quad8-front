@@ -6,14 +6,13 @@ import Dialog from '@/components/Dialog/Dialog';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { ROUTER } from '@/constants/route';
 import type { CartProductType, ProductType } from '@/types/ProductTypes';
-import { Users } from '@/types/userType';
+import type { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
+import type { Users } from '@/types/userType';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-
-import { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
 import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
 import OptionContainer from './OptionContainer';
 import styles from './ProductDetail.module.scss';

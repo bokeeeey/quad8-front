@@ -1,18 +1,18 @@
 'use client';
 
-import { ROUTER } from '@/constants/route';
-import { useQuery } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
+import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 
+import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
-import Image from 'next/image';
-import { CartAPIDataType } from '@/types/CartTypes';
+import type { CartAPIDataType } from '@/types/CartTypes';
 import SignInModal from '../SignInModal/SignInModal';
-import { CartButton, LoginButton, LogoutButton, SearchBox, ShopButton } from './HeaderParts';
+import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
 
@@ -82,7 +82,7 @@ export default function Header() {
             </div>
           </div>
           <div className={cn('left-wrapper')}>
-            <SearchBox isBlack={isBlack} />
+            <SearchButton isBlack={isBlack} />
             {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
             <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
               {profileImage ? (

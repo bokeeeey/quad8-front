@@ -1,0 +1,50 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-bottom: 0.1rem solid $black;
+}
+
+.input {
+  @include poppins-22-500;
+
+  width: 100%;
+  border: none;
+  outline: none;
+  color: $black;
+
+  &::placeholder {
+    @include poppins-22-500;
+
+    color: $gray-50;
+  }
+}
+
+.search-button {
+  fill: $black;
+}
+
+.search-button-black {
+  fill: $white;
+}
+
+.auto-list-wrapper {
+  position: absolute;
+  top: 6rem;
+  width: 100%;
+}
+
+.bg-black {
+  border-color: $white;
+  background-color: $black;
+  color: $gray-10;
+
+  &::placeholder {
+    color: $gray-10;
+  }
+}

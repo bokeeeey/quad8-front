@@ -193,14 +193,15 @@ export default function CartModal({
             category: 'etc',
           }));
           const newValue = getUpdatedCartCountData(cartData, newShopData);
+          const temporaryId = Math.ceil(Math.random() * 10000);
           queryClient.setQueryData(['cartData'], {
             totalCount: newValue.totalCount + 1,
-            SHOP: newValue.SHOP,
+            SHOP: [...newValue.SHOP],
             CUSTOM: [
               ...newValue.CUSTOM,
               {
-                id: -1,
-                productId: -1,
+                id: temporaryId,
+                productId: temporaryId,
                 imgUrl: data.imgBase64,
                 ...data,
                 classification: 'CUSTOM',
@@ -250,6 +251,7 @@ export default function CartModal({
   };
 
   const handleClickDeleteConfirm = () => {
+    changeConfirmDialog(false);
     if (!deleteId) {
       toast.error('삭제할 제품을 찾지 못하였습니다');
       return;
