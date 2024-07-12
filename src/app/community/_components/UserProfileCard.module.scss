@@ -2,19 +2,31 @@
   display: flex;
   position: absolute;
   z-index: $zindex-popover;
-  left: 7rem;
-  width: max-content;
+  top: 7rem;
+  left: 0;
+  width: 45rem;
   height: 15rem;
   padding: 1rem;
-  animation: shadow-drop-center 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   border: 0.2rem solid $primary-60;
   border-radius: 1rem;
   background-color: white;
   gap: 1rem;
 }
 
+.loading-div {
+  @include flex-center;
+}
+
 .entrance-animation {
-  animation: tilt-in-left-2 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: fade-in 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+.exit-animation {
+  animation: fade-out 1s ease-out both;
+}
+
+.above-cursor {
+  top: -16rem;
 }
 
 .display-none {
@@ -23,9 +35,10 @@
 
 .profile-image {
   position: relative;
-  width: 9rem;
+  width: 12rem;
   height: 100%;
-  border-radius: 0.4rem;
+  overflow: hidden;
+  border-radius: 0.8rem;
   background-color: $gray-10;
 }
 
@@ -53,24 +66,22 @@
   @include pretendard-20-700;
 }
 
-@keyframes shadow-drop-center {
+@keyframes fade-in {
   0% {
-    box-shadow: 0 0 0 0 rgb(0 0 0 / 0%);
-  }
-
-  100% {
-    box-shadow: 0 0 1.5rem 0 rgb(0 0 0 / 25%);
-  }
-}
-
-@keyframes tilt-in-left-2 {
-  0% {
-    transform: rotateX(30deg) translateX(-30px) skewX(30deg);
     opacity: 0;
   }
 
   100% {
-    transform: rotateX(0deg) translateX(0) skewX(0deg);
     opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
   }
 }

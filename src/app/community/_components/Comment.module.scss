@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  position: relative;
   width: 100%;
   gap: 1.2rem;
 }
@@ -45,12 +46,6 @@
 
     color: $gray-50;
   }
-}
-
-.dot-icon {
-  position: relative;
-  margin-left: auto;
-  cursor: pointer;
 }
 
 .content {

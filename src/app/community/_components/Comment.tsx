@@ -1,33 +1,38 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { MouseEvent, forwardRef } from 'react';
+import { forwardRef, useState, MouseEvent } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { calculateTimeDifference } from '@/libs/calculateDate';
-import { VerticalTripleDotIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
 import { PopOver } from '@/components';
 import { deleteComment } from '@/api/communityAPI';
-import { toast } from 'react-toastify';
+import { communityPopOverOption } from '@/libs/communityPopOverOption';
 
 import styles from './Comment.module.scss';
+import UserProfileCard from './UserProfileCard';
 
 const cn = classNames.bind(styles);
 
+interface CommentDataType {
+  id: number;
+  userId: number;
+  nickName: string;
+  imgUrl: string | null;
+  content: string;
+  createdAt: string;
+}
+
 interface CommentProps {
   cardId: number;
-  commentUserId: number;
-  commentId: number;
-  nickname: string;
-  profile: string | null;
-  createdTime: string;
-  comment: string;
-  onClickProfile: ({ top, commentId, userId }: { top: number; commentId: number; userId: number }) => void;
-  onOpenPopOver: (e: MouseEvent<HTMLDivElement>, commentId: number) => void;
+  onOpenPopOver: (commentId: number) => void;
   onClosePopOver: () => void;
-  isOpenPopOver: boolean;
+  commentData: CommentDataType;
+  isOpenedPopOver: boolean;
+  onOpenProfileCard: () => void;
 }
 
 interface UserDataType {
@@ -37,28 +42,28 @@ interface UserDataType {
 }
 
 export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
-  {
-    cardId,
-    commentUserId,
-    commentId,
-    nickname,
-    profile,
-    createdTime,
-    comment,
-    onClickProfile,
-    onOpenPopOver,
-    onClosePopOver,
-    isOpenPopOver,
-  },
+  { cardId, commentData, onOpenPopOver, onClosePopOver, isOpenedPopOver, onOpenProfileCard },
   ref,
 ) {
   const queryClient = useQueryClient();
 
+  const {
+    id: commentId,
+    userId: commentUserId,
+    nickName: nickname,
+    imgUrl: profile,
+    content: comment,
+    createdAt: createdTime,
+  } = commentData;
+
   const createdTimeToDate = new Date(createdTime);
+  const [isOpenPopOver, setIsOpenPopOver] = useState(false);
+  const [isOpenProfileCard, setIsOpenProfileCard] = useState(false);
+  const [userCardDirection, setUserCardDirection] = useState<'top' | 'bottom'>('bottom');
 
   const userData = queryClient.getQueryData<UserDataType>(['userData']);
-
   const userID = userData?.data?.id;
+  const timeAgo = calculateTimeDifference(createdTimeToDate);
 
   const { mutate: deleteCommentMutation } = useMutation({
     mutationFn: deleteComment,
@@ -74,44 +79,43 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
     },
   });
 
-  const handleClickProfile = (e: MouseEvent<HTMLElement>) => {
+  const handleOpenProfile = (e: MouseEvent<HTMLDivElement>) => {
+    onOpenProfileCard();
     const { top } = e.currentTarget.getBoundingClientRect();
-    e.stopPropagation();
-    onClickProfile({ top, commentId, userId: commentUserId });
+    const viewPortHeight = window.innerHeight;
+    if (top > viewPortHeight / 2) {
+      setUserCardDirection('top');
+    }
+
+    setIsOpenProfileCard(true);
   };
 
-  const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {
+  const handleCloseProfile = () => {
+    setIsOpenProfileCard(false);
+  };
+
+  const handleClickPopOver = () => {
+    onOpenPopOver(commentId);
+    setIsOpenPopOver(true);
+  };
+
+  const handleClickDelete = () => {
     deleteCommentMutation(commentId);
-    e.stopPropagation();
   };
 
-  const handleClickReport = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
+  const handleClickEdit = () => {};
 
-  const MY_POPOVER_OPTION = [
-    {
-      label: '삭제하기',
-      onClick: handleClickDelete,
-    },
-    {
-      label: '신고하기',
-      onClick: handleClickReport,
-    },
-  ];
+  const handleClickReport = () => {};
 
-  const OTHERS_POPOVER_OPTION = [
-    {
-      label: '신고하기',
-      onClick: handleClickReport,
-    },
-  ];
-
-  const timeAgo = calculateTimeDifference(createdTimeToDate);
   return (
-    <div className={cn('container')}>
-      <div onClick={handleClickProfile} className={cn('user-profile')} ref={ref}>
-        <ProfileImage profileImage={profile || null} />
+    <div className={cn('container')} ref={ref}>
+      <div onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
+        <ProfileImage profileImage={profile && profile} />
+        <UserProfileCard
+          isOpenProfileCard={isOpenProfileCard}
+          userId={commentUserId}
+          isAboveCursor={userCardDirection === 'top'}
+        />
       </div>
       <div className={cn('content-wrapper')}>
         <div className={cn('user-info-wrapper')}>
@@ -119,15 +123,17 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
             <p className={cn('nickname')}>{nickname}</p>
             <p className={cn('time-ago')}>{timeAgo}</p>
           </div>
-          <div className={cn('dot-icon')} onClick={(e) => onOpenPopOver(e, commentId)}>
-            <VerticalTripleDotIcon />
-            {isOpenPopOver && (
-              <PopOver
-                optionsData={userID === commentUserId ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
-                onHandleClose={onClosePopOver}
-              />
-            )}
-          </div>
+          <PopOver
+            optionsData={communityPopOverOption({
+              isMine: userID === commentUserId,
+              onClickDelete: handleClickDelete,
+              onClickEdit: handleClickEdit,
+              onClickReport: handleClickReport,
+            })}
+            isOpenPopOver={isOpenPopOver && isOpenedPopOver}
+            onHandleOpen={handleClickPopOver}
+            onHandleClose={onClosePopOver}
+          />
         </div>
         <div className={cn('content')}>{comment}</div>
       </div>

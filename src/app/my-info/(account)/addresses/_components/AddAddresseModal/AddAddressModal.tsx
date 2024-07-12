@@ -8,9 +8,9 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { Button, InputField } from '@/components';
 import { Input, Label } from '@/components/parts';
 import { changePhoneNumber, formatPhoneNumber, unFormatPhoneNumber } from '@/libs';
+import { CheckboxCircleIcon } from '@/public/index';
 import type { UserAddress } from '@/types/shippingType';
 
-import { CheckboxCircleIcon } from '@/public/index';
 import styles from './AddAddressModal.module.scss';
 
 const cn = classNames.bind(styles);
@@ -47,6 +47,7 @@ export default function AddAddressModal({ onClick, newAddressData, userAddressDa
     handleSubmit,
     register,
     setValue,
+    getValues,
     formState: { isValid },
   } = useForm({
     mode: 'all',
@@ -82,8 +83,18 @@ export default function AddAddressModal({ onClick, newAddressData, userAddressDa
     setIsChecked((prevState) => !prevState);
   };
 
+  const handleFormSubmit: SubmitHandler<FieldValues> = (data) => {
+    const checkId = getValues('id');
+    if (checkId === -1) {
+      const { id, ...postData } = data;
+      onSubmit(postData);
+    } else {
+      onSubmit(data);
+    }
+  };
+
   return (
-    <form className={cn('modal')} onSubmit={handleSubmit(onSubmit)}>
+    <form className={cn('modal')} onSubmit={handleSubmit(handleFormSubmit)}>
       <h1 className={cn('title')}>배송지 등록 / 수정</h1>
       <div className={cn('inputs')}>
         <InputField

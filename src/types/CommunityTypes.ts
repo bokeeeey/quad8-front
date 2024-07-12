@@ -7,6 +7,7 @@ export interface CommunityParamsType {
 }
 
 export interface CommunityPostCardDataType {
+  userId: number;
   id: number;
   title: string;
   likeCount: number;
@@ -16,6 +17,35 @@ export interface CommunityPostCardDataType {
   thumbnail: string | string[];
   isLiked: boolean;
   updateAt: string;
+}
+
+export interface CommunityAllPostCardDataType {
+  content: CommunityPostCardDataType[];
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  size: number;
+  number: number;
+  sort: {
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
 }
 
 export interface CommunityPostCardDetailDataType extends Omit<CommunityPostCardDataType, 'thumbnail' | 'updateAt'> {

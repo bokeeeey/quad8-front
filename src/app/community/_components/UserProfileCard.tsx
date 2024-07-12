@@ -4,63 +4,58 @@ import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 
 import { getOthersInfo } from '@/api/usersAPI';
-import { keydeukProfileImg } from '@/public/index';
+import { SpinLoading, keydeukProfileImg } from '@/public/index';
 
 import styles from './UserProfileCard.module.scss';
 
 const cn = classNames.bind(styles);
 
 interface UserProfileCardProps {
-  triggerAnimate?: boolean;
   isOpenProfileCard: boolean;
-  top?: number;
   userId: number;
+  isAboveCursor?: boolean;
 }
 
 export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserProfileCard(
-  { isOpenProfileCard, top, userId, triggerAnimate },
+  { isOpenProfileCard, userId, isAboveCursor },
   ref,
 ) {
-  const [animate, setAnimate] = useState(false);
-
   const {
     data: userInfo,
     refetch,
-    isLoading,
+    isFetching,
   } = useQuery({
     queryKey: ['clickedUserInfo'],
     queryFn: () => getOthersInfo(userId),
     enabled: false,
-    gcTime: 0,
   });
+  const [animationClass, setAnimationClass] = useState('');
 
   useEffect(() => {
     if (isOpenProfileCard) {
       refetch();
-      setAnimate(true);
-      console.log(userInfo);
-      const timer = setTimeout(() => {
-        setAnimate(false);
-      }, 300);
-      return () => clearTimeout(timer);
+      setAnimationClass('entrance-animation');
     } else {
-      return () => {};
+      setAnimationClass('');
     }
-  }, [isOpenProfileCard, refetch, userId, triggerAnimate]);
+  }, [isOpenProfileCard, userId, refetch]);
 
   return (
     <div
       ref={ref}
-      style={{ top: top ? top - 170 : 0 }}
       className={cn(
         'user-detail-profile-card',
         { 'display-none': !isOpenProfileCard },
-        { 'entrance-animation': animate },
+        { 'loading-div': isFetching },
+        { 'above-cursor': isAboveCursor },
+        animationClass,
       )}
       onClick={(e) => e.stopPropagation()}
     >
-      {isLoading ? (
-        <div>Loading..</div>
+      {isFetching ? (
+        <div>
+          <SpinLoading />
+        </div>
       ) : (
         <>
           <div className={cn('profile-image')}>
