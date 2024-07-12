@@ -9,13 +9,12 @@
   z-index: $zindex-fixed + 1;
   top: 0;
   align-items: center;
-  border-bottom: 0.1rem solid $gray-10;
+  width: 100%;
   background-color: $white;
   text-decoration: none;
 }
 
 .bg-black {
-  border-bottom: 0.1rem solid $black;
   background-color: $black;
 }
 
@@ -27,6 +26,7 @@
   width: 100%;
   height: 8rem;
   padding: 0 12rem;
+  border-bottom: 0.1rem solid $gray-10;
   color: $gray-50;
 
   a:hover,
@@ -81,7 +81,12 @@
   }
 }
 
+.profile-image {
+  border-radius: 100%;
+}
+
 .black {
+  border-color: $black;
   background-color: $black;
 
   a:hover,

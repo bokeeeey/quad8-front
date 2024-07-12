@@ -12,13 +12,21 @@ import styles from './ShopCardList.module.scss';
 const cn = classNames.bind(styles);
 
 export default function ShopCardList() {
-  const { data: cartData } = useQuery<CartAPIDataType>({ queryKey: ['cartData'], queryFn: getCartData });
+  const {
+    data: cartData,
+    isFetching,
+    isPending,
+  } = useQuery<CartAPIDataType>({ queryKey: ['cartData'], queryFn: getCartData });
+
+  if (isFetching || isPending) {
+    return <div />;
+  }
   const shopData = cartData?.SHOP ?? [];
 
   return (
     <div className={cn('wrapper')}>
       {shopData.map((shop) => (
-        <CartCard key={shop.id} cardData={shop} type='shop' />
+        <CartCard key={shop.prductId} cardData={shop} type='shop' />
       ))}
     </div>
   );

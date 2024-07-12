@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import classNames from 'classnames/bind';
 
 import { getUserData } from '@/api/usersAPI';
+import { getCartData } from '@/api/cartAPI';
 import { Footer, Header } from '@/components';
 import { Providers } from './providers';
 
@@ -26,20 +27,24 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const queryClient = new QueryClient();
+  const entireQueryClient = new QueryClient();
 
   await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
+  await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
 
   return (
     <html lang='ko'>
       <body>
         <Providers>
-          <div className={cn('wrapper')}>
-            <HydrationBoundary state={dehydrate(queryClient)}>
-              <Header />
-            </HydrationBoundary>
-            <div className={cn('content-wrapper')}>{children}</div>
-            <Footer />
-          </div>
+          <HydrationBoundary state={dehydrate(entireQueryClient)}>
+            <div className={cn('wrapper')}>
+              <HydrationBoundary state={dehydrate(queryClient)}>
+                <Header />
+              </HydrationBoundary>
+              <div className={cn('content-wrapper')}>{children}</div>
+              <Footer />
+            </div>
+          </HydrationBoundary>
         </Providers>
       </body>
     </html>
