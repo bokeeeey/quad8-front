@@ -18,10 +18,10 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import AuthorCard from '../AuthorCard';
 import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
-
-import styles from './PostCardDetailModal.module.scss';
 import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
 import DetailModalSkeleton from './DetailModalSkeleton';
+
+import styles from './PostCardDetailModal.module.scss';
 
 const cn = classNames.bind(styles);
 
@@ -89,13 +89,13 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
 
   const { mutate: deletePostMutation } = useMutation({
     mutationFn: deletePostCard,
-    onSuccess: () => {
+    onSuccess: (updatedData) => {
       toast.success('게시글이 삭제되었습니다.');
       queryClient.invalidateQueries({
         queryKey: ['myCustomReview'],
       });
       queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
-      refetch();
+      queryClient.setQueryData(['myCustomReview'], updatedData);
     },
     onError: () => {
       toast.error('게시글 삭제 중 오류가 발생하였습니다.');

@@ -111,9 +111,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
   /** 상품 리뷰 관련 입니다. */
 
   const handleClickFeedback = (optionIndex: number, feedbackIndex: number) => {
-    const updatedClickedFeedback = [...clickedFeedback];
-    updatedClickedFeedback[optionIndex] = feedbackIndex;
-    setClickedFeedback(updatedClickedFeedback);
+    setClickedFeedback((prev) => prev.map((feedback, i) => (i === optionIndex ? feedback : feedbackIndex)));
   };
 
   const { mutate: postProductReviewMutation } = useMutation({
