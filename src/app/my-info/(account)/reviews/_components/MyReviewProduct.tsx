@@ -12,7 +12,6 @@ import styles from './MyReviewProduct.module.scss';
 const cn = classNames.bind(styles);
 
 interface MyReviewProductProps {
-  //   reviewId: number;
   productId: number;
   updatedAt: Date;
   switchOption: string;

@@ -36,7 +36,7 @@ export const getUserProductReviews = async (params: ProductReviewParams): Promis
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/reviews/user?sort=${sort}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}`, //= 2024-01-01T00%3A00%3A00&endDate=2024-12-31T23%3A59%3A59`,
+      `${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/reviews/user?sort=${sort}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}`,
       {
         cache: 'no-store',
         headers: {
