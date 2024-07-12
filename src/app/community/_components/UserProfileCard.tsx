@@ -50,7 +50,7 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
         'user-detail-profile-card',
         { 'display-none': !isOpenProfileCard },
         { 'loading-div': isFetching },
-        { 'above-cursor': isAboveProfile },
+        { 'above-profile': isAboveProfile },
       )}
       onClick={(e) => e.stopPropagation()}
     >
