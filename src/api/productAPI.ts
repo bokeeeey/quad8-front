@@ -118,3 +118,39 @@ export async function getKeydeukBest() {
     throw error;
   }
 }
+
+export const getRecentProducts = async (userId: number | undefined): Promise<ProductType[]> => {
+  const token = await getCookie('accessToken');
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/v1/user/recent-products/${userId}`, {
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+    });
+
+    const result = await res.json();
+
+    return result.data;
+  } catch {
+    throw new Error(`최근 본 상품을 조회할 수 없습니다. `);
+  }
+};
+
+export const postRecentProducts = async (userId: number, productId: number) => {
+  const token = await getCookie('accessToken');
+
+  try {
+    await fetch(`${BASE_URL}/api/v1/user/recent-products/${userId}?productId=${productId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};

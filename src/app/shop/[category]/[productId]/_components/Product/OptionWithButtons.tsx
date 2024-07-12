@@ -1,13 +1,14 @@
 'use client';
 
 import { postCart } from '@/api/cartAPI';
+import { postRecentProducts } from '@/api/productAPI';
 import { Button, CountInput, Dropdown } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { ROUTER } from '@/constants/route';
-import type { CartProductType, ProductType } from '@/types/ProductTypes';
+import type { CartProductType, PostRecentProductsParams, ProductType } from '@/types/ProductTypes';
 import { Users } from '@/types/userType';
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -131,17 +132,15 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     router.push(ROUTER.MY_PAGE.CHECKOUT);
   };
 
-  useEffect(() => {
-    const prevItems = window.localStorage.getItem('recentViews');
+  const { mutate: addRecentProduct } = useMutation({
+    mutationFn: ({ uId, pId }: PostRecentProductsParams) => postRecentProducts(uId, pId),
+  });
 
-    if (prevItems) {
-      const items = JSON.parse(prevItems);
-      const newItems = [productData, ...items.filter((item: ProductType) => item.id !== productData.id)];
-      localStorage.setItem('recentViews', JSON.stringify(newItems.slice(0, 8)));
-    } else {
-      localStorage.setItem('recentViews', JSON.stringify([productData]));
+  useEffect(() => {
+    if (userData?.data && productId) {
+      addRecentProduct({ uId: userData.data.id, pId: productId });
     }
-  }, [productData]);
+  }, [userData?.data, productId, addRecentProduct]);
 
   return (
     <>

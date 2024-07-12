@@ -27,3 +27,8 @@ export interface CartProductType {
   switchOptionId: number | undefined;
   count: number;
 }
+
+export interface PostRecentProductsParams {
+  uId: number;
+  pId: number;
+}

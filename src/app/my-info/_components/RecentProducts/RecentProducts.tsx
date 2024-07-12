@@ -1,29 +1,43 @@
 'use client';
 
+import { getRecentProducts } from '@/api/productAPI';
 import ProductItem from '@/components/Products/ProductItem';
 import type { ProductType } from '@/types/ProductTypes';
+import type { Users } from '@/types/userType';
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
 import MyInfoEmptyCase from '../MyInfoEmptyCase/MyInfoEmptyCase';
 import styles from './RecentProducts.module.scss';
 
 const cn = classNames.bind(styles);
 
 export default function RecentProducts() {
-  const [recentViewProducts, setRecentViewProducts] = useState([]);
+  // const [recentViewProducts, setRecentViewProducts] = useState([]);
+  const { data: userData } = useQuery<{ data: Users }>({
+    queryKey: ['userData'],
+  });
 
-  useEffect(() => {
-    const prevItems = window.localStorage.getItem('recentViews');
+  const userId = userData?.data.id;
 
-    if (prevItems) {
-      setRecentViewProducts(JSON.parse(prevItems));
-    }
-  }, []);
+  const { data: recentViewProducts } = useQuery<ProductType[]>({
+    queryKey: ['recentProducts', userId],
+    queryFn: () => getRecentProducts(userId),
+    enabled: !!userId,
+  });
+  console.log(recentViewProducts);
+
+  // useEffect(() => {
+  //   const prevItems = window.localStorage.getItem('recentViews');
+
+  //   if (prevItems) {
+  //     setRecentViewProducts(JSON.parse(prevItems));
+  //   }
+  // }, []);
 
   return (
     <article className={cn('recent')}>
       <h1 className={cn('recent-title')}>최근 본 상품</h1>
-      {recentViewProducts ? (
+      {!userData && recentViewProducts ? (
         <div className={cn('recent-items')}>
           {recentViewProducts.map(
             ({ id, name, price, thubmnailList, categoryName, isLiked, reviewscount }: ProductType) => (
