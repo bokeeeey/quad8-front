@@ -27,8 +27,8 @@ export const getProductReviews = async (params: ProductReviewParams): Promise<Pr
 export const getUserProductReviews = async (params: ProductReviewParams): Promise<ReviewResponse> => {
   const {
     sort = 'createdAt',
-    page = 0,
-    size = 10,
+    page = '0',
+    size = '10',
     startDate = '2024-01-01T00:00:00',
     endDate = '2024-12-31T23:59:59',
   } = params;

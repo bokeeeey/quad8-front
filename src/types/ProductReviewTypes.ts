@@ -38,6 +38,7 @@ export interface ReviewSearchParams {
   totalPages: number;
   first: boolean;
   last: boolean;
+  currentPage: number;
 }
 
 export type OptionRatio = Record<string, number>;
@@ -52,6 +53,11 @@ export type ProductReviewPreview = {
 
 export interface ProductReviewType extends ProductReviewPreview {
   reviewDtoList: ReviewDto[];
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+  currentPage: number;
 }
 
 type Keyword = Record<string, string[]>;
@@ -59,16 +65,15 @@ type Keyword = Record<string, string[]>;
 export type ReviewKeywordType = Record<'키보드' | '키캡' | '스위치' | '기타용품', Keyword>;
 
 export interface ProductReviewParams {
-  productId?: string;
+  productId?: number;
   sort?: string;
-  page?: number;
-  size?: number;
+  page?: string;
+  size?: string;
   startDate?: string;
   endDate?: string;
 }
 
-export interface MyReviewParamsType {
-  sort: string;
+export interface ReviewParamsType {
   page?: string;
   size?: string;
 }
