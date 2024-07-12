@@ -1,7 +1,7 @@
 import { useMutation, useSuspenseQuery, useQueryClient, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -162,8 +162,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
 
   const createdDateString = formatDateToString(new Date(updatedAt));
 
-  const handleClickPopup = (e: MouseEvent<SVGElement>) => {
-    e.stopPropagation();
+  const handleClickPopup = () => {
     setIsPopupOpen((prevIsOpen) => !prevIsOpen);
   };
 
@@ -207,9 +206,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
     setIsEditModalOpen(false);
   };
 
-  const handleClickReport = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
+  const handleClickReport = () => {};
 
   const POPOVER_OPTION = isMine
     ? [
@@ -244,14 +241,13 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
         )}
         <div className={cn('image-content-wrapper')}>
           <div className={cn('left-wrapper')}>
-            <div className={cn('selected-image')}>
+            <div className={cn('selected-image-wrapper')}>
               <Image
                 src={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
                 alt='키보드 이미지'
-                layout='fill'
                 fill
-                objectFit='contain'
                 onError={() => setClickedImage('')}
+                className={cn('selected-image-wrapper')}
                 sizes='(max-width: 1200px) 100%'
                 priority
                 placeholder={IMAGE_BLUR.placeholder}

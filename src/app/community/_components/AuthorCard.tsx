@@ -12,7 +12,7 @@ interface AuthorCardProps {
   nickname: string;
   dateText: string;
   userImage: string | null;
-  onClickPopOver: (e: MouseEvent<SVGElement>) => void;
+  onClickPopOver: () => void;
   onClosePopOver: () => void;
   isOpenPopOver: boolean;
   popOverOptions: {

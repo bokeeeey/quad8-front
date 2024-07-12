@@ -1,13 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-import { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
+import type { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
 import { Button, ImageInput, InputField, Rating, TextField, CustomOption } from '@/components';
 import { keydeukImg } from '@/public/index';
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
@@ -19,13 +19,25 @@ import styles from './WriteEditModal.module.scss';
 
 const cn = classNames.bind(styles);
 
-interface WriteEditModalProps {
-  reviewType: 'customReview' | 'customReviewEdit' | 'otherReview';
-  keyboardInfo?: PostCardDetailModalCustomKeyboardType;
-  editCustomData?: CommunityPostCardDetailDataType;
-  productData?: ProductDataType;
+interface CustomReviewProps {
+  reviewType: 'customReview';
+  keyboardInfo: PostCardDetailModalCustomKeyboardType;
   onSuccessReview: () => void;
 }
+
+interface CustomReviewEditProps {
+  reviewType: 'customReviewEdit';
+  editCustomData: CommunityPostCardDetailDataType;
+  onSuccessReview: () => void;
+}
+
+interface OtherReviewProps {
+  reviewType: 'otherReview';
+  productData: ProductDataType;
+  onSuccessReview: () => void;
+}
+
+type WriteEditModalProps = CustomReviewProps | CustomReviewEditProps | OtherReviewProps;
 
 interface ProductDataType {
   productId: number;
@@ -39,46 +51,24 @@ const TITLE_MAX_LENGTH = 16;
 const TITLE_PLACEHOLDER = '미 입력 시 키득 커스텀 키보드로 등록됩니다.';
 const CONTENT_PLACEHOLDER = '최소 20자 이상 입력해주세요';
 
-export default function WriteEditModal({
-  keyboardInfo,
-  reviewType,
-  editCustomData,
-  productData,
-  onSuccessReview,
-}: WriteEditModalProps) {
+export default function WriteEditModal(props: WriteEditModalProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
   const [deletedImageId, setDeleteImageId] = useState<number[]>([]);
   const [clickedFeedback, setClickedFeedback] = useState<Array<number>>([0, 0, 0]);
   const [rating, setRating] = useState<number>(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isImageError, setIsImageError] = useState<boolean>(false);
 
+  const { reviewType, onSuccessReview } = props;
   const isCustom = reviewType === 'customReview' || reviewType === 'customReviewEdit';
+  const { keyboardInfo } = props as CustomReviewProps;
+  const { editCustomData } = props as CustomReviewEditProps;
+  const { productData } = props as OtherReviewProps;
 
-  const handleClickFeedback = (optionIndex: number, feedbackIndex: number) => {
-    const updatedClickedFeedback = [...clickedFeedback];
-    updatedClickedFeedback[optionIndex] = feedbackIndex;
-    setClickedFeedback(updatedClickedFeedback);
-  };
-
-  const handleSaveDeletedImageId = (id: number) => {
-    setDeleteImageId((prevIds) => [...prevIds, id]);
-  };
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { isValid },
-  } = useForm<FieldValues>({
-    mode: 'onTouched',
-    defaultValues: {
-      title: editCustomData?.title || '',
-      content: editCustomData?.content || '',
-      files: editCustomData?.reviewImages || [],
-    },
-  });
+  /**
+   * 커스텀 리뷰 작성 관련 입니다.
+   */
 
   const { mutate: postCreatePostMutation } = useMutation({
     mutationFn: postCreateCustomReview,
@@ -96,6 +86,12 @@ export default function WriteEditModal({
     },
   });
 
+  /** 수정 관련 입니다. */
+
+  const handleSaveDeletedImageId = (id: number) => {
+    setDeleteImageId((prevIds) => [...prevIds, id]);
+  };
+
   const { mutate: putEditPostMutation } = useMutation({
     mutationFn: ({ id, formData }: { id: number; formData: FormData }) => putEditCustomReview({ id, formData }),
     onSuccess: (res) => {
@@ -112,6 +108,14 @@ export default function WriteEditModal({
     },
   });
 
+  /** 상품 리뷰 관련 입니다. */
+
+  const handleClickFeedback = (optionIndex: number, feedbackIndex: number) => {
+    const updatedClickedFeedback = [...clickedFeedback];
+    updatedClickedFeedback[optionIndex] = feedbackIndex;
+    setClickedFeedback(updatedClickedFeedback);
+  };
+
   const { mutate: postProductReviewMutation } = useMutation({
     mutationFn: ({ productId, formData }: { productId: number; formData: FormData }) =>
       postProductReviews({ productId, formData }),
@@ -127,6 +131,28 @@ export default function WriteEditModal({
       toast.error('리뷰 등록 중 오류가 발생했습니다.');
     },
   });
+
+  /** react hook form  */
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { isValid },
+    reset,
+  } = useForm<FieldValues>({
+    mode: 'onTouched',
+  });
+
+  useEffect(() => {
+    if (editCustomData?.title) {
+      reset({
+        title: editCustomData.title || '',
+        content: editCustomData.content || '',
+        files: editCustomData.reviewImages || [],
+      });
+    }
+  }, [editCustomData, reset]);
 
   const registers = {
     title: register('title', {
@@ -202,10 +228,15 @@ export default function WriteEditModal({
     return null;
   };
 
-  const PRODUCT_DATA = {
-    productImage: isCustom ? keyboardInfo?.imgUrl : productData?.productImgUrl,
-    productName: isCustom ? '키득 커스텀 키보드' : productData?.productName,
-  };
+  const PRODUCT_DATA = isCustom
+    ? {
+        image: keyboardInfo?.imgUrl,
+        name: '키득 커스텀 키보드',
+      }
+    : {
+        image: productData?.productImgUrl,
+        name: productData?.productName,
+      };
 
   const productType = '키보드';
 
@@ -218,17 +249,18 @@ export default function WriteEditModal({
         <div className={cn('product-data-wrapper')}>
           <div className={cn('product-image')}>
             <Image
-              src={PRODUCT_DATA.productImage || keydeukImg}
+              src={isImageError || !PRODUCT_DATA.image ? keydeukImg : PRODUCT_DATA.image}
               alt='커스텀 키보드 이미지'
               width={143}
               height={143}
               priority
               placeholder={IMAGE_BLUR.placeholder}
               blurDataURL={IMAGE_BLUR.blurDataURL}
+              onError={() => setIsImageError(true)}
             />
           </div>
           <div className={cn('product-info')}>
-            <p className={cn('product-info-title')}>{PRODUCT_DATA.productName}</p>
+            <p className={cn('product-info-title')}>{PRODUCT_DATA.name}</p>
             {isCustom && keyboardInfo ? (
               <CustomOption customData={keyboardInfo} wrapperRef={containerRef} />
             ) : (
@@ -247,7 +279,7 @@ export default function WriteEditModal({
               placeholder={TITLE_PLACEHOLDER}
               maxLength={TITLE_MAX_LENGTH}
               labelSize='lg'
-              currentLength={watch('title').length}
+              currentLength={watch('title')?.length}
               {...registers.title}
             />
           </div>

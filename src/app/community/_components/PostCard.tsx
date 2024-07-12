@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import { useState, MouseEvent, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -13,6 +13,7 @@ import { IMAGE_BLUR } from '@/constants/blurImage';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { deletePostCard, getPostDetail } from '@/api/communityAPI';
 import { ErrorBoundary } from 'react-error-boundary';
+import { communityPopOverOption } from '@/libs/communityPopOverOption';
 import AuthorCard from './AuthorCard';
 import PostCardDetailModal from './PostCardDetailModal/PostCardDetailModal';
 import { PostInteractions } from './PostInteractions';
@@ -40,8 +41,7 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
   const ApdatedDate = new Date(updateAt);
   const timeToString = calculateTimeDifference(ApdatedDate);
 
-  const handleClickPopup = (e: MouseEvent<SVGElement>) => {
-    e.stopPropagation();
+  const handleClickPopOver = () => {
     setIsPopupOpen((prevIsOpen) => !prevIsOpen);
   };
 
@@ -87,14 +87,12 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
     },
   });
 
-  const handleClickEdit = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
+  const handleClickEdit = () => {
     setIsEditModalOpen(true);
     handleClosePopOver();
   };
 
-  const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
+  const handleClickDelete = () => {
     if (id) {
       deletePostCardMutation(id);
     } else {
@@ -102,27 +100,7 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
     }
   };
 
-  const handleClickReport = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
-
-  const MY_POPOVER_OPTION = [
-    {
-      label: '삭제하기',
-      onClick: handleClickDelete,
-    },
-    {
-      label: '수정하기',
-      onClick: handleClickEdit,
-    },
-  ];
-
-  const OTHERS_POPOVER_OPTION = [
-    {
-      label: '신고하기',
-      onClick: handleClickReport,
-    },
-  ];
+  const handleClickReport = () => {};
 
   return (
     <div className={cn('container')}>
@@ -131,16 +109,19 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
           nickname={nickName}
           dateText={timeToString}
           userImage={userImage}
-          onClickPopOver={handleClickPopup}
+          onClickPopOver={handleClickPopOver}
           onClosePopOver={handleClosePopOver}
           isOpenPopOver={isPopupOpen}
-          popOverOptions={isMine ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
+          popOverOptions={communityPopOverOption({
+            isMine,
+            onClickDelete: handleClickDelete,
+            onClickReport: handleClickReport,
+            onClickEdit: handleClickEdit,
+          })}
         />
         <div className={cn('keyboard-image-wrapper')}>
           <Image
-            layout='fill'
             fill
-            objectFit='cover'
             src={Array.isArray(thumbnail) ? thumbnail[0] : thumbnail}
             className={cn('keyboard-image')}
             alt='키보드 이미지'

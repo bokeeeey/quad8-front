@@ -17,7 +17,7 @@ interface OptionType {
 interface PopOverProps {
   optionsData: OptionType[];
   onHandleClose: () => void;
-  onHandleOpen: (e: MouseEvent<SVGElement>) => void;
+  onHandleOpen: () => void;
   isOpenPopOver: boolean;
 }
 
@@ -26,9 +26,13 @@ export default function PopOver({ optionsData, onHandleClose, onHandleOpen, isOp
 
   useOutsideClick(ref, onHandleClose);
 
+  const handleClickDotIcon = () => {
+    onHandleOpen();
+  };
+
   return (
-    <div className={cn('container')}>
-      <VerticalTripleDotIcon onClick={(e) => onHandleOpen(e)} />
+    <div className={cn('container')} onClick={(e) => e.stopPropagation()}>
+      <VerticalTripleDotIcon onClick={handleClickDotIcon} />
       {isOpenPopOver && (
         <div className={cn('pop-over-container')} ref={ref}>
           {optionsData.map((option) => (

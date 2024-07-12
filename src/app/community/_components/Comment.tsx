@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { MouseEvent, useState, forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -11,6 +11,7 @@ import type { Users } from '@/types/userType';
 import { PopOver } from '@/components';
 import { deleteComment } from '@/api/communityAPI';
 
+import { communityPopOverOption } from '@/libs/communityPopOverOption';
 import styles from './Comment.module.scss';
 
 const cn = classNames.bind(styles);
@@ -67,41 +68,21 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment({ cardI
     },
   });
 
-  const handleClickPopOver = (e: MouseEvent<SVGElement>) => {
+  const handleClickPopOver = () => {
     setIsOpenPopOver(!isOpenPopOver);
-    e.stopPropagation();
   };
 
   const handleClosePopOver = () => {
     setIsOpenPopOver(false);
   };
 
-  const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {
+  const handleClickDelete = () => {
     deleteCommentMutation(commentId);
-    e.stopPropagation();
   };
 
-  const handleClickReport = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
+  const handleClickEdit = () => {};
 
-  const MY_POPOVER_OPTION = [
-    {
-      label: '삭제하기',
-      onClick: handleClickDelete,
-    },
-    {
-      label: '신고하기',
-      onClick: handleClickReport,
-    },
-  ];
-
-  const OTHERS_POPOVER_OPTION = [
-    {
-      label: '신고하기',
-      onClick: handleClickReport,
-    },
-  ];
+  const handleClickReport = () => {};
 
   const timeAgo = calculateTimeDifference(createdTimeToDate);
 
@@ -115,10 +96,15 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment({ cardI
             <p className={cn('time-ago')}>{timeAgo}</p>
           </div>
           <PopOver
-            optionsData={userID === commentUserId ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
-            onHandleClose={handleClosePopOver}
+            optionsData={communityPopOverOption({
+              isMine: userID === commentUserId,
+              onClickDelete: handleClickDelete,
+              onClickEdit: handleClickEdit,
+              onClickReport: handleClickReport,
+            })}
             isOpenPopOver={isOpenPopOver}
             onHandleOpen={handleClickPopOver}
+            onHandleClose={handleClosePopOver}
           />
         </div>
         <div className={cn('content')}>{comment}</div>
