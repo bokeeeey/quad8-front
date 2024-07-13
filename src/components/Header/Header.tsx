@@ -1,16 +1,18 @@
 'use client';
 
-import { ROUTER } from '@/constants/route';
-import { useQuery } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
+import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 
+import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
+import type { CartAPIDataType } from '@/types/CartTypes';
 import SignInModal from '../SignInModal/SignInModal';
-import { CartButton, LoginButton, LogoutButton, SearchBox, ShopButton } from './HeaderParts';
+import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
 
@@ -27,9 +29,14 @@ export default function Header() {
     queryKey: ['userData'],
   });
 
-  const cartCount = 0;
+  const { data: cartData } = useQuery<CartAPIDataType>({
+    queryKey: ['cartData'],
+  });
+
+  const cartCount = cartData?.totalCount ?? 0;
 
   const users = userData?.data ?? null;
+  const profileImage = userData?.data?.imgUrl ?? null;
 
   const handleLoginButtonClick = () => {
     setIsModalOpen((prevIsOpen) => !prevIsOpen);
@@ -75,14 +82,16 @@ export default function Header() {
             </div>
           </div>
           <div className={cn('left-wrapper')}>
-            <SearchBox isBlack={isBlack} />
-            <div className={cn('status-wrapper')}>
-              {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
-              <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
+            <SearchButton isBlack={isBlack} />
+            {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
+            <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
+              {profileImage ? (
+                <Image src={profileImage} alt='profile' width={31} height={31} className={cn('profile-image')} />
+              ) : (
                 <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={31} height={31} />
-              </button>
-              <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
-            </div>
+              )}
+            </button>
+            <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
           </div>
         </div>
       </header>

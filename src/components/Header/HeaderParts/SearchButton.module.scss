@@ -1,0 +1,101 @@
+.icon {
+  fill: $gray-50;
+  cursor: pointer;
+}
+
+.search-wrapper {
+  position: absolute;
+  z-index: $zindex-dropdown - 1;
+  top: 8rem;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 8rem);
+  transition: transform 0.3s ease-in-out;
+  animation: fade-in 0.3s ease forwards;
+  background-color: rgb(0 0 0 / 70%);
+}
+
+.black {
+  background-color: $black;
+  fill: $white;
+}
+
+.wrapper {
+  @include flex-center;
+
+  position: relative;
+  width: 100%;
+  padding: 5rem 0;
+  animation: slide-in 0.3s ease forwards;
+  background-color: $white;
+}
+
+.search-box-wrapper {
+  width: 40%;
+}
+
+.slide-out {
+  animation: slide-out 0.3s ease forwards;
+}
+
+.fade-out {
+  animation: fade-out 0.3s ease forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: scaleY(0.4);
+    transform-origin: 100% 0%;
+  }
+
+  to {
+    transform: scaleY(1);
+    transform-origin: 100% 0%;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: scaleY(1);
+    transform-origin: 100% 0%;
+  }
+
+  to {
+    transform: scaleY(0.4);
+    transform-origin: 100% 0%;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.border-black {
+  border-top: 0.1rem solid $gray-40;
+}
+
+.bg-black {
+  border-color: $white;
+  background-color: $black;
+  color: $gray-10;
+
+  &::placeholder {
+    color: $gray-10;
+  }
+}

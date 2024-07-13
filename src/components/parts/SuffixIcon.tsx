@@ -15,7 +15,7 @@ export default function SuffixIcon({ type, icon, isOpen, onClick }: SuffixIconPr
   const renderIcon = () => {
     switch (icon) {
       case 'search':
-        return <SearchIcon />;
+        return <SearchIcon className={cn('search-icon')} />;
       case 'arrow':
         return <ChevronIcon className={cn('chevron-icon')} />;
       default:

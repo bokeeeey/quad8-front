@@ -1,7 +1,5 @@
 .wrapper {
   @include flex-column(4rem);
-
-  width: calc(100vw - 47rem);
 }
 
 .title {
@@ -29,7 +27,7 @@
   width: 100%;
 }
 
-.prduct-category-wrapper {
+.product-category-wrapper {
   width: 100%;
 }
 

@@ -12,6 +12,7 @@ export default function LogoutButton() {
 
   const handleClickButton = () => {
     deleteCookie('accessToken');
+    deleteCookie('refreshToken');
     router.refresh();
   };
 

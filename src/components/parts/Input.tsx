@@ -61,14 +61,20 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     }
   };
 
-  const combinedClassName = cn('default', sizeVariant, type, className, {
-    red: isError,
-    select: isSelect,
-    option: isOption,
-    checked: isChecked,
-    phone: isPhonePrefix,
-    'dropdown-textarea-case': value === '직접 입력',
-  });
+  const combinedClassName = cn(
+    'default',
+    sizeVariant,
+    type,
+    {
+      red: isError,
+      select: isSelect,
+      option: isOption,
+      checked: isChecked,
+      phone: isPhonePrefix,
+      'dropdown-textarea-case': value === '직접 입력',
+    },
+    className,
+  );
 
   return (
     <input
