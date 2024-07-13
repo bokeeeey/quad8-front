@@ -1,23 +1,45 @@
-import { Button } from '@/components';
+'use client';
+
+import { getPayment } from '@/api/orderAPI';
+import { Button, ItemOverview } from '@/components';
+import { formatPhoneNumber } from '@/libs';
+import { OrderItem } from '@/types/OrderTypes';
+import { OrderDetailData } from '@/types/paymentTypes';
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import styles from './CheckoutComplete.module.scss';
 
 const cn = classNames.bind(styles);
 
-export default function CheckoutCompleted() {
+interface CheckoutCompletedProps {
+  orderId: string;
+}
+
+export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
+  const { data: paymentDataResponse } = useQuery<{ data: OrderDetailData }>({
+    queryKey: ['paymentDataResponse'],
+    queryFn: () => getPayment(orderId),
+  });
+
+  const { paymentOrderId, shippingAddressResponse, orderItemResponses } = paymentDataResponse?.data ?? {};
+
+  const { name, phone = '', zoneCode, address, detailAddress } = shippingAddressResponse ?? {};
+
   return (
     <div className={cn('checkout-completed')}>
       <article className={cn('info-box')}>
         <h1 className={cn('info-title')}>
-          주문번호<span>12345678</span>
+          주문번호<span>{paymentOrderId}</span>
         </h1>
         <div className={cn('info-address')}>
           <div className={cn('address')}>
-            <p>오수아</p>
-            <p>010-1234-5567</p>
-            <p>인천시 서울시 평양시</p>
+            <p>{name}</p>
+            <p>010-{formatPhoneNumber(phone)}</p>
+            <p>
+              ({zoneCode}){address} {detailAddress}
+            </p>
           </div>
-          <Button
+          {/* <Button
             className={cn('address-modification-button')}
             type='button'
             radioGroup='4'
@@ -25,9 +47,15 @@ export default function CheckoutCompleted() {
             width={72}
           >
             변경
-          </Button>
+          </Button> */}
         </div>
-        <div>상품 컴포넌트</div>
+        <div className={cn('item-box')}>
+          <h1>주문 상품</h1>
+          {orderItemResponses &&
+            orderItemResponses.map((item: OrderItem) => (
+              <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
+            ))}
+        </div>
       </article>
 
       <div className={cn('confirm-box')}>

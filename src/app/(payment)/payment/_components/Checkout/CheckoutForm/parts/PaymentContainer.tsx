@@ -6,11 +6,11 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components';
-import { ROUTER } from '@/constants/route';
 import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
 import type { OrderDetailData } from '@/types/paymentTypes';
 import type { Users } from '@/types/userType';
 
+import { ROUTER } from '@/constants/route';
 import styles from './PaymentContainer.module.scss';
 
 const cn = classNames.bind(styles);
@@ -18,7 +18,7 @@ const cn = classNames.bind(styles);
 interface PaymentContainerProps {
   amountValue: number;
   paymentData?: OrderDetailData;
-  isPutPaymentSuccessed: boolean;
+  isPutPaymentSucceed: boolean;
 }
 
 interface WidgetPaymentMethodWidget {
@@ -37,18 +37,16 @@ interface TossPaymentsWidgets {
     customerName?: string;
     customerEmail?: string;
     successUrl: string;
-    failUrl: string;
+    // failUrl: string;
   }) => Promise<void>;
 }
-
-const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string;
 
 export default function PaymentContainer({
   amountValue,
   paymentData,
-  isPutPaymentSuccessed = false,
+  isPutPaymentSucceed = false,
 }: PaymentContainerProps) {
-  const [ready, setReady] = useState(isPutPaymentSuccessed);
+  const [ready, setReady] = useState(isPutPaymentSucceed);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
   const { data: userDataResponse } = useQuery<{ data: Users }>({ queryKey: ['userData'] });
@@ -59,8 +57,16 @@ export default function PaymentContainer({
 
   const orderName = renderPaymentProductName({ orderItemResponses });
 
+  // const { mutate: postPaymentConfirmMutation } = useMutation({
+  //   mutationFn: () => postPaymentConfirm(payload),
+  //   onSuccess: (res) => {
+  //     console.log(res);
+  //   },
+  // });
+
   useEffect(() => {
     const fetchPaymentWidgets = async () => {
+      const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string;
       const tossPayments = await loadTossPayments(clientKey);
       const widgetsInstance = tossPayments.widgets({ customerKey: ANONYMOUS }) as unknown as TossPaymentsWidgets;
       setWidgets(widgetsInstance);
@@ -102,16 +108,28 @@ export default function PaymentContainer({
     }
 
     try {
-      await widgets.requestPayment({
+      const paymentResult = await widgets.requestPayment({
         orderId: paymentOrderId || '',
         orderName,
         customerName: customerName || '',
         customerEmail: customerEmail || '',
         successUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_SUCCESS}`,
-        failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
+        // failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
       });
+
+      console.log(paymentResult);
+
+      // const payload = {
+      //   orderId: paymentResult.orderId,
+      //   paymentKey: paymentResult.paymentKey,
+      //   paymentOrderId: paymentOrderId || '',
+      //   amount: paymentResult.amount,
+      // };
+
+      // postPaymentConfirmMutation(payload);
     } catch (error) {
       // TODO: 에러 처리
+      console.error('결제 실패');
       throw error;
     }
   };

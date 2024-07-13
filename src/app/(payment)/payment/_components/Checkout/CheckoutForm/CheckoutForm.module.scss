@@ -18,10 +18,6 @@
 
     .item-box {
       @include default-layout;
-
-      .item {
-        height: 10.4rem;
-      }
     }
 
     .price-box {

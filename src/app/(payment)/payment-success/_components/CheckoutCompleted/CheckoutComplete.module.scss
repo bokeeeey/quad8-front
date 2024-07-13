@@ -1,3 +1,12 @@
+@mixin default-layout {
+  @include flex-column(1.2rem);
+  @include pretendard-20-500;
+
+  padding: 2rem;
+  border-radius: 0.4rem;
+  background: $white;
+}
+
 .checkout-completed {
   @include flex-column(4rem);
 
@@ -33,6 +42,10 @@
       }
     }
   }
+
+  // .item-box {
+  //   @include default-layout;
+  // }
 
   .confirm-box {
     @include pretendard-16-400;

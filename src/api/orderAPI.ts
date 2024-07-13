@@ -80,7 +80,7 @@ export const getPayment = async (orderId?: string) => {
   }
 };
 
-export const putPayment = async (orderId?: number, payload?: FieldValues) => {
+export const putPayment = async (orderId?: string, payload?: FieldValues) => {
   const token = await getCookie('accessToken');
 
   if (!token) {

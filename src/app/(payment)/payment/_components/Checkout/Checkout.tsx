@@ -1,5 +1,9 @@
 import CheckoutForm from './CheckoutForm/CheckoutForm';
 
-export default function Checkout() {
-  return <CheckoutForm />;
+interface CheckoutProps {
+  orderId: string;
+}
+
+export default function Checkout({ orderId }: CheckoutProps) {
+  return <CheckoutForm orderId={orderId} />;
 }

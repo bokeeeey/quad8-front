@@ -1,11 +1,11 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
-import { putPayment } from '@/api/orderAPI';
+import { getPayment, putPayment } from '@/api/orderAPI';
 import { Button, Dropdown, ItemOverview } from '@/components';
 import { Input, Label } from '@/components/parts';
 import { formatNumber } from '@/libs';
@@ -20,17 +20,23 @@ import styles from './CheckoutForm.module.scss';
 
 const cn = classNames.bind(styles);
 
-export default function CheckoutForm() {
+interface CheckoutFormProps {
+  orderId: string;
+}
+
+export default function CheckoutForm({ orderId }: CheckoutFormProps) {
+  const queryClient = useQueryClient();
   const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
     queryKey: ['paymentResponse'],
+    queryFn: () => getPayment(orderId),
   });
 
-  const { totalPrice = 0, orderItemResponses, shippingAddressResponse, orderId } = paymentResponse?.data ?? {};
+  const { totalPrice = 0, orderItemResponses, shippingAddressResponse } = paymentResponse?.data ?? {};
 
   const [selectedAddress, setSelectedAddress] = useState<ShippingAddressResponse | null>(
     shippingAddressResponse ?? null,
   );
-  const [isPutPaymentSuccessed, setIsPutPaymentSuccessed] = useState(false);
+  const [isPutPaymentSucceed, setIsPutPaymentSucceed] = useState(false);
 
   const { handleSubmit, control, setValue } = useForm<FieldValues>({
     mode: 'onTouched',
@@ -55,7 +61,8 @@ export default function CheckoutForm() {
     putPaymentMutation(payload, {
       onSuccess: (res) => {
         if (res.status === 'SUCCESS') {
-          setIsPutPaymentSuccessed(true);
+          setIsPutPaymentSucceed(true);
+          queryClient.invalidateQueries({ queryKey: ['paymentDataResponse'] });
           return;
         }
 
@@ -126,7 +133,7 @@ export default function CheckoutForm() {
         <PaymentContainer
           amountValue={Number(totalPrice)}
           paymentData={paymentResponse?.data}
-          isPutPaymentSuccessed={isPutPaymentSuccessed}
+          isPutPaymentSucceed={isPutPaymentSucceed}
         />
       </article>
     </form>
