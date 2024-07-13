@@ -10,8 +10,6 @@ import type {
   CommunityPostCardDetailDataType,
 } from '@/types/CommunityTypes';
 import PostCard from './PostCard';
-import WritePostButton from './WritePostButton';
-import SortDropdown from './SortDropdown';
 
 import styles from './PostCardList.module.scss';
 
@@ -30,22 +28,16 @@ export default function PostCardList({ searchParams, initialData }: CommunityPag
   };
 
   const { data: communityData, isLoading } = useQuery({
-    queryKey: ['postCardsList', searchParams],
+    queryKey: ['postCardsList'],
     queryFn: () => getAllCommunityPost(getAllCommunityParams),
   });
 
   const content = isLoading || !communityData ? initialData : communityData.content;
 
   return (
-    <div className={cn('container')}>
-      <div className={cn('filter-write-button-wrapper')}>
-        <SortDropdown />
-        <WritePostButton />
-      </div>
+    <div>
       <div className={cn('post-wrapper')}>
-        {content.map((cardData: CommunityPostCardDataType) => (
-          <PostCard key={cardData.id} cardData={cardData} />
-        ))}
+        {content?.map((cardData: CommunityPostCardDataType) => <PostCard key={cardData.id} cardData={cardData} />)}
       </div>
     </div>
   );

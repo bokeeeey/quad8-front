@@ -2,7 +2,7 @@ import { getCookie } from '@/libs/manageCookie';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
-export const postPaymentConfirm = async (payload) => {
+export const postPaymentConfirm = async (payload: string) => {
   const token = await getCookie('accessToken');
 
   if (!token) {

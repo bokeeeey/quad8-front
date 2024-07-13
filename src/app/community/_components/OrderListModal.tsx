@@ -2,10 +2,10 @@
 
 import classNames from 'classnames/bind';
 import { useRef } from 'react';
+import Image from 'next/image';
 
 import { Button, CustomOption } from '@/components';
 import type { PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
-import Image from 'next/image';
 import { keydeukImg } from '@/public/index';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 

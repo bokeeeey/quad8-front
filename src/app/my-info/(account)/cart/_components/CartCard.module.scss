@@ -34,6 +34,10 @@
 
 .type {
   @include pretendard-14-500;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .title {

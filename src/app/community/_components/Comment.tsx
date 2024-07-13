@@ -3,15 +3,15 @@
 import classNames from 'classnames/bind';
 import { MouseEvent, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { calculateTimeDifference } from '@/libs/calculateDate';
 import { VerticalTripleDotIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
 import { PopOver } from '@/components';
-
 import { deleteComment } from '@/api/communityAPI';
-import { toast } from 'react-toastify';
+
 import styles from './Comment.module.scss';
 
 const cn = classNames.bind(styles);
@@ -43,10 +43,10 @@ export default function Comment({
 }: CommentProps) {
   const queryClient = useQueryClient();
   const createdTimeToDate = new Date(createdTime);
+
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
 
   const userData = queryClient.getQueryData<UserDataType>(['userData']);
-
   const userID = userData?.data?.id;
 
   const { mutate: deleteCommentMutation } = useMutation({
@@ -56,6 +56,7 @@ export default function Comment({
       queryClient.invalidateQueries({
         queryKey: ['postData', cardId],
       });
+      queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
     },
     onError: () => {
       toast.error('댓글 삭제 중 오류가 발생하였습니다.');

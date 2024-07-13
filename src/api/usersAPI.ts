@@ -19,6 +19,7 @@ export const getUserData = async () => {
   try {
     const res = await fetch(`${BASE_URL}/api/v1/users/me`, {
       method: 'GET',
+      cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
