@@ -182,7 +182,7 @@ export default function CartModal({
           const cartData = queryClient.getQueryData<CartAPIDataType>(['cartData']) ?? null;
           const newShopData: ShopDataType[] = optionData.map((element) => ({
             id: -1,
-            prductId: element.id,
+            productId: element.id,
             optionId: null,
             optionName: element.name,
             price: element.price,

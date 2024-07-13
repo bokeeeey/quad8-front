@@ -46,7 +46,7 @@ export default function PurchaseButton() {
 
     const shopSelectedData =
       cartData?.SHOP.filter((shop) => checkedShopList[shop.id]).map((element) => ({
-        productId: element.prductId,
+        productId: element.productId,
         switchOptionId: element.optionId,
         quantity: element.count,
       })) ?? [];
@@ -72,7 +72,7 @@ export default function PurchaseButton() {
 
     const shopData =
       cartData?.SHOP.map((element) => ({
-        productId: element.prductId,
+        productId: element.productId,
         switchOptionId: element.optionId,
         quantity: element.count,
       })) ?? [];

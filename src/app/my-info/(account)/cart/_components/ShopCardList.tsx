@@ -19,7 +19,7 @@ export default function ShopCardList() {
   return (
     <div className={cn('wrapper')}>
       {shopData.map((shop) => (
-        <CartCard key={shop.prductId} cardData={shop} type='shop' />
+        <CartCard key={shop.productId} cardData={shop} type='shop' />
       ))}
     </div>
   );
