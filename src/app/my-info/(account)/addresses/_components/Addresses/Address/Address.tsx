@@ -16,9 +16,11 @@ const cn = classNames.bind(styles);
 
 interface AddressProps {
   item: UserAddress;
+  isDisplayOnModal?: boolean;
+  onClick?: (item: UserAddress) => void;
 }
 
-export default function Address({ item }: AddressProps) {
+export default function Address({ item, isDisplayOnModal = false, onClick }: AddressProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPostcodeEmbedOpen, setIsPostcodeEmbedOpen] = useState(false);
   const [addressData, setAddressData] = useState<AddressT | null>(null);
@@ -76,7 +78,10 @@ export default function Address({ item }: AddressProps) {
 
   return (
     <>
-      <article className={cn('address', { 'address-default': isDefault })}>
+      <article
+        className={cn('address', { 'address-default': isDefault, 'display-on-modal': isDisplayOnModal })}
+        onClick={() => onClick && onClick(item)}
+      >
         <div className={cn('address-textbox')}>
           <div className={cn('address-namebox')}>
             <h1 className={cn('address-name')}>{name}</h1>
@@ -87,15 +92,18 @@ export default function Address({ item }: AddressProps) {
             ({zoneCode}) {address} {detailAddress}
           </p>
         </div>
-        <div className={cn('button-box')}>
-          <button className={cn('button')} type='button' onClick={handleModifyButtonClick}>
-            수정
-          </button>
-          <div className={cn('hr')} />
-          <button className={cn('button')} type='button' onClick={handleDeleteButtonClick}>
-            삭제
-          </button>
-        </div>
+
+        {isDisplayOnModal || (
+          <div className={cn('button-box')}>
+            <button className={cn('button')} type='button' onClick={handleModifyButtonClick}>
+              수정
+            </button>
+            <div className={cn('hr')} />
+            <button className={cn('button')} type='button' onClick={handleDeleteButtonClick}>
+              삭제
+            </button>
+          </div>
+        )}
       </article>
 
       <Modal isOpen={isPostcodeEmbedOpen} onClose={() => setIsPostcodeEmbedOpen(false)}>

@@ -1,0 +1,19 @@
+.container {
+  @include flex-column(4rem);
+
+  width: 60.2rem;
+  height: 74.6rem;
+  padding: 3rem 1.6rem 6rem;
+  border-radius: 2.4rem;
+  background-color: $white;
+
+  .title {
+    @include pretendard-30-700;
+
+    text-align: center;
+  }
+
+  .addresses {
+    overflow: scroll;
+  }
+}

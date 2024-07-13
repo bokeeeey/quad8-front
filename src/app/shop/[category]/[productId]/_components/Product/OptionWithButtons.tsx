@@ -98,8 +98,8 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
       onSuccess: () => {
         const cartData = queryClient.getQueryData<CartAPIDataType>(['cartData']) ?? null;
         const newShopData: ShopDataType = {
-          id: -1,
-          prductId: data.productId,
+          id: Math.random(),
+          productId: data.productId,
           optionId: data.switchOptionId ?? null,
           optionName: productData.name,
           price: productData.price * data.count,
