@@ -39,6 +39,8 @@
 
   & > .nickname {
     @include pretendard-16-400;
+
+    cursor: pointer;
   }
 
   & > .time-ago {

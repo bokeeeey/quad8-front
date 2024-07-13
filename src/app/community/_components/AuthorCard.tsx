@@ -36,7 +36,7 @@ export default function AuthorCard({
   const userProfileCardRef = useRef<HTMLDivElement>(null);
   const [isOpenUserCard, setIsOpenUserCard] = useState(false);
 
-  const handleeOpenProfile = () => {
+  const handleOpenProfile = () => {
     setIsOpenUserCard(true);
   };
 
@@ -47,7 +47,7 @@ export default function AuthorCard({
   return (
     <div className={cn('container')} onClick={(e) => e.stopPropagation()}>
       <div
-        onMouseEnter={handleeOpenProfile}
+        onMouseEnter={handleOpenProfile}
         onMouseLeave={handleCloseProfile}
         className={cn('user-profile')}
         ref={userProfileCardRef}
@@ -56,7 +56,9 @@ export default function AuthorCard({
         <UserProfileCard isOpenProfileCard={isOpenUserCard} userId={userId} />
       </div>
       <div className={cn('info-textbox')}>
-        <p className={cn('user-name')}>{nickname}</p>
+        <p className={cn('user-name')} onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
+          {nickname}
+        </p>
         <p className={cn('sub-info')}>{dateText}</p>
       </div>
       <div className={cn('show-more-icon')}>

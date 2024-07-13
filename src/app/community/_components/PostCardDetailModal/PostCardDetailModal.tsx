@@ -20,9 +20,9 @@ import AuthorCard from '../AuthorCard';
 import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
 import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
+import DetailModalSkeleton from './DetailModalSkeleton';
 
 import styles from './PostCardDetailModal.module.scss';
-import DetailModalSkeleton from './DetailModalSkeleton';
 
 const cn = classNames.bind(styles);
 

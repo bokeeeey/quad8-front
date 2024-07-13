@@ -20,6 +20,8 @@
 
   & > .user-name {
     @include pretendard-18-500;
+
+    cursor: pointer;
   }
 
   & > .sub-info {

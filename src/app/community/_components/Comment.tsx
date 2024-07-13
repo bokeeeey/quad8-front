@@ -112,13 +112,12 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
         <UserProfileCard
           isOpenProfileCard={isOpenProfileCard}
           userId={commentUserId}
-          // isAboveCursor={userCardDirection === 'top'}
           positionTop={commentPositionTop}
         />
       </div>
       <div className={cn('content-wrapper')}>
         <div className={cn('user-info-wrapper')}>
-          <div className={cn('user-info')}>
+          <div className={cn('user-info')} onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
             <p className={cn('nickname')}>{nickname}</p>
             <p className={cn('time-ago')}>{timeAgo}</p>
           </div>
