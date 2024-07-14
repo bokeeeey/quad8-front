@@ -177,6 +177,7 @@ export default function SearchBox({ isBlack = false, initialValue, onSubmit }: S
       onSubmit();
     }
     router.push(`${ROUTER.SEARCH}?keyword=${searchKeyword}`, { scroll: false });
+    window.scrollTo(0, 0);
   };
 
   const handleClickKeywordList = (value: string) => {
@@ -191,6 +192,7 @@ export default function SearchBox({ isBlack = false, initialValue, onSubmit }: S
       onSubmit();
     }
     router.push(`${ROUTER.SEARCH}?keyword=${value}`, { scroll: false });
+    window.scrollTo(0, 0);
   };
 
   const handleClickDeleteHistory = (value: string) => {
