@@ -18,7 +18,7 @@ export default function CardList({ cardData }: CardListProps) {
         <ProductItem
           key={card.productId}
           size='lg'
-          hasShop
+          hasShop={false}
           id={card.productId}
           reviewscount={card.reviewCount}
           isLiked={card.liked}
