@@ -2,6 +2,7 @@
   @include flex-center;
 
   flex-direction: column;
+  width: 100%;
   padding: 10rem 0;
 }
 
@@ -12,5 +13,6 @@
 .content-wrapper {
   @include flex-column(5rem);
 
+  width: 100%;
   padding: 10rem 12rem;
 }
