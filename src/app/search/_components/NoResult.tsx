@@ -11,8 +11,8 @@ export default function NoResult({ keyword }: NoResultProps) {
   return (
     <div className={cn('wrapper')}>
       <div className={cn('title-wrapper')}>
-        &apos;<div className={cn('keyword')}>{keyword}</div>&apos;&nbsp;
-        <div className={cn('title-text')}>에 대한 검색 결과가 없습니다</div>
+        <span className={cn('keyword')}>&apos;{keyword}&apos; </span>
+        <span className={cn('text')}>에 대한 검색 결과가 없습니다</span>
       </div>
       <ul className={cn('content-wrapper')}>
         <li>단어의 철자가 정확한지 확인해보세요.</li>

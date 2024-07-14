@@ -8,17 +8,16 @@
 }
 
 .title-wrapper {
-  @include pretendard-30-600;
+  @include pretendard-30-400;
 
   display: flex;
   width: 100%;
 }
 
-.title-text {
-  @include pretendard-30-400;
-}
-
 .keyword {
+  @include pretendard-30-600;
+
+  display: inline-block;
   max-width: 30rem;
   overflow: hidden;
   text-overflow: ellipsis;

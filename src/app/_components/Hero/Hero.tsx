@@ -1,4 +1,3 @@
-import { IMAGE_BLUR } from '@/constants/blurImage';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import styles from './Hero.module.scss';
@@ -19,8 +18,7 @@ export default function Hero() {
                 alt={`배경 이미지 ${i}`}
                 className={cn('hero-item')}
                 sizes='(max-width: 600px) 480px, (max-width: 1200px) 800px, 1200px'
-                placeholder={IMAGE_BLUR.placeholder}
-                blurDataURL={IMAGE_BLUR.blurDataURL}
+                placeholder='empty'
               />
             ))}
           </div>
