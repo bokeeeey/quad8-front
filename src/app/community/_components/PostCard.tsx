@@ -17,7 +17,7 @@ import { communityPopOverOption } from '@/libs/communityPopOverOption';
 import AuthorCard from './AuthorCard';
 import PostCardDetailModal from './PostCardDetailModal/PostCardDetailModal';
 import { PostInteractions } from './PostInteractions';
-import DetailModalSkeleton from './PostCardDetailModal/ModalSkeleton';
+import DetailModalSkeleton from '../../../components/ModalSkeleton/ModalSkeleton';
 import ErrorFallbackDetailModal from './PostCardDetailModal/ErrorFallbackDetailModal';
 
 import styles from './PostCard.module.scss';

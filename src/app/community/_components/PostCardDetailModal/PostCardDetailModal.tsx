@@ -20,7 +20,7 @@ import AuthorCard from '../AuthorCard';
 import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
 import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
-import ModalSkeleton from './ModalSkeleton';
+import ModalSkeleton from '../../../../components/ModalSkeleton/ModalSkeleton';
 
 import styles from './PostCardDetailModal.module.scss';
 
