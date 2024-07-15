@@ -3,6 +3,8 @@
 import { deleteProductLikes, getProductLikes } from '@/api/likesAPI';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
 import { Button, Dialog } from '@/components';
+import LogoLoading from '@/components/LogoLoading/LogoLoading';
+import Pagination from '@/components/Pagination/Pagination';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { GetProductLikesParams, WishlistPageProps } from '@/types/LikeTypes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -25,7 +27,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
     size: searchParams.size || '10',
   };
 
-  const { data, isLoading } = useQuery({
+  const { data: likeList, isPending } = useQuery({
     queryKey: [...QUERY_KEYS.LIKE.LISTS(), searchParams],
     queryFn: () => getProductLikes(getProductLikesParams),
   });
@@ -44,11 +46,17 @@ export default function WishList({ searchParams }: WishlistPageProps) {
     },
   });
 
-  if (isLoading) {
-    return null;
+  if (isPending) {
+    return <LogoLoading />;
   }
 
-  if (data?.length === 0) {
+  const productList = likeList?.likedProductsResponses;
+
+  if (productList?.length === 0) {
+    return <MyInfoEmptyCase message='찜한 상품이 없습니다.' />;
+  }
+
+  if (!likeList) {
     return <MyInfoEmptyCase message='찜한 상품이 없습니다.' />;
   }
 
@@ -70,24 +78,24 @@ export default function WishList({ searchParams }: WishlistPageProps) {
   const toggleAllCheckedById = (e: ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
     if (checked) {
-      const allChecked = new Set(data?.map(({ productId }) => productId));
+      const allChecked = new Set(productList?.map(({ productId }) => productId));
       setSelectedList(allChecked);
     } else {
       setSelectedList(new Set());
     }
   };
 
-  const isAllSelected = () => data?.every((v) => selectedList.has(v.productId));
+  const isAllSelected = () => productList?.every((v) => selectedList.has(v.productId));
 
   const handleAllDelete = () => {
-    if (!data) {
+    if (!productList) {
       return;
     }
-    deleteWishItem(data.map(({ productId }) => productId));
+    deleteWishItem(productList.map(({ productId }) => productId));
   };
 
   const handleSelectedDelete = () => {
-    if (!data) {
+    if (!productList) {
       return;
     }
     deleteWishItem([...selectedList]);
@@ -130,7 +138,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
         </div>
       </div>
       <ul className={cn('item-list')}>
-        {data?.map((item) => (
+        {productList?.map((item) => (
           <WishItem
             checked={selectedList.has(item.productId)}
             onChange={handleOnChange}
@@ -154,6 +162,14 @@ export default function WishList({ searchParams }: WishlistPageProps) {
         isOpen={isDeleteAllOpen}
         onClick={{ left: () => setIsDeleteAllOpen(false), right: handleSelectedDelete }}
         buttonText={{ left: '취소', right: '확인' }}
+      />
+      <Pagination
+        number={likeList.currentPage}
+        totalElements={likeList.totalElements}
+        totalPages={likeList.totalPages}
+        first={likeList.first}
+        last={likeList.last}
+        searchParams={searchParams}
       />
     </div>
   );

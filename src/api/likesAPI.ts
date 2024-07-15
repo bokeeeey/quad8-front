@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import { GetProductLikesParams, ProductLike } from '@/types/LikeTypes';
+import { GetProductLikesParams, ProductLikeResponse } from '@/types/LikeTypes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -19,7 +19,7 @@ export const postProductLikes = async (productId: number) => {
   }
 };
 
-export async function getProductLikes({ page, size }: GetProductLikesParams): Promise<ProductLike[]> {
+export async function getProductLikes({ page, size }: GetProductLikesParams): Promise<ProductLikeResponse> {
   const token = await getCookie('accessToken');
 
   try {

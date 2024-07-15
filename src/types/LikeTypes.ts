@@ -10,6 +10,15 @@ export interface GetProductLikesParams {
   size?: string;
 }
 
+export interface ProductLikeResponse {
+  likedProductsResponses: ProductLike[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
+  first: boolean;
+  last: boolean;
+}
+
 export interface WishlistPageProps {
   searchParams: { [key: string]: string | undefined };
 }
