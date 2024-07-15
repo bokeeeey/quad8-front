@@ -72,7 +72,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
     return updatedSet;
   };
 
-  const handleOnChange = (id: number) => {
+  const handleChangeSelectedList = (id: number) => {
     setSelectedList((prevSet) => updateSet(prevSet, id));
   };
   const toggleAllCheckedById = (e: ChangeEvent<HTMLInputElement>) => {
@@ -141,7 +141,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
         {productList?.map((item) => (
           <WishItem
             checked={selectedList.has(item.productId)}
-            onChange={handleOnChange}
+            onChange={handleChangeSelectedList}
             key={item.productId}
             {...item}
           />
