@@ -27,7 +27,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const queryClient = new QueryClient();
 
-  const data = await queryClient.fetchQuery<SearchResultType | null>({
+  const searchResult = await queryClient.fetchQuery<SearchResultType | null>({
     queryKey: [`search-${keyword}-${page}`],
     queryFn: () => getSearchResult(keyword, page),
   });
@@ -38,18 +38,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <div className={cn('search-wrapper')}>
           <SearchBox isBlack={false} initialValue={keyword} />
         </div>
-        {data ? (
+        {searchResult ? (
           <div className={cn('content-wrapper')}>
-            <Title keyword={keyword} count={data.totalElements} />
-            <CardList cardData={data.content} />
-            <Pagination
-              totalElements={data.totalElements}
-              totalPages={data.totalPages}
-              number={data.number}
-              first={data.first}
-              last={data.last}
-              searchParams={{ keyword }}
-            />
+            <Title keyword={keyword} count={searchResult.totalElements} />
+            <CardList cardData={searchResult.content} />
+            <Pagination {...searchResult} searchParams={{ keyword }} />
           </div>
         ) : (
           <NoResult keyword={keyword} />
