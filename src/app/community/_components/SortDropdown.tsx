@@ -1,11 +1,16 @@
 'use client';
 
+import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { Dropdown } from '@/components';
 import { COMMUNITY_REVIEW_SORT_OPTIONS } from '@/constants/dropdownOptions';
+
+import styles from './SortDropdown.module.scss';
+
+const cn = classNames.bind(styles);
 
 export default function SortDropdown() {
   const [selectedOption, setSelectedOption] = useState(COMMUNITY_REVIEW_SORT_OPTIONS[0].label);
@@ -31,11 +36,13 @@ export default function SortDropdown() {
   };
 
   return (
-    <Dropdown
-      options={COMMUNITY_REVIEW_SORT_OPTIONS.map((option) => option.label)}
-      sizeVariant='xs'
-      onChange={handleDropdownChange}
-      value={selectedOption}
-    />
+    <div className={cn('container')}>
+      <Dropdown
+        options={COMMUNITY_REVIEW_SORT_OPTIONS.map((option) => option.label)}
+        sizeVariant='xs'
+        onChange={handleDropdownChange}
+        value={selectedOption}
+      />
+    </div>
   );
 }
