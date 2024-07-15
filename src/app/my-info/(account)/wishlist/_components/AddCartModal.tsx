@@ -30,7 +30,7 @@ export default function AddCartModal({ productId, closeModal }: AddCartModalProp
     queryFn: () => getProductDetail(String(productId)),
   });
 
-  const { mutate: postCartItem } = useMutation({
+  const { mutate: postCartItem, isPending: isPendingPostCartItem } = useMutation({
     mutationFn: postCart,
     onSuccess: () => {
       toast.success('장바구니에 담겼습니다');
@@ -116,7 +116,13 @@ export default function AddCartModal({ productId, closeModal }: AddCartModalProp
       </div>
       <div className={cn('button-wrapper')}>
         <Button onClick={handleClickCancelButton}>취소</Button>
-        <Button onClick={handleClickEditButton}>장바구니 담기</Button>
+        <Button
+          onClick={handleClickEditButton}
+          disabled={isPendingPostCartItem}
+          backgroundColor={isPendingPostCartItem ? 'background-gray-40' : 'background-primary'}
+        >
+          장바구니 담기
+        </Button>
       </div>
     </div>
   );
