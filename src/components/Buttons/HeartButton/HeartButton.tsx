@@ -7,7 +7,7 @@ import { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { MouseEvent, useState } from 'react';
-import { CommunityPostCardDataType } from '@/types/CommunityTypes';
+import type { CommunityPostCardDataType } from '@/types/CommunityTypes';
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -36,10 +36,10 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
     queryKey: ['userData'],
   });
 
-  const { mutate: likeDetailMutation } = useMutation({
+  const { mutate: likeProductMutation } = useMutation({
     mutationFn: async ({ itemId, itemIsLiked }: LikeMutationProps) => {
       if (itemIsLiked) {
-        await deleteProductLikes(itemId);
+        await deleteProductLikes([itemId]);
       } else {
         await postProductLikes(itemId);
       }
@@ -127,7 +127,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         },
       );
     } else {
-      likeDetailMutation(
+      likeProductMutation(
         { itemId: id, itemIsLiked: isChecked },
         {
           onSuccess: () => {

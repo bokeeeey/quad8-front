@@ -11,7 +11,7 @@ interface CommunityLayoutProps {
   children: ReactNode;
 }
 
-export default async function MyInfoLayout({ children }: CommunityLayoutProps) {
+export default async function CommunityLayout({ children }: CommunityLayoutProps) {
   return (
     <div className={cn('container')}>
       <p className={cn('page-name')}>커뮤니티</p>
