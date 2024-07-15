@@ -3,6 +3,7 @@ import { ROUTER } from '@/constants/route';
 import { keydeukImg } from '@/public/index';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './CustomGuide.module.scss';
 import Guide from './Guide';
 
@@ -55,7 +56,7 @@ export default function CustomGuide() {
       </h1>
 
       <Button
-        as='a'
+        as={Link}
         href={ROUTER.CUSTOM_KEYBOARD}
         fontSize={24}
         width={320}
