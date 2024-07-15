@@ -19,7 +19,7 @@ import AuthorCard from '../AuthorCard';
 import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
 import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
-import DetailModalSkeleton from './DetailModalSkeleton';
+import ModalSkeleton from './ModalSkeleton';
 
 import styles from './PostCardDetailModal.module.scss';
 
@@ -151,7 +151,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
     }
   }, [data, queryClient]);
 
-  if (!data) return <DetailModalSkeleton />;
+  if (!data) return <ModalSkeleton />;
 
   const { data: postData, status, message } = data;
 
