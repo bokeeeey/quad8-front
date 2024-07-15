@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { calculateTimeDifference } from '@/libs/calculateDate';
-import type { Users } from '@/types/userType';
+import type { UserDataResponseType } from '@/types/userType';
 import { PopOver } from '@/components';
 import { deleteComment } from '@/api/communityAPI';
 import { communityPopOverOption } from '@/libs/communityPopOverOption';
@@ -35,12 +35,6 @@ interface CommentProps {
   onOpenProfileCard: () => void;
 }
 
-interface UserDataType {
-  data: Users;
-  status: string;
-  message: string;
-}
-
 export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   { cardId, commentData, onOpenPopOver, onClosePopOver, isOpenedPopOver, onOpenProfileCard },
   ref,
@@ -61,7 +55,8 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   const [isOpenProfileCard, setIsOpenProfileCard] = useState(false);
   const [commentPositionTop, setCommentPositionTop] = useState(0);
 
-  const userData = queryClient.getQueryData<UserDataType>(['userData']);
+  const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
+
   const userID = userData?.data?.id;
   const timeAgo = calculateTimeDifference(createdTimeToDate);
 

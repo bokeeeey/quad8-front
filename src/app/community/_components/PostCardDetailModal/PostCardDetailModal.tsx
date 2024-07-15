@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { deletePostCard, getCommentsInfiniteScroll, getPostDetail, postComment } from '@/api/communityAPI';
-import { Button, CustomOption, InputField, Modal } from '@/components';
+import { Button, CustomOption, InputField, Modal, ModalSkeleton } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { IMAGE_BLUR } from '@/constants/blurImage';
@@ -14,13 +14,13 @@ import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
 import { formatDateToString } from '@/libs/formatDateToString';
 import { keydeukImg, SpinLoading } from '@/public/index';
 import type { CommunityPostCardDetailDataType, CommentType } from '@/types/CommunityTypes';
+import type { UserDataResponseType } from '@/types/userType';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { communityPopOverOption } from '@/libs/communityPopOverOption';
 import AuthorCard from '../AuthorCard';
 import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
 import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
-import ModalSkeleton from '../../../../components/ModalSkeleton/ModalSkeleton';
 
 import styles from './PostCardDetailModal.module.scss';
 
@@ -86,6 +86,8 @@ export default function PostCardDetailModal({
     setIsPopupOpen(false);
   };
 
+  const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
+
   const { data, refetch } = useQuery<PostCardListResponseData>({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
@@ -137,16 +139,20 @@ export default function PostCardDetailModal({
 
   useEffect(() => {
     const handleSubmitComment = () => {
+      if (!userData) {
+        return toast.error('로그인이 필요합니다.');
+      }
       if (commentRef) {
         const commentContent = commentRef.value;
         postCommentMutation({ id: cardId, content: commentContent });
       }
+      return null;
     };
     const removeEvent = addEnterKeyEvent({ element: { current: commentRef }, callback: handleSubmitComment });
     return () => {
       removeEvent();
     };
-  }, [cardId, postCommentMutation, commentRef]);
+  }, [cardId, postCommentMutation, commentRef, userData]);
 
   const isLastCommentIntersecting = useIntersectionObserver(lastCommentRef, { threshold: 1 });
 
