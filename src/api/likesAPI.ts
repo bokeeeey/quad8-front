@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import { GetProductLikesParams, ProductLikeResponse } from '@/types/LikeTypes';
+import type { GetProductLikesParams, ProductLikeResponse } from '@/types/LikeTypes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

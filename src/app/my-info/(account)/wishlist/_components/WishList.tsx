@@ -6,7 +6,7 @@ import { Button, Dialog } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import Pagination from '@/components/Pagination/Pagination';
 import { QUERY_KEYS } from '@/constants/queryKey';
-import { GetProductLikesParams, WishlistPageProps } from '@/types/LikeTypes';
+import type { GetProductLikesParams, WishlistPageProps } from '@/types/LikeTypes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { ChangeEvent, useState } from 'react';
