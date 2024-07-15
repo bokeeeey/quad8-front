@@ -14,7 +14,7 @@ interface WishCheckBoxProps {
 }
 
 export default function WishCheckBox({ children, productId, onChange, isChecked }: WishCheckBoxProps) {
-  const handleOnChange = () => {
+  const handleChange = () => {
     onChange(productId);
   };
 
@@ -25,7 +25,7 @@ export default function WishCheckBox({ children, productId, onChange, isChecked 
         id={`select-item-${productId}`}
         className={cn('select-item-input')}
         checked={isChecked}
-        onChange={handleOnChange}
+        onChange={handleChange}
       />
       <label htmlFor={`select-item-${productId}`} className={cn('select-item-label')}>
         {children}

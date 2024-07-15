@@ -9,9 +9,9 @@ export default function AOSWrapper({ children }: PropsWithChildren) {
     AOS.init({
       duration: 1500,
       easing: 'ease-in-out',
-      once: false,
+      once: true,
     });
   }, []);
 
-  return <>{children}</>;
+  return <div>{children}</div>;
 }
