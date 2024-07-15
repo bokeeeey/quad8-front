@@ -13,9 +13,13 @@ const cn = classNames.bind(styles);
 interface CountInputProps {
   value?: number;
   onChange?: (value: number) => void;
+  onBlur?: () => void;
 }
 
-export default forwardRef<HTMLInputElement, CountInputProps>(function CountInput({ value, onChange }, ref, ...rest) {
+export default forwardRef<HTMLInputElement, CountInputProps>(function CountInput(
+  { value, onChange, onBlur, ...rest },
+  ref,
+) {
   const [count, setCount] = useState<number | ''>(value ?? 1);
   const handleClickButton = (type: 'decrease' | 'increase') => {
     if (type === 'decrease') {
@@ -68,6 +72,9 @@ export default forwardRef<HTMLInputElement, CountInputProps>(function CountInput
     setCount(newValue);
     if (onChange) {
       onChange(newValue);
+    }
+    if (onBlur) {
+      onBlur();
     }
   };
 
