@@ -25,14 +25,15 @@ export default function ReviewModalTest() {
   };
 
   const handleSuccessReview = () => {
-    // console.log('리뷰 작성');
+    setIsModalOpen(false);
   };
 
   const PRODUCT_DATA = {
-    orderId: 12345,
-    option: '옵션입니다',
-    productImgUrl: '',
-    productName: '상품 이름',
+    productId: 125,
+    orderId: 188,
+    option: '바이올렛축',
+    productImgUrl: 'https://cdn.imweb.me/thumbnail/20220404/12007f769b366.jpg',
+    productName: '게이트론 무보강 스테빌라이저(스크류/나사 체결)',
   };
 
   return (
@@ -54,7 +55,7 @@ export default function ReviewModalTest() {
         button
       </Button>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <WriteEditModal reviewType='customReview' onSuccessReview={handleSuccessReview} productData={PRODUCT_DATA} />
+        <WriteEditModal reviewType='otherReview' onSuccessReview={handleSuccessReview} productData={PRODUCT_DATA} />
       </Modal>
     </div>
   );

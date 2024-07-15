@@ -5,8 +5,9 @@ import Image from 'next/image';
 import classNames from 'classnames/bind';
 import { UseFormRegister, FieldValues, UseFormSetValue } from 'react-hook-form';
 
-import { CameraIcon, DeleteIcon } from '@/public/index';
+import { CameraIcon, DeleteIcon, keydeukProfileImg } from '@/public/index';
 import { IMAGE_BLUR } from '@/constants/blurImage';
+
 import styles from './ImageInput.module.scss';
 
 const cn = classNames.bind(styles);
@@ -21,11 +22,19 @@ interface ImageInputProps {
   setValue: UseFormSetValue<FieldValues>;
   editCustomImages?: CustomImagesType[];
   onSaveDeletedImageId?: (id: number) => void;
+  isCustom: boolean;
 }
 
-export default function ImageInput({ register, setValue, editCustomImages, onSaveDeletedImageId }: ImageInputProps) {
+export default function ImageInput({
+  register,
+  setValue,
+  editCustomImages,
+  onSaveDeletedImageId,
+  isCustom,
+}: ImageInputProps) {
   const [selectedImageUrls, setSelectedImageUrls] = useState<string[]>([]);
   const [selectedImageFiles, setSelectedImageFiles] = useState<File[]>([]);
+  const [isImageError, setIsImageError] = useState<boolean>(false);
 
   useEffect(() => {
     if (editCustomImages) {
@@ -77,12 +86,13 @@ export default function ImageInput({ register, setValue, editCustomImages, onSav
             <div key={imageUrl} className={cn('image-wrapper')}>
               <Image
                 alt='선택된 이미지'
-                src={imageUrl}
+                src={isImageError ? keydeukProfileImg : imageUrl}
                 fill
                 className={cn('image')}
                 priority
                 placeholder={IMAGE_BLUR.placeholder}
                 blurDataURL={IMAGE_BLUR.blurDataURL}
+                onError={() => setIsImageError(true)}
               />
               <div className={cn('delete-image-icon')} onClick={(e) => handleClickDeleteImage(e, index)}>
                 <DeleteIcon fill='#ffffff' width={32} height={32} />
@@ -105,7 +115,7 @@ export default function ImageInput({ register, setValue, editCustomImages, onSav
             id='imageInput'
             {...register('files', {
               onChange: handleChangeImage,
-              validate: () => selectedImageUrls.length > 0 && true,
+              ...(isCustom && { validate: () => selectedImageUrls.length > 0 && true }),
             })}
           />
         </div>

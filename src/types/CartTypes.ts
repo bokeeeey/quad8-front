@@ -9,7 +9,7 @@ export interface CustomDataType extends Omit<CustomKeyboardAPITypes, 'imgBase64'
 
 export interface ShopDataType {
   id: number;
-  prductId: number;
+  productId: number;
   optionId: number | null;
   optionName: string | null;
   price: number;
@@ -17,7 +17,7 @@ export interface ShopDataType {
   thumbsnail: string;
   count: number;
   classification: 'SHOP';
-  category: 'keyboard' | 'keycap' | 'etc';
+  category: 'keyboard' | 'keycap' | 'switch' | 'etc';
 }
 
 export interface CartAPIDataType {

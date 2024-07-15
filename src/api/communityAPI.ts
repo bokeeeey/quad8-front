@@ -61,6 +61,26 @@ export const getPostDetail = async (id: number) => {
   }
 };
 
+export const getCommentsInfiniteScroll = async ({
+  communityId,
+  commentId,
+}: {
+  communityId: number;
+  commentId: number;
+}) => {
+  try {
+    const res = await fetch(`${BASE_URL}/api/v1/community/comment/${communityId}/${commentId}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const postComment = async ({ id, content }: { id: number; content: string }) => {
   const token = await getCookie('accessToken');
 

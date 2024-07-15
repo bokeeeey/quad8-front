@@ -38,7 +38,7 @@ export async function getProductLikes({ page, size }: GetProductLikesParams): Pr
   }
 }
 
-export const deleteProductLikes = async (productId: number[]) => {
+export const deleteProductLikes = async (productId: number[][]) => {
   const token = await getCookie('accessToken');
 
   try {

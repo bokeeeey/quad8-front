@@ -7,11 +7,9 @@ import { getAllCommunityPost } from '@/api/communityAPI';
 import type {
   CommunityParamsType,
   CommunityPostCardDataType,
-  CommunityPostCardDetailDataType,
+  CommunityAllPostCardDataType,
 } from '@/types/CommunityTypes';
 import PostCard from './PostCard';
-import WritePostButton from './WritePostButton';
-import SortDropdown from './SortDropdown';
 
 import styles from './PostCardList.module.scss';
 
@@ -19,7 +17,7 @@ const cn = classNames.bind(styles);
 
 interface CommunityPageProps {
   searchParams: { [key: string]: string | undefined };
-  initialData: CommunityPostCardDetailDataType;
+  initialData: CommunityPostCardDataType[];
 }
 
 export default function PostCardList({ searchParams, initialData }: CommunityPageProps) {
@@ -29,21 +27,17 @@ export default function PostCardList({ searchParams, initialData }: CommunityPag
     size: searchParams.size || '16',
   };
 
-  const { data: communityData, isLoading } = useQuery({
-    queryKey: ['postCardsList', searchParams],
+  const { data: communityData, isPending } = useQuery<CommunityAllPostCardDataType>({
+    queryKey: ['postCardsList'],
     queryFn: () => getAllCommunityPost(getAllCommunityParams),
   });
 
-  const content = isLoading || !communityData ? initialData : communityData.content;
+  const content = isPending || !communityData ? initialData : communityData.content;
 
   return (
-    <div className={cn('container')}>
-      <div className={cn('filter-write-button-wrapper')}>
-        <SortDropdown />
-        <WritePostButton />
-      </div>
+    <div>
       <div className={cn('post-wrapper')}>
-        {content.map((cardData: CommunityPostCardDataType) => (
+        {content.map((cardData) => (
           <PostCard key={cardData.id} cardData={cardData} />
         ))}
       </div>

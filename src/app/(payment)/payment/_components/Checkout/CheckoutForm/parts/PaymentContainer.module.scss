@@ -1,0 +1,17 @@
+.container {
+  width: 100%;
+
+  .payment-button-wrap {
+    @include flex-column(4rem);
+
+    align-items: center;
+    margin-top: 4rem;
+
+    .payment-button {
+      @include pretendard-18-500;
+
+      width: 34.8rem;
+      padding: 2rem 4rem;
+    }
+  }
+}
