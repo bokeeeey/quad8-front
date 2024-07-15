@@ -3,6 +3,8 @@ export const ROUTER = {
   CUSTOM_KEYBOARD: '/custom-keyboard',
   COMMUNITY: '/community',
 
+  SEARCH: '/search',
+
   AHTH: {
     SIGN_UP: '/sign-up',
   },

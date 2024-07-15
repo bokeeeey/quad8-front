@@ -27,7 +27,7 @@ export const getCartData = async () => {
   const accessToken = await getCookie('accessToken');
   try {
     const res = await fetch(`${BASE_URL}/api/v1/cart/get`, {
-      cache: 'no-store',
+      cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,

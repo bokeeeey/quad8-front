@@ -17,6 +17,7 @@ export default function LogoutButton() {
     queryClient.invalidateQueries({
       queryKey: ['postCardsList'],
     });
+    deleteCookie('refreshToken');
     router.refresh();
   };
 

@@ -1,22 +1,20 @@
 @mixin flex-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 100%;
 }
 
 .header {
+  display: flex;
   position: sticky;
   z-index: $zindex-fixed + 1;
   top: 0;
-  height: 8rem;
-  border-bottom: 0.1rem solid $gray-10;
+  align-items: center;
+  width: 100%;
   background-color: $white;
   text-decoration: none;
 }
 
 .bg-black {
-  border-bottom: 0.1rem solid $black;
   background-color: $black;
 }
 
@@ -24,13 +22,12 @@
   @include flex-wrapper;
   @include poppins-18-600;
 
+  justify-content: space-between;
   width: 100%;
-  min-width: 112rem;
-  max-width: 192rem;
-  margin: 0 auto;
+  height: 8rem;
   padding: 0 12rem;
+  border-bottom: 0.1rem solid $gray-10;
   color: $gray-50;
-  gap: 4rem;
 
   a:hover,
   button:hover {
@@ -40,31 +37,19 @@
   .right-wrapper {
     @include flex-wrapper;
 
-    flex-grow: 2;
-    width: 100%;
-    max-width: 64.303rem;
-    gap: 2rem;
+    gap: 4rem;
 
-    .logo {
-      flex-grow: 1;
-
-      .logo-icon {
-        fill: $primary;
-      }
+    .logo-icon {
+      fill: $primary;
     }
 
     .button-wrapper {
       @include flex-wrapper;
 
       gap: 4rem;
-      flex-grow: 2;
 
       .current-page {
         color: $primary;
-      }
-
-      .button {
-        flex-shrink: 0;
       }
     }
   }
@@ -72,17 +57,10 @@
   .left-wrapper {
     @include flex-wrapper;
 
-    gap: 4rem;
-    flex-grow: 1;
+    gap: 2rem;
 
-    .status-wrapper {
-      @include flex-wrapper;
-
-      gap: 2rem;
-
-      .user-icon {
-        height: 3.1rem;
-      }
+    .user-icon {
+      height: 3.1rem;
     }
 
     .user-white {
@@ -103,7 +81,12 @@
   }
 }
 
+.profile-image {
+  border-radius: 100%;
+}
+
 .black {
+  border-color: $black;
   background-color: $black;
 
   a:hover,
