@@ -1,0 +1,86 @@
+.wrapper {
+  @include flex-column(2rem);
+
+  padding: 2rem 0;
+  border: 0.1rem solid $gray-20;
+  border-radius: 2rem;
+  background-color: $white;
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.delete-all {
+  @include poppins-14-400;
+}
+
+.history-wrapper {
+  @include flex-column(0);
+}
+
+.history-item-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+  border-radius: 1rem;
+  background-color: $white;
+  color: $gray-50;
+  cursor: pointer;
+
+  .delete-icon {
+    fill: $gray-50;
+
+    &:hover {
+      fill: $black;
+    }
+  }
+}
+
+.keyword {
+  @include poppins-18-400;
+
+  padding-right: 2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bg-black {
+  background-color: $black;
+  color: $white;
+
+  .delete-icon {
+    fill: $white;
+  }
+}
+
+.focus {
+  background-color: $primary-20;
+}
+
+.delete-button {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.focus-black {
+  background-color: $gray-10;
+
+  .delete-icon {
+    fill: $gray-50;
+  }
+
+  color: $gray-50;
+}
+
+.hollow-wrapper {
+  @include flex-center;
+  @include poppins-14-400;
+
+  height: 18rem;
+}

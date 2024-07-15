@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import classNames from 'classnames/bind';
 
 import Modal from '../Modal/Modal';
@@ -29,6 +30,10 @@ interface ConfirmDialogProps extends BaseDialogProps {
 type DialogProps = AlertDialogProps | ConfirmDialogProps;
 
 export default function Dialog({ type, isOpen, onClick, buttonText, iconType, message }: DialogProps) {
+  const handleClickButton = (e: MouseEvent<HTMLButtonElement>, callback: () => void) => {
+    e.stopPropagation();
+    callback();
+  };
   return (
     <Modal isOpen={isOpen} onClose={() => {}}>
       <div className={cn('wrapper')}>
@@ -46,13 +51,19 @@ export default function Dialog({ type, isOpen, onClick, buttonText, iconType, me
         </div>
         <div className={cn('button-wrapper')}>
           {type === 'confirm' && (
-            <Button backgroundColor='background-gray-40' onClick={onClick.left} className={cn('button-left')}>
+            <Button
+              backgroundColor='background-gray-40'
+              onClick={(e: MouseEvent<HTMLButtonElement>) => handleClickButton(e, onClick.left)}
+              className={cn('button-left')}
+            >
               {buttonText.left}
             </Button>
           )}
           <Button
             backgroundColor='background-primary'
-            onClick={type === 'confirm' ? onClick.right : onClick}
+            onClick={(e: MouseEvent<HTMLButtonElement>) =>
+              type === 'confirm' ? handleClickButton(e, onClick.right) : handleClickButton(e, onClick)
+            }
             hoverColor='background-primary-60'
           >
             {type === 'confirm' ? buttonText.right : buttonText}
