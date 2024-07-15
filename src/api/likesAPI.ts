@@ -38,7 +38,7 @@ export async function getProductLikes({ page, size }: GetProductLikesParams): Pr
   }
 }
 
-export const deleteProductLikes = async (productId: number[][]) => {
+export const deleteProductLikes = async (productIds: number[]) => {
   const token = await getCookie('accessToken');
 
   try {
@@ -49,7 +49,7 @@ export const deleteProductLikes = async (productId: number[][]) => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        productIds: productId,
+        productIds,
       }),
     });
   } catch (error) {
