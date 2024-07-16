@@ -156,9 +156,6 @@ export default function SearchBox({ isBlack = false, initialValue, onSubmit }: S
         return prev - 1;
       });
     }
-    if (inputRef.current) {
-      inputRef.current.scrollLeft = inputRef.current?.scrollWidth;
-    }
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {

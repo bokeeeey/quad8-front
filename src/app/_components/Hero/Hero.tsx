@@ -18,7 +18,6 @@ export default function Hero() {
                 alt={`배경 이미지 ${i}`}
                 className={cn('hero-item')}
                 sizes='(max-width: 600px) 480px, (max-width: 1200px) 800px, 1200px'
-                placeholder='empty'
               />
             ))}
           </div>

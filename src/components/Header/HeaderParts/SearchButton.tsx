@@ -43,6 +43,10 @@ export default function SearchButton({ isBlack }: SearchBoxProps) {
     }
   };
 
+  const handleSubmitSearch = () => {
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     setIsRender(false);
   }, [pathName]);
@@ -58,7 +62,7 @@ export default function SearchButton({ isBlack }: SearchBoxProps) {
         >
           <div className={cn('wrapper', { 'slide-out': !isOpen, 'bg-black': isBlack })} ref={wrapperRef}>
             <div className={cn('search-box-wrapper')}>
-              <SearchBox isBlack={isBlack} onSubmit={() => setIsOpen(false)} />
+              <SearchBox isBlack={isBlack} onSubmit={handleSubmitSearch} />
             </div>
           </div>
         </div>
