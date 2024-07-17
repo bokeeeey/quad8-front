@@ -96,6 +96,10 @@ video {
   border: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* HTML5 display-role reset for older browsers */
 article,
 aside,
