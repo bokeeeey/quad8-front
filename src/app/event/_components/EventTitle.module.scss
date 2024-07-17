@@ -1,0 +1,17 @@
+.title-wrap {
+  color: $black;
+  text-align: center;
+}
+
+.title-top {
+  padding-top: 16rem;
+  @include flex-center;
+
+  gap: 0.8rem;
+  @include pretendard-32-600;
+}
+
+.main-title {
+  padding-top: 2rem;
+  @include pretendard-60-800;
+}

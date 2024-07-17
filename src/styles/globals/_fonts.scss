@@ -108,12 +108,28 @@
   @include font-mixin('Pretendard', 3, 700);
 }
 
+@mixin pretendard-30-600 {
+  @include font-mixin('Pretendard', 3, 600);
+}
+
+@mixin pretendard-32-600 {
+  @include font-mixin('Pretendard', 3.2, 600);
+}
+
 @mixin pretendard-40-700 {
   @include font-mixin('Pretendard', 4, 700);
 }
 
 @mixin pretendard-50-100 {
   @include font-mixin('Pretendard', 5, 100);
+}
+
+@mixin pretendard-60-700 {
+  @include font-mixin('Pretendard', 6, 700);
+}
+
+@mixin pretendard-60-800 {
+  @include font-mixin('Pretendard', 6, 800);
 }
 
 @mixin pretendard-70-700 {
