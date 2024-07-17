@@ -3,11 +3,11 @@
 import { deleteCommunityLikes, deleteProductLikes, postCommunityLikes, postProductLikes } from '@/api/likesAPI';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { HeartIcon } from '@/public/index';
+import { CommunityPostCardDataType } from '@/types/CommunityTypes';
 import { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { MouseEvent, useState } from 'react';
-import { CommunityPostCardDataType } from '@/types/CommunityTypes';
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -39,7 +39,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   const { mutate: likeDetailMutation } = useMutation({
     mutationFn: async ({ itemId, itemIsLiked }: LikeMutationProps) => {
       if (itemIsLiked) {
-        await deleteProductLikes(itemId);
+        await deleteProductLikes([itemId]);
       } else {
         await postProductLikes(itemId);
       }

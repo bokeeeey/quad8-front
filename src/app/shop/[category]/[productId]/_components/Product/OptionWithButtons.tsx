@@ -6,7 +6,7 @@ import { Button, CountInput, Dropdown } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { ROUTER } from '@/constants/route';
-import type { CartProductType, PostRecentProductsParams, ProductType } from '@/types/ProductTypes';
+import type { CartProductType, ProductType } from '@/types/ProductTypes';
 import { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
@@ -133,12 +133,12 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
   };
 
   const { mutate: addRecentProduct } = useMutation({
-    mutationFn: ({ uId, pId }: PostRecentProductsParams) => postRecentProducts(uId, pId),
+    mutationFn: (pId: number) => postRecentProducts(pId),
   });
 
   useEffect(() => {
     if (userData?.data && productId) {
-      addRecentProduct({ uId: userData.data.id, pId: productId });
+      addRecentProduct(productId);
     }
   }, [userData?.data, productId, addRecentProduct]);
 

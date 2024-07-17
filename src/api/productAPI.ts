@@ -7,7 +7,7 @@ import type {
   TabType,
 } from '@/types/ProductItem';
 
-import type { ProductType } from '@/types/ProductTypes';
+import type { ProductType, RecentProductType } from '@/types/ProductTypes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -119,11 +119,11 @@ export async function getKeydeukBest() {
   }
 }
 
-export const getRecentProducts = async (userId: number | undefined): Promise<ProductType[]> => {
+export const getRecentProducts = async (): Promise<RecentProductType[]> => {
   const token = await getCookie('accessToken');
 
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/user/recent-products/${userId}`, {
+    const res = await fetch(`${BASE_URL}/api/v1/user/recent-products`, {
       cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
@@ -139,11 +139,11 @@ export const getRecentProducts = async (userId: number | undefined): Promise<Pro
   }
 };
 
-export const postRecentProducts = async (userId: number, productId: number) => {
+export const postRecentProducts = async (productId: number) => {
   const token = await getCookie('accessToken');
 
   try {
-    await fetch(`${BASE_URL}/api/v1/user/recent-products/${userId}?productId=${productId}`, {
+    await fetch(`${BASE_URL}/api/v1/user/recent-products/${productId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

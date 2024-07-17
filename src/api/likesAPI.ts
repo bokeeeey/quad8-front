@@ -18,16 +18,19 @@ export const postProductLikes = async (productId: number) => {
   }
 };
 
-export const deleteProductLikes = async (productId: number) => {
+export const deleteProductLikes = async (productIds: number[]) => {
   const token = await getCookie('accessToken');
 
   try {
-    await fetch(`${BASE_URL}/api/v1/likes/${productId}`, {
+    await fetch(`${BASE_URL}/api/v1/likes`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        productIds,
+      }),
     });
   } catch (error) {
     throw error;
