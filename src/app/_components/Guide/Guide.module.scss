@@ -1,8 +1,6 @@
 .card-wrap {
   display: flex;
   justify-content: space-between;
-
-  // padding: 0 4.6rem;
   overflow: hidden;
   border: 0.1rem solid #eee;
   border-radius: 3.6rem;
@@ -42,8 +40,6 @@
 .img-area {
   position: relative;
   min-width: 70rem;
-
-  // height: 100%;
 }
 
 .img-area img {
