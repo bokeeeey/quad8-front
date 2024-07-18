@@ -1,9 +1,15 @@
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { ReactNode } from 'react';
 
-import { getPaymentItemData } from '@/api/orderAPI';
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import { getPaymentData } from '@/api/orderAPI';
+import { getAddresses } from '@/api/shippingAPI';
+import { getUserData } from '@/api/usersAPI';
+import { ROUTER } from '@/constants/route';
+import { getCookie } from '@/libs/manageCookie';
+import { redirect } from 'next/navigation';
 import CheckoutNavigation from './_components/CheckoutNavigation/CheckoutNavigation';
+
 import styles from './layout.module.scss';
 
 const cn = classNames.bind(styles);
@@ -14,14 +20,18 @@ interface CheckoutLayoutProps {
 
 export default async function PaymentPageLayout({ children }: CheckoutLayoutProps) {
   const queryClient = new QueryClient();
+  const orderId = await getCookie('orderId');
 
-  await queryClient.prefetchQuery({ queryKey: ['orderId'] });
+  await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
+  const userData = queryClient.getQueryData(['userData']);
 
-  const orderId = queryClient.getQueryData<string>(['orderId']);
-
-  if (orderId) {
-    await queryClient.prefetchQuery({ queryKey: ['paymentItemData'], queryFn: () => getPaymentItemData(orderId) });
+  if (!userData || !orderId) {
+    redirect(ROUTER.MAIN);
   }
+
+  await queryClient.prefetchQuery({ queryKey: ['paymentData'], queryFn: () => getPaymentData(orderId) });
+
+  await queryClient.prefetchQuery({ queryKey: ['addressesData'], queryFn: getAddresses });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

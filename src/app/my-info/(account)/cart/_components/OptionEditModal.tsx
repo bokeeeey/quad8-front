@@ -115,7 +115,11 @@ export default function OptionEditModal({
       </div>
       <div className={cn('button-wrapper')}>
         <Button onClick={onClickCancel}>취소</Button>
-        <Button onClick={handleClickEditButton} className={cn({ disabled: notChanged })} disabled={notChanged}>
+        <Button
+          onClick={handleClickEditButton}
+          backgroundColor={notChanged ? 'background-gray-40' : 'background-primary'}
+          disabled={notChanged}
+        >
           수정 완료
         </Button>
       </div>

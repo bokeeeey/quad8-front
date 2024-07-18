@@ -1,29 +1,33 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { MouseEvent, useState } from 'react';
+import { useState, forwardRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { calculateTimeDifference } from '@/libs/calculateDate';
-import { VerticalTripleDotIcon } from '@/public/index';
 import type { Users } from '@/types/userType';
 import { PopOver } from '@/components';
 import { deleteComment } from '@/api/communityAPI';
 
+import { communityPopOverOption } from '@/libs/communityPopOverOption';
 import styles from './Comment.module.scss';
 
 const cn = classNames.bind(styles);
 
+interface CommentDataType {
+  id: number;
+  userId: number;
+  nickName: string;
+  imgUrl: string | null;
+  content: string;
+  createdAt: string;
+}
+
 interface CommentProps {
   cardId: number;
-  commentUserId: number;
-  commentId: number;
-  nickname: string;
-  profile: string | null;
-  createdTime: string;
-  comment: string;
+  commentData: CommentDataType;
 }
 
 interface UserDataType {
@@ -32,16 +36,17 @@ interface UserDataType {
   message: string;
 }
 
-export default function Comment({
-  cardId,
-  commentUserId,
-  commentId,
-  nickname,
-  profile,
-  createdTime,
-  comment,
-}: CommentProps) {
+export default forwardRef<HTMLDivElement, CommentProps>(function Comment({ cardId, commentData }, ref) {
   const queryClient = useQueryClient();
+
+  const {
+    id: commentId,
+    userId: commentUserId,
+    nickName: nickname,
+    imgUrl: profile,
+    content: comment,
+    createdAt: createdTime,
+  } = commentData;
   const createdTimeToDate = new Date(createdTime);
 
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
@@ -63,64 +68,47 @@ export default function Comment({
     },
   });
 
-  const handleClickPopOver = (e: MouseEvent<HTMLDivElement>) => {
+  const handleClickPopOver = () => {
     setIsOpenPopOver(!isOpenPopOver);
-    e.stopPropagation();
   };
 
   const handleClosePopOver = () => {
     setIsOpenPopOver(false);
   };
 
-  const handleClickDelete = (e: MouseEvent<HTMLDivElement>) => {
+  const handleClickDelete = () => {
     deleteCommentMutation(commentId);
-    e.stopPropagation();
   };
 
-  const handleClickReport = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
+  const handleClickEdit = () => {};
 
-  const MY_POPOVER_OPTION = [
-    {
-      label: '삭제하기',
-      onClick: handleClickDelete,
-    },
-    {
-      label: '신고하기',
-      onClick: handleClickReport,
-    },
-  ];
-
-  const OTHERS_POPOVER_OPTION = [
-    {
-      label: '신고하기',
-      onClick: handleClickReport,
-    },
-  ];
+  const handleClickReport = () => {};
 
   const timeAgo = calculateTimeDifference(createdTimeToDate);
+
   return (
-    <div className={cn('container')}>
-      <ProfileImage profileImage={profile || null} />
+    <div className={cn('container')} ref={ref}>
+      <ProfileImage profileImage={profile && profile} />
       <div className={cn('content-wrapper')}>
         <div className={cn('user-info-wrapper')}>
           <div className={cn('user-info')}>
             <p className={cn('nickname')}>{nickname}</p>
             <p className={cn('time-ago')}>{timeAgo}</p>
           </div>
-          <div className={cn('dot-icon')} onClick={(e) => handleClickPopOver(e)}>
-            <VerticalTripleDotIcon />
-            {isOpenPopOver && (
-              <PopOver
-                optionsData={userID === commentUserId ? MY_POPOVER_OPTION : OTHERS_POPOVER_OPTION}
-                onHandleClose={handleClosePopOver}
-              />
-            )}
-          </div>
+          <PopOver
+            optionsData={communityPopOverOption({
+              isMine: userID === commentUserId,
+              onClickDelete: handleClickDelete,
+              onClickEdit: handleClickEdit,
+              onClickReport: handleClickReport,
+            })}
+            isOpenPopOver={isOpenPopOver}
+            onHandleOpen={handleClickPopOver}
+            onHandleClose={handleClosePopOver}
+          />
         </div>
         <div className={cn('content')}>{comment}</div>
       </div>
     </div>
   );
-}
+});

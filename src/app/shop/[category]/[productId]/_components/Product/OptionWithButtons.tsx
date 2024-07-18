@@ -6,8 +6,12 @@ import { Button, CountInput, Dropdown } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { ROUTER } from '@/constants/route';
+
+import type { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
 import type { CartProductType, ProductType } from '@/types/ProductTypes';
-import { Users } from '@/types/userType';
+import type { Users } from '@/types/userType';
+
+import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
@@ -95,6 +99,21 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
   const handleAddCartProduct = (data: CartProductType) => {
     addCartProduct(data, {
       onSuccess: () => {
+        const cartData = queryClient.getQueryData<CartAPIDataType>(['cartData']) ?? null;
+        const newShopData: ShopDataType = {
+          id: Math.random(),
+          productId: data.productId,
+          optionId: data.switchOptionId ?? null,
+          optionName: productData.name,
+          price: productData.price * data.count,
+          productTitle: productData.name,
+          thumbsnail: productData.thubmnailList[0].imgUrl,
+          count: data.count,
+          classification: 'SHOP',
+          category: productData.categoryName,
+        };
+        const newValue = getUpdatedCartCountData(cartData, [newShopData]);
+        queryClient.setQueryData(['cartData'], newValue);
         queryClient.invalidateQueries({ queryKey: ['cartData'] });
         toast.success('상품이 장바구니에 담겼습니다.');
         setSelectedOptions([]);

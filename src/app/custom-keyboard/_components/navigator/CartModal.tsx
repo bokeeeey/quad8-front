@@ -19,6 +19,8 @@ import { toast } from 'react-toastify';
 import { ROUTER } from '@/constants/route';
 import { getCookie } from '@/libs/manageCookie';
 import SignInModal from '@/components/SignInModal/SignInModal';
+import { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
+import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
 import CartModalOptionCard from './parts/CartModalOptionCard';
 
 import styles from './CartModal.module.scss';
@@ -177,6 +179,35 @@ export default function CartModal({
           toast.error('장바구니 담기에 실패했습니다');
         },
         onSuccess: () => {
+          const cartData = queryClient.getQueryData<CartAPIDataType>(['cartData']) ?? null;
+          const newShopData: ShopDataType[] = optionData.map((element) => ({
+            id: -1,
+            productId: element.id,
+            optionId: null,
+            optionName: element.name,
+            price: element.price,
+            productTitle: element.name,
+            thumbsnail: element.thumbnail,
+            count: 1,
+            classification: 'SHOP',
+            category: 'etc',
+          }));
+          const newValue = getUpdatedCartCountData(cartData, newShopData);
+          const temporaryId = Math.ceil(Math.random() * 10000);
+          queryClient.setQueryData(['cartData'], {
+            totalCount: newValue.totalCount + 1,
+            SHOP: [...newValue.SHOP],
+            CUSTOM: [
+              ...newValue.CUSTOM,
+              {
+                id: temporaryId,
+                productId: temporaryId,
+                imgUrl: data.imgBase64,
+                ...data,
+                classification: 'CUSTOM',
+              },
+            ],
+          });
           queryClient.invalidateQueries({ queryKey: ['cartData'] });
           toast.success('장바구니에 담았습니다', {
             onClose: () => {
@@ -220,6 +251,7 @@ export default function CartModal({
   };
 
   const handleClickDeleteConfirm = () => {
+    changeConfirmDialog(false);
     if (!deleteId) {
       toast.error('삭제할 제품을 찾지 못하였습니다');
       return;

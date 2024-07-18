@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 
 import { Button, CustomOption } from '@/components';
@@ -28,6 +28,8 @@ export default function OrderListModal({
 }: OrderListModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const [isImageError, setIsImageError] = useState<boolean>(false);
+
   const handleClickWriteButton = () => {
     onOpenReviewModal();
   };
@@ -44,13 +46,14 @@ export default function OrderListModal({
           >
             <div className={cn('keyboard-image')}>
               <Image
-                src={order.imgUrl || keydeukImg}
+                src={isImageError || !order.imgUrl ? keydeukImg : order.imgUrl}
                 alt='커스텀 키보드 이미지'
                 width={104}
                 height={104}
                 priority
                 placeholder={IMAGE_BLUR.placeholder}
                 blurDataURL={IMAGE_BLUR.blurDataURL}
+                onError={() => setIsImageError}
               />
             </div>
             <div className={cn('keyboard-info-wrapper')}>

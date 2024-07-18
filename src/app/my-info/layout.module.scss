@@ -1,14 +1,11 @@
 .layout {
   display: flex;
   width: 100%;
-  max-width: 192rem;
-  min-height: 76.3vh;
-  margin: 0 auto;
   padding: 10.6rem 12rem 11.2rem;
   overflow: auto;
   gap: 3.2rem;
 
   .page {
-    width: 100%;
+    width: calc(100% - 19rem);
   }
 }

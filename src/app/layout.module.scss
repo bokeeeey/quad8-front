@@ -1,0 +1,11 @@
+.wrapper {
+  @include flex-column(0);
+
+  height: 100%;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  flex: 1;
+  height: 100%;
+}
