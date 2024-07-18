@@ -22,7 +22,7 @@ interface AddCartModalProps {
 export default function AddCartModal({ productId, closeModal }: AddCartModalProps) {
   const queryClient = useQueryClient();
 
-  const [optionId, setOptionId] = useState<number | undefined>(undefined);
+  const [optionId, setOptionId] = useState<number>(-1);
   const [count, setCount] = useState(1);
 
   const { data: productData, isPending: isPendingProductData } = useQuery<ProductType>({
