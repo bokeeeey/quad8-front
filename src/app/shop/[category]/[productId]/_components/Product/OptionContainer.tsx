@@ -15,7 +15,6 @@ interface OptionContainerProps {
 }
 
 export default function OptionContainer({ optionText, price, count, updateCount, deleteOption }: OptionContainerProps) {
-  console.log(updateCount);
   const handleUpdateCount = useCallback(
     (value: number) => {
       updateCount(value);

@@ -1,7 +1,7 @@
 'use client';
 
 import { postCart } from '@/api/cartAPI';
-import { postRecentProducts } from '@/api/productAPI';
+import { postCreateOrder } from '@/api/orderAPI';
 import { Button, CountInput, Dropdown } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import SignInModal from '@/components/SignInModal/SignInModal';
@@ -12,11 +12,16 @@ import type { CartProductType, ProductType } from '@/types/ProductTypes';
 import type { Users } from '@/types/userType';
 
 import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+
+import { postRecentProducts } from '@/api/productAPI';
+import { setCookie } from '@/libs/manageCookie';
+import { CreateOrderAPIType, CreateOrderResponseType } from '@/types/OrderTypes';
 import OptionContainer from './OptionContainer';
 import styles from './ProductDetail.module.scss';
 
@@ -79,6 +84,9 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
   };
 
   const { mutate: addCartProduct } = useMutation({ mutationFn: (data: CartProductType) => postCart(data) });
+  const { mutate: createOrder } = useMutation({
+    mutationFn: postCreateOrder,
+  });
 
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
@@ -92,6 +100,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
 
     if (optionList && selectedOptions.length === 0) {
       setIsNoOptionModalOpen(true);
+      return true;
     }
     return false;
   };
@@ -145,10 +154,34 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     });
   };
 
-  const handleClickBuyButton = () => {
-    checkUserAndOptions();
+  const handleBuyProduct = (data: CreateOrderAPIType) => {
+    createOrder(data, {
+      onSuccess: (response: CreateOrderResponseType) => {
+        setCookie('orderId', response.data.toString());
+        router.push(ROUTER.MY_PAGE.CHECKOUT);
+      },
+      onError: () => {
+        toast.error('주문 정보 생성에 실패하였습니다');
+      },
+    });
+  };
 
-    router.push(ROUTER.MY_PAGE.CHECKOUT);
+  const handleClickBuyButton = () => {
+    if (checkUserAndOptions()) return;
+
+    if (!optionList) {
+      const noOptionData: CreateOrderAPIType = [{ productId, switchOptionId: null, quantity: noOptionCount }];
+      handleBuyProduct(noOptionData);
+      return;
+    }
+
+    const data = selectedOptions.map((option) => ({
+      productId,
+      switchOptionId: option.id,
+      quantity: option.count,
+    }));
+
+    handleBuyProduct(data);
   };
 
   const { mutate: addRecentProduct } = useMutation({
