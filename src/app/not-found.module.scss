@@ -8,11 +8,11 @@
 }
 
 .title {
-  @include pretendard-70-700;
+  @include pretendard-60-700;
 }
 
 .desc {
-  @include pretendard-50-100;
+  @include pretendard-30-100;
 }
 
 .left {
@@ -20,7 +20,7 @@
 }
 
 .right {
-  width: 60em;
+  width: 80em;
   height: 36rem;
 }
 
@@ -28,7 +28,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.2rem;
-  width: 50rem;
+  width: 45rem;
 }
 
 .button {

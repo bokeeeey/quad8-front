@@ -42,7 +42,9 @@ export default function Pagination({
         {pageNum}
       </span>
     ) : (
-      <Link {...linkProps}>{pageNum}</Link>
+      <Link {...linkProps} className={cn('page')}>
+        {pageNum}
+      </Link>
     );
   };
 

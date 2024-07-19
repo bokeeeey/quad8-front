@@ -1,0 +1,48 @@
+.item-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5rem;
+}
+
+.info-area {
+  display: flex;
+  gap: 2rem;
+}
+
+.info-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.img {
+  position: relative;
+  width: 10.4rem;
+  height: 10.4rem;
+  overflow: hidden;
+  border: 0.1rem solid $gray-7;
+  border-radius: 0.8rem;
+
+  & img {
+    object-fit: cover;
+  }
+}
+
+.name {
+  @include pretendard-16-600;
+
+  color: $black;
+}
+
+.price {
+  @include pretendard-14-400;
+
+  color: $black;
+}
+
+.cart-delete {
+  @include flex-center;
+
+  gap: 2rem;
+}
