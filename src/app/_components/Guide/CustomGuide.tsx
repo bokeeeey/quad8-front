@@ -43,7 +43,7 @@ export default function CustomGuide() {
       <h1 className={cn('title')} data-aos='fade-up'>
         커스텀 용어가 어렵다면 키득이 도와줄게요
       </h1>
-      <p className={cn('sub-title')} data-aos='fade-up' data-aos-once>
+      <p className={cn('sub-title')} data-aos='fade-up'>
         3D 시뮬레이션으로 원하는 느낌 그대로 재현 할 수 있어요
       </p>
       <ul className={cn('guide-list')}>
@@ -51,7 +51,7 @@ export default function CustomGuide() {
           <Guide key={step} step={step} title={title} desc={desc} src={src} />
         ))}
       </ul>
-      <h1 className={cn('title')} data-aos='fade-up' data-aos-once>
+      <h1 className={cn('title')} data-aos='fade-up'>
         키보드 득템할 준비가 되었다면?
       </h1>
 
@@ -61,7 +61,6 @@ export default function CustomGuide() {
         fontSize={24}
         width={320}
         data-aos='fade-up'
-        data-aos-once
         className={cn('button-area')}
       >
         키보드 커스텀 하러 가기
