@@ -1,4 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
+import type { GetProductLikesParams, ProductLikeResponse } from '@/types/LikeTypes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -17,6 +18,25 @@ export const postProductLikes = async (productId: number) => {
     throw error;
   }
 };
+
+export async function getProductLikes({ page, size }: GetProductLikesParams): Promise<ProductLikeResponse> {
+  const token = await getCookie('accessToken');
+
+  try {
+    const response = await fetch(`${BASE_URL}/api/v1/likes/products?page=${page}&size=${size}`, {
+      cache: 'no-cache',
+      headers: {
+        'Cache-Control': 'no-cache',
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+    });
+    const rawData = await response.json();
+
+    return rawData.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export const deleteProductLikes = async (productIds: number[]) => {
   const token = await getCookie('accessToken');

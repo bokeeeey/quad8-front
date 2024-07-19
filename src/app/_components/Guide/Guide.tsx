@@ -13,7 +13,7 @@ interface GuideProp {
 
 export default function Guide({ step, title, desc, src }: GuideProp) {
   return (
-    <li className={cn('card-wrap')}>
+    <li className={cn('card-wrap')} data-aos='fade-up'>
       <div className={cn('text-area')}>
         <em className={cn('badge')}>STEP {step}</em>
         <h3 className={cn('title')}>{title}</h3>
@@ -24,7 +24,12 @@ export default function Guide({ step, title, desc, src }: GuideProp) {
         ))}
       </div>
       <div className={cn('img-area')}>
-        <Image src={src} alt={`STEP ${step}`} fill />
+        <Image
+          src={src}
+          alt={`STEP ${step}`}
+          fill
+          sizes='(max-width: 600px) 480px, (max-width: 1200px) 800px, 1200px'
+        />
       </div>
     </li>
   );

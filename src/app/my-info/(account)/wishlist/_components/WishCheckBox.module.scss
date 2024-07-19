@@ -1,0 +1,29 @@
+.select-item-input {
+  display: none;
+}
+
+.select-item-label {
+  position: relative;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 0.3rem;
+  background-color: $gray-40;
+  cursor: pointer;
+}
+
+.select-item-input:checked + .select-item-label {
+  background-color: $primary;
+}
+
+.select-item-label::before {
+  content: '';
+  position: absolute;
+  top: 0.1rem;
+  left: 0.5rem;
+  width: 0.6rem;
+  height: 1rem;
+  transform: rotate(45deg) scale(0.8);
+  border: solid $white;
+  border-width: 0 0.3rem 0.3rem 0;
+  border-radius: 2%;
+}

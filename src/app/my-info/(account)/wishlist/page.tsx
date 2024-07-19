@@ -1,5 +1,6 @@
-import { MyInfoEmptyCase } from '../../_components';
+import type { WishlistPageProps } from '@/types/LikeTypes';
+import WishList from './_components/WishList';
 
-export default function WishlistPage() {
-  return <MyInfoEmptyCase message='찜한 상품이 없습니다.' />;
+export default function WishlistPage({ searchParams }: WishlistPageProps) {
+  return <WishList searchParams={searchParams} />;
 }
