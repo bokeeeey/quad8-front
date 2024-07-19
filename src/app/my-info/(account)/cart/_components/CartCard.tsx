@@ -97,7 +97,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
             quantity: 1,
           }
         : {
-            productId: cardData.prductId,
+            productId: cardData.productId,
             switchOptionId: cardData.optionId,
             quantity: cardData.count,
           };
@@ -118,7 +118,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
           <CardCheckBox id={cardData.id} type={type} />
         </div>
         {type === 'shop' ? (
-          <Link className={cn('product-wrapper')} href={`/shop/${cardData.category}/${cardData.prductId}`}>
+          <Link className={cn('product-wrapper')} href={`/shop/${cardData.category}/${cardData.productId}`}>
             <Image src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
             <div className={cn('information-wrapper')}>
               {type === 'shop' && <div className={cn('type')}>{category}</div>}
@@ -149,7 +149,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
         <Modal isOpen={isOpenModal} onClose={handleCloseModal}>
           <OptionEditModal
             id={cardData.id}
-            productId={cardData.prductId}
+            productId={cardData.productId}
             currentCount={cardData.count}
             currentOptionId={cardData.optionId}
             onClickCancel={handleCloseModal}

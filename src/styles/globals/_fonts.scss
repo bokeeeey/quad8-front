@@ -1,42 +1,3 @@
-@font-face {
-  font-family: Pretendard-Thin;
-  font-style: normal;
-  font-weight: 100;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff') format('woff');
-}
-
-@font-face {
-  font-family: Pretendard-Regular;
-  font-style: normal;
-  font-weight: 400;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-}
-@font-face {
-  font-family: Pretendard-Medium;
-  font-style: normal;
-  font-weight: 500;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff') format('woff');
-}
-@font-face {
-  font-family: Pretendard-SemiBold;
-  font-style: normal;
-  font-weight: 600;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff') format('woff');
-}
-@font-face {
-  font-family: Pretendard-Bold;
-  font-style: normal;
-  font-weight: 700;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
-}
-
-@font-face {
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: 400;
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/Poppins/Poppins-Regular.woff2') format('woff2');
-}
-
 @function line-height-calc($font-family, $font-size) {
   @if $font-family == 'Pretendard' {
     @return if($font-size >= 3.5, $font-size + 1rem, $font-size + 0.8rem);
@@ -143,6 +104,18 @@
   @include font-mixin('Pretendard', 2.4, 700);
 }
 
+@mixin pretendard-30-400 {
+  @include font-mixin('Pretendard', 3, 400);
+}
+
+@mixin pretendard-30-500 {
+  @include font-mixin('Pretendard', 3, 500);
+}
+
+@mixin pretendard-30-600 {
+  @include font-mixin('Pretendard', 3, 600);
+}
+
 @mixin pretendard-30-700 {
   @include font-mixin('Pretendard', 3, 700);
 }
@@ -151,12 +124,12 @@
   @include font-mixin('Pretendard', 4, 700);
 }
 
-@mixin pretendard-50-100 {
-  @include font-mixin('Pretendard', 5, 100);
+@mixin pretendard-30-100 {
+  @include font-mixin('Pretendard', 3, 100);
 }
 
-@mixin pretendard-70-700 {
-  @include font-mixin('Pretendard', 7, 700);
+@mixin pretendard-60-700 {
+  @include font-mixin('Pretendard', 6, 700);
 }
 
 @mixin pretendard-80-700 {
@@ -164,6 +137,14 @@
 }
 
 // Poppins Mixin들
+@mixin poppins-14-400 {
+  @include font-mixin('Poppins', 1.4, 400);
+}
+
+@mixin poppins-16-500 {
+  @include font-mixin('Poppins', 1.6, 500);
+}
+
 @mixin poppins-18-400 {
   @include font-mixin('Poppins', 1.8, 400);
 }
@@ -174,4 +155,8 @@
 
 @mixin poppins-18-600 {
   @include font-mixin('Poppins', 1.8, 600);
+}
+
+@mixin poppins-22-500 {
+  @include font-mixin('Poppins', 2.2, 500);
 }

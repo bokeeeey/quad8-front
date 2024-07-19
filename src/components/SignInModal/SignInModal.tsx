@@ -8,9 +8,12 @@ import { setCookie } from '@/libs/manageCookie';
 import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
 import type { FetchSignInInfoTypes } from '@/types/authTypes';
 import { useRouter } from 'next/navigation';
+
+import { useQueryClient } from '@tanstack/react-query';
+import Modal from '../Modal/Modal';
+
 import Button from '../Buttons/Button/Button';
 import InputField from '../InputField/InputField';
-import Modal from '../Modal/Modal';
 
 import styles from './SigninModal.module.scss';
 
@@ -26,6 +29,8 @@ interface SigninModalProps {
 
 export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const {
     register,
     formState: { errors },
@@ -57,6 +62,9 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
         onClose();
         toast.success('로그인이 성공적으로 완료되었습니다.', {
           autoClose: 2000,
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['postCardsList'],
         });
       } else if (responseData.status === 'FAIL') {
         toast.error(responseData.message);

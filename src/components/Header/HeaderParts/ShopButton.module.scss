@@ -15,14 +15,13 @@
 
 .sub-menu-layout {
   position: absolute;
-  z-index: inherit;
+  z-index: $zindex-dropdown;
   top: 100%;
   padding-top: 2rem;
 }
 
 .sub-menu-wrapper {
   display: flex;
-  z-index: inherit;
   padding: 0.6rem;
   border: 0.1rem solid $primary;
   border-radius: 1rem;
@@ -32,7 +31,6 @@
 
 .menu-button {
   display: flex;
-  z-index: $zindex-dropdown;
   align-items: center;
   justify-content: center;
   width: 10rem;

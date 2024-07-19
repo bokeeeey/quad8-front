@@ -1,0 +1,56 @@
+.item-list {
+  @include flex-column(2rem);
+}
+
+.check-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button-area {
+  @include flex-center;
+
+  gap: 1.2rem;
+}
+
+.select-item-input {
+  display: none;
+}
+
+.select-item-input:checked + .select-item-label {
+  background-color: $primary;
+}
+
+.select-item-label {
+  display: block;
+  position: relative;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 0.2rem;
+  background-color: $gray-40;
+}
+
+.select-item-label::before {
+  content: '';
+  position: absolute;
+  top: 0.1rem;
+  left: 0.5rem;
+  width: 0.6rem;
+  height: 1rem;
+  transform: rotate(45deg) scale(0.8);
+  border: solid $white;
+  border-width: 0 0.3rem 0.3rem 0;
+  border-radius: 2%;
+}
+
+.select-item-label::after {
+  @include pretendard-18-400;
+
+  content: '전체선택';
+  position: absolute;
+  top: 0;
+  left: calc(100% + 1rem);
+  width: 10rem;
+  line-height: 1.8rem;
+}

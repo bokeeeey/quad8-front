@@ -17,3 +17,11 @@
 .banner img {
   object-fit: contain;
 }
+
+.title {
+  @include pretendard-30-700;
+
+  margin-bottom: 1.6rem;
+  color: $black;
+  text-align: center;
+}
