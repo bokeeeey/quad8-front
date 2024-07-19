@@ -126,6 +126,10 @@ body {
   min-width: 102.5rem;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 menu,
 ol,
 ul {
