@@ -37,7 +37,7 @@ interface TossPaymentsWidgets {
     customerName?: string;
     customerEmail?: string;
     successUrl: string;
-    // failUrl: string;
+    failUrl: string;
   }) => Promise<void>;
 }
 
@@ -108,16 +108,26 @@ export default function PaymentContainer({
     }
 
     try {
-      const paymentResult = await widgets.requestPayment({
+      await widgets.requestPayment({
         orderId: paymentOrderId || '',
         orderName,
         customerName: customerName || '',
         customerEmail: customerEmail || '',
         successUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_SUCCESS}`,
-        // failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
+        failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
       });
+      // const paymentResult = await widgets.requestPayment({
+      //   orderId: paymentOrderId || '',
+      //   orderName,
+      //   customerName: customerName || '',
+      //   customerEmail: customerEmail || '',
+      //   successUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_SUCCESS}`,
+      //   failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
+      // });
 
-      console.log(paymentResult);
+      // 결제 승인 전 뎁스 하나 추가
+
+      // console.log(paymentResult);
 
       // const payload = {
       //   orderId: paymentResult.orderId,
