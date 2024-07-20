@@ -1,7 +1,6 @@
 export interface PaymentConfirmRequest {
-  orderId: number;
+  orderId: string;
   paymentKey: string;
   paymentOrderId: string;
-  amount: number;
-  currency: 'KRW';
+  amount: string;
 }

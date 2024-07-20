@@ -125,9 +125,9 @@ export default function PaymentContainer({
       //   failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
       // });
 
-      // 결제 승인 전 뎁스 하나 추가
-
       // console.log(paymentResult);
+
+      // 결제 승인 전 뎁스 하나 추가
 
       // const payload = {
       //   orderId: paymentResult.orderId,

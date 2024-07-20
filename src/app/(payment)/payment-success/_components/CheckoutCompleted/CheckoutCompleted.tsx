@@ -1,12 +1,15 @@
 'use client';
 
-import { getPayment } from '@/api/orderAPI';
+import { postPaymentConfirm, postPaymentSuccess } from '@/api/paymentAPI';
 import { Button, ItemOverview } from '@/components';
+import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import { formatPhoneNumber } from '@/libs';
 import { OrderItem } from '@/types/OrderTypes';
 import { OrderDetailData } from '@/types/paymentTypes';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import styles from './CheckoutComplete.module.scss';
 
 const cn = classNames.bind(styles);
@@ -16,10 +19,47 @@ interface CheckoutCompletedProps {
 }
 
 export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
+  const searchParams = useSearchParams();
+  // const paymentType = searchParams.get('paymentType') || '';
+  const orderIdFromParams = searchParams.get('orderId') || '';
+  const paymentKey = searchParams.get('paymentKey') || '';
+  const amount = searchParams.get('amount') || '';
+
   const { data: paymentDataResponse } = useQuery<{ data: OrderDetailData }>({
     queryKey: ['paymentDataResponse'],
-    queryFn: () => getPayment(orderId),
   });
+
+  console.log(amount);
+
+  const { mutate: postPaymentSuccessMutation } = useMutation({
+    mutationFn: () => postPaymentSuccess({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
+    onSuccess: (res) => {
+      console.log('paymentSuccess 결과', res);
+    },
+  });
+
+  const { mutate: postPaymentConfirmMutation } = useMutation({
+    mutationFn: () => postPaymentConfirm({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
+    onSuccess: (res) => {
+      console.log('paymentConfirm 결과', res);
+      if (res.status === 'SUCCESS') {
+        setIsConfirmed(true);
+        postPaymentSuccessMutation();
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (orderId && paymentKey && orderIdFromParams && amount) {
+      postPaymentConfirmMutation();
+    }
+  }, [amount, orderId, orderIdFromParams, paymentKey, postPaymentConfirmMutation]);
+
+  if (!isConfirmed) {
+    return <LogoLoading />;
+  }
 
   const { paymentOrderId, shippingAddressResponse, orderItemResponses } = paymentDataResponse?.data ?? {};
 
