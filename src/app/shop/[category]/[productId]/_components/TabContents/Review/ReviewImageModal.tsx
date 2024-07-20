@@ -24,21 +24,21 @@ export default function ReviewImageModal({ productId, reviewId }: ReviewImageMod
   const [currentReviewId, setCurrentReviewId] = useState<number>(reviewId);
   const [currentReview, setCurrentReview] = useState<ReviewDto>();
 
-  const { data } = useQuery<ProductReviewType>({
+  const { data: reviewData } = useQuery<ProductReviewType>({
     queryKey: ['review', productId, currentReviewId],
     queryFn: () => getProductReviews({ productId }),
   });
 
   useEffect(() => {
-    if (data) {
-      const index = data.reviewDtoList.findIndex((review) => review.id === currentReviewId);
+    if (reviewData) {
+      const index = reviewData.reviewDtoList.findIndex((review) => review.id === currentReviewId);
       if (index !== -1) {
         setCurrentReviewIndex(index);
-        setCurrentImage(data.reviewDtoList[index]?.reviewImgs[0]?.imageUrl || '');
-        setCurrentReview(data.reviewDtoList[currentReviewIndex]);
+        setCurrentImage(reviewData.reviewDtoList[index]?.reviewImgs[0]?.imageUrl || '');
+        setCurrentReview(reviewData.reviewDtoList[currentReviewIndex]);
       }
     }
-  }, [data, currentReviewId, currentReviewIndex]);
+  }, [reviewData, currentReviewId, currentReviewIndex]);
 
   const handleClickImage = (value: string) => {
     setCurrentImage(value);
@@ -46,16 +46,16 @@ export default function ReviewImageModal({ productId, reviewId }: ReviewImageMod
 
   const handlePreviousReview = () => {
     setCurrentReviewIndex((prevIndex) => {
-      const newIndex = prevIndex > 0 ? prevIndex - 1 : (data?.reviewDtoList.length ?? 1) - 1;
-      setCurrentReviewId(data?.reviewDtoList[newIndex]?.id ?? reviewId);
+      const newIndex = prevIndex > 0 ? prevIndex - 1 : (reviewData?.reviewDtoList.length ?? 1) - 1;
+      setCurrentReviewId(reviewData?.reviewDtoList[newIndex]?.id ?? reviewId);
       return newIndex;
     });
   };
 
   const handleNextReview = () => {
     setCurrentReviewIndex((prevIndex) => {
-      const newIndex = prevIndex < (data?.reviewDtoList.length ?? 1) - 1 ? prevIndex + 1 : 0;
-      setCurrentReviewId(data?.reviewDtoList[newIndex]?.id ?? reviewId);
+      const newIndex = prevIndex < (reviewData?.reviewDtoList.length ?? 1) - 1 ? prevIndex + 1 : 0;
+      setCurrentReviewId(reviewData?.reviewDtoList[newIndex]?.id ?? reviewId);
       return newIndex;
     });
   };

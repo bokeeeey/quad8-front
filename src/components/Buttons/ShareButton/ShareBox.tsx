@@ -1,7 +1,7 @@
 import useKakaoShare from '@/hooks/useKakaoShare';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { KakaoIcon, LinkCopyIcon } from '@/public/index';
-import { ProductType } from '@/types/ProductTypes';
+import type { ProductType } from '@/types/ProductTypes';
 import classNames from 'classnames/bind';
 import { MouseEvent, useRef } from 'react';
 import { toast } from 'react-toastify';
@@ -10,17 +10,17 @@ import styles from './ShareButton.module.scss';
 const cn = classNames.bind(styles);
 
 interface ShareBoxProps {
-  handleClick: () => void;
+  onClickClose: () => void;
   data: ProductType;
 }
 
-export default function ShareBox({ handleClick, data }: ShareBoxProps) {
+export default function ShareBox({ onClickClose, data }: ShareBoxProps) {
   const boxRef = useRef<HTMLDivElement>(null);
 
   const shareUrl = window.location.href;
 
   useOutsideClick(boxRef, () => {
-    handleClick();
+    onClickClose();
   });
 
   const { shareKakao } = useKakaoShare(shareUrl);

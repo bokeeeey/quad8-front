@@ -1,14 +1,20 @@
 'use client';
 
+import { getProductDetail } from '@/api/productAPI';
 import { getUserProductReviews } from '@/api/productReviewAPI';
+
 import DatePicker from '@/components/DatePicker/DatePicker';
 import ReviewItem from '@/components/ReviewItem/ReviewItem';
+
 import { formatDateToQueryString } from '@/libs/formatDateToQueryString';
-import { ReviewResponse } from '@/types/ProductReviewTypes';
-import { useQuery } from '@tanstack/react-query';
+import { SpinLoading } from '@/public/index';
+import type { ReviewResponse } from '@/types/ProductReviewTypes';
+
+import { useQueries, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import MyReviewProduct from './MyReviewProduct';
+
 import styles from './MyReviewProduct.module.scss';
 
 const cn = classNames.bind(styles);
@@ -20,14 +26,27 @@ interface MyReviewListProps {
 export default function MyReviewList({ data }: MyReviewListProps) {
   const [searchDate, setSearchDate] = useState<{ startDate: string; endDate: string }>({
     startDate: '2024-01-01T00:00:00',
-    endDate: '2024-12-31T23:59:59',
+    endDate: formatDateToQueryString('end', new Date()),
   });
 
-  const { data: reviewsData, refetch } = useQuery({
+  const {
+    data: reviewsData,
+    isLoading: isReviewsLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['userProductReviews', searchDate],
     queryFn: () => getUserProductReviews({ startDate: searchDate.startDate, endDate: searchDate.endDate }),
     initialData: data,
   });
+
+  const productQueries = useQueries({
+    queries: (reviewsData?.reviewDtoList || []).map((review) => ({
+      queryKey: ['product', review.productId],
+      queryFn: () => getProductDetail(review.productId),
+    })),
+  });
+
+  const isLoading = isReviewsLoading || productQueries.some((query) => query.isLoading);
 
   useEffect(() => {
     refetch();
@@ -40,17 +59,26 @@ export default function MyReviewList({ data }: MyReviewListProps) {
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className={cn('loading')}>
+        <SpinLoading />
+      </div>
+    );
+  }
+
   return (
     <div>
       <DatePicker onDateChange={handleDateChange} />
       {reviewsData?.reviewDtoList.length > 0 ? (
         <div className={cn('total-review-container')}>
-          {reviewsData.reviewDtoList.map((reviewData) => (
+          {reviewsData.reviewDtoList.map((reviewData, index) => (
             <div key={reviewData.id}>
               <MyReviewProduct
                 productId={reviewData.productId}
                 updatedAt={reviewData.updatedAt}
                 switchOption={reviewData.switchOption}
+                productData={productQueries[index].data}
               />
               <ReviewItem data={reviewData} usage='mypage' />
             </div>

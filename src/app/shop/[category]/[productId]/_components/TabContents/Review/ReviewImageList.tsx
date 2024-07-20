@@ -15,7 +15,7 @@ interface ReviewImageListProps {
   reviewImgs: ReviewImage[];
 }
 
-const SECTION_SIZE = 7;
+const SECTION_SIZE = 6;
 
 export default function ReviewImageList({ productId, reviewImgs }: ReviewImageListProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +23,7 @@ export default function ReviewImageList({ productId, reviewImgs }: ReviewImageLi
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
 
   const isPrevDisabled = currentSectionIndex === 0;
-  const isNextDisabled = currentSectionIndex === Math.floor(reviewImgs.length / SECTION_SIZE) - 1;
+  const isNextDisabled = currentSectionIndex === Math.ceil(reviewImgs.length / SECTION_SIZE - 1);
 
   const handleModalOpen = (id: number) => {
     setIsOpen(true);
@@ -35,10 +35,14 @@ export default function ReviewImageList({ productId, reviewImgs }: ReviewImageLi
   };
 
   const handleMovePrevSection = () => {
-    if (currentSectionIndex > 0) setCurrentSectionIndex((prev) => prev - 1);
+    if (!isPrevDisabled) {
+      setCurrentSectionIndex((prev) => prev - 1);
+    }
   };
   const handleMoveNextSection = () => {
-    if (currentSectionIndex < Math.floor(reviewImgs.length / SECTION_SIZE)) setCurrentSectionIndex((prev) => prev + 1);
+    if (!isNextDisabled) {
+      setCurrentSectionIndex((prev) => prev + 1);
+    }
   };
 
   return (
@@ -48,7 +52,7 @@ export default function ReviewImageList({ productId, reviewImgs }: ReviewImageLi
           className={cn('arrow-box', { disabled: isPrevDisabled })}
           onClick={!isPrevDisabled ? handleMovePrevSection : undefined}
         >
-          <ChevronIcon className={cn('arrow', { disabled: isPrevDisabled })}>{'<'}</ChevronIcon>
+          <ChevronIcon className={cn('arrow', { disabled: isPrevDisabled })} />
         </div>
         <div
           className={cn('arrow-box', {
@@ -60,9 +64,7 @@ export default function ReviewImageList({ productId, reviewImgs }: ReviewImageLi
             className={cn('arrow', 'right', {
               disabled: isNextDisabled,
             })}
-          >
-            {'>'}
-          </ChevronIcon>
+          />
         </div>
       </div>
       <div className={cn('all-review-images')}>

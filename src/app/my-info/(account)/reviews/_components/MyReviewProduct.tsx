@@ -1,9 +1,7 @@
 'use client';
 
-import { getProductDetail } from '@/api/productAPI';
 import { formatDateToString } from '@/libs/formatDateToString';
 import { ProductType } from '@/types/ProductTypes';
-import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,17 +13,15 @@ interface MyReviewProductProps {
   productId: number;
   updatedAt: Date;
   switchOption: string;
+  productData?: ProductType;
 }
 
-export default function MyReviewProduct({ productId, updatedAt, switchOption }: MyReviewProductProps) {
-  const { data: productDetailData } = useQuery<ProductType>({
-    queryKey: ['product-detail', productId],
-    queryFn: () => getProductDetail(productId.toString()),
-  });
+export default function MyReviewProduct({ productId, updatedAt, switchOption, productData }: MyReviewProductProps) {
+  if (!productData) {
+    return <div className={cn('no-product-data')}>상품 정보를 불러올 수 없습니다.</div>;
+  }
 
-  if (!productDetailData) return null;
-
-  const { name, thubmnailList, categoryName } = productDetailData;
+  const { name, thubmnailList, categoryName } = productData;
 
   return (
     <div className={cn('container')}>

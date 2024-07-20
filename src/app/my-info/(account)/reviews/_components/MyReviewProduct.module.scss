@@ -41,8 +41,22 @@
 .no-review {
   display: flex;
   justify-content: center;
-  margin-top: 15rem;
+  margin: 15rem 0;
   color: $gray-40;
 
   @include pretendard-20-600;
+}
+
+.no-product-data {
+  @include flex-center;
+  @include pretendard-16-600;
+
+  margin-top: 5rem;
+}
+
+.loading {
+  @include flex-center;
+
+  margin-top: 10rem;
+  margin-bottom: 15rem;
 }

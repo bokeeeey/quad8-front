@@ -27,7 +27,7 @@ export default function AddCartModal({ productId, closeModal }: AddCartModalProp
 
   const { data: productData, isPending: isPendingProductData } = useQuery<ProductType>({
     queryKey: [`product-${productId}`],
-    queryFn: () => getProductDetail(String(productId)),
+    queryFn: () => getProductDetail(productId),
   });
 
   const { mutate: postCartItem, isPending: isPendingPostCartItem } = useMutation({

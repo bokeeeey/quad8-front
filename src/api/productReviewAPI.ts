@@ -1,3 +1,4 @@
+import { formatDateToQueryString } from '@/libs/formatDateToQueryString';
 import { getCookie } from '@/libs/manageCookie';
 import type { ProductReviewParams, ProductReviewType, ReviewResponse } from '@/types/ProductReviewTypes';
 
@@ -30,7 +31,7 @@ export const getUserProductReviews = async (params: ProductReviewParams): Promis
     page = '0',
     size = '10',
     startDate = '2024-01-01T00:00:00',
-    endDate = '2024-12-31T23:59:59',
+    endDate = formatDateToQueryString('end', new Date()),
   } = params;
   const token = await getCookie('accessToken');
 

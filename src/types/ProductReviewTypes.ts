@@ -51,13 +51,8 @@ export type ProductReviewPreview = {
   reviewStatistics: KeywordStatistics & { scoreRatios: OptionRatio };
 };
 
-export interface ProductReviewType extends ProductReviewPreview {
+export interface ProductReviewType extends ProductReviewPreview, ReviewSearchParams {
   reviewDtoList: ReviewDto[];
-  totalElements: number;
-  totalPages: number;
-  first: boolean;
-  last: boolean;
-  currentPage: number;
 }
 
 type Keyword = Record<string, string[]>;

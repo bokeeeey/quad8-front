@@ -1,6 +1,6 @@
 import { getUserProductReviews } from '@/api/productReviewAPI';
 import Pagination from '@/components/Pagination/Pagination';
-import { ReviewParamsType } from '@/types/ProductReviewTypes';
+import type { ReviewParamsType } from '@/types/ProductReviewTypes';
 import { MyInfoEmptyCase } from '../../_components';
 import MyReviewList from './_components/MyReviewList';
 

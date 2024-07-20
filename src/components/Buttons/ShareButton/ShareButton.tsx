@@ -1,7 +1,7 @@
 'use client';
 
 import { ShareIcon } from '@/public/index';
-import { ProductType } from '@/types/ProductTypes';
+import type { ProductType } from '@/types/ProductTypes';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import ShareBox from './ShareBox';
@@ -23,7 +23,7 @@ export default function ShareButton({ data }: ShareButtonProps) {
   return (
     <button type='button' className={cn('circle', { 'blue-circle': isClicked })} onClick={handleClickButton}>
       <ShareIcon />
-      {isClicked && <ShareBox handleClick={handleClickButton} data={data} />}
+      {isClicked && <ShareBox onClickClose={handleClickButton} data={data} />}
     </button>
   );
 }

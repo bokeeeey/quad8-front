@@ -1,4 +1,4 @@
-export const formatDateToQueryString = (type: string, date: Date) => {
+export const formatDateToQueryString = (type: 'start' | 'end', date: Date) => {
   const pad = (num: number) => num.toString().padStart(2, '0');
 
   const year = date.getFullYear();
