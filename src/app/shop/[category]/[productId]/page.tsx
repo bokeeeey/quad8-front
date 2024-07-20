@@ -13,7 +13,7 @@ interface ProductDetailParams {
 
 export default async function ProductDetailPage({ params }: ProductDetailParams) {
   const { productId } = params;
-  const productDetailData = await getProductDetail(productId);
+  const productDetailData = await getProductDetail(Number(productId));
   const productReviewData = await getProductReviews({ productId: Number(productId) });
 
   if (!productDetailData) {
