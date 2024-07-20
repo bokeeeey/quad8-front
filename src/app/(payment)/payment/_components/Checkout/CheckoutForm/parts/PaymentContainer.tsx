@@ -57,13 +57,6 @@ export default function PaymentContainer({
 
   const orderName = renderPaymentProductName({ orderItemResponses });
 
-  // const { mutate: postPaymentConfirmMutation } = useMutation({
-  //   mutationFn: () => postPaymentConfirm(payload),
-  //   onSuccess: (res) => {
-  //     console.log(res);
-  //   },
-  // });
-
   useEffect(() => {
     const fetchPaymentWidgets = async () => {
       const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string;
@@ -116,27 +109,6 @@ export default function PaymentContainer({
         successUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_SUCCESS}`,
         failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
       });
-      // const paymentResult = await widgets.requestPayment({
-      //   orderId: paymentOrderId || '',
-      //   orderName,
-      //   customerName: customerName || '',
-      //   customerEmail: customerEmail || '',
-      //   successUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_SUCCESS}`,
-      //   failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
-      // });
-
-      // console.log(paymentResult);
-
-      // 결제 승인 전 뎁스 하나 추가
-
-      // const payload = {
-      //   orderId: paymentResult.orderId,
-      //   paymentKey: paymentResult.paymentKey,
-      //   paymentOrderId: paymentOrderId || '',
-      //   amount: paymentResult.amount,
-      // };
-
-      // postPaymentConfirmMutation(payload);
     } catch (error) {
       // TODO: 에러 처리
       console.error('결제 실패');

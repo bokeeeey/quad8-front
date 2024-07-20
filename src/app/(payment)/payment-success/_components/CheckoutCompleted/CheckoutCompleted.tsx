@@ -4,8 +4,8 @@ import { postPaymentConfirm, postPaymentSuccess } from '@/api/paymentAPI';
 import { Button, ItemOverview } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import { formatPhoneNumber } from '@/libs';
-import { OrderItem } from '@/types/OrderTypes';
-import { OrderDetailData } from '@/types/paymentTypes';
+import type { OrderItem } from '@/types/OrderTypes';
+import type { OrderDetailData } from '@/types/paymentTypes';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useSearchParams } from 'next/navigation';
@@ -30,8 +30,6 @@ export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
   const { data: paymentDataResponse } = useQuery<{ data: OrderDetailData }>({
     queryKey: ['paymentDataResponse'],
   });
-
-  console.log(amount);
 
   const { mutate: postPaymentSuccessMutation } = useMutation({
     mutationFn: () => postPaymentSuccess({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
