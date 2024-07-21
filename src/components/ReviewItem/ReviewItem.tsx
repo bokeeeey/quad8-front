@@ -20,12 +20,12 @@ const cn = classNames.bind(styles);
 
 interface ReviewItemProps {
   usage?: 'mypage' | 'modal';
-  data: ReviewDto;
+  reviewData: ReviewDto;
 }
 
 const PRODUCT_LIST = Object.values(CATEGORY_MAP);
 
-export default function ReviewItem({ usage, data }: ReviewItemProps) {
+export default function ReviewItem({ usage, reviewData }: ReviewItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const {
     id,
@@ -41,7 +41,8 @@ export default function ReviewItem({ usage, data }: ReviewItemProps) {
     likeCount,
     likedByUser,
     updatedAt,
-  } = data;
+    productId,
+  } = reviewData;
   const { nickname, imgUrl } = writer;
   const optionsValues = [option1, option2, option3];
 
@@ -73,7 +74,7 @@ export default function ReviewItem({ usage, data }: ReviewItemProps) {
                 </h2>
               </div>
             </div>
-            <ReviewLikeButton id={id} isLiked={likedByUser} likeCount={likeCount} />
+            <ReviewLikeButton reviewId={id} productId={productId} isLiked={likedByUser} likeCount={likeCount} />
           </div>
           <div className={cn('modal-option-section')}>
             {switchOption.length ? <h2 className={cn('option')}>스위치: {switchOption}</h2> : ''}
@@ -119,7 +120,9 @@ export default function ReviewItem({ usage, data }: ReviewItemProps) {
                     height={123}
                     alt='리뷰 이미지'
                   />
-                  {data.reviewImgs.length > 1 && <div className={cn('image-count')}>{data.reviewImgs.length}</div>}
+                  {reviewData.reviewImgs.length > 1 && (
+                    <div className={cn('image-count')}>{reviewData.reviewImgs.length}</div>
+                  )}
                 </div>
               )}
               {usage !== 'mypage' && isExpanded && (
@@ -148,7 +151,7 @@ export default function ReviewItem({ usage, data }: ReviewItemProps) {
           </div>
           {usage !== 'mypage' && (
             <div className={cn('button-section')}>
-              <ReviewLikeButton id={id} isLiked={likedByUser} likeCount={likeCount} />
+              <ReviewLikeButton reviewId={id} productId={productId} isLiked={likedByUser} likeCount={likeCount} />
             </div>
           )}
         </>

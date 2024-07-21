@@ -43,7 +43,7 @@ export default function OptionEditModal({
     isSuccess,
     isError,
   } = useQuery<ProductType>({
-    queryKey: [`product-${productId}`],
+    queryKey: ['product', productId],
     queryFn: () => getProductDetail(productId),
   });
 

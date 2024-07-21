@@ -3,7 +3,7 @@ import { getCookie } from '@/libs/manageCookie';
 import type { ProductReviewParams, ProductReviewType, ReviewResponse } from '@/types/ProductReviewTypes';
 
 export const getProductReviews = async (params: ProductReviewParams): Promise<ProductReviewType> => {
-  const { productId, sort = 'likes', page = 0, size = 10 } = params;
+  const { productId, sort = 'createdAt', page = 0, size = 10 } = params;
   const token = await getCookie('accessToken');
 
   try {

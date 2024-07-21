@@ -80,7 +80,7 @@ export default function MyReviewList({ data }: MyReviewListProps) {
                 switchOption={reviewData.switchOption}
                 productData={productQueries[index].data}
               />
-              <ReviewItem data={reviewData} usage='mypage' />
+              <ReviewItem reviewData={reviewData} usage='mypage' />
             </div>
           ))}
         </div>

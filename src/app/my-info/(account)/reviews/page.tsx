@@ -14,19 +14,19 @@ export default async function ReviewsPage({ searchParams }: ReviewPageProps) {
     size: searchParams.size || '16',
   };
 
-  const data = await getUserProductReviews(initialParams);
+  const userReviewData = await getUserProductReviews(initialParams);
 
   return (
     <div>
-      {Array.isArray(data.reviewDtoList) ? (
+      {Array.isArray(userReviewData.reviewDtoList) ? (
         <div>
-          <MyReviewList data={data} />
+          <MyReviewList data={userReviewData} />
           <Pagination
-            totalElements={data.totalElements}
-            totalPages={data.totalPages}
-            number={data.currentPage}
-            first={data.first}
-            last={data.last}
+            totalElements={userReviewData.totalElements}
+            totalPages={userReviewData.totalPages}
+            number={userReviewData.currentPage}
+            first={userReviewData.first}
+            last={userReviewData.last}
             searchParams={searchParams}
           />
         </div>

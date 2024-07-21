@@ -1,6 +1,5 @@
 'use client';
 
-import type { ProductReviewType } from '@/types/ProductReviewTypes';
 import classNames from 'classnames/bind';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import DetailImage from './DetailImage';
@@ -17,12 +16,10 @@ interface TabData {
   ref: RefObject<HTMLDivElement>;
 }
 interface DetailTabProps {
-  detailsImg: string;
-  reviewData: ProductReviewType;
   productId: number;
 }
 
-export default function DetailTab({ detailsImg, reviewData, productId }: DetailTabProps) {
+export default function DetailTab({ productId }: DetailTabProps) {
   const [tabRefs] = useState([
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
@@ -30,9 +27,9 @@ export default function DetailTab({ detailsImg, reviewData, productId }: DetailT
   ]);
 
   const tabData: TabData[] = [
-    { id: 0, button: '상품 상세 정보', content: <DetailImage detailsImg={detailsImg} />, ref: tabRefs[0] },
+    { id: 0, button: '상품 상세 정보', content: <DetailImage productId={productId} />, ref: tabRefs[0] },
     { id: 1, button: '교환 및 반품 안내', content: <ReturnExchangeInfo />, ref: tabRefs[1] },
-    { id: 2, button: '리뷰', content: <ProductReviewList data={reviewData} productId={productId} />, ref: tabRefs[2] },
+    { id: 2, button: '리뷰', content: <ProductReviewList productId={productId} />, ref: tabRefs[2] },
   ];
 
   const [activeTab, setActiveTab] = useState(0);

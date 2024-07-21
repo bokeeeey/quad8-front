@@ -25,7 +25,7 @@ export default function ReviewImageModal({ productId, reviewId }: ReviewImageMod
   const [currentReview, setCurrentReview] = useState<ReviewDto>();
 
   const { data: reviewData } = useQuery<ProductReviewType>({
-    queryKey: ['review', productId, currentReviewId],
+    queryKey: ['review', productId],
     queryFn: () => getProductReviews({ productId }),
   });
 
@@ -79,7 +79,7 @@ export default function ReviewImageModal({ productId, reviewId }: ReviewImageMod
               />
             </div>
             <div className={cn('right-section')}>
-              <ReviewItem data={currentReview} usage='modal' />
+              <ReviewItem reviewData={currentReview} usage='modal' />
               <div className={cn('image-section')}>
                 {currentReview.reviewImgs.map((item) => (
                   <div key={item.id} className={cn('small-image-wrap')}>
