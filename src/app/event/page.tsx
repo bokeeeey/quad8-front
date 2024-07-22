@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
-import BenefitRoulette from './_components/\bBenefitRoulette';
 import BenefitJoin from './_components/BenefitJoin';
+import BenefitRoulette from './_components/BenefitRoulette';
 import EventTab from './_components/EventTab';
 import EventTop from './_components/EventTop';
 import styles from './page.module.scss';
