@@ -21,7 +21,7 @@ import { toast } from 'react-toastify';
 
 import { postRecentProducts } from '@/api/productAPI';
 import { setCookie } from '@/libs/manageCookie';
-import { CreateOrderAPIType, CreateOrderResponseType } from '@/types/OrderTypes';
+import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/OrderTypes';
 import OptionContainer from './OptionContainer';
 import styles from './ProductDetail.module.scss';
 
@@ -83,8 +83,8 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     setSelectedOptions((prevOptions) => prevOptions.filter((option) => option.name !== name));
   };
 
-  const { mutate: addCartProduct } = useMutation({ mutationFn: (data: CartProductType) => postCart(data) });
-  const { mutate: createOrder } = useMutation({
+  const { mutate: addProductToCartMutate } = useMutation({ mutationFn: (data: CartProductType) => postCart(data) });
+  const { mutate: createOrderMutate } = useMutation({
     mutationFn: postCreateOrder,
   });
 
@@ -106,7 +106,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
   };
 
   const handleAddCartProduct = (data: CartProductType) => {
-    addCartProduct(data, {
+    addProductToCartMutate(data, {
       onSuccess: () => {
         const cartData = queryClient.getQueryData<CartAPIDataType>(['cartData']) ?? null;
         const newShopData: ShopDataType = {
@@ -155,7 +155,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
   };
 
   const handleBuyProduct = (data: CreateOrderAPIType) => {
-    createOrder(data, {
+    createOrderMutate(data, {
       onSuccess: (response: CreateOrderResponseType) => {
         setCookie('orderId', response.data.toString());
         router.push(ROUTER.MY_PAGE.CHECKOUT);

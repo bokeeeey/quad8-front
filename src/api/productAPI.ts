@@ -26,8 +26,8 @@ export const getProductDetail = async (productId: string): Promise<ProductType> 
     const result = await res.json();
 
     return result.data;
-  } catch {
-    throw new Error(`상품을 조회할 수 없습니다. `);
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -93,7 +93,7 @@ export async function getCategoryProductList({
     const rawData: ProductListResponse = await response.json();
     return rawData;
   } catch (error) {
-    throw new Error('에러');
+    throw error;
   }
 }
 
@@ -134,8 +134,8 @@ export const getRecentProducts = async (): Promise<RecentProductType[]> => {
     const result = await res.json();
 
     return result.data;
-  } catch {
-    throw new Error(`최근 본 상품을 조회할 수 없습니다. `);
+  } catch (error) {
+    throw error;
   }
 };
 
