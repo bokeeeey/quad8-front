@@ -1,0 +1,17 @@
+.container {
+  position: relative;
+}
+
+.image {
+  object-fit: contain;
+}
+
+.scanner {
+  position: absolute;
+  width: 15rem;
+  height: 15rem;
+  border: 1px solid black;
+  background-color: rgb(255 255 255 / 70%);
+  cursor: pointer;
+  pointer-events: none;
+}
