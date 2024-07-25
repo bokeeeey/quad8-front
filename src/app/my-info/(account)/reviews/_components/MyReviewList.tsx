@@ -28,7 +28,7 @@ export default function MyReviewList({ searchParams }: ReviewPageProps) {
   };
 
   const [searchDate, setSearchDate] = useState<{ startDate: string; endDate: string }>({
-    startDate: '2024-01-01T00:00:00',
+    startDate: formatDateToQueryString('start', new Date()),
     endDate: formatDateToQueryString('end', new Date()),
   });
   const queryClient = useQueryClient();
@@ -63,7 +63,7 @@ export default function MyReviewList({ searchParams }: ReviewPageProps) {
 
   return (
     <div>
-      <DatePicker onDateChange={handleDateChange} />
+      <DatePicker startDate={searchDate.startDate} endDate={searchDate.endDate} onDateChange={handleDateChange} />
       {reviewsData && reviewsData?.reviewDtoList.length > 0 ? (
         <div className={cn('total-review-container')}>
           <div className={cn('review-list')}>
