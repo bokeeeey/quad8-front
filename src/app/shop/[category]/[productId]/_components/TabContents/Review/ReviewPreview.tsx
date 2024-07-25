@@ -13,7 +13,7 @@ interface ReviewListPreviewProps {
 }
 
 export default function ReviewPreview({ previewData }: ReviewListPreviewProps) {
-  const { averageScore, reviewCounts, reviewStatistics } = previewData;
+  const { averageScore, totalElements, reviewStatistics } = previewData;
   const { scoreRatios, ...optionRatios } = reviewStatistics;
 
   return (
@@ -29,7 +29,7 @@ export default function ReviewPreview({ previewData }: ReviewListPreviewProps) {
       <div className={cn('one-section')}>
         <h3 className={cn('title')}>리뷰 수</h3>
         <SpeechBubbleIcon />
-        <h1 className={cn('big-text')}>{reviewCounts}</h1>
+        <h1 className={cn('big-text')}>{totalElements}</h1>
       </div>
       <div className={cn('one-section')}>
         <h3 className={cn('title')}>평점 비율</h3>

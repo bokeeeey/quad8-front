@@ -1,6 +1,7 @@
 export type ThumbnailTypes = {
   id: number;
   imgUrl: string;
+  reviewId?: number;
 };
 
 export type OptionTypes = {
