@@ -88,7 +88,7 @@ export default function PostCardDetailModal({
 
   const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
 
-  const { data, refetch } = useQuery<PostCardListResponseData>({
+  const { data: postCardListData, refetch } = useQuery<PostCardListResponseData>({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
   });
@@ -182,17 +182,17 @@ export default function PostCardDetailModal({
   useEffect(() => {
     // 처음에 가져온 댓글 데이터
     queryClient.setQueryData(['infiniteCommentData'], null);
-    if (data?.data) {
-      const initialComments = data.data.comments;
+    if (postCardListData?.data) {
+      const initialComments = postCardListData.data.comments;
       const lastCommentData = initialComments[initialComments.length - 1];
       setVisibleComments(initialComments);
       setLastCommentId(lastCommentData?.id);
     }
-  }, [data, queryClient]);
+  }, [postCardListData, queryClient]);
 
-  if (!data) return <ModalSkeleton />;
+  if (!postCardListData) return <ModalSkeleton />;
 
-  const { data: postData, status, message } = data;
+  const { data: postData, status, message } = postCardListData;
 
   if (status === 'ERROR') {
     toast.error(message);
@@ -239,8 +239,6 @@ export default function PostCardDetailModal({
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
   };
-
-  const handleClickReport = () => {};
 
   const setCommentRefType = (commentId: number) => {
     if (commentId === lastCommentId) {
@@ -312,7 +310,6 @@ export default function PostCardDetailModal({
                   isMine,
                   onClickDelete: handleClickDeleteAlertButon,
                   onClickEdit: handleClickEditAlertButton,
-                  onClickReport: handleClickReport,
                 })}
               />
               <CustomOption wrapperRef={containerRef} customData={custom} />

@@ -2,15 +2,9 @@ interface CommunityPopOverOptionProps {
   isMine?: boolean;
   onClickDelete: () => void;
   onClickEdit: () => void;
-  onClickReport: () => void;
 }
 
-export const communityPopOverOption = ({
-  isMine,
-  onClickDelete,
-  onClickReport,
-  onClickEdit,
-}: CommunityPopOverOptionProps) => {
+export const communityPopOverOption = ({ isMine, onClickDelete, onClickEdit }: CommunityPopOverOptionProps) => {
   return isMine
     ? [
         {
@@ -25,7 +19,6 @@ export const communityPopOverOption = ({
     : [
         {
           label: '신고하기',
-          onClick: onClickReport,
         },
       ];
 };

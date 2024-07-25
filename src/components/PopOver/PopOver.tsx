@@ -11,7 +11,7 @@ const cn = classNames.bind(styles);
 
 interface OptionType {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 interface PopOverProps {

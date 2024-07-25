@@ -84,8 +84,7 @@ export const checkNickname = async (nickname: string) => {
 export const getOthersInfo = async (userId: number) => {
   try {
     const res = await fetch(`${BASE_URL}/api/v1/users/${userId}`);
-    const result = await res.json();
-    const { data } = result;
+    const { data } = await res.json();
     return data;
   } catch (error) {
     throw error;

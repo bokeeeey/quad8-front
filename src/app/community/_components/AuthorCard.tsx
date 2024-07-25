@@ -19,7 +19,7 @@ interface AuthorCardProps {
   isOpenPopOver: boolean;
   popOverOptions: {
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
   }[];
 }
 

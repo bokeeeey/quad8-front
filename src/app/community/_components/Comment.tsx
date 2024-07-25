@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { forwardRef, useState, MouseEvent, useEffect } from 'react';
+import { forwardRef, useState, MouseEvent } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -81,8 +81,6 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
     setIsOpenProfileCard(true);
   };
 
-  useEffect(() => {}, [commentPositionTop]);
-
   const handleCloseProfile = () => {
     setIsOpenProfileCard(false);
   };
@@ -97,8 +95,6 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   };
 
   const handleClickEdit = () => {};
-
-  const handleClickReport = () => {};
 
   return (
     <div className={cn('container')} ref={ref}>
@@ -121,7 +117,6 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
               isMine: userID === commentUserId,
               onClickDelete: handleClickDelete,
               onClickEdit: handleClickEdit,
-              onClickReport: handleClickReport,
             })}
             isOpenPopOver={isOpenPopOver && isOpenedPopOver}
             onHandleOpen={handleClickPopOver}

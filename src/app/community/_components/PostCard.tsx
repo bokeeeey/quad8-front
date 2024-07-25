@@ -100,8 +100,6 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
     }
   };
 
-  const handleClickReport = () => {};
-
   return (
     <div className={cn('container')}>
       <AuthorCard
@@ -115,7 +113,6 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
         popOverOptions={communityPopOverOption({
           isMine,
           onClickDelete: handleClickDelete,
-          onClickReport: handleClickReport,
           onClickEdit: handleClickEdit,
         })}
       />

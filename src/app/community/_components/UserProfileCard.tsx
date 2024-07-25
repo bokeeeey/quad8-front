@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 import { forwardRef, useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 
 import { getOthersInfo } from '@/api/usersAPI';
@@ -30,18 +30,22 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
     queryFn: () => getOthersInfo(userId),
     enabled: false,
   });
+  const queryClient = useQueryClient();
+
   const [isAboveProfile, setIsAboveProfile] = useState(false);
 
   useEffect(() => {
     const VIEWPORT_HEIGHT = window.innerHeight;
 
-    if (isOpenProfileCard) {
-      refetch();
-      if (positionTop && positionTop > VIEWPORT_HEIGHT / 2) {
-        setIsAboveProfile(true);
-      }
+    if (isOpenProfileCard && positionTop && positionTop > VIEWPORT_HEIGHT / 2) {
+      setIsAboveProfile(true);
     }
-  }, [isOpenProfileCard, userId, refetch, positionTop, isAboveProfile]);
+  }, [isOpenProfileCard, positionTop, isAboveProfile]);
+
+  useEffect(() => {
+    queryClient.removeQueries({ queryKey: ['clickedUserInfo'] });
+    refetch();
+  }, [userId, refetch, isOpenProfileCard, queryClient]);
 
   return positionTop && positionTop === 0 ? null : (
     <div
@@ -55,9 +59,7 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
       onClick={(e) => e.stopPropagation()}
     >
       {isFetching ? (
-        <div>
-          <SpinLoading />
-        </div>
+        <SpinLoading />
       ) : (
         <>
           <div className={cn('profile-image')}>
