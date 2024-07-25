@@ -1,7 +1,10 @@
+import { getProductDetail } from '@/api/productAPI';
 import { HeartButton, Rating } from '@/components';
 import ShareButton from '@/components/Buttons/ShareButton/ShareButton';
-import type { ProductType } from '@/types/ProductTypes';
+import { ROUTER } from '@/constants/route';
+import { QueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { redirect } from 'next/navigation';
 import OptionWithButton from './OptionWithButtons';
 import styles from './ProductDetail.module.scss';
 import Thumbnail from './Thumbnail';
@@ -9,7 +12,7 @@ import Thumbnail from './Thumbnail';
 const cn = classNames.bind(styles);
 
 interface ProductDetailProps {
-  productData: ProductType;
+  productId: number;
 }
 
 const DELIVERY_TEXT = {
@@ -22,7 +25,17 @@ const POINT_TEXT = {
   포인트: '구매 확정시 포인트 지급',
 };
 
-export default async function ProductDetail({ productData }: ProductDetailProps) {
+export default async function ProductDetail({ productId }: ProductDetailProps) {
+  const queryClient = new QueryClient();
+  const productData = await queryClient.fetchQuery({
+    queryKey: ['product', productId],
+    queryFn: () => getProductDetail(productId),
+  });
+
+  if (!productData) {
+    redirect(ROUTER.MAIN);
+  }
+
   return (
     <div>
       {productData ? (

@@ -1,4 +1,6 @@
 .total-review-container {
+  @include flex-column(16rem);
+
   margin: 4rem 0;
   border-top: 0.1rem solid $gray-10;
 }
@@ -52,11 +54,4 @@
   @include pretendard-16-600;
 
   margin-top: 5rem;
-}
-
-.loading {
-  @include flex-center;
-
-  margin-top: 10rem;
-  margin-bottom: 15rem;
 }

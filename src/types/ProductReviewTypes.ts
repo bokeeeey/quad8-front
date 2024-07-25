@@ -72,3 +72,7 @@ export interface ReviewParamsType {
   page?: string;
   size?: string;
 }
+
+export interface ReviewPageProps {
+  searchParams: { [key: string]: string | undefined };
+}
