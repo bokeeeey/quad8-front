@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
-import Image from 'next/image';
 import classNames from 'classnames/bind';
-import { UseFormRegister, FieldValues, UseFormSetValue } from 'react-hook-form';
+import Image from 'next/image';
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import { FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
-import { CameraIcon, DeleteIcon, keydeukProfileImg } from '@/public/index';
 import { IMAGE_BLUR } from '@/constants/blurImage';
+import { CameraIcon, DeleteIcon, keydeukProfileImg } from '@/public/index';
 
+import type { ReviewImage } from '@/types/ProductReviewTypes';
 import styles from './ImageInput.module.scss';
 
 const cn = classNames.bind(styles);
@@ -16,11 +17,10 @@ interface CustomImagesType {
   id: number;
   imgUrl: string;
 }
-
 interface ImageInputProps {
   register: UseFormRegister<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
-  editCustomImages?: CustomImagesType[];
+  editCustomImages?: CustomImagesType[] | ReviewImage[];
   onSaveDeletedImageId?: (id: number) => void;
   isCustom: boolean;
 }
@@ -38,10 +38,12 @@ export default function ImageInput({
 
   useEffect(() => {
     if (editCustomImages) {
-      const initialUrls = editCustomImages.map((image) => image.imgUrl);
+      const initialUrls = editCustomImages.map((image) =>
+        isCustom ? (image as CustomImagesType).imgUrl : (image as ReviewImage).imageUrl,
+      );
       setSelectedImageUrls(initialUrls);
     }
-  }, [editCustomImages]);
+  }, [editCustomImages, isCustom]);
 
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -64,7 +66,11 @@ export default function ImageInput({
     const clickedImageUrl = selectedImageUrls[clickedImageIndex];
 
     if (editCustomImages && onSaveDeletedImageId) {
-      const imageToDelete = editCustomImages.find((image) => image.imgUrl === clickedImageUrl);
+      const imageToDelete = editCustomImages.find((image) =>
+        isCustom
+          ? (image as CustomImagesType).imgUrl === clickedImageUrl
+          : (image as ReviewImage).imageUrl === clickedImageUrl,
+      );
       if (imageToDelete) {
         onSaveDeletedImageId(imageToDelete.id);
       }

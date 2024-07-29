@@ -76,3 +76,12 @@ export interface ReviewParamsType {
 export interface ReviewPageProps {
   searchParams: { [key: string]: string | undefined };
 }
+
+export interface EditReviewRequest {
+  content: string;
+  score: number;
+  option1: number;
+  option2: number;
+  option3: number;
+  existingReviewImgs: ReviewImage[];
+}
