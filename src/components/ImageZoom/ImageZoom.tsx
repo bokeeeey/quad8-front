@@ -73,10 +73,12 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
       updatedScannerPosition.top = containerRect.height - scannerSize;
     }
 
+    const imageAspectRatio = imageDimensions.width / imageDimensions.height;
+
     setScannerPosition(updatedScannerPosition);
     setViewPosition({
-      left: (updatedScannerPosition.left + scannerSize / 2) * -1.7,
-      top: (updatedScannerPosition.top + scannerSize / 2) * -2.07,
+      left: (updatedScannerPosition.left + scannerSize / 2) * -2,
+      top: (updatedScannerPosition.top + scannerSize / 2) * -(2 / imageAspectRatio),
     });
   };
 

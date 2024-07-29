@@ -280,8 +280,8 @@ export default function PostCardDetailModal({
                 image={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
                 alt='키보드 이미지'
                 width={493}
-                // height={reviewImages.length > 1 ? 536 : 604}
-                height={604}
+                height={reviewImages.length > 1 ? 536 : 604}
+                // height={604}
               />
             </div>
             {reviewImages.length > 1 && (

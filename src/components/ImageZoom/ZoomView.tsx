@@ -46,8 +46,8 @@ export default function ZoomView({ image, position, left, viewWidth, viewHeight,
         top: 0,
         width: viewWidth,
         height: viewHeight,
-        backgroundPosition: `${position.left + 175}px ${position.top + 500}px`,
-        backgroundSize: `${widthRatio}% ${heightRatio}%`,
+        backgroundPosition: `${position.left + 200}px ${position.top + 250}px`,
+        backgroundSize: `${widthRatio * 1.1}% ${heightRatio}%`,
       }}
     />
   );
