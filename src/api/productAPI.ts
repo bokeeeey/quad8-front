@@ -11,7 +11,7 @@ import type { ProductType } from '@/types/ProductTypes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
-export const getProductDetail = async (productId: string): Promise<ProductType> => {
+export const getProductDetail = async (productId: number): Promise<ProductType> => {
   const token = await getCookie('accessToken');
 
   try {

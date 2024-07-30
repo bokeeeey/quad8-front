@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, forwardRef, useState, FocusEvent } from 'react';
+import { ChangeEvent, forwardRef, useState, FocusEvent, useEffect } from 'react';
 import classNames from 'classnames/bind';
 
 import { Input } from '@/components/parts';
@@ -13,28 +13,20 @@ const cn = classNames.bind(styles);
 interface CountInputProps {
   value?: number;
   onChange?: (value: number) => void;
+  onBlur?: () => void;
 }
 
-export default forwardRef<HTMLInputElement, CountInputProps>(function CountInput({ value, onChange }, ref, ...rest) {
+export default forwardRef<HTMLInputElement, CountInputProps>(function CountInput(
+  { value, onChange, onBlur, ...rest },
+  ref,
+) {
   const [count, setCount] = useState<number | ''>(value ?? 1);
   const handleClickButton = (type: 'decrease' | 'increase') => {
     if (type === 'decrease') {
-      setCount((prev) => {
-        const newValue = Math.max(Number(prev) - 1, 1);
-        if (onChange) {
-          onChange(newValue);
-        }
-        return newValue;
-      });
+      setCount((prev) => Math.max(Number(prev) - 1, 1));
       return;
     }
-    setCount((prev) => {
-      const newValue = Math.min(Number(prev) + 1, 99);
-      if (onChange) {
-        onChange(newValue);
-      }
-      return newValue;
-    });
+    setCount((prev) => Math.min(Number(prev) + 1, 99));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,29 +37,26 @@ export default forwardRef<HTMLInputElement, CountInputProps>(function CountInput
     const newValue = Number(e.currentTarget.value);
     if (!newValue) {
       setCount(1);
-      if (onChange) {
-        onChange(1);
-      }
       return;
     }
     if (newValue >= 100) {
       setCount(99);
-      if (onChange) {
-        onChange(99);
-      }
       return;
     }
     setCount(newValue);
-    if (onChange) {
-      onChange(newValue);
-    }
   };
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(count !== '' ? count : 1);
+    }
+  }, [count, onChange]);
 
   const handleBlurInput = (e: FocusEvent<HTMLInputElement>) => {
     const newValue = Math.max(Math.min(Number(e.currentTarget.value), 99), 1);
     setCount(newValue);
-    if (onChange) {
-      onChange(newValue);
+    if (onBlur) {
+      onBlur();
     }
   };
 

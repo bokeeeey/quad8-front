@@ -1,14 +1,14 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import Image from 'next/image';
-import classNames from 'classnames/bind';
 import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 import { getProductDetail } from '@/api/productAPI';
+import { Button, CountInput, Dropdown } from '@/components';
 import type { OptionChageAPIType } from '@/types/CartTypes';
 import type { ProductType } from '@/types/ProductTypes';
-import { Button, Dropdown, CountInput } from '@/components';
 
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import styles from './OptionEditModal.module.scss';
@@ -43,8 +43,8 @@ export default function OptionEditModal({
     isSuccess,
     isError,
   } = useQuery<ProductType>({
-    queryKey: [`product-${productId}`],
-    queryFn: () => getProductDetail(String(productId)),
+    queryKey: ['product', productId],
+    queryFn: () => getProductDetail(productId),
   });
 
   if (!isSuccess) {

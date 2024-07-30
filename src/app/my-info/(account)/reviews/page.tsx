@@ -1,5 +1,6 @@
-import { MyInfoEmptyCase } from '../../_components';
+import { ReviewPageProps } from '@/types/ProductReviewTypes';
+import MyReviewList from './_components/MyReviewList';
 
-export default function ReviewsPage() {
-  return <MyInfoEmptyCase message='구매 후기가 없습니다.' />;
+export default async function ReviewsPage({ searchParams }: ReviewPageProps) {
+  return <MyReviewList searchParams={searchParams} />;
 }

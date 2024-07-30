@@ -1,14 +1,16 @@
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
-import classNames from 'classnames/bind';
 
-import { getUserData } from '@/api/usersAPI';
 import { getCartData } from '@/api/cartAPI';
+import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
+import Script from 'next/script';
 import { Providers } from './providers';
 
 import '@/styles/reset.css';
+import AOSWrapper from './_components/Aos/AOSWrapper';
 import styles from './layout.module.scss';
 
 const cn = classNames.bind(styles);
@@ -41,12 +43,16 @@ export default async function RootLayout({
               <HydrationBoundary state={dehydrate(queryClient)}>
                 <Header />
               </HydrationBoundary>
-              <div className={cn('content-wrapper')}>{children}</div>
+              <div className={cn('content-wrapper')}>
+                {' '}
+                <AOSWrapper>{children}</AOSWrapper>
+              </div>
               <Footer />
             </div>
           </HydrationBoundary>
         </Providers>
       </body>
+      <Script src='https://developers.kakao.com/sdk/js/kakao.js' strategy='afterInteractive' />
     </html>
   );
 }

@@ -265,23 +265,11 @@ export default function PostCardDetailModal({
         <div className={cn('image-content-wrapper')}>
           <div className={cn('left-wrapper')}>
             <div className={cn('selected-image-wrapper')}>
-              {/* <Image
-                src={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
-                alt='키보드 이미지'
-                fill
-                onError={() => setClickedImage('')}
-                className={cn('selected-image')}
-                sizes='(max-width: 1200px) 100%'
-                priority
-                placeholder={IMAGE_BLUR.placeholder}
-                blurDataURL={IMAGE_BLUR.blurDataURL}
-              /> */}
               <ImageZoom
                 image={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
                 alt='키보드 이미지'
                 width={493}
                 height={reviewImages.length > 1 ? 536 : 604}
-                // height={604}
               />
             </div>
             {reviewImages.length > 1 && (

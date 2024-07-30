@@ -1,0 +1,36 @@
+.wrapper {
+  @include flex-center;
+
+  flex-direction: column;
+  width: 100%;
+  padding: 10rem 0;
+}
+
+.search-wrapper {
+  width: 40%;
+}
+
+.content-wrapper {
+  @include flex-column(5rem);
+
+  width: 100%;
+  padding: 10rem 12rem;
+}
+
+.title {
+  @include pretendard-30-700;
+
+  display: flex;
+  gap: 1rem;
+}
+
+.keyword {
+  max-width: 30rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text {
+  @include pretendard-30-500;
+}

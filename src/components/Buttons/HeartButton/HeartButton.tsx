@@ -2,12 +2,13 @@
 
 import { deleteCommunityLikes, deleteProductLikes, postCommunityLikes, postProductLikes } from '@/api/likesAPI';
 import SignInModal from '@/components/SignInModal/SignInModal';
+import { QUERY_KEYS } from '@/constants/queryKey';
 import { HeartIcon } from '@/public/index';
+import type { CommunityPostCardDataType } from '@/types/CommunityTypes';
 import { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { MouseEvent, useState } from 'react';
-import type { CommunityPostCardDataType } from '@/types/CommunityTypes';
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -38,7 +39,13 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
 
   const { mutate: likeProductMutation } = useMutation({
     mutationFn: async ({ itemId, itemIsLiked }: LikeMutationProps) => {
-      if (itemIsLiked) {
+      if (usage === 'community') {
+        if (itemIsLiked) {
+          await deleteCommunityLikes(itemId);
+        } else {
+          await postCommunityLikes(itemId);
+        }
+      } else if (itemIsLiked) {
         await deleteProductLikes([itemId]);
       } else {
         await postProductLikes(itemId);
@@ -132,6 +139,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
         {
           onSuccess: () => {
             setIsChecked((prev) => !prev);
+            queryClient.invalidateQueries({ queryKey: [...QUERY_KEYS.LIKE.LISTS()] });
           },
         },
       );
@@ -173,7 +181,6 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
           <HeartIcon className={cn('heart', usage === 'detail' && 'white-stroke', isChecked && 'red-heart')} />
         )}
       </div>
-
       <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
     </>
   );
