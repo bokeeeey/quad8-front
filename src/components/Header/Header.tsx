@@ -1,16 +1,16 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 
-import { ROUTER } from '@/constants/route';
-import { LogoIcon, UserIcon } from '@/public/index';
 import type { CartAPIDataType } from '@/types/CartTypes';
 import type { Users } from '@/types/userType';
+import { ROUTER } from '@/constants/route';
+import { LogoIcon, UserIcon } from '@/public/index';
 import SignInModal from '../SignInModal/SignInModal';
 import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton } from './HeaderParts';
 
@@ -75,7 +75,7 @@ export default function Header() {
               >
                 커스텀 키보드 만들기
               </Link>
-              <ShopButton pathname={pathname} />
+              <ShopButton />
               <Link href={ROUTER.COMMUNITY} className={cn('button', { 'current-page': pathname === ROUTER.COMMUNITY })}>
                 커뮤니티
               </Link>
@@ -84,11 +84,11 @@ export default function Header() {
           <div className={cn('left-wrapper')}>
             <SearchButton isBlack={isBlack} />
             {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
-            <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
-              {profileImage && profileImage !== 'null' ? (
-                <Image src={profileImage} alt='profile' width={31} height={31} className={cn('profile-image')} />
+            <button className={cn('user-icon', 'button')} type='button' onClick={handleUserIconClick}>
+              {profileImage ? (
+                <Image src={profileImage} alt='profile' width={28} height={28} className={cn('profile-image')} />
               ) : (
-                <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={31} height={31} />
+                <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={28} height={28} />
               )}
             </button>
             <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />

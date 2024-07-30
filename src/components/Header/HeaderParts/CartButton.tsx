@@ -1,5 +1,5 @@
-import { CartIcon } from '@/public/index';
 import classNames from 'classnames/bind';
+import { CartIcon } from '@/public/index';
 import styles from './CartButton.module.scss';
 
 interface CartButtonProps {

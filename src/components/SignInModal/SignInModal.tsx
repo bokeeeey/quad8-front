@@ -1,17 +1,17 @@
-import classNames from 'classnames/bind';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import classNames from 'classnames/bind';
 
 import { postSignin } from '@/api/authAPI';
 import { ROUTER } from '@/constants/route';
 import { setCookie } from '@/libs/manageCookie';
 import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
 import type { FetchSignInInfoTypes } from '@/types/authTypes';
-import { useRouter } from 'next/navigation';
-
-import { useQueryClient } from '@tanstack/react-query';
 import Modal from '../Modal/Modal';
-
 import Button from '../Buttons/Button/Button';
 import InputField from '../InputField/InputField';
 
@@ -64,7 +64,7 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
           autoClose: 2000,
         });
         queryClient.invalidateQueries({
-          queryKey: ['postCardsList'],
+          queryKey: [['postCardsList'], ['userData']],
         });
       } else if (responseData.status === 'FAIL') {
         toast.error(responseData.message);
