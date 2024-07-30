@@ -1,7 +1,7 @@
 interface CommunityPopOverOptionProps {
   isMine?: boolean;
   onClickDelete: () => void;
-  onClickEdit: () => void;
+  onClickEdit?: () => void;
 }
 
 export const communityPopOverOption = ({ isMine, onClickDelete, onClickEdit }: CommunityPopOverOptionProps) => {

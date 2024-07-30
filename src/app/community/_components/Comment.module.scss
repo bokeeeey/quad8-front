@@ -3,6 +3,10 @@
   position: relative;
   width: 100%;
   gap: 1.2rem;
+
+  &:hover {
+    background-color: $gray-5;
+  }
 }
 
 .user-profile {
@@ -41,6 +45,10 @@
     @include pretendard-16-400;
 
     cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   & > .time-ago {

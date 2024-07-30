@@ -52,6 +52,7 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
 
   const createdTimeToDate = new Date(createdTime);
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
+  const [showIcon, setShowIcon] = useState(false);
   const [isOpenProfileCard, setIsOpenProfileCard] = useState(false);
   const [commentPositionTop, setCommentPositionTop] = useState(0);
 
@@ -86,18 +87,26 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   };
 
   const handleClickPopOver = () => {
-    onOpenPopOver(commentId);
-    setIsOpenPopOver(true);
+    if (isOpenPopOver) {
+      onClosePopOver();
+      setIsOpenPopOver(false);
+    } else {
+      onOpenPopOver(commentId);
+      setIsOpenPopOver(true);
+    }
   };
 
   const handleClickDelete = () => {
     deleteCommentMutation(commentId);
   };
 
-  const handleClickEdit = () => {};
-
   return (
-    <div className={cn('container')} ref={ref}>
+    <div
+      className={cn('container')}
+      ref={ref}
+      onMouseEnter={() => setShowIcon(true)}
+      onMouseLeave={() => (isOpenedPopOver ? setShowIcon(true) : setShowIcon(false))}
+    >
       <div onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
         <ProfileImage profileImage={profile && profile} />
         <UserProfileCard
@@ -112,16 +121,18 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
             <p className={cn('nickname')}>{nickname}</p>
             <p className={cn('time-ago')}>{timeAgo}</p>
           </div>
-          <PopOver
-            optionsData={communityPopOverOption({
-              isMine: userID === commentUserId,
-              onClickDelete: handleClickDelete,
-              onClickEdit: handleClickEdit,
-            })}
-            isOpenPopOver={isOpenPopOver && isOpenedPopOver}
-            onHandleOpen={handleClickPopOver}
-            onHandleClose={onClosePopOver}
-          />
+          {showIcon && (
+            <PopOver
+              optionsData={communityPopOverOption({
+                isMine: userID === commentUserId,
+                onClickDelete: handleClickDelete,
+              })}
+              isOpenPopOver={isOpenPopOver && isOpenedPopOver}
+              onHandleOpen={handleClickPopOver}
+              onHandleClose={onClosePopOver}
+              position={{ left: 415, top: 15 }}
+            />
+          )}
         </div>
         <div className={cn('content')}>{comment}</div>
       </div>

@@ -35,6 +35,7 @@ export default function AuthorCard({
 }: AuthorCardProps) {
   const userProfileCardRef = useRef<HTMLDivElement>(null);
   const [isOpenUserCard, setIsOpenUserCard] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
   const handleOpenProfile = () => {
     setIsOpenUserCard(true);
@@ -45,7 +46,12 @@ export default function AuthorCard({
   };
 
   return (
-    <div className={cn('container')} onClick={(e) => e.stopPropagation()}>
+    <div
+      className={cn('container')}
+      onClick={(e) => e.stopPropagation()}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       <div
         onMouseEnter={handleOpenProfile}
         onMouseLeave={handleCloseProfile}
@@ -61,14 +67,17 @@ export default function AuthorCard({
         </p>
         <p className={cn('sub-info')}>{dateText}</p>
       </div>
-      <div className={cn('show-more-icon')}>
-        <PopOver
-          optionsData={popOverOptions}
-          onHandleClose={onClosePopOver}
-          isOpenPopOver={isOpenPopOver}
-          onHandleOpen={onClickPopOver}
-        />
-      </div>
+      {isHovering && (
+        <div className={cn('show-more-icon')}>
+          <PopOver
+            optionsData={popOverOptions}
+            onHandleClose={onClosePopOver}
+            isOpenPopOver={isOpenPopOver}
+            onHandleOpen={onClickPopOver}
+            position={{ left: -30, top: -20 }}
+          />
+        </div>
+      )}
     </div>
   );
 }
