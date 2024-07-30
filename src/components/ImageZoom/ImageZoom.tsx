@@ -3,8 +3,12 @@
 import classNames from 'classnames/bind';
 import { useState, MouseEvent, useRef } from 'react';
 import Image, { StaticImageData } from 'next/image';
-import styles from './ImageZoom.module.scss';
+
+import { IMAGE_BLUR } from '@/constants/blurImage';
+import { keydeukProfileImg } from '@/public/index';
 import ZoomView from './ZoomView';
+
+import styles from './ImageZoom.module.scss';
 
 const cn = classNames.bind(styles);
 
@@ -24,14 +28,24 @@ interface ScannerProps {
   position: Position;
 }
 
+const scannerSize = 250;
+
 function Scanner({ position }: ScannerProps) {
-  return <div style={{ top: position.top, left: position.left }} className={cn('scanner')} />;
+  return (
+    <div
+      style={{ top: position.top, left: position.left, width: scannerSize, height: scannerSize }}
+      className={cn('scanner')}
+    />
+  );
 }
 
 export default function ImageZoom({ image, alt, width, height }: ImageZoomProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
+  const [isImageError, setIsImageError] = useState(false);
+  const [scannerPosition, setScannerPosition] = useState<Position | null>(null);
+  const [viewPosition, setViewPosition] = useState<Position | null>(null);
 
   const handleLoadingComplete = (result: { naturalHeight: number; naturalWidth: number }) => {
     setImageDimensions({
@@ -40,13 +54,9 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
     });
   };
 
-  const [scannerPosition, setScannerPosition] = useState<Position | null>(null);
-  const [viewPosition, setViewPosition] = useState<Position | null>(null);
-
   const handleMouseMove = (e: MouseEvent) => {
-    const scannerSize = 200;
     const updatedScannerPosition = { left: 0, top: 0 };
-
+    const imageAspectRatio = imageDimensions.width / imageDimensions.height;
     const containerRect = containerRef.current?.getBoundingClientRect();
 
     if (!containerRect) return;
@@ -73,13 +83,19 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
       updatedScannerPosition.top = containerRect.height - scannerSize;
     }
 
-    const imageAspectRatio = imageDimensions.width / imageDimensions.height;
-
     setScannerPosition(updatedScannerPosition);
-    setViewPosition({
-      left: (updatedScannerPosition.left + scannerSize / 2) * -2,
-      top: (updatedScannerPosition.top + scannerSize / 2) * -(2 / imageAspectRatio),
-    });
+
+    if (imageDimensions.width > imageDimensions.height) {
+      setViewPosition({
+        left: updatedScannerPosition.left * -2.0,
+        top: (updatedScannerPosition.top + scannerSize / 2) * -(2 / imageAspectRatio),
+      });
+    } else {
+      setViewPosition({
+        left: updatedScannerPosition.left * -(2 * imageAspectRatio),
+        top: (updatedScannerPosition.top + scannerSize / 2) * -2,
+      });
+    }
   };
 
   const handleMouseLeave = () => {
@@ -88,15 +104,19 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
   };
 
   return (
-    <div
-      style={{ width, height }}
-      className={cn('container')}
-      onMouseMove={(e) => handleMouseMove(e)}
-      onMouseLeave={handleMouseLeave}
-      ref={containerRef}
-    >
-      <div className={cn('image-wrapper')}>
-        <Image src={image} alt={alt} className={cn('image')} fill onLoadingComplete={handleLoadingComplete} />
+    <div style={{ width, height }} className={cn('container')} ref={containerRef}>
+      <div className={cn('image-wrapper')} onMouseMove={(e) => handleMouseMove(e)} onMouseLeave={handleMouseLeave}>
+        <Image
+          src={isImageError ? keydeukProfileImg : image}
+          alt={alt}
+          className={cn('image')}
+          fill
+          onLoadingComplete={handleLoadingComplete}
+          onError={() => setIsImageError(true)}
+          priority
+          placeholder={IMAGE_BLUR.placeholder}
+          blurDataURL={IMAGE_BLUR.blurDataURL}
+        />
       </div>
       {scannerPosition && <Scanner position={scannerPosition} />}
       {viewPosition && containerRef?.current && (

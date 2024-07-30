@@ -22,6 +22,7 @@ export default function ZoomView({ image, position, left, viewWidth, viewHeight,
   const { width: imageWidth, height: imageHeight } = imageDimensions;
 
   const imageAspectRatio = imageWidth / imageHeight;
+  const marginTop = viewHeight === 536 ? 250 : 300;
 
   const calcRatio = (width: number, height: number): { widthRatio: number; heightRatio: number } => {
     if (width > height) {
@@ -46,8 +47,8 @@ export default function ZoomView({ image, position, left, viewWidth, viewHeight,
         top: 0,
         width: viewWidth,
         height: viewHeight,
-        backgroundPosition: `${position.left + 200}px ${position.top + 250}px`,
-        backgroundSize: `${widthRatio * 1.1}% ${heightRatio}%`,
+        backgroundPosition: `${position.left}px ${position.top + marginTop}px`,
+        backgroundSize: `${widthRatio}% ${heightRatio}%`,
       }}
     />
   );
