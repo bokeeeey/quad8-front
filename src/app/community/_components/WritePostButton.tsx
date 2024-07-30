@@ -80,7 +80,14 @@ export default function WritePostButton() {
 
   return (
     <div>
-      <Button width={120} fontSize={14} paddingVertical={8} radius={4} onClick={handleClickButton}>
+      <Button
+        width={120}
+        fontSize={14}
+        paddingVertical={8}
+        radius={4}
+        onClick={handleClickButton}
+        hoverColor='background-primary-60'
+      >
         <div className={cn('write-button-content')}>
           <PlusIcon /> 글 작성하기
         </div>
