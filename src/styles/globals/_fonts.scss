@@ -136,8 +136,8 @@
   @include font-mixin('Pretendard', 6, 700);
 }
 
-@mixin pretendard-60-800 {
-  @include font-mixin('Pretendard', 6, 800);
+@mixin pretendard-52-800 {
+  @include font-mixin('Pretendard', 5.2, 800);
 }
 
 @mixin pretendard-80-700 {

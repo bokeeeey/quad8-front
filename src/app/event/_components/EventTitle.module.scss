@@ -1,6 +1,14 @@
 .title-wrap {
   color: $black;
   text-align: center;
+
+  &.white {
+    color: white;
+  }
+
+  &.black {
+    color: $black;
+  }
 }
 
 .title-top {
@@ -13,5 +21,5 @@
 
 .main-title {
   padding-top: 2rem;
-  @include pretendard-60-800;
+  @include pretendard-52-800;
 }

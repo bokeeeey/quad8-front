@@ -63,6 +63,9 @@ export { default as heroItem3Img } from './images/heroItem3.png';
 export { default as heroItem4Img } from './images/heroItem4.png';
 export { default as heroItem5Img } from './images/heroItem5.png';
 export { default as heroItem6Img } from './images/heroItem6.png';
+export { default as pointImg } from './images/point.png';
+export { default as rouletteImg } from './images/roulette.png';
+
 export { default as keydeukProfileImg } from './images/kedeukProfile.png';
 export { default as keydeukImg } from './images/keydeuk.png';
 export { default as myProfileImg } from './images/myProfile.jpeg';

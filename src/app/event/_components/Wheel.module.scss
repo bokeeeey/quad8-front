@@ -1,40 +1,39 @@
 .container {
-  margin-top: 50px;
+  margin-top: 4rem;
   text-align: center;
 }
 
-.wheel {
+.event-area {
+  @include flex-column(2rem);
+}
+
+.button-area {
+  @include flex-center;
+
+  margin-top: 6rem;
+}
+
+.start-button {
+  background-color: $black;
+}
+
+.roulette-area {
   position: relative;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-  transition: transform 2s ease-out;
-  border: 5px solid black;
-  border-radius: 50%;
-  cursor: pointer;
-
-  &.spinning {
-    transform: rotate(1440deg);
-  }
-
-  .text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
-  }
 }
 
-.message {
-  margin-top: 20px;
+.point-img {
+  position: absolute;
+  z-index: 3;
+  top: -0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.head {
-  font-size: 2em;
+.result {
+  font-size: 3rem;
 }
 
-.tail {
-  color: green;
-  font-size: 1.5em;
+.tag {
+  margin-top: 7.2rem;
+  @include flex-center;
 }

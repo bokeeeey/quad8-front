@@ -8,15 +8,16 @@ const cn = classNames.bind(styles);
 interface EventTitleProps {
   title: string;
   children: ReactNode;
+  color: 'white' | 'black';
 }
 
-export default function EventTitle({ title, children }: EventTitleProps) {
+export default function EventTitle({ title, children, color }: EventTitleProps) {
   return (
-    <div className={cn('title-wrap')}>
+    <div className={cn('title-wrap', { white: color === 'white', black: color === 'black' })}>
       <div className={cn('title-top')}>
-        <CloverIcon />
+        <CloverIcon fill={color === 'white' ? '#fff' : '#000'} />
         <h2>{title}</h2>
-        <CloverIcon />
+        <CloverIcon fill={color === 'white' ? '#fff' : '#000'} />
       </div>
 
       <h1 className={cn('main-title')}>{children}</h1>

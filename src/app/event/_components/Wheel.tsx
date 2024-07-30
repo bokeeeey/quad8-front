@@ -1,44 +1,87 @@
 'use client';
 
+import { pointImg, rouletteImg } from '@/public/index';
+import { useEffect, useState } from 'react';
+
+import { Button, Dialog } from '@/components';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import Image from 'next/image';
 import styles from './Wheel.module.scss';
 
 const cn = classNames.bind(styles);
-const coupons = ['10% 할인 쿠폰', '무료 배송 쿠폰', '5% 할인 쿠폰', '1+1 쿠폰'];
+
+const rewards = ['3000', '1000', '2000', '3000', '1000', '2000'];
+const animationDuration = 2500;
+
+const getRandomIndex = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const calculateRotation = (index: number, total: number): number => (360 / total) * index + 360 * 2;
 
 function Wheel() {
-  const [selectedCoupon, setSelectedCoupon] = useState<string | null>(null);
-  const [isSpinning, setIsSpinning] = useState(false);
-  // const [confetti, setConfetti] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const spinWheel = () => {
-    setIsSpinning(true);
+  useEffect(() => {
+    if (isAnimating) {
+      const resultIndex = getRandomIndex(0, rewards.length - 1);
+      const newRotation = calculateRotation(resultIndex, rewards.length);
+      setRotation(newRotation);
+
+      setTimeout(() => {
+        setIsAnimating(false);
+        setResult(rewards[resultIndex]);
+      }, animationDuration);
+    }
+  }, [isAnimating]);
+
+  const startRoulette = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
     setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * coupons.length);
-      setSelectedCoupon(coupons[randomIndex]);
-      // setIsSpinning(false);
-      // setConfetti(true);
-      // setTimeout(() => setConfetti(false), 3000);
-    }, 2000); // 2초 동안 회전 애니메이션
+      setIsModalOpen(true);
+    }, 2700);
   };
-  console.log(selectedCoupon);
 
   return (
-    <div className={cn('container')}>
-      <h1 className={cn('head')}>돌림판 이벤트</h1>
-      <div className={cn('wheel', { spinning: isSpinning })}>
-        <div className={cn('text')}>{isSpinning ? '돌리는 중...' : '돌림판 돌리기'}</div>
-      </div>
-      {selectedCoupon && isSpinning && (
-        <div className={cn('message')}>
-          <h2 className={cn('tail')}>축하합니다! 당신은 {selectedCoupon}을 받았습니다!</h2>
+    <div className={cn('tag')}>
+      <div className={cn('event-area')}>
+        <div className={cn('roulette-area')}>
+          <Image src={pointImg} alt='point' className={cn('point-img')} width={78} />
+          <Image
+            src={rouletteImg}
+            alt='룰렛'
+            className={cn('roulette')}
+            width={650}
+            height={650}
+            style={{
+              transform: `rotate(${rotation}deg)`,
+              transition: isAnimating ? `transform ${animationDuration / 1000}s ease-out` : 'none',
+            }}
+          />
         </div>
-      )}
-      <button type='button' onClick={spinWheel}>
-        룰렛 돌리기
-      </button>
-      {/* {confetti && <Confetti />} */}
+        <div className={cn('button-area')}>
+          <Button
+            onClick={startRoulette}
+            fontSize={24}
+            className={cn('start-button')}
+            disabled={isAnimating}
+            type='button'
+          >
+            룰렛 돌리고 쿠폰 받기!
+          </Button>
+        </div>
+        <Dialog
+          type='alert'
+          iconType='accept'
+          message={`${result}원 쿠폰에 당첨 됐습니다.`}
+          isOpen={isModalOpen}
+          buttonText='확인'
+          onClick={() => setIsModalOpen(false)}
+        />
+        {result && <div className={cn('result')}>결과: {result}원 쿠폰</div>}
+      </div>
     </div>
   );
 }
