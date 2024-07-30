@@ -1,14 +1,13 @@
 'use client';
 
-import { ScrollUpButton } from '@/components';
+import { ReactNode, useRef } from 'react';
 import { QueryClient, QueryClientProvider, isServer } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import classNames from 'classnames/bind';
-import { ReactNode, useRef } from 'react';
-import { ToastContainer, Zoom } from 'react-toastify';
 
-import '@/styles/toast/toastAnimation.scss';
-import '@/styles/toast/toastContainer.scss';
+import { Zoom } from 'react-toastify';
+import { ScrollUpButton, Toast } from '@/components';
+
 import styles from './providers.module.scss';
 
 const cn = classNames.bind(styles);
@@ -48,7 +47,7 @@ export function Providers({ children }: ProvidersProps) {
       <ScrollUpButton headerRef={scrollRef} />
       <div id='modal' />
       <ReactQueryDevtools initialIsOpen={false} />
-      <ToastContainer
+      <Toast
         autoClose={2000}
         theme='dark'
         position='top-center'
@@ -58,6 +57,7 @@ export function Providers({ children }: ProvidersProps) {
         pauseOnFocusLoss={false}
         closeOnClick
         hideProgressBar
+        closeButton={false}
       />
     </QueryClientProvider>
   );
