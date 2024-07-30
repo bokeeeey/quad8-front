@@ -117,6 +117,7 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
           priority
           placeholder={IMAGE_BLUR.placeholder}
           blurDataURL={IMAGE_BLUR.blurDataURL}
+          sizes='(max-width: 768px) 30rem'
         />
       </div>
       {scannerPosition && <Scanner position={scannerPosition} />}
