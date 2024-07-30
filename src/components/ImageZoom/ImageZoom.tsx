@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { useState, MouseEvent, useRef } from 'react';
+import { useState, MouseEvent, useRef, SyntheticEvent } from 'react';
 import Image, { StaticImageData } from 'next/image';
 
 import { IMAGE_BLUR } from '@/constants/blurImage';
@@ -47,10 +47,11 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
   const [scannerPosition, setScannerPosition] = useState<Position | null>(null);
   const [viewPosition, setViewPosition] = useState<Position | null>(null);
 
-  const handleLoadingComplete = (result: { naturalHeight: number; naturalWidth: number }) => {
+  const handleImageLoadComplete = (e: SyntheticEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
     setImageDimensions({
-      width: result.naturalWidth,
-      height: result.naturalHeight,
+      width: target.naturalWidth,
+      height: target.naturalHeight,
     });
   };
 
@@ -111,7 +112,7 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
           alt={alt}
           className={cn('image')}
           fill
-          onLoadingComplete={handleLoadingComplete}
+          onLoad={handleImageLoadComplete}
           onError={() => setIsImageError(true)}
           priority
           placeholder={IMAGE_BLUR.placeholder}
