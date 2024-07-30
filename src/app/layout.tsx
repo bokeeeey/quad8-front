@@ -7,12 +7,11 @@ import { getCartData } from '@/api/cartAPI';
 import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
 import Script from 'next/script';
+import { getAlarm } from '@/api/alarmAPI';
 import { Providers } from './providers';
 import AOSWrapper from './_components/Aos/AOSWrapper';
 
 import '@/styles/reset.css';
-import 'react-toastify/dist/ReactToastify.css';
-import '@/styles/toast/toastContainer.scss';
 import styles from './layout.module.scss';
 
 const cn = classNames.bind(styles);
@@ -34,6 +33,8 @@ export default async function RootLayout({
   const entireQueryClient = new QueryClient();
 
   await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
+  await queryClient.prefetchQuery({ queryKey: ['communityAlarm'], queryFn: getAlarm });
+
   await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
 
   return (

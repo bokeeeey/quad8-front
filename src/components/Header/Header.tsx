@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -19,6 +19,7 @@ import styles from './Header.module.scss';
 const cn = classNames.bind(styles);
 
 export default function Header() {
+  const eventSource = useRef<null | EventSource>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
@@ -83,7 +84,7 @@ export default function Header() {
           </div>
           <div className={cn('left-wrapper')}>
             <SearchButton isBlack={isBlack} />
-            {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
+            {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton eventSource={eventSource} />}
             <button className={cn('user-icon', 'button')} type='button' onClick={handleUserIconClick}>
               {profileImage ? (
                 <Image src={profileImage} alt='profile' width={28} height={28} className={cn('profile-image')} />
@@ -92,7 +93,7 @@ export default function Header() {
               )}
             </button>
             <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
-            {userData && <NotificationButton isBlack={isBlack} />}
+            {users && <NotificationButton isBlack={isBlack} eventSource={eventSource} />}
           </div>
         </div>
       </header>

@@ -1,4 +1,5 @@
 .button-wrapper {
+  position: relative;
   width: 2.4rem;
   height: 2.4rem;
 }
@@ -171,7 +172,30 @@
 }
 
 .hollow-card-text {
-  @include pretendard-14-400;
+  @include pretendard-12-400;
 
   color: $black;
+}
+
+.toast-body {
+  @include pretendard-16-400;
+}
+
+.alarm-count {
+  @include pretendard-14-400;
+  @include flex-center;
+
+  position: absolute;
+  top: -0.5rem;
+  right: -0.7rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 30rem;
+  background-color: $red;
+  color: $white;
+  cursor: pointer;
+}
+
+.count-more-digit {
+  width: 2.3rem;
 }

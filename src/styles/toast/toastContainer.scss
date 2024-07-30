@@ -38,6 +38,10 @@
   gap: 1rem;
 }
 
+.Toastify__progress-bar-theme--light {
+  background: $primary;
+}
+
 .Toastify__toast-theme--dark {
   background-color: $gray-50 !important;
 }
