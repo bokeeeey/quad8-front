@@ -12,7 +12,7 @@ import type { Users } from '@/types/userType';
 import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
 import SignInModal from '../SignInModal/SignInModal';
-import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton } from './HeaderParts';
+import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton, NotificationButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
 
@@ -92,6 +92,7 @@ export default function Header() {
               )}
             </button>
             <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
+            {userData && <NotificationButton isBlack={isBlack} />}
           </div>
         </div>
       </header>

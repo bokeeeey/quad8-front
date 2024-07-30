@@ -8,9 +8,11 @@ import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
 import Script from 'next/script';
 import { Providers } from './providers';
+import AOSWrapper from './_components/Aos/AOSWrapper';
 
 import '@/styles/reset.css';
-import AOSWrapper from './_components/Aos/AOSWrapper';
+import 'react-toastify/dist/ReactToastify.css';
+import '@/styles/toast/toastContainer.scss';
 import styles from './layout.module.scss';
 
 const cn = classNames.bind(styles);

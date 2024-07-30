@@ -8,8 +8,6 @@ import classNames from 'classnames/bind';
 import { ToastContainer, Zoom } from 'react-toastify';
 import { ScrollUpButton } from '@/components';
 
-import 'react-toastify/dist/ReactToastify.css';
-import '@/styles/toast/toastContainer.scss';
 import styles from './providers.module.scss';
 
 const cn = classNames.bind(styles);
