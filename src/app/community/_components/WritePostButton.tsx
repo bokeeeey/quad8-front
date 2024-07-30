@@ -35,14 +35,15 @@ export default function WritePostButton() {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<PostCardDetailModalCustomKeyboardType | null>(null);
 
-  const userData = queryClient.getQueryData<UserDataType>(['userData']);
-
   const { data: orderListData } = useQuery({
     queryKey: ['orderList'],
     queryFn: getCustomOrderList,
   });
 
   const handleClickButton = () => {
+    const userData = queryClient.getQueryData<UserDataType>(['userData']);
+    queryClient.invalidateQueries({ queryKey: ['orderList'] });
+
     if (!userData?.data) {
       setIsOpenSignInModal(true);
     } else {
