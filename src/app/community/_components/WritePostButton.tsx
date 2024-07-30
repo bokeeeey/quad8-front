@@ -35,9 +35,10 @@ export default function WritePostButton() {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<PostCardDetailModalCustomKeyboardType | null>(null);
 
-  const { data: orderListData } = useQuery({
+  const { data: orderListData, refetch: refetchCustomOrderList } = useQuery({
     queryKey: ['orderList'],
     queryFn: getCustomOrderList,
+    enabled: false,
   });
 
   const handleClickButton = () => {
@@ -47,6 +48,7 @@ export default function WritePostButton() {
     if (!userData?.data) {
       setIsOpenSignInModal(true);
     } else {
+      refetchCustomOrderList();
       setIsOpenOrderListModal(true);
     }
   };
