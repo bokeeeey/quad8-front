@@ -47,10 +47,11 @@ export default function WritePostButton() {
 
     if (!userData?.data) {
       setIsOpenSignInModal(true);
-    } else {
-      refetchCustomOrderList();
-      setIsOpenOrderListModal(true);
+      return;
     }
+
+    refetchCustomOrderList();
+    setIsOpenOrderListModal(true);
   };
 
   const handleClickProductList = (i: number) => {
