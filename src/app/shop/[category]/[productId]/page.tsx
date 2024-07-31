@@ -1,7 +1,3 @@
-import { getProductDetail } from '@/api/productAPI';
-import { getProductReviews } from '@/api/productReviewAPI';
-import { ROUTER } from '@/constants/route';
-import { redirect } from 'next/navigation';
 import ProductDetail from './_components/Product/ProductDetail';
 import DetailTab from './_components/TabContents/DetailTab';
 
@@ -11,19 +7,14 @@ interface ProductDetailParams {
   };
 }
 
-export default async function page({ params }: ProductDetailParams) {
+export default async function ProductDetailPage({ params }: ProductDetailParams) {
   const { productId } = params;
-  const productDetailData = await getProductDetail(productId);
-  const productReviewData = await getProductReviews({ productId });
-
-  if (!productDetailData) {
-    redirect(ROUTER.MAIN);
-  }
+  const localProductId = Number(productId);
 
   return (
     <div>
-      <ProductDetail product={productDetailData} />
-      <DetailTab detailsImg={productDetailData.detailsImg} reviewData={productReviewData} productId={productId} />
+      <ProductDetail productId={localProductId} />
+      <DetailTab productId={localProductId} />
     </div>
   );
 }

@@ -14,8 +14,8 @@ export const GENDER_OPTION = [
 export const PRODUCT_REVIEW_SORT_OPTIONS = [
   { label: '최신순', value: 'createdAt' },
   { label: '인기순', value: 'likes' },
-  { label: '평점 낮은순', value: 'scoreHigh' },
-  { label: '평점 높은순', value: 'scoreLow' },
+  { label: '평점 낮은순', value: 'scoreLow' },
+  { label: '평점 높은순', value: 'scoreHigh' },
 ];
 
 export const COMMUNITY_REVIEW_SORT_OPTIONS = [
