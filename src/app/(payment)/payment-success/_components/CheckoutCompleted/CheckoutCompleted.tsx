@@ -88,16 +88,17 @@ export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
         <h1 className={cn('info-title')}>
           주문번호<span>{paymentResponse?.paymentOrderId.toUpperCase()}</span>
         </h1>
-      </article>
 
-      {shippingAddress && <CheckoutAddress item={shippingAddress} />}
-      <div className={cn('item-box')}>
-        <h1>주문 상품</h1>
-        {orderItems &&
-          orderItems.map((item: OrderItem) => (
-            <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
-          ))}
-      </div>
+        {shippingAddress && <CheckoutAddress item={shippingAddress} />}
+
+        <div className={cn('item-box')}>
+          <h1>주문 상품</h1>
+          {orderItems &&
+            orderItems.map((item: OrderItem) => (
+              <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
+            ))}
+        </div>
+      </article>
 
       <div className={cn('confirm-box')}>
         <p>주문 내역을 확인하였으며, 정보 제공등에 동의합니다.</p>
