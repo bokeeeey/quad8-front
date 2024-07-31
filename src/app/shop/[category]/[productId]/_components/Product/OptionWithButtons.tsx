@@ -167,7 +167,9 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
         {optionList?.length ? (
           <Dropdown options={optionNames} placeholder={OPTION_PLACEHOLDER} value='' onChange={handleChangeOption} />
         ) : (
-          <CountInput value={noOptionCount} onChange={(count) => setNoOptionCount(count)} />
+          <div className={cn('option-count')}>
+            <CountInput value={noOptionCount} onChange={(count) => setNoOptionCount(count)} />
+          </div>
         )}
         {selectedOptions.map((option) => (
           <OptionContainer

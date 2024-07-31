@@ -104,7 +104,9 @@ export default function OptionEditModal({
               {productData.optionList.find((option) => option.id === optionId)?.optionName}
             </div>
           )}
-          <CountInput value={count} ref={inputRef} onChange={(value) => setCount(Number(value))} />
+          <div className={cn('option-count')}>
+            <CountInput value={count} ref={inputRef} onChange={(value) => setCount(Number(value))} />
+          </div>
         </div>
         <div className={cn('cart-wrapper')} />
         <div className={cn('price-wrapper')}>
