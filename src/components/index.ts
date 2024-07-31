@@ -1,6 +1,7 @@
 export { default as Button } from './Buttons/Button/Button';
 export { default as CheckBox } from './CheckBox/CheckBox';
 export { default as CountInput } from './CountInput/CountInput';
+export { default as CustomImage } from './CustomImage/CustomImage';
 export { default as CustomOption } from './CustomOption/CustomOption';
 export { default as Dialog } from './Dialog/Dialog';
 export { default as Dropdown } from './Dropdown/Dropdown';

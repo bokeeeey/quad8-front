@@ -12,12 +12,12 @@ import { postCustomKeyboardOrder } from '@/api/customKeyboardAPI';
 import { getColorUpperCase } from '@/libs/getColorUpperCase';
 import { getCustomKeyboardPrice } from '@/libs/getCustomKeyboardPrice';
 import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
-import { getCookie } from '@/libs/manageCookie';
 import { StepContext, KeyboardDataContext } from '@/context';
 import { ROUTER } from '@/constants/route';
 import { POINT_KEY } from '@/constants/keyboardData';
 import type { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
 import type { CustomKeyboardStepTypes, OptionDataType, CustomKeyboardAPITypes } from '@/types/CustomKeyboardTypes';
+import type { Users } from '@/types/userType';
 import { blackSwitchImg, blueSwitchImg, brownSwitchImg, redSwitchImg } from '@/public/index';
 import { Button, Dialog, SignInModal } from '@/components';
 import CartModalOptionCard from './parts/CartModalOptionCard';
@@ -150,9 +150,9 @@ export default function CartModal({
 
   const handleClickPutButton = async () => {
     const id = params.get('orderId');
-    const accessToken = await getCookie('accessToken');
+    const userData = queryClient.getQueryData<{ data: Users }>(['userData']);
 
-    if (!accessToken) {
+    if (!userData?.data) {
       changeLoginModal(true);
       return;
     }

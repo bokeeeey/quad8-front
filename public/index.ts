@@ -55,6 +55,7 @@ export { default as banner2Img } from './images/banner2.png';
 export { default as blackSwitchImg } from './images/blackSwitch.jpg';
 export { default as blueSwitchImg } from './images/blueSwitch.jpg';
 export { default as brownSwitchImg } from './images/brownSwitch.jpg';
+export { default as errorImg } from './images/error.png';
 export { default as guide1Img } from './images/guide1.png';
 export { default as guide2Img } from './images/guide2.png';
 export { default as guide3Img } from './images/guide3.png';

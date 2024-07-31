@@ -30,29 +30,25 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const queryClient = new QueryClient();
-  const entireQueryClient = new QueryClient();
 
   await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
   await queryClient.prefetchQuery({ queryKey: ['communityAlarm'], queryFn: getAlarm });
-
-  await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
+  await queryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
 
   return (
     <html lang='ko'>
       <body>
         <Providers>
-          <HydrationBoundary state={dehydrate(entireQueryClient)}>
-            <div className={cn('wrapper')}>
-              <HydrationBoundary state={dehydrate(queryClient)}>
-                <Header />
-              </HydrationBoundary>
-              <div className={cn('content-wrapper')}>
-                {' '}
-                <AOSWrapper>{children}</AOSWrapper>
-              </div>
-              <Footer />
+          <div className={cn('wrapper')}>
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Header />
+            </HydrationBoundary>
+            <div className={cn('content-wrapper')}>
+              {' '}
+              <AOSWrapper>{children}</AOSWrapper>
             </div>
-          </HydrationBoundary>
+            <Footer />
+          </div>
         </Providers>
       </body>
       <Script src='https://developers.kakao.com/sdk/js/kakao.js' strategy='afterInteractive' />

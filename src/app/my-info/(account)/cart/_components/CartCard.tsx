@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 import classNames from 'classnames/bind';
-import Link from 'next/link';
 
 import { putChangeCartData } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
 import type { CustomDataType, OptionChageAPIType, ShopDataType } from '@/types/CartTypes';
 import type { CreateOrderResponseType } from '@/types/OrderTypes';
 import { ROUTER } from '@/constants/route';
-import { Button, Modal, CustomOption } from '@/components';
-import { toast } from 'react-toastify';
+import { Button, Modal, CustomOption, CustomImage } from '@/components';
 import CardCheckBox from './CardCheckBox';
 import ShopOption from './ShopOption';
 import OptionEditModal from './OptionEditModal';
@@ -119,7 +118,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
         </div>
         {type === 'shop' ? (
           <Link className={cn('product-wrapper')} href={`/shop/${cardData.category}/${cardData.productId}`}>
-            <Image src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
+            <CustomImage src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
             <div className={cn('information-wrapper')}>
               {type === 'shop' && <div className={cn('type')}>{category}</div>}
               <div className={cn('title')}> {title}</div>
@@ -128,7 +127,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
           </Link>
         ) : (
           <div className={cn('product-wrapper')}>
-            <Image src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
+            <CustomImage src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
             <div className={cn('information-wrapper')}>
               <div className={cn('title')}> {title}</div>
               <CustomOption customData={cardData} />
