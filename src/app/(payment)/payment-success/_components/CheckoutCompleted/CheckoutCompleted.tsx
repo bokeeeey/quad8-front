@@ -1,16 +1,18 @@
 'use client';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import { postPaymentConfirm, postPaymentSuccess } from '@/api/paymentAPI';
 import CheckoutAddress from '@/app/(payment)/payment/_components/Checkout/CheckoutForm/parts/CheckoutAddress';
 import { Button, ItemOverview } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import { ROUTER } from '@/constants/route';
 import type { OrderItem } from '@/types/OrderTypes';
-import { PaymentSuccessRequest } from '@/types/PaymentTypes';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import type { PaymentSuccessRequest } from '@/types/PaymentsTypes';
+
 import styles from './CheckoutComplete.module.scss';
 
 const cn = classNames.bind(styles);
@@ -24,24 +26,17 @@ export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
 
-  // const paymentType = searchParams.get('paymentType') || '';
   const orderIdFromParams = searchParams.get('orderId') || '';
   const paymentKey = searchParams.get('paymentKey') || '';
   const amount = searchParams.get('amount') || '';
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  // const { data: paymentDataResponse } = useQuery<{ data: OrderDetailData }>({
-  //   queryKey: ['paymentDataResponse'],
-  // });
-
   const { mutate: postPaymentSuccessMutation } = useMutation({
     mutationFn: () => postPaymentSuccess({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
     onSuccess: (res) => {
-      console.log('paymentSuccess 결과', res);
-
       if (res.status === 'SUCCESS') {
-        queryClient.setQueryData(['paymentDataResponse'], res.data);
+        queryClient.setQueryData(['paymentSuccessRequest'], res.data);
         setIsConfirmed(true);
       } else {
         setIsFailed(true);
@@ -53,10 +48,10 @@ export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
   const { mutate: postPaymentConfirmMutation } = useMutation({
     mutationFn: () => postPaymentConfirm({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
     onSuccess: (res) => {
-      console.log('paymentConfirm 결과', res);
-
       if (res.status === 'SUCCESS') {
         postPaymentSuccessMutation();
+      } else {
+        setIsFailed(true);
       }
     },
     retry: 0,
@@ -76,9 +71,9 @@ export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
     router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
   }
 
-  const paymentDataResponse = queryClient.getQueryData<PaymentSuccessRequest>(['paymentDataResponse']);
+  const paymentSuccessRequest = queryClient.getQueryData<PaymentSuccessRequest>(['paymentSuccessRequest']);
 
-  const { paymentResponse, orderDetailResponse } = paymentDataResponse ?? {};
+  const { paymentResponse, orderDetailResponse } = paymentSuccessRequest ?? {};
 
   const { shippingAddress, orderItems } = orderDetailResponse ?? {};
 
