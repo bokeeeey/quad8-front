@@ -246,7 +246,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
           onClick={handleClickButton}
         />
         {totalUnreadCount > 0 && (
-          <div className={cn('alarm-count', totalUnreadCount > 9 && 'count-more-digit')}>
+          <div className={cn('alarm-count', totalUnreadCount > 9 && 'count-more-digit')} onClick={handleClickButton}>
             {totalUnreadCount > 9 ? '9+' : totalUnreadCount}
           </div>
         )}
@@ -307,7 +307,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
       <div onClick={handleClick}>
         <ToastContainer
           toastClassName={cn('toast-body')}
-          autoClose={2000}
+          autoClose={3000}
           containerId='alarm'
           position='bottom-right'
           pauseOnHover={false}

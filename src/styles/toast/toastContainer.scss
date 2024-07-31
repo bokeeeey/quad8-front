@@ -3,11 +3,12 @@
 @import '../_globals';
 
 .Toastify__toast {
+  @include pretendard-20-500;
+
   width: max-content;
   padding: 2rem !important;
   border-radius: 1.6rem !important;
   box-shadow: 0 0.4rem 1.2rem rgb(0 0 0 / 10%) !important;
-  font-size: 2rem;
   cursor: default !important;
 
   &:has(> button) {
@@ -17,7 +18,6 @@
 
 .Toastify__toast-container {
   width: fit-content !important;
-  font-weight: 500;
 }
 
 .Toastify__close-button {
