@@ -306,7 +306,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
       </div>
       <div onClick={handleClick}>
         <ToastContainer
-          toastClassName={cn('toast-body')}
+          bodyClassName={cn('toast-body')}
           autoClose={3000}
           containerId='alarm'
           position='bottom-right'
