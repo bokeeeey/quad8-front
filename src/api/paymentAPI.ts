@@ -11,7 +11,7 @@ export const postPaymentConfirm = async (payload: PaymentConfirmRequest) => {
   }
 
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/payment/confirm`, {
+    const res = await fetch(`${BASE_URL}/api/v1/payments/confirm`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const postPaymentSuccess = async (payload: PaymentConfirmRequest) => {
   }
 
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/payment/success`, {
+    const res = await fetch(`${BASE_URL}/api/v1/payments/success`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

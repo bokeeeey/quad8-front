@@ -6,11 +6,11 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components';
+import { ROUTER } from '@/constants/route';
 import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
-import type { OrderDetailData } from '@/types/paymentTypes';
+import type { OrderDetailData } from '@/types/OrderTypes';
 import type { Users } from '@/types/userType';
 
-import { ROUTER } from '@/constants/route';
 import styles from './PaymentContainer.module.scss';
 
 const cn = classNames.bind(styles);

@@ -6,12 +6,11 @@ import { Control, Controller, FieldValues, SubmitHandler } from 'react-hook-form
 import { toast } from 'react-toastify';
 
 import { postAddress } from '@/api/shippingAPI';
-import type { ShippingAddressResponse } from '@/types/paymentTypes';
-import type { UserAddress } from '@/types/shippingType';
-
 import { Button, Dropdown, Modal } from '@/components';
 import AddAddressModal from '@/components/AddAddresseModal/AddAddressModal';
 import { formatPhoneNumber } from '@/libs';
+import type { ShippingAddressResponse } from '@/types/OrderTypes';
+import type { UserAddress } from '@/types/shippingType';
 import CheckoutAddressModal from './CheckoutAddressModal';
 
 import styles from './CheckoutAddress.module.scss';

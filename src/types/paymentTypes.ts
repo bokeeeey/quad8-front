@@ -1,19 +1,36 @@
-import { OrderItem } from './OrderTypes';
+import { OrderItem, ShippingAddressResponse } from './OrderTypes';
 
-export interface ShippingAddressResponse {
-  address: string;
-  detailAddress: string;
+interface PaymentResponse {
   id: number;
-  isDefault: boolean;
-  name: string;
-  phone: string;
-  zoneCode: string;
+  orderId: number;
+  paymentOrderId: string;
+  paymentKey: string;
+  method: string;
+  totalAmount: number;
+  status: string;
+  requestedAt: string;
+  approvedAt: string;
+  lastTransactionKey: string;
 }
 
-export interface OrderDetailData {
+interface OrderDetailResponse {
   orderId: number;
-  orderItemResponses: OrderItem[];
+  orderItems: OrderItem[];
+  shippingAddress: ShippingAddressResponse;
+  deliveryMessage: string;
+  totalAmount: number;
+  purchaseDate: string;
+  confirmationDate: string;
+}
+
+export interface PaymentConfirmRequest {
+  orderId: string;
+  paymentKey: string;
   paymentOrderId: string;
-  shippingAddressResponse: ShippingAddressResponse;
-  totalPrice: number;
+  amount: string;
+}
+
+export interface PaymentSuccessRequest {
+  paymentResponse: PaymentResponse;
+  orderDetailResponse: OrderDetailResponse;
 }

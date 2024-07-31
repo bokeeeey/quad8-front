@@ -22,6 +22,7 @@ export const ROUTER = {
 
     CHECKOUT: '/payment', // 주문 / 결제
     CHECKOUT_SUCCESS: '/payment-success',
+    CHECKOUT_FAIL: '/payment-fail',
   },
 
   SHOP: {
