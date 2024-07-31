@@ -138,12 +138,7 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
       <Modal isOpen={isPostModalOpen} onClose={handleClosePostModal}>
         <ErrorBoundary FallbackComponent={ErrorFallbackDetailModal}>
           <Suspense fallback={<DetailModalSkeleton />}>
-            <PostCardDetailModal
-              cardId={id}
-              onClose={handleClosePostModal}
-              isMine={isMine}
-              commentCount={commentCount}
-            />
+            <PostCardDetailModal cardId={id} onClose={handleClosePostModal} isMine={isMine} />
           </Suspense>
         </ErrorBoundary>
       </Modal>

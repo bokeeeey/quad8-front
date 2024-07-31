@@ -35,10 +35,9 @@ interface PostCardDetailModalProps {
   cardId: number;
   onClose: () => void;
   isMine?: boolean;
-  commentCount: number;
 }
 
-export default function PostCardDetailModal({ cardId, onClose, isMine, commentCount }: PostCardDetailModalProps) {
+export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCardDetailModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const lastCommentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
@@ -161,7 +160,8 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
     return null;
   }
 
-  const { content, likeCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } = postData;
+  const { content, likeCount, commentCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } =
+    postData;
 
   const createdDateString = formatDateToString(new Date(updatedAt));
 
