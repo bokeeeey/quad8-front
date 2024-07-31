@@ -1,10 +1,10 @@
 'use client';
 
 import { postPaymentConfirm, postPaymentSuccess } from '@/api/paymentAPI';
+import CheckoutAddress from '@/app/(payment)/payment/_components/Checkout/CheckoutForm/parts/CheckoutAddress';
 import { Button, ItemOverview } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import { ROUTER } from '@/constants/route';
-import { formatPhoneNumber } from '@/libs';
 import type { OrderItem } from '@/types/OrderTypes';
 import { PaymentSuccessRequest } from '@/types/PaymentTypes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -82,40 +82,22 @@ export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
 
   const { shippingAddress, orderItems } = orderDetailResponse ?? {};
 
-  const { name, phone = '', zoneCode, address, detailAddress } = shippingAddress ?? {};
-
   return (
     <div className={cn('checkout-completed')}>
       <article className={cn('info-box')}>
         <h1 className={cn('info-title')}>
-          주문번호<span>{paymentResponse?.paymentOrderId}</span>
+          주문번호<span>{paymentResponse?.paymentOrderId.toUpperCase()}</span>
         </h1>
-        <div className={cn('info-address')}>
-          <div className={cn('address')}>
-            <p>{name}</p>
-            <p>010-{formatPhoneNumber(phone)}</p>
-            <p>
-              ({zoneCode}){address} {detailAddress}
-            </p>
-          </div>
-          {/* <Button
-            className={cn('address-modification-button')}
-            type='button'
-            radioGroup='4'
-            paddingVertical={8}
-            width={72}
-          >
-            변경
-          </Button> */}
-        </div>
-        <div className={cn('item-box')}>
-          <h1>주문 상품</h1>
-          {orderItems &&
-            orderItems.map((item: OrderItem) => (
-              <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
-            ))}
-        </div>
       </article>
+
+      {shippingAddress && <CheckoutAddress item={shippingAddress} />}
+      <div className={cn('item-box')}>
+        <h1>주문 상품</h1>
+        {orderItems &&
+          orderItems.map((item: OrderItem) => (
+            <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
+          ))}
+      </div>
 
       <div className={cn('confirm-box')}>
         <p>주문 내역을 확인하였으며, 정보 제공등에 동의합니다.</p>

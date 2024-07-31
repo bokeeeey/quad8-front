@@ -21,11 +21,12 @@ const DELIVERY_OPTIONS = ['부재시 문앞에 놓아주세요.', '경비실에 
 
 interface CheckoutAddressProps {
   item: ShippingAddressResponse;
-  onClick: (selectItem: UserAddress) => void;
-  control: Control<FieldValues>;
+  onClick?: (selectItem: UserAddress) => void;
+  control?: Control<FieldValues>;
+  isForm?: boolean;
 }
 
-export default function CheckoutAddress({ item, onClick, control }: CheckoutAddressProps) {
+export default function CheckoutAddress({ item, onClick, control, isForm = false }: CheckoutAddressProps) {
   const queryClient = useQueryClient();
 
   const [isAddressChangeModalOpen, setIsAddressChangeModalOpen] = useState(false);
@@ -48,7 +49,7 @@ export default function CheckoutAddress({ item, onClick, control }: CheckoutAddr
   };
 
   const handleAddressClick = (selectItem: UserAddress) => {
-    onClick(selectItem);
+    onClick?.(selectItem);
     setIsAddressChangeModalOpen((prevIsOpen) => !prevIsOpen);
   };
 
@@ -96,9 +97,11 @@ export default function CheckoutAddress({ item, onClick, control }: CheckoutAddr
       <div className={cn('address-section')}>
         <div className={cn('address-title-box')}>
           <h1>배송 주소</h1>
-          <button className={cn('address-title-button')} type='button' onClick={handleAddAddressButtonClick}>
-            + 새 주소 추가
-          </button>
+          {isForm && (
+            <button className={cn('address-title-button')} type='button' onClick={handleAddAddressButtonClick}>
+              + 새 주소 추가
+            </button>
+          )}
         </div>
         <div className={cn('address-box')}>
           <div className={cn('address-wrap')}>
@@ -115,23 +118,27 @@ export default function CheckoutAddress({ item, onClick, control }: CheckoutAddr
               </p>
             </div>
           </div>
-          <Button type='button' paddingVertical={8} width={72} radius={4} onClick={handleAddressButtonClick}>
-            변경
-          </Button>
-        </div>
-        <Controller
-          name='deliveryMessage'
-          control={control}
-          render={({ field: { onChange, ...field } }) => (
-            <Dropdown
-              options={DELIVERY_OPTIONS}
-              sizeVariant='sm'
-              placeholder='배송 요청 사항을 선택해 주세요.'
-              onChange={onChange}
-              {...field}
-            />
+          {isForm && (
+            <Button type='button' paddingVertical={8} width={72} radius={4} onClick={handleAddressButtonClick}>
+              변경
+            </Button>
           )}
-        />
+        </div>
+        {isForm && (
+          <Controller
+            name='deliveryMessage'
+            control={control}
+            render={({ field: { onChange, ...field } }) => (
+              <Dropdown
+                options={DELIVERY_OPTIONS}
+                sizeVariant='sm'
+                placeholder='배송 요청 사항을 선택해 주세요.'
+                onChange={onChange}
+                {...field}
+              />
+            )}
+          />
+        )}
       </div>
 
       <Modal isOpen={isAddressChangeModalOpen} onClose={() => setIsAddressChangeModalOpen(false)}>

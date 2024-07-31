@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import { getPayment, putPayment } from '@/api/orderAPI';
 import { Button, Dropdown, ItemOverview } from '@/components';
@@ -11,7 +12,6 @@ import { Input, Label } from '@/components/parts';
 import { formatNumber } from '@/libs';
 import type { OrderDetailData, OrderItem, ShippingAddressResponse } from '@/types/OrderTypes';
 import type { UserAddress } from '@/types/shippingType';
-import { toast } from 'react-toastify';
 import CheckoutAddress from './parts/CheckoutAddress';
 import PaymentContainer from './parts/PaymentContainer';
 
@@ -86,7 +86,9 @@ export default function CheckoutForm({ orderId }: CheckoutFormProps) {
           <p className={cn('price')}>{formattedTotalPrice} 원</p>
         </div>
 
-        {selectedAddress && <CheckoutAddress item={selectedAddress} onClick={handleAddressClick} control={control} />}
+        {selectedAddress && (
+          <CheckoutAddress item={selectedAddress} onClick={handleAddressClick} control={control} isForm />
+        )}
 
         <div className={cn('discount-box')}>
           <h1>할인 혜택</h1>
