@@ -7,7 +7,6 @@ import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { formatDateToString } from '@/libs/formatDateToString';
 
 import type { ReviewDto } from '@/types/ProductReviewTypes';
-import type { ProductType } from '@/types/ProductTypes';
 
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
@@ -16,18 +15,24 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { ProductType } from '@/types/ProductTypes';
 import styles from './MyReviewProduct.module.scss';
 
 const cn = classNames.bind(styles);
 
 interface MyReviewProductProps {
   reviewData: ReviewDto;
-  productData: ProductType;
-  // searchDate: { startDate: string; endDate: string };
+  productData?: ProductType;
 }
 
+const defaultProductData = {
+  name: '상품 정보 없음',
+  thubmnailList: [{ id: 0, imgUrl: '/public/images/kedeukProfile.png' }],
+  categoryName: 'keyboard',
+};
+
 export default function MyReviewProduct({ reviewData, productData }: MyReviewProductProps) {
-  const { name: productName, thubmnailList, categoryName } = productData;
+  const { name: productName, thubmnailList, categoryName } = productData || defaultProductData;
   const { orderId, productId, id: reviewId, updatedAt, switchOption } = reviewData;
   const productImgUrl = thubmnailList[0].imgUrl;
 
