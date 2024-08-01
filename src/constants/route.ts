@@ -16,6 +16,7 @@ export const ROUTER = {
     WISHLIST: '/my-info/wishlist', // 찜 목록
     CART: '/my-info/cart', // 장바구니
     MY_POSTS: '/my-info/my-posts', // 내 게시글
+    COUPONS: '/my-info/coupons',
 
     ORDERS: '/my-info/orders', // 주문 / 배송조회
     ORDER_INFO: '/my-info/order-info',

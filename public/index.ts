@@ -43,6 +43,7 @@ export { default as ThumbIcon } from './svgs/thumb.svg';
 export { default as UserIcon } from './svgs/user.svg';
 export { default as VerticalTripleDotIcon } from './svgs/verticalTripleDot.svg';
 export { default as WarnCircleIcon } from './svgs/warnCircle.svg';
+export { default as KeydeukBlueIcon } from './svgs/keydeukBlueIcon.svg';
 
 export { default as ErrorIcon } from './svgs/404.svg';
 
