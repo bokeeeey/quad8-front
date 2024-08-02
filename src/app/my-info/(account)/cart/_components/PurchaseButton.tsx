@@ -52,9 +52,6 @@ export default function PurchaseButton() {
 
     const orderData = [...customSelectedData, ...shopSelectedData];
     createOrder(orderData, {
-      onSuccess: () => {
-        router.push(ROUTER.MY_PAGE.CHECKOUT);
-      },
       onError: () => {
         toast.error('주문 정보 생성에 실패하였습니다');
       },
@@ -78,9 +75,6 @@ export default function PurchaseButton() {
 
     const orderData = [...customData, ...shopData];
     createOrder(orderData, {
-      onSuccess: () => {
-        router.push(ROUTER.MY_PAGE.CHECKOUT);
-      },
       onError: () => {
         toast.error('주문 정보 생성에 실패하였습니다');
       },
