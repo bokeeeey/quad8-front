@@ -12,7 +12,7 @@ const cn = classNames.bind(styles);
 
 export default function CouponList() {
   const { data: myCoupons } = useSuspenseQuery({
-    queryKey: ['myCustomReview'],
+    queryKey: ['coupons'],
     queryFn: () => getCoupons(),
   });
 
