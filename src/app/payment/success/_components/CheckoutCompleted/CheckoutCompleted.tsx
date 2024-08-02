@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { postPaymentConfirm, postPaymentSuccess } from '@/api/paymentAPI';
-import CheckoutAddress from '@/app/(payment)/payment/_components/CheckoutForm/parts/CheckoutAddress';
+import CheckoutAddress from '@/app/payment/_components/CheckoutForm/parts/CheckoutAddress';
 import { Button, ItemOverview } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import { ROUTER } from '@/constants/route';
@@ -17,18 +17,15 @@ import styles from './CheckoutComplete.module.scss';
 
 const cn = classNames.bind(styles);
 
-interface CheckoutCompletedProps {
-  orderId: string;
-}
-
-export default function CheckoutCompleted({ orderId }: CheckoutCompletedProps) {
+export default function CheckoutCompleted() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
-
+  const orderId = searchParams.get('paymentOrderId') || '';
   const orderIdFromParams = searchParams.get('orderId') || '';
   const paymentKey = searchParams.get('paymentKey') || '';
   const amount = searchParams.get('amount') || '';
+
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 

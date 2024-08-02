@@ -1,27 +1,32 @@
-import { getPayment } from '@/api/orderAPI';
 import { getUserData } from '@/api/usersAPI';
 import { ROUTER } from '@/constants/route';
-import { getCookie } from '@/libs/manageCookie';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 import { redirect } from 'next/navigation';
-import CheckoutCompleted from './_components/CheckoutCompleted/CheckoutCompleted';
+import { ReactNode } from 'react';
+import styles from './layout.module.scss';
 
-export default async function PaymentSuccessPage() {
+const cn = classNames.bind(styles);
+
+interface CheckoutLayoutProps {
+  children: ReactNode;
+}
+
+export default async function PaymentPageLayout({ children }: CheckoutLayoutProps) {
   const queryClient = new QueryClient();
-  const orderId = await getCookie('orderId');
 
   await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
   const userData = queryClient.getQueryData(['userData']);
 
-  if (!userData || !orderId) {
+  if (!userData) {
     redirect(ROUTER.MAIN);
   }
 
-  await queryClient.prefetchQuery({ queryKey: ['paymentResponse'], queryFn: () => getPayment(orderId) });
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CheckoutCompleted orderId={orderId} />;
+      <section className={cn('layout')}>
+        <div className={cn('page')}>{children}</div>
+      </section>
     </HydrationBoundary>
   );
 }

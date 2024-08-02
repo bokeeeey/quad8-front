@@ -53,7 +53,7 @@ export default function PaymentContainer({
 
   const { nickname: customerName, email: customerEmail } = userDataResponse?.data ?? {};
 
-  const { paymentOrderId, orderItemResponses = [] } = paymentData ?? {};
+  const { orderId, paymentOrderId, orderItemResponses = [] } = paymentData ?? {};
 
   const orderName = renderPaymentProductName({ orderItemResponses });
 
@@ -106,8 +106,8 @@ export default function PaymentContainer({
         orderName,
         customerName: customerName || '',
         customerEmail: customerEmail || '',
-        successUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_SUCCESS}`,
-        failUrl: `${window.location.origin}/sandbox/fail${window.location.search}`,
+        successUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_SUCCESS}?paymentOrderId=${orderId}`,
+        failUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_FAIL}`,
       });
     } catch (error) {
       // TODO: 에러 처리
