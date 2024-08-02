@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { putChangeCartData } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
+import { Button, CustomOption, Modal } from '@/components';
+import { ROUTER } from '@/constants/route';
 import type { CustomDataType, OptionChageAPIType, ShopDataType } from '@/types/CartTypes';
 import type { CreateOrderResponseType } from '@/types/OrderTypes';
-import { ROUTER } from '@/constants/route';
-import { Button, Modal, CustomOption } from '@/components';
-import { toast } from 'react-toastify';
 import CardCheckBox from './CardCheckBox';
-import ShopOption from './ShopOption';
 import OptionEditModal from './OptionEditModal';
+import ShopOption from './ShopOption';
 
 import styles from './CartCard.module.scss';
 
@@ -40,7 +40,7 @@ const CATEGORY = {
 export default function CartCard({ cardData, type }: CustomCardProps | ShopCardProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [isOpenModal, setIsOpenMoal] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const imageURL = type === 'custom' ? cardData.imgUrl : cardData.thumbsnail;
   const title = type === 'custom' ? '키득 커스텀 키보드' : cardData.productTitle;
@@ -49,8 +49,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
   const { mutate: createOrder } = useMutation({
     mutationFn: postCreateOrder,
     onSuccess: (response: CreateOrderResponseType) => {
-      queryClient.setQueryData(['orderId'], response.data);
-      router.push(ROUTER.MY_PAGE.CHECKOUT);
+      router.push(`${ROUTER.MY_PAGE.CHECKOUT}?orderId=${response.data}`);
     },
     onError: () => {
       toast.error('주문 정보 생성에 실팽하였습니다');
@@ -66,7 +65,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
       { id, data },
       {
         onSuccess: () => {
-          setIsOpenMoal(false);
+          setIsOpenModal(false);
           queryClient.invalidateQueries({ queryKey: ['cartData'] });
         },
         onError: () => {
@@ -77,12 +76,12 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
   };
 
   const handleCloseModal = () => {
-    setIsOpenMoal(false);
+    setIsOpenModal(false);
   };
 
   const handleOpenModal = () => {
     if (type === 'shop') {
-      setIsOpenMoal(true);
+      setIsOpenModal(true);
       return;
     }
     router.push(`${ROUTER.CUSTOM_KEYBOARD}?orderId=${cardData.id}`, { scroll: false });

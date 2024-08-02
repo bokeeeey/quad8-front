@@ -11,7 +11,6 @@ import { postCreateOrder } from '@/api/orderAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { CartDataContext } from '@/context/CartDataContext';
-import { setCookie } from '@/libs/manageCookie';
 import type { CartAPIDataType } from '@/types/CartTypes';
 import type { CreateOrderResponseType } from '@/types/OrderTypes';
 
@@ -29,9 +28,7 @@ export default function PurchaseButton() {
   const { mutate: createOrder } = useMutation({
     mutationFn: postCreateOrder,
     onSuccess: (response: CreateOrderResponseType) => {
-      setCookie('orderId', response.data.toString());
-
-      router.push(ROUTER.MY_PAGE.CHECKOUT);
+      router.push(`${ROUTER.MY_PAGE.CHECKOUT}?orderId=${response.data.toString()}`);
     },
     onError: () => {
       toast.error('주문 정보 생성에 실패하였습니다');
