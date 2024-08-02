@@ -2,19 +2,22 @@ import { getPayment } from '@/api/orderAPI';
 import { getAddresses } from '@/api/shippingAPI';
 import { getUserData } from '@/api/usersAPI';
 import { ROUTER } from '@/constants/route';
-import { getCookie } from '@/libs/manageCookie';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { redirect } from 'next/navigation';
-import Checkout from './_components/Checkout/Checkout';
+import CheckoutForm from './_components/CheckoutForm/CheckoutForm';
 
-export default async function PaymentPage() {
+interface PaymentPageProps {
+  searchParams: { [key: string]: string };
+}
+
+export default async function PaymentPage({ searchParams }: PaymentPageProps) {
   const queryClient = new QueryClient();
-  const orderId = await getCookie('orderId');
+  const { orderId } = searchParams;
 
   await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
   const userData = queryClient.getQueryData(['userData']);
 
-  if (!userData || !orderId) {
+  if (!userData) {
     redirect(ROUTER.MAIN);
   }
 
@@ -24,7 +27,7 @@ export default async function PaymentPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Checkout orderId={orderId} />
+      <CheckoutForm />
     </HydrationBoundary>
   );
 }

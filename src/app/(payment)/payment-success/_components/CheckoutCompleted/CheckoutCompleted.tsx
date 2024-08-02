@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { postPaymentConfirm, postPaymentSuccess } from '@/api/paymentAPI';
-import CheckoutAddress from '@/app/(payment)/payment/_components/Checkout/CheckoutForm/parts/CheckoutAddress';
+import CheckoutAddress from '@/app/(payment)/payment/_components/CheckoutForm/parts/CheckoutAddress';
 import { Button, ItemOverview } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import { ROUTER } from '@/constants/route';

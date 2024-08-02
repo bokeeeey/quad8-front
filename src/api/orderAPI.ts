@@ -58,7 +58,7 @@ export const getOrdersData = async () => {
 export const getPayment = async (orderId?: string) => {
   const token = await getCookie('accessToken');
 
-  if (!token) {
+  if (!token || !orderId) {
     return null;
   }
 

@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -19,15 +20,15 @@ import styles from './CheckoutForm.module.scss';
 
 const cn = classNames.bind(styles);
 
-interface CheckoutFormProps {
-  orderId: string;
-}
-
-export default function CheckoutForm({ orderId }: CheckoutFormProps) {
+export default function CheckoutForm() {
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get('orderId') || '';
+
   const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
     queryKey: ['paymentResponse'],
     queryFn: () => getPayment(orderId),
+    enabled: !!orderId,
   });
 
   const { totalPrice = 0, orderItemResponses, shippingAddressResponse } = paymentResponse?.data ?? {};
