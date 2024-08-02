@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -31,10 +31,8 @@ export default function CheckoutForm() {
     enabled: !!orderId,
   });
 
-  const { totalPrice = 0, orderItemResponses, shippingAddressResponse } = paymentResponse?.data ?? {};
-
   const [selectedAddress, setSelectedAddress] = useState<ShippingAddressResponse | null>(
-    shippingAddressResponse ?? null,
+    paymentResponse?.data.shippingAddressResponse ?? null,
   );
   const [isPutPaymentSucceed, setIsPutPaymentSucceed] = useState(false);
 
@@ -46,7 +44,15 @@ export default function CheckoutForm() {
     },
   });
 
+  const { totalPrice = 0, orderItemResponses } = paymentResponse?.data ?? {};
+
   const formattedTotalPrice = totalPrice > 0 ? formatNumber(totalPrice) : 0;
+
+  useEffect(() => {
+    if (paymentResponse) {
+      setSelectedAddress(paymentResponse.data.shippingAddressResponse);
+    }
+  }, [paymentResponse]);
 
   const { mutate: putPaymentMutation } = useMutation({
     mutationFn: (payload: FieldValues) => putPayment(orderId, payload),

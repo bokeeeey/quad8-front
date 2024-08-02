@@ -11,6 +11,7 @@ import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
 import type { OrderDetailData } from '@/types/OrderTypes';
 import type { Users } from '@/types/userType';
 
+import { getUserData } from '@/api/usersAPI';
 import styles from './PaymentContainer.module.scss';
 
 const cn = classNames.bind(styles);
@@ -41,15 +42,11 @@ interface TossPaymentsWidgets {
   }) => Promise<void>;
 }
 
-export default function PaymentContainer({
-  amountValue,
-  paymentData,
-  isPutPaymentSucceed = false,
-}: PaymentContainerProps) {
+export default function PaymentContainer({ amountValue, paymentData, isPutPaymentSucceed }: PaymentContainerProps) {
   const [ready, setReady] = useState(isPutPaymentSucceed);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
-  const { data: userDataResponse } = useQuery<{ data: Users }>({ queryKey: ['userData'] });
+  const { data: userDataResponse } = useQuery<{ data: Users }>({ queryKey: ['userData'], queryFn: getUserData });
 
   const { nickname: customerName, email: customerEmail } = userDataResponse?.data ?? {};
 
