@@ -35,7 +35,7 @@
 }
 
 .explanation-list {
-  width: 21rem;
+  width: 22rem;
   margin-left: 2rem;
   list-style-type: circle;
   line-height: 60%;
@@ -52,6 +52,12 @@
   height: 2rem;
   transform: rotate(90deg);
   cursor: pointer;
+}
+
+.icon.chevron {
+  top: 2.3rem;
+  width: 1.8rem;
+  height: 1.8rem;
 }
 
 .slit-in-vertical {

@@ -11,7 +11,7 @@ import Dialog from '@/components/Dialog/Dialog';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
-import { formatDateToString } from '@/libs/formatDateToString';
+import { formatDateWithDot } from '@/libs/formatDateToString';
 import { keydeukImg, SpinLoading } from '@/public/index';
 import type { CommunityPostCardDetailDataType, CommentType } from '@/types/CommunityTypes';
 import type { UserDataResponseType } from '@/types/userType';
@@ -203,7 +203,7 @@ export default function PostCardDetailModal({
 
   const { content, likeCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } = postData;
 
-  const createdDateString = formatDateToString(new Date(updatedAt));
+  const createdDateString = formatDateWithDot(new Date(updatedAt));
 
   const handleClickThumbnail = (i: number) => {
     setClickedImage(reviewImages[i].imgUrl);

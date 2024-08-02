@@ -1,6 +1,6 @@
 'use client';
 
-import { formatDateToString } from '@/libs/formatDateToString';
+import { formatDateWithDot } from '@/libs/formatDateToString';
 import { ProductType } from '@/types/ProductTypes';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
@@ -26,7 +26,7 @@ export default function MyReviewProduct({ productId, updatedAt, switchOption, pr
   return (
     <div className={cn('container')}>
       <div className={cn('top-section')}>
-        <h3 className={cn('write-date')}>작성일 : {formatDateToString(new Date(updatedAt))}</h3>
+        <h3 className={cn('write-date')}>작성일 : {formatDateWithDot(new Date(updatedAt))}</h3>
         <div className={cn('button-section')}>
           <h2>수정</h2>
           <h2>삭제</h2>
