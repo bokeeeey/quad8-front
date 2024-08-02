@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { getCartData } from '@/api/cartAPI';
+import { getUserData } from '@/api/usersAPI';
 import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
 import type { CartAPIDataType } from '@/types/CartTypes';
@@ -27,10 +29,12 @@ export default function Header() {
 
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
+    queryFn: getUserData,
   });
 
   const { data: cartData } = useQuery<CartAPIDataType>({
     queryKey: ['cartData'],
+    queryFn: getCartData,
   });
 
   const cartCount = cartData?.totalCount ?? 0;

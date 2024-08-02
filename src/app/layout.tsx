@@ -32,6 +32,7 @@ export default async function RootLayout({
   const entireQueryClient = new QueryClient();
 
   await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
+
   await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
 
   return (

@@ -21,6 +21,7 @@ export default function CheckoutCompleted() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
+
   const orderId = searchParams.get('paymentOrderId') || '';
   const orderIdFromParams = searchParams.get('orderId') || '';
   const paymentKey = searchParams.get('paymentKey') || '';
@@ -29,10 +30,30 @@ export default function CheckoutCompleted() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    const handlePopState = () => {
+      router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
+    };
+    window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [router]);
+
   const { mutate: postPaymentSuccessMutation } = useMutation({
     mutationFn: () => postPaymentSuccess({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
     onSuccess: (res) => {
       if (res.status === 'SUCCESS') {
+        queryClient.invalidateQueries({ queryKey: ['cartData'] });
         queryClient.setQueryData(['paymentSuccessRequest'], res.data);
         setIsConfirmed(true);
       } else {
@@ -74,6 +95,10 @@ export default function CheckoutCompleted() {
 
   const { shippingAddress, orderItems } = orderDetailResponse ?? {};
 
+  const handleButtonClick = () => {
+    router.push(ROUTER.MY_PAGE.ORDERS);
+  };
+
   return (
     <div className={cn('checkout-completed')}>
       <article className={cn('info-box')}>
@@ -93,8 +118,7 @@ export default function CheckoutCompleted() {
       </article>
 
       <div className={cn('confirm-box')}>
-        <p>주문 내역을 확인하였으며, 정보 제공등에 동의합니다.</p>
-        <Button className={cn('confirm-button')} type='submit'>
+        <Button className={cn('confirm-button')} type='submit' onClick={handleButtonClick}>
           주문 상세보기
         </Button>
       </div>
