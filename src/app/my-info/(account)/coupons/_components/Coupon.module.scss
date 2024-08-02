@@ -2,11 +2,24 @@
   display: flex;
   position: relative;
   justify-content: space-between;
-  width: 30rem;
-  height: 17rem;
+  width: 100%;
+  height: 100%;
   padding: 2rem;
+  border: 0.1rem solid #eee;
   border-radius: 0.8rem;
-  box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
+  box-shadow: 0 0 0.7rem 0 rgb(0 0 0 / 10%);
+}
+
+.expired-overlay {
+  background-color: rgb(128 128 128 / 10%);
+  pointer-events: none;
+  filter: grayscale(50%);
+}
+
+.expired-text {
+  @include pretendard-16-700;
+
+  color: red;
 }
 
 .coupon-info {
@@ -22,20 +35,18 @@
   color: $primary;
 }
 
+.expired-price {
+  color: $gray-50;
+}
+
 .name {
   @include pretendard-16-600;
 
   margin-bottom: 0.5rem;
 }
 
-.logo-wrapper {
-  position: absolute;
-  right: 1.5rem;
-  bottom: 1rem;
-}
-
 .explanation-list {
-  width: 22rem;
+  width: 80%;
   margin-left: 2rem;
   list-style-type: circle;
   line-height: 60%;
