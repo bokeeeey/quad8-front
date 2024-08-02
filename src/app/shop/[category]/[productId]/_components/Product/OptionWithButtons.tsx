@@ -1,19 +1,27 @@
 'use client';
 
 import { postCart } from '@/api/cartAPI';
+import { postCreateOrder } from '@/api/orderAPI';
 import { Button, CountInput, Dropdown } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { ROUTER } from '@/constants/route';
-import type { CartProductType, ProductType } from '@/types/ProductTypes';
+
 import type { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
+import type { CartProductType, ProductType } from '@/types/ProductTypes';
 import type { Users } from '@/types/userType';
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
+
+import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
+
+import { postRecentProducts } from '@/api/productAPI';
+import { setCookie } from '@/libs/manageCookie';
+import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/OrderTypes';
 import OptionContainer from './OptionContainer';
 import styles from './ProductDetail.module.scss';
 
@@ -75,7 +83,10 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     setSelectedOptions((prevOptions) => prevOptions.filter((option) => option.name !== name));
   };
 
-  const { mutate: addCartProduct } = useMutation({ mutationFn: (data: CartProductType) => postCart(data) });
+  const { mutate: addProductToCartMutate } = useMutation({ mutationFn: (data: CartProductType) => postCart(data) });
+  const { mutate: createOrderMutate } = useMutation({
+    mutationFn: postCreateOrder,
+  });
 
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
@@ -89,12 +100,13 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
 
     if (optionList && selectedOptions.length === 0) {
       setIsNoOptionModalOpen(true);
+      return true;
     }
     return false;
   };
 
   const handleAddCartProduct = (data: CartProductType) => {
-    addCartProduct(data, {
+    addProductToCartMutate(data, {
       onSuccess: () => {
         const cartData = queryClient.getQueryData<CartAPIDataType>(['cartData']) ?? null;
         const newShopData: ShopDataType = {
@@ -142,23 +154,45 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     });
   };
 
-  const handleClickBuyButton = () => {
-    checkUserAndOptions();
-
-    router.push(ROUTER.MY_PAGE.CHECKOUT);
+  const handleBuyProduct = (data: CreateOrderAPIType) => {
+    createOrderMutate(data, {
+      onSuccess: (response: CreateOrderResponseType) => {
+        setCookie('orderId', response.data.toString());
+        router.push(ROUTER.MY_PAGE.CHECKOUT);
+      },
+      onError: () => {
+        toast.error('주문 정보 생성에 실패하였습니다');
+      },
+    });
   };
 
-  useEffect(() => {
-    const prevItems = window.localStorage.getItem('recentViews');
+  const handleClickBuyButton = () => {
+    if (checkUserAndOptions()) return;
 
-    if (prevItems) {
-      const items = JSON.parse(prevItems);
-      const newItems = [productData, ...items.filter((item: ProductType) => item.id !== productData.id)];
-      localStorage.setItem('recentViews', JSON.stringify(newItems.slice(0, 8)));
-    } else {
-      localStorage.setItem('recentViews', JSON.stringify([productData]));
+    if (!optionList) {
+      const noOptionData: CreateOrderAPIType = [{ productId, switchOptionId: null, quantity: noOptionCount }];
+      handleBuyProduct(noOptionData);
+      return;
     }
-  }, [productData]);
+
+    const data = selectedOptions.map((option) => ({
+      productId,
+      switchOptionId: option.id,
+      quantity: option.count,
+    }));
+
+    handleBuyProduct(data);
+  };
+
+  const { mutate: addRecentProduct } = useMutation({
+    mutationFn: (pId: number) => postRecentProducts(pId),
+  });
+
+  useEffect(() => {
+    if (userData?.data && productId) {
+      addRecentProduct(productId);
+    }
+  }, [userData?.data, productId, addRecentProduct]);
 
   return (
     <>

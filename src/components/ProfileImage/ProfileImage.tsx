@@ -1,9 +1,10 @@
 'use client';
 
-import classNames from 'classnames/bind';
-
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { CameraIcon, keydeukProfileImg } from '@/public/index';
+
+import classNames from 'classnames/bind';
+
 import Image, { StaticImageData } from 'next/image';
 import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
 
