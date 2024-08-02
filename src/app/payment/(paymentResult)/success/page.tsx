@@ -2,7 +2,7 @@ import { getUserData } from '@/api/usersAPI';
 import { ROUTER } from '@/constants/route';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { redirect } from 'next/navigation';
-import CheckoutNavigation from '../_components/CheckoutNavigation/CheckoutNavigation';
+import CheckoutNavigation from '../../_components/CheckoutNavigation/CheckoutNavigation';
 import CheckoutCompleted from './_components/CheckoutCompleted/CheckoutCompleted';
 
 export default async function SuccessPage() {
