@@ -10,10 +10,10 @@
 
   width: 10rem;
   margin-top: 2.6rem;
-  padding: 1rem;
   border: 0.1rem solid $primary;
   border-radius: 30rem;
   color: $primary;
+  white-space: nowrap;
 
   &:first-child {
     background-color: $primary;
@@ -29,4 +29,8 @@
     background-color: $primary;
     color: $white;
   }
+}
+
+.item {
+  padding: 1rem 2rem;
 }
