@@ -1,23 +1,23 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useContext, useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
 import { getRandomOptionProduct } from '@/api/customKeyboardAPI';
+import { Button, Modal } from '@/components';
+import { FocusKeyContext, KeyboardDataContext, StepContext } from '@/context';
+import { useCaptureCanvas } from '@/hooks/useCanvasCaptrue';
+import { getBlurImageList } from '@/libs/getBlurImage';
+import { getCustomKeyboardPrice } from '@/libs/getCustomKeyboardPrice';
+import { ChevronIcon } from '@/public/index';
 import type {
   CustomKeyboardStepStatusTypes,
   CustomKeyboardStepTypes,
   OptionDataType,
 } from '@/types/CustomKeyboardTypes';
-import { FocusKeyContext, KeyboardDataContext, StepContext } from '@/context';
-import { getCustomKeyboardPrice } from '@/libs/getCustomKeyboardPrice';
-import { getBlurImageList } from '@/libs/getBlurImage';
-import { ChevronIcon } from '@/public/index';
-import { Modal, Button } from '@/components';
-import { useCaptureCanvas } from '@/hooks/useCanvasCaptrue';
-import OptionProductModal from './OptionProductModal';
 import CartModal from './CartModal';
+import OptionProductModal from './OptionProductModal';
 
 import styles from './TotalCostWithNavigation.module.scss';
 
@@ -152,7 +152,7 @@ export default function TotalCostWithNavigation() {
     setIsOpenCartModal(true);
   };
 
-  const handleCloseCartMoal = () => {
+  const handleCloseCartModal = () => {
     if (isOpenAnyModalOnCartModal) {
       return;
     }
@@ -229,13 +229,13 @@ export default function TotalCostWithNavigation() {
           openCartModal={handleOpenCartModal}
         />
       </Modal>
-      <Modal isOpen={isOpenCartModal} onClose={handleCloseCartMoal}>
+      <Modal isOpen={isOpenCartModal} onClose={handleCloseCartModal}>
         <CartModal
           optionData={optionData}
           optionPrice={optionPrice}
           isOpenConfirmDialog={isOpenConfirmDialog}
           isOpenLoginModal={isOpenLoginModal}
-          onClose={handleCloseCartMoal}
+          onClose={handleCloseCartModal}
           updateOptionPrice={updateOptionPrice}
           changeConfirmDialog={handleConfirmDialog}
           changeLoginModal={setIsOpenLoginModal}
