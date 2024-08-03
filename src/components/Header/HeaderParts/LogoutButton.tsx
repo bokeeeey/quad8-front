@@ -22,7 +22,6 @@ export default function LogoutButton({ eventSource }: LogoutButtonProps) {
   const handleClickButton = () => {
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
-    deleteCookie('orderId');
     queryClient.removeQueries();
 
     if (eventSource.current) {

@@ -63,9 +63,10 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
         toast.success('로그인이 성공적으로 완료되었습니다.', {
           autoClose: 2000,
         });
-        queryClient.invalidateQueries({
-          queryKey: [['postCardsList'], ['userData']],
-        });
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['postCardsList'] }),
+          queryClient.invalidateQueries({ queryKey: ['userData'] }),
+        ]);
       } else if (responseData.status === 'FAIL') {
         toast.error(responseData.message);
       }
