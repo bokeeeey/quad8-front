@@ -1,16 +1,16 @@
 'use client';
 
-import { useRef, useState, useEffect, MouseEvent, MutableRefObject } from 'react';
+import { useRef, useState, MouseEvent, MutableRefObject } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { EventSourcePolyfill, Event } from 'event-source-polyfill';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import classNames from 'classnames/bind';
 
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { NotificationIcon } from '@/public/index';
 import { getAlarm, postAlarmRead, deleteAlarm } from '@/api/alarmAPI';
-import { getCookie } from '@/libs/manageCookie';
 import type { AlarmAPIDataType, AlarmDataType, AlarmType } from '@/types/alarmTypes';
+import { getCurrentAlarm } from '@/libs/getCurrentAlarm';
+import { useEventSource } from '@/hooks/useEventSource';
 import NotificationCard from './NotificationCard';
 
 import styles from './NotificationButton.module.scss';
@@ -28,7 +28,6 @@ type CategoryType = (typeof CATEGORY_LIST)[number];
 export default function NotificationButton({ isBlack, eventSource }: NotificationButtonProps) {
   const queryClient = useQueryClient();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<null | NodeJS.Timeout>(null);
   const isOpenAlarm = useRef<boolean>(false);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -42,13 +41,22 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
 
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('전체');
 
-  const communityUnreadCount = communityAlarm?.alarmDtoList
-    ? communityAlarm.alarmDtoList.filter((alarm) => !alarm.isRead).length
-    : 0;
-  const productUnreadCount = productAlarm.filter((alarm) => !alarm.isRead).length;
-  const eventUnreadCount = eventAlarm.filter((alarm) => !alarm.isRead).length;
+  const unreadCount = {
+    상품: productAlarm.filter((alarm) => !alarm.isRead).length,
+    이벤트: eventAlarm.filter((alarm) => !alarm.isRead).length,
+    커뮤니티: communityAlarm?.alarmDtoList ? communityAlarm?.alarmDtoList.filter((alarm) => !alarm.isRead).length : 0,
+  };
 
-  const totalUnreadCount = communityUnreadCount + productUnreadCount + eventUnreadCount;
+  const currentAlarm = getCurrentAlarm(
+    currentCategory,
+    {
+      상품: productAlarm,
+      이벤트: eventAlarm,
+      커뮤니티: communityAlarm?.alarmDtoList ?? [],
+    },
+    unreadCount,
+  );
+  const totalUnreadCount = Object.values(unreadCount).reduce((acc, value) => acc + value, 0);
 
   const { mutate: postAlarmReadMutate } = useMutation({
     mutationFn: (id: number) => postAlarmRead(id),
@@ -57,36 +65,6 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
   const { mutate: deleteAlarmMutate } = useMutation({
     mutationFn: (id: number) => deleteAlarm(id),
   });
-
-  const getCurrentAlarm = (category: CategoryType) => {
-    /* 저장된 데이터 가져오기 */
-    if (category === '전체') {
-      const alarmData = [...productAlarm, ...eventAlarm, ...(communityAlarm?.alarmDtoList ?? [])].sort(
-        (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt),
-      );
-      return { alarmList: alarmData, count: communityUnreadCount + productUnreadCount + eventUnreadCount };
-    }
-
-    if (category === '상품') {
-      return {
-        alarmList: productAlarm.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)),
-        count: productUnreadCount,
-      };
-    }
-
-    if (category === '이벤트') {
-      return {
-        alarmList: eventAlarm.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)),
-        count: eventUnreadCount,
-      };
-    }
-    return {
-      alarmList: communityAlarm?.alarmDtoList.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)) ?? [],
-      count: communityUnreadCount,
-    };
-  };
-
-  const currentAlarm = getCurrentAlarm(currentCategory);
 
   const handleClickButton = () => {
     if (isOpenModal) {
@@ -103,6 +81,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
   };
 
   useOutsideClick(wrapperRef, handleClickButton);
+  useEventSource(eventSource, isOpenAlarm);
 
   const handleAnimationEnd = () => {
     if (!isOpen) {
@@ -173,64 +152,6 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
   const handleOpenModal = (value: boolean) => {
     setIsOpenModal(value);
   };
-
-  useEffect(() => {
-    const eventRef = eventSource.current;
-    if (eventRef === null) {
-      const addServerSentEvent = async () => {
-        const accessToken = await getCookie('accessToken');
-        if (!accessToken) {
-          return;
-        }
-        const newEventSource = new EventSourcePolyfill(
-          `${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/alarm/subscribe`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'text/event-stream',
-            },
-            heartbeatTimeout: 3600000,
-          },
-        );
-
-        Object.assign(eventSource, { current: newEventSource });
-
-        /* eslint-disable-next-line */
-        newEventSource.addEventListener('error', async (error: any) => {
-          if (error.status === 401) {
-            newEventSource.close();
-          }
-          newEventSource.close();
-          Object.assign(eventSource, { current: null });
-        });
-
-        newEventSource.addEventListener('COMMUNITY', (e: Event) => {
-          const event = e as MessageEvent;
-          const newData = JSON.parse(event.data) as AlarmDataType;
-          if (timerRef.current) {
-            return;
-          }
-          const timerId = setTimeout(() => {
-            queryClient.invalidateQueries({ queryKey: ['communityAlarm'] });
-            if (!isOpenAlarm.current) {
-              toast.info(newData.message, {
-                containerId: 'alarm',
-              });
-            }
-            Object.assign(timerRef, { current: null });
-          }, 500);
-          Object.assign(timerRef, { current: timerId });
-        });
-      };
-      addServerSentEvent();
-    }
-    return () => {
-      if (eventRef) {
-        eventRef.close();
-        Object.assign(eventSource, { current: null });
-      }
-    };
-  }, [eventSource, queryClient]);
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
