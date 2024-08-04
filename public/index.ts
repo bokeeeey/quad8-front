@@ -48,11 +48,13 @@ export { default as eventTopImg } from './images/eventTop.png';
 export { default as ErrorIcon } from './svgs/404.svg';
 export { default as CloverIcon } from './svgs/clover.svg';
 
+export { default as backConfettiImg } from './images/backconfetti.png';
 export { default as banner1Img } from './images/banner1.png';
 export { default as banner2Img } from './images/banner2.png';
 export { default as blackSwitchImg } from './images/blackSwitch.jpg';
 export { default as blueSwitchImg } from './images/blueSwitch.jpg';
 export { default as brownSwitchImg } from './images/brownSwitch.jpg';
+export { default as deliveryImg } from './images/delivery.png';
 export { default as guide1Img } from './images/guide1.png';
 export { default as guide2Img } from './images/guide2.png';
 export { default as guide3Img } from './images/guide3.png';
