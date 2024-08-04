@@ -3,27 +3,51 @@
 import { pointImg, rouletteImg } from '@/public/index';
 import { useEffect, useState } from 'react';
 
+import { postCreateCoupon } from '@/api/couponAPI';
 import { Button, Dialog } from '@/components';
+import SignInModal from '@/components/SignInModal/SignInModal';
+import { getCookie } from '@/libs/manageCookie';
+import { CouponResponse } from '@/types/CouponTypes';
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import JSConfetti from 'js-confetti';
 import Image from 'next/image';
 import styles from './Wheel.module.scss';
 
 const cn = classNames.bind(styles);
 
-const rewards = ['3000', '1000', '2000', '3000', '1000', '2000'];
+const rewards = [3000, 1000, 2000, 3000, 1000, 2000];
 const animationDuration = 2500;
-
 const getRandomIndex = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min;
-
 const calculateRotation = (index: number, total: number): number => (360 / total) * index + 360 * 2;
 
-function Wheel() {
-  const [result, setResult] = useState<string | null>(null);
+export default function Wheel() {
+  const [result, setResult] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isParticipated, setIsParticipated] = useState(false);
+
+  const { data: couponList } = useQuery<CouponResponse[]>({
+    queryKey: ['coupons'],
+  });
+
+  const queryClient = new QueryClient();
+
+  const { mutate: createCoupon } = useMutation({
+    mutationFn: postCreateCoupon,
+    onSuccess: () => {
+      setIsModalOpen(true);
+      // 조회 리스트 업데이트 로직 추가 해야함. // 의문점이 있음..
+      queryClient.invalidateQueries({
+        queryKey: ['coupons'],
+      });
+    },
+  });
 
   useEffect(() => {
+    const jsConfetti = new JSConfetti();
     if (isAnimating) {
       const resultIndex = getRandomIndex(0, rewards.length - 1);
       const newRotation = calculateRotation(resultIndex, rewards.length);
@@ -31,17 +55,42 @@ function Wheel() {
 
       setTimeout(() => {
         setIsAnimating(false);
-        setResult(rewards[resultIndex]);
+        const finalResult = rewards[resultIndex];
+        setResult(finalResult);
+        jsConfetti.addConfetti({
+          emojis: ['💳', '💵', '💶', '💰', '🤑', '💸'],
+          emojiSize: 50,
+          confettiNumber: 70,
+        });
+        createCoupon({
+          name: '룰렛 쿠폰',
+          price: finalResult,
+          minPrice: finalResult * 10,
+          expiredDate: new Date(),
+          isWelcome: false,
+        });
       }, animationDuration);
     }
-  }, [isAnimating]);
+  }, [isAnimating, createCoupon]);
 
-  const startRoulette = () => {
+  const startRoulette = async () => {
+    const accessToken = await getCookie('accessToken');
+
+    if (!accessToken) {
+      setIsLoginOpen(true);
+      return;
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    const filterList = couponList?.filter((coupon) => coupon.expiredAt.slice(0, 10) === today);
+    const hasRouletteCoupon = filterList?.some((coupon) => coupon.name === '룰렛 쿠폰');
+
+    if (hasRouletteCoupon) {
+      setIsParticipated(true);
+      return;
+    }
     if (isAnimating) return;
     setIsAnimating(true);
-    setTimeout(() => {
-      setIsModalOpen(true);
-    }, 2700);
   };
 
   return (
@@ -80,10 +129,16 @@ function Wheel() {
           buttonText='확인'
           onClick={() => setIsModalOpen(false)}
         />
-        {result && <div className={cn('result')}>결과: {result}원 쿠폰</div>}
+        <SignInModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+        <Dialog
+          type='alert'
+          iconType='warn'
+          message='오늘은 더 이상 참여 할 수 없습니다.\n내일 다시 참여해주세요.'
+          isOpen={isParticipated}
+          buttonText='확인'
+          onClick={() => setIsParticipated(false)}
+        />
       </div>
     </div>
   );
 }
-
-export default Wheel;

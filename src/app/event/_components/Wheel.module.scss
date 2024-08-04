@@ -14,7 +14,12 @@
 }
 
 .start-button {
+  margin-bottom: 20rem;
   background-color: $black;
+
+  &:disabled {
+    background-color: $gray-50;
+  }
 }
 
 .roulette-area {
