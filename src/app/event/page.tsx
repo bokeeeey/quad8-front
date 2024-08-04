@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import BenefitDelivery from './_components/BenefitDelivery';
 import BenefitJoin from './_components/BenefitJoin';
 import BenefitRoulette from './_components/BenefitRoulette';
 import EventTab from './_components/EventTab';
@@ -14,6 +15,8 @@ export default function Page() {
       <EventTab />
       <BenefitJoin />
       <BenefitRoulette />
+      {/* <Test /> */}
+      <BenefitDelivery />
     </div>
   );
 }
