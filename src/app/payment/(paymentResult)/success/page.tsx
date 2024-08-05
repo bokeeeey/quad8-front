@@ -5,14 +5,23 @@ import { redirect } from 'next/navigation';
 import CheckoutNavigation from '../../_components/CheckoutNavigation/CheckoutNavigation';
 import CheckoutCompleted from './_components/CheckoutCompleted/CheckoutCompleted';
 
-export default async function SuccessPage() {
+interface SuccessPageProps {
+  searchParams: { [key: string]: string };
+}
+
+export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const queryClient = new QueryClient();
+  const { orderId } = searchParams;
 
   await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
   const userData = queryClient.getQueryData(['userData']);
 
   if (!userData) {
     redirect(ROUTER.MAIN);
+  }
+
+  if (!orderId) {
+    redirect('/not-found');
   }
 
   return (
