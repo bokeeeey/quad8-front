@@ -12,6 +12,7 @@ export { default as ImageInput } from './WriteEditModal/ImageInput';
 export { default as InputField } from './InputField/InputField';
 export { default as ItemOverview } from './ItemOverview/ItemOverview';
 export { default as Modal } from './Modal/Modal';
+export { default as ModalSkeleton } from './ModalSkeleton/ModalSkeleton';
 export { default as Pagination } from './Pagination/Pagination';
 export { default as PopOver } from './PopOver/PopOver';
 export { default as RadioField } from './RadioField/RadioField';

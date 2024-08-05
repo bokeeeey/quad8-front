@@ -1,6 +1,7 @@
 .container {
   @include flex-center;
 
+  position: relative;
   width: 100%;
   height: 6.4rem;
 }
@@ -16,6 +17,12 @@
 
   & > .user-name {
     @include pretendard-18-500;
+
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   & > .sub-info {

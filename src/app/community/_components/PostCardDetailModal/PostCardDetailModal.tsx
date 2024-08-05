@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { deletePostCard, getCommentsInfiniteScroll, getPostDetail, postComment } from '@/api/communityAPI';
-import { Button, CustomOption, InputField, Modal } from '@/components';
+import { Button, CustomOption, InputField, Modal, ModalSkeleton } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { IMAGE_BLUR } from '@/constants/blurImage';
@@ -14,12 +14,14 @@ import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
 import { formatDateToString } from '@/libs/formatDateToString';
 import { keydeukImg, SpinLoading } from '@/public/index';
 import type { CommunityPostCardDetailDataType, CommentType } from '@/types/CommunityTypes';
+import type { UserDataResponseType } from '@/types/userType';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { communityPopOverOption } from '@/libs/communityPopOverOption';
+import ImageZoom from '@/components/ImageZoom/ImageZoom';
 import AuthorCard from '../AuthorCard';
 import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
 import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
-import ModalSkeleton from './ModalSkeleton';
 
 import styles from './PostCardDetailModal.module.scss';
 
@@ -49,10 +51,37 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  const [clickedPopOverCommentId, setClickedPopOverCommentId] = useState(0);
+
   const [lastCommentId, setLastCommentId] = useState(0);
   const [visibleComments, setVisibleComments] = useState<CommentType[]>([]);
 
-  const { data, refetch } = useQuery<PostCardListResponseData>({
+  const handleOpenAuthorPopOver = () => {
+    setIsPopupOpen((prevIsOpen) => !prevIsOpen);
+    setClickedPopOverCommentId(0);
+  };
+
+  const handleClosePopOver = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handleOpenCommentPopOver = (commentId: number) => {
+    setClickedPopOverCommentId(commentId);
+    setIsPopupOpen(false);
+  };
+
+  const handleCloseCommentPopOver = () => {
+    setClickedPopOverCommentId(0);
+  };
+
+  const handleOpenCommentProfileCard = () => {
+    setClickedPopOverCommentId(0);
+    setIsPopupOpen(false);
+  };
+
+  const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
+
+  const { data: postCardListData, refetch } = useQuery<PostCardListResponseData>({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
   });
@@ -103,16 +132,20 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
 
   useEffect(() => {
     const handleSubmitComment = () => {
+      if (!userData) {
+        return toast.error('로그인이 필요합니다.');
+      }
       if (commentRef) {
         const commentContent = commentRef.value;
         postCommentMutation({ id: cardId, content: commentContent });
       }
+      return null;
     };
     const removeEvent = addEnterKeyEvent({ element: { current: commentRef }, callback: handleSubmitComment });
     return () => {
       removeEvent();
     };
-  }, [cardId, postCommentMutation, commentRef]);
+  }, [cardId, postCommentMutation, commentRef, userData]);
 
   const isLastCommentIntersecting = useIntersectionObserver(lastCommentRef, { threshold: 1 });
 
@@ -142,36 +175,39 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   useEffect(() => {
     // 처음에 가져온 댓글 데이터
     queryClient.setQueryData(['infiniteCommentData'], null);
-    if (data?.data) {
-      const initialComments = data.data.comments;
+    if (postCardListData?.data) {
+      const initialComments = postCardListData.data.comments;
       const lastCommentData = initialComments[initialComments.length - 1];
       setVisibleComments(initialComments);
       setLastCommentId(lastCommentData?.id);
     }
-  }, [data, queryClient]);
+  }, [postCardListData, queryClient]);
 
-  if (!data) return <ModalSkeleton />;
+  if (!postCardListData) return <ModalSkeleton />;
 
-  const { data: postData, status, message } = data;
+  const { data: postData, status, message } = postCardListData;
 
-  if (status === 'ERROR' || postData === null) {
+  if (status === 'ERROR') {
     toast.error(message);
     onClose();
     return null;
   }
 
-  const { content, likeCount, commentCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } =
-    postData;
+  const {
+    content,
+    likeCount,
+    commentCount,
+    nickName,
+    reviewImages,
+    title,
+    updatedAt,
+    userId,
+    userImage,
+    custom,
+    isLiked,
+  } = postData;
 
   const createdDateString = formatDateToString(new Date(updatedAt));
-
-  const handleClickPopup = () => {
-    setIsPopupOpen((prevIsOpen) => !prevIsOpen);
-  };
-
-  const handleClosePopOver = () => {
-    setIsPopupOpen(false);
-  };
 
   const handleClickThumbnail = (i: number) => {
     setClickedImage(reviewImages[i].imgUrl);
@@ -196,7 +232,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
   };
 
   const handleClickEditModalButton = () => {
-    setIsEditModalOpen(false);
+    setIsEditModalOpen(true);
     queryClient.invalidateQueries({
       queryKey: ['myCustomReview'],
     });
@@ -209,25 +245,13 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
     setIsEditModalOpen(false);
   };
 
-  const handleClickReport = () => {};
+  const setCommentRefType = (commentId: number) => {
+    if (commentId === lastCommentId) {
+      return lastCommentRef;
+    }
 
-  const POPOVER_OPTION = isMine
-    ? [
-        {
-          label: '삭제하기',
-          onClick: handleClickDeleteAlertButon,
-        },
-        {
-          label: '수정하기',
-          onClick: handleClickEditModalButton,
-        },
-      ]
-    : [
-        {
-          label: '신고하기',
-          onClick: handleClickReport,
-        },
-      ];
+    return null;
+  };
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallbackDetailModal}>
@@ -245,16 +269,11 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
         <div className={cn('image-content-wrapper')}>
           <div className={cn('left-wrapper')}>
             <div className={cn('selected-image-wrapper')}>
-              <Image
-                src={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
+              <ImageZoom
+                image={clickedImage || (reviewImages.length > 0 ? reviewImages[0].imgUrl : keydeukImg)}
                 alt='키보드 이미지'
-                fill
-                onError={() => setClickedImage('')}
-                className={cn('selected-image-wrapper')}
-                sizes='(max-width: 1200px) 100%'
-                priority
-                placeholder={IMAGE_BLUR.placeholder}
-                blurDataURL={IMAGE_BLUR.blurDataURL}
+                width={493}
+                height={reviewImages.length > 1 ? 536 : 604}
               />
             </div>
             {reviewImages.length > 1 && (
@@ -281,12 +300,17 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
               <p className={cn('title')}>{title}</p>
               <AuthorCard
                 nickname={nickName}
+                userId={userId}
                 dateText={createdDateString}
                 userImage={userImage}
-                onClickPopOver={handleClickPopup}
+                onClickPopOver={handleOpenAuthorPopOver}
                 onClosePopOver={handleClosePopOver}
                 isOpenPopOver={isPopupOpen}
-                popOverOptions={POPOVER_OPTION}
+                popOverOptions={communityPopOverOption({
+                  isMine,
+                  onClickDelete: handleClickDeleteAlertButon,
+                  onClickEdit: handleClickEditAlertButton,
+                })}
               />
               <CustomOption wrapperRef={containerRef} customData={custom} />
               <p className={cn('content')}>{content}</p>
@@ -299,7 +323,11 @@ export default function PostCardDetailModal({ cardId, onClose, isMine }: PostCar
                     key={comment.id}
                     cardId={cardId}
                     commentData={comment}
-                    ref={lastCommentId === comment.id ? lastCommentRef : null}
+                    ref={setCommentRefType(comment.id)}
+                    onOpenPopOver={handleOpenCommentPopOver}
+                    onClosePopOver={handleCloseCommentPopOver}
+                    isOpenedPopOver={clickedPopOverCommentId === comment.id}
+                    onOpenProfileCard={handleOpenCommentProfileCard}
                   />
                 ))}
                 <div className={cn('spin-loading')}> {isCommentLoading && <SpinLoading />} </div>

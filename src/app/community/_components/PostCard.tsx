@@ -17,7 +17,7 @@ import { communityPopOverOption } from '@/libs/communityPopOverOption';
 import AuthorCard from './AuthorCard';
 import PostCardDetailModal from './PostCardDetailModal/PostCardDetailModal';
 import { PostInteractions } from './PostInteractions';
-import DetailModalSkeleton from './PostCardDetailModal/ModalSkeleton';
+import DetailModalSkeleton from '../../../components/ModalSkeleton/ModalSkeleton';
 import ErrorFallbackDetailModal from './PostCardDetailModal/ErrorFallbackDetailModal';
 
 import styles from './PostCard.module.scss';
@@ -36,10 +36,10 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const { id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage, isLiked } = cardData;
+  const { userId, id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage, isLiked } = cardData;
 
-  const ApdatedDate = new Date(updateAt);
-  const timeToString = calculateTimeDifference(ApdatedDate);
+  const updatedDate = new Date(updateAt);
+  const timeToString = calculateTimeDifference(updatedDate);
 
   const handleClickPopOver = () => {
     setIsPopOverOpen((prevIsOpen) => !prevIsOpen);
@@ -100,25 +100,23 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
     }
   };
 
-  const handleClickReport = () => {};
-
   return (
     <div className={cn('container')}>
+      <AuthorCard
+        userId={userId}
+        nickname={nickName}
+        dateText={timeToString}
+        userImage={userImage}
+        onClickPopOver={handleClickPopOver}
+        onClosePopOver={handleClosePopOver}
+        isOpenPopOver={isPopOverOpen}
+        popOverOptions={communityPopOverOption({
+          isMine,
+          onClickDelete: handleClickDelete,
+          onClickEdit: handleClickEdit,
+        })}
+      />
       <div className={cn('container')} onClick={handleClickPostModal}>
-        <AuthorCard
-          nickname={nickName}
-          dateText={timeToString}
-          userImage={userImage}
-          onClickPopOver={handleClickPopOver}
-          onClosePopOver={handleClosePopOver}
-          isOpenPopOver={isPopOverOpen}
-          popOverOptions={communityPopOverOption({
-            isMine,
-            onClickDelete: handleClickDelete,
-            onClickReport: handleClickReport,
-            onClickEdit: handleClickEdit,
-          })}
-        />
         <div className={cn('keyboard-image-wrapper')}>
           <Image
             fill
