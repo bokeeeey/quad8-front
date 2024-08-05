@@ -182,7 +182,6 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
           <HeartIcon className={cn('heart', usage === 'detail' && 'white-stroke', isChecked && 'red-heart')} />
         )}
       </div>
-
       <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
     </>
   );

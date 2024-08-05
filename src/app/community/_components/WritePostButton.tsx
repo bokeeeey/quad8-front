@@ -11,31 +11,51 @@ import Dialog from '@/components/Dialog/Dialog';
 import { ROUTER } from '@/constants/route';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import type { PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
+import type { Users } from '@/types/userType';
 import { getCustomOrderList } from '@/api/communityAPI';
-import styles from './WritePostButton.module.scss';
+import SignInModal from '@/components/SignInModal/SignInModal';
 import OrderListModal from './OrderListModal';
 
+import styles from './WritePostButton.module.scss';
+
 const cn = classNames.bind(styles);
+
+interface UserDataType {
+  data: Users;
+  status: string;
+  message: string;
+}
 
 export default function WritePostButton() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const [isOpenOrderListModal, setIsOpenOrderListModal] = useState(false);
+  const [isOpenSignInModal, setIsOpenSignInModal] = useState(false);
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<PostCardDetailModalCustomKeyboardType | null>(null);
 
-  const { data: orderListData } = useQuery({
+  const { data: orderListData, refetch: refetchCustomOrderList } = useQuery({
     queryKey: ['orderList'],
     queryFn: getCustomOrderList,
+    enabled: false,
   });
+
+  const handleClickButton = () => {
+    const userData = queryClient.getQueryData<UserDataType>(['userData']);
+    queryClient.invalidateQueries({ queryKey: ['orderList'] });
+
+    if (!userData?.data) {
+      setIsOpenSignInModal(true);
+      return;
+    }
+
+    refetchCustomOrderList();
+    setIsOpenOrderListModal(true);
+  };
 
   const handleClickProductList = (i: number) => {
     setSelectedOrder(orderListData.data[i]);
-  };
-
-  const openOrderListModal = () => {
-    setIsOpenOrderListModal(true);
   };
 
   const closeOrderListModal = () => {
@@ -60,7 +80,14 @@ export default function WritePostButton() {
 
   return (
     <div>
-      <Button width={120} fontSize={14} paddingVertical={8} radius={4} onClick={openOrderListModal}>
+      <Button
+        width={120}
+        fontSize={14}
+        paddingVertical={8}
+        radius={4}
+        onClick={handleClickButton}
+        hoverColor='background-primary-60'
+      >
         <div className={cn('write-button-content')}>
           <PlusIcon /> 글 작성하기
         </div>
@@ -101,6 +128,7 @@ export default function WritePostButton() {
             }}
           />
         ))}
+      <SignInModal isOpen={isOpenSignInModal} onClose={() => setIsOpenSignInModal(false)} />
     </div>
   );
 }

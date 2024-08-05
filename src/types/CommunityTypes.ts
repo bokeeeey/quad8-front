@@ -7,6 +7,7 @@ export interface CommunityParamsType {
 }
 
 export interface CommunityPostCardDataType {
+  userId: number;
   id: number;
   title: string;
   likeCount: number;

@@ -14,12 +14,12 @@ interface CommunityLayoutProps {
 export default async function CommunityLayout({ children }: CommunityLayoutProps) {
   return (
     <div className={cn('container')}>
-      <p className={cn('page-name')}>커뮤니티</p>
+      <div className={cn('filter-write-button-wrapper')}>
+        <p className={cn('page-name')}>커뮤니티</p>
+        <WritePostButton />
+      </div>
       <div>
-        <div className={cn('filter-write-button-wrapper')}>
-          <SortDropdown />
-          <WritePostButton />
-        </div>
+        <SortDropdown />
         {children}
       </div>
     </div>
