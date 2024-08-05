@@ -22,8 +22,8 @@ export const getProductReviews = async (params: ProductReviewParams): Promise<Pr
     const { data } = await res.json();
 
     return data;
-  } catch {
-    throw new Error(`상품을 조회할 수 없습니다. `);
+  } catch (error) {
+    throw error;
   }
 };
 
