@@ -18,18 +18,16 @@ export default async function CommunityPage({ searchParams }: CommunityPageProps
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
+  const posts = await queryClient.fetchQuery<CommunityPostListResponse | null>({
     queryKey: ['postCardsList'],
     queryFn: () => getAllCommunityPost(initialParams),
   });
 
-  const data = queryClient.getQueryData<CommunityPostListResponse | null>(['postCardsList']);
-
-  if (!data) {
+  if (!posts) {
     return <CommunityEmptyCase />;
   }
 
-  const { content, ...rest } = data;
+  const { content, ...rest } = posts;
 
   return (
     <div>
