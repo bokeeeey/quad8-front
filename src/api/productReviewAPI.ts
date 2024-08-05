@@ -30,20 +30,14 @@ export const getProductReviews = async (params: ProductReviewParams): Promise<Pr
 export const postProductReviews = async ({ productId, formData }: { productId: number; formData: FormData }) => {
   const token = await getCookie('accessToken');
 
-  if (!token) {
-    return null;
-  }
-
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/reviews?productId=${productId}`, {
+    await fetch(`${BASE_URL}/api/v1/reviews?productId=${productId}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
-    const data = await res.json();
-    return data;
   } catch (error) {
     throw error;
   }
@@ -81,19 +75,13 @@ export const getUserProductReviews = async (params: ProductReviewParams): Promis
 export const deleteUserProductReview = async (reviewId: number) => {
   const token = await getCookie('accessToken');
 
-  if (!token) {
-    return null;
-  }
-
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/reviews/${reviewId}`, {
+    await fetch(`${BASE_URL}/api/v1/reviews/${reviewId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    const data = await res.json();
-    return data;
   } catch (error) {
     throw error;
   }
@@ -102,20 +90,14 @@ export const deleteUserProductReview = async (reviewId: number) => {
 export const putUserProductReview = async ({ reviewId, formData }: { reviewId: number; formData: FormData }) => {
   const token = await getCookie('accessToken');
 
-  if (!token) {
-    return null;
-  }
-
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/reviews/${reviewId}`, {
+    await fetch(`${BASE_URL}/api/v1/reviews/${reviewId}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
-    const data = await res.json();
-    return data;
   } catch (error) {
     throw error;
   }
