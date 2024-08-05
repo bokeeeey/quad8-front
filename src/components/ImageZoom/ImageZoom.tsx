@@ -19,10 +19,7 @@ interface ImageZoomProps {
   height: number;
 }
 
-interface Position {
-  left: number;
-  top: number;
-}
+type Position = Pick<DOMRect, 'left' | 'top'>;
 
 interface ScannerProps {
   position: Position;
