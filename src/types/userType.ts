@@ -7,3 +7,9 @@ export interface Users {
   gender: 'MALE' | 'FEMALE';
   imgUrl: string;
 }
+
+export interface UserDataResponseType {
+  data: Users;
+  status: string;
+  message: string;
+}

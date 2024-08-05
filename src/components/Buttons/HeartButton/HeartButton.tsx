@@ -5,10 +5,11 @@ import SignInModal from '@/components/SignInModal/SignInModal';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { HeartIcon } from '@/public/index';
 import type { CommunityPostCardDataType } from '@/types/CommunityTypes';
-import { Users } from '@/types/userType';
+import type { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { MouseEvent, useState } from 'react';
+
 import styles from './HeartButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -181,7 +182,6 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
           <HeartIcon className={cn('heart', usage === 'detail' && 'white-stroke', isChecked && 'red-heart')} />
         )}
       </div>
-
       <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />
     </>
   );

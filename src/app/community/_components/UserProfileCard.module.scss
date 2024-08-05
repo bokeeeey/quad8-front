@@ -1,0 +1,82 @@
+.user-detail-profile-card {
+  display: flex;
+  position: absolute;
+  z-index: $zindex-popover;
+  top: 6rem;
+  left: 0;
+  width: 45rem;
+  height: 15rem;
+  padding: 1rem;
+  animation: fade-in 0.5s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  border: 0.2rem solid $gray-20;
+  border-radius: 1rem;
+  background-color: white;
+  box-shadow: 0 0 1.5rem 0 rgb(0 0 0 / 35%);
+  gap: 1rem;
+}
+
+.loading-div {
+  @include flex-center;
+}
+
+.above-profile {
+  top: -16rem;
+}
+
+.display-none {
+  display: none;
+}
+
+.profile-image {
+  position: relative;
+  width: 12rem;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0.8rem;
+  background-color: $gray-10;
+  object-fit: cover;
+}
+
+.info-wrapper {
+  @include flex-column(0.2rem);
+
+  height: 100%;
+  padding-left: 1rem;
+  border-left: 0.2rem solid $gray-20;
+}
+
+.info-wrapper p {
+  @include pretendard-14-400;
+
+  & > strong {
+    @include pretendard-14-600;
+  }
+}
+
+.info-wrapper .nickname {
+  @include pretendard-20-700;
+}
+
+.not-found-text {
+  @include pretendard-20-700;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

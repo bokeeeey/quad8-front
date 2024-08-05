@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 import { FallbackProps } from 'react-error-boundary';
 import { Button } from '@/components';
-
 import styles from './ErrorFallbackDetailModal.module.scss';
 
 const cn = classNames.bind(styles);
