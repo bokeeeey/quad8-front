@@ -20,7 +20,6 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { postRecentProducts } from '@/api/productAPI';
-import { setCookie } from '@/libs/manageCookie';
 import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/OrderTypes';
 import OptionContainer from './OptionContainer';
 import styles from './ProductDetail.module.scss';
@@ -157,8 +156,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
   const handleBuyProduct = (data: CreateOrderAPIType) => {
     createOrderMutate(data, {
       onSuccess: (response: CreateOrderResponseType) => {
-        setCookie('orderId', response.data.toString());
-        router.push(ROUTER.MY_PAGE.CHECKOUT);
+        router.push(`${ROUTER.MY_PAGE.CHECKOUT}?orderId=${response.data.toString()}`);
       },
       onError: () => {
         toast.error('주문 정보 생성에 실패하였습니다');
