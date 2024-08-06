@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import JSConfetti from 'js-confetti';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -21,6 +22,7 @@ export default function CheckoutCompleted() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
+  const jsConfetti = new JSConfetti();
 
   const orderId = searchParams.get('paymentOrderId') || '';
   const orderIdFromParams = searchParams.get('orderId') || '';
@@ -30,31 +32,16 @@ export default function CheckoutCompleted() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = '';
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    const handlePopState = () => {
-      router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
-    };
-    window.history.pushState(null, '', window.location.href);
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [router]);
-
   const { mutate: postPaymentSuccessMutation } = useMutation({
     mutationFn: () => postPaymentSuccess({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
     onSuccess: (res) => {
       if (res.status === 'SUCCESS') {
+        jsConfetti.addConfetti({ confettiNumber: 500 });
+
         queryClient.invalidateQueries({ queryKey: ['cartData'] });
         queryClient.setQueryData(['paymentSuccessRequest'], res.data);
+        localStorage.setItem('paymentSuccessRequest', JSON.stringify(res.data));
+
         setIsConfirmed(true);
       } else {
         setIsFailed(true);
@@ -81,6 +68,25 @@ export default function CheckoutCompleted() {
       postPaymentConfirmMutation();
     }
   }, [amount, orderId, orderIdFromParams, paymentKey, postPaymentConfirmMutation]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    const handlePopState = () => {
+      router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
+    };
+    window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [router]);
 
   if (!isConfirmed) {
     return <LogoLoading />;
