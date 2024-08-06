@@ -6,6 +6,7 @@ import { AlertIcon, FailIcon } from '@/public/index';
 import classNames from 'classnames/bind';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CheckoutNavigation from '../../_components/CheckoutNavigation/CheckoutNavigation';
+
 import styles from './page.module.scss';
 
 const cn = classNames.bind(styles);
@@ -19,7 +20,12 @@ export default function PaymentFailPage() {
   const errorMessage = searchParams.get('message') || '';
 
   const handleButtonClick = () => {
-    router.replace(`${ROUTER.MY_PAGE.CHECKOUT}?orderId=${orderId}`);
+    if (orderId) {
+      router.replace(`${ROUTER.MY_PAGE.CHECKOUT}?orderId=${orderId}`);
+      return;
+    }
+
+    router.replace(ROUTER.MY_PAGE.CART);
   };
 
   return (

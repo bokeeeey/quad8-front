@@ -103,6 +103,7 @@ export default function CheckoutCompleted() {
   return (
     <div className={cn('checkout-completed')}>
       <article className={cn('info-box')}>
+        <h1 className={cn('success-message')}>주문 / 결제가 정상적으로 완료되었습니다.</h1>
         <h1 className={cn('info-title')}>
           주문번호<span>{paymentResponse?.paymentOrderId.toUpperCase()}</span>
         </h1>
