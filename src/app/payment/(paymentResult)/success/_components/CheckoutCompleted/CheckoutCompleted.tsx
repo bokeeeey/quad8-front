@@ -35,30 +35,29 @@ export default function CheckoutCompleted() {
   const { mutate: postPaymentSuccessMutation } = useMutation({
     mutationFn: () => postPaymentSuccess({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
     onSuccess: (res) => {
-      if (res.status === 'SUCCESS') {
-        jsConfetti.addConfetti({ confettiNumber: 500 });
+      jsConfetti.addConfetti({ confettiNumber: 500 });
 
-        queryClient.invalidateQueries({ queryKey: ['cartData'] });
-        queryClient.setQueryData(['paymentSuccessRequest'], res.data);
-        localStorage.setItem('paymentSuccessRequest', JSON.stringify(res.data));
+      queryClient.invalidateQueries({ queryKey: ['cartData'] });
+      queryClient.setQueryData(['paymentSuccessRequest'], res.data);
+      localStorage.setItem('paymentSuccessRequest', JSON.stringify(res.data));
 
-        setIsConfirmed(true);
-      } else {
-        setIsFailed(true);
-      }
+      setIsConfirmed(true);
+    },
+    onError: () => {
+      setIsFailed(true);
     },
     retry: 0,
   });
 
   const { mutate: postPaymentConfirmMutation } = useMutation({
     mutationFn: () => postPaymentConfirm({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
-    onSuccess: (res) => {
-      if (res.status === 'SUCCESS') {
-        postPaymentSuccessMutation();
-      } else {
-        router.replace(`${ROUTER.MY_PAGE.CHECKOUT_FAIL}?orderId=${orderId}&message=${res.message}`);
-        setIsFailed(true);
-      }
+    onSuccess: () => {
+      postPaymentSuccessMutation();
+    },
+    onError: (error) => {
+      router.replace(`${ROUTER.MY_PAGE.CHECKOUT_FAIL}?orderId=${orderId}&message=${error.message}`);
+
+      setIsFailed(true);
     },
     retry: 0,
   });

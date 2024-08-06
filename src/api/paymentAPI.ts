@@ -21,7 +21,12 @@ export const postPaymentConfirm = async (payload: PaymentConfirmRequest) => {
     });
 
     const result = await res.json();
-    return result;
+
+    if (res.ok) {
+      return result;
+    }
+
+    throw new Error(result.message || '결제 진행중 오류가 발생하였습니다. 잠시후 다시 시도해주세요.');
   } catch (error) {
     throw error;
   }
@@ -45,7 +50,12 @@ export const postPaymentSuccess = async (payload: PaymentConfirmRequest) => {
     });
 
     const result = await res.json();
-    return result;
+
+    if (res.ok) {
+      return result;
+    }
+
+    throw new Error(result.message || '결제 진행중 오류가 발생하였습니다. 잠시후 다시 시도해주세요.');
   } catch (error) {
     throw error;
   }
