@@ -9,7 +9,7 @@ interface SuccessPageProps {
   searchParams: { [key: string]: string };
 }
 
-export default async function SuccessPage({ searchParams }: SuccessPageProps) {
+export default async function PaymentSuccessPage({ searchParams }: SuccessPageProps) {
   const queryClient = new QueryClient();
   const { orderId } = searchParams;
 

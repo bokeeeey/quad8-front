@@ -69,6 +69,7 @@ export default function CheckoutCompleted() {
       if (res.status === 'SUCCESS') {
         postPaymentSuccessMutation();
       } else {
+        router.replace(`${ROUTER.MY_PAGE.CHECKOUT_FAIL}?orderId=${orderId}&message=${res.message}`);
         setIsFailed(true);
       }
     },

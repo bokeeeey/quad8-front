@@ -5,13 +5,13 @@ import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 
+import { getUserData } from '@/api/usersAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
 import type { OrderDetailData } from '@/types/OrderTypes';
 import type { Users } from '@/types/userType';
 
-import { getUserData } from '@/api/usersAPI';
 import styles from './PaymentContainer.module.scss';
 
 const cn = classNames.bind(styles);
@@ -108,7 +108,6 @@ export default function PaymentContainer({ amountValue, paymentData, isPutPaymen
       });
     } catch (error) {
       // TODO: 에러 처리
-      console.error('결제 실패');
       throw error;
     }
   };

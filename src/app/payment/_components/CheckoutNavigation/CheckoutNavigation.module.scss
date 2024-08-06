@@ -45,4 +45,18 @@
   &.success {
     border-bottom: 0.1rem dashed $primary;
   }
+
+  &.fail {
+    border-bottom: 0.2rem dashed $red;
+  }
+}
+
+.cross-icon {
+  position: absolute;
+  z-index: 1;
+  top: 1.6rem;
+  rotate: 45deg;
+  right: -2.2rem;
+  fill: $red;
+  scale: 2.5;
 }
