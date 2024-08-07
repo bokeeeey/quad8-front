@@ -1,20 +1,22 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
 
 import { getOrdersData } from '@/api/orderAPI';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
 import DatePicker from '@/components/DatePicker/DatePicker';
 import type { Order } from '@/types/OrderTypes';
+import { debounce } from 'lodash';
 import OrderHeader from './OrderHeader/OrderHeader';
 import OrderItemList from './OrderItemList/OrderItemList';
 
 export default function Orders() {
+  const queryClient = useQueryClient();
   // const [page, setPage] = useState(0);
   // const [limit, setlimit] = useState(10);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
   const { data: ordersResponse } = useQuery<{ data: Order[] }>({
     queryKey: ['ordersResponse'],
@@ -23,9 +25,19 @@ export default function Orders() {
 
   const orders = ordersResponse?.data ?? [];
 
+  const debouncedRefetch = useMemo(
+    () =>
+      debounce(() => {
+        queryClient.invalidateQueries({ queryKey: ['ordersResponse'] });
+      }, 300),
+    [queryClient],
+  );
+
   const handleDateClick = (date: { startDate: Date; endDate: Date }) => {
-    setStartDate(date.startDate.toISOString());
-    setEndDate(date.endDate.toISOString());
+    setStartDate(date.startDate);
+    setEndDate(date.endDate);
+
+    debouncedRefetch();
   };
 
   return (

@@ -1,3 +1,4 @@
+import { formatKORDate } from '@/libs/formatKORDate';
 import { getCookie } from '@/libs/manageCookie';
 import type { CreateOrderAPIType, OrderDataRequest } from '@/types/OrderTypes';
 import { FieldValues } from 'react-hook-form';
@@ -29,12 +30,12 @@ export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }:
   const initialStartDate = new Date();
   initialStartDate.setMonth(initialStartDate.getMonth() - 1);
 
-  const formattedStartDate = startDate || initialStartDate.toISOString().split('.')[0];
-  const formattedEndDate = endDate || initialDate.toISOString().split('.')[0];
+  const formattedStartDate = startDate || initialStartDate;
+  const formattedEndDate = endDate || initialDate;
 
   try {
     const res = await fetch(
-      `${BASE_URL}/api/v1/order?page=${page}&size=${size}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+      `${BASE_URL}/api/v1/order?page=${page}&size=${size}&startDate=${formatKORDate(formattedStartDate)}&endDate=${formatKORDate(formattedEndDate)}`,
       {
         method: 'GET',
         headers: {
@@ -50,7 +51,7 @@ export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }:
       return data;
     }
 
-    throw new Error('에러발생 끼얏호우!');
+    return null;
   } catch (error) {
     console.error(error);
 

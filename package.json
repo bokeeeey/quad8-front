@@ -22,6 +22,7 @@
     "aos": "^3.0.0-beta.6",
     "classnames": "^2.5.1",
     "js-confetti": "^0.12.0",
+    "lodash": "^4.17.21",
     "next": "14.2.3",
     "plaiceholder": "^3.0.0",
     "query-string": "^9.0.0",

@@ -64,6 +64,6 @@ export interface OrderDetailData {
 export interface OrderDataRequest {
   page: number;
   size: number;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
 }
