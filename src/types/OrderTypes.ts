@@ -40,6 +40,7 @@ export interface Order {
   orderStatus: OrderStatus;
   purchaseDate: string;
   confirmationDate: string;
+  deliveryMessage: string;
 }
 
 export interface ShippingAddressResponse {
