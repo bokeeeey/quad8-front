@@ -5,8 +5,8 @@ import { ReactNode } from 'react';
 
 import { getOrdersData } from '@/api/orderAPI';
 import { getAddresses } from '@/api/shippingAPI';
+import { getUserData } from '@/api/usersAPI';
 import { ROUTER } from '@/constants/route';
-import { getCookie } from '@/libs/manageCookie';
 import { SNB } from './_components';
 
 import styles from './layout.module.scss';
@@ -19,14 +19,15 @@ interface MyInfoLayoutProps {
 
 export default async function MyInfoLayout({ children }: MyInfoLayoutProps) {
   const queryClient = new QueryClient();
-  const token = await getCookie('accessToken');
 
-  if (!token) {
+  await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
+  const userData = queryClient.getQueryData(['userData']);
+
+  if (!userData) {
     redirect(ROUTER.MAIN);
   }
 
   await queryClient.prefetchQuery({ queryKey: ['addressesData'], queryFn: getAddresses });
-
   await queryClient.prefetchQuery({ queryKey: ['ordersData'], queryFn: getOrdersData });
 
   return (
