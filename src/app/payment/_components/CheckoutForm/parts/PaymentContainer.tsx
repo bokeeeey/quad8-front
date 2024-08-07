@@ -107,7 +107,6 @@ export default function PaymentContainer({ amountValue, paymentData, isPutPaymen
         failUrl: `${window.location.origin}${ROUTER.MY_PAGE.CHECKOUT_FAIL}`,
       });
     } catch (error) {
-      // TODO: 에러 처리
       throw error;
     }
   };

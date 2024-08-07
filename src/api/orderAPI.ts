@@ -1,5 +1,4 @@
 import { getCookie } from '@/libs/manageCookie';
-
 import type { CreateOrderAPIType } from '@/types/OrderTypes';
 import { FieldValues } from 'react-hook-form';
 
@@ -101,7 +100,12 @@ export const putPayment = async (orderId?: string, payload?: FieldValues) => {
     });
 
     const result = await res.json();
-    return result;
+
+    if (res.ok) {
+      return result;
+    }
+
+    throw new Error(result.message || '결제 진행중 문제가 발생하였습니다.');
   } catch (error) {
     throw error;
   }

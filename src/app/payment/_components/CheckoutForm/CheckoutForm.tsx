@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -21,6 +21,7 @@ import styles from './CheckoutForm.module.scss';
 const cn = classNames.bind(styles);
 
 export default function CheckoutForm() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId') || '';
@@ -56,6 +57,9 @@ export default function CheckoutForm() {
 
   const { mutate: putPaymentMutation } = useMutation({
     mutationFn: (payload: FieldValues) => putPayment(orderId, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['paymentDataResponse'] });
+    },
   });
 
   const handleAddressClick = (selectItem: UserAddress) => {
@@ -65,17 +69,18 @@ export default function CheckoutForm() {
 
   const onSubmit: SubmitHandler<FieldValues> = (payload) => {
     putPaymentMutation(payload, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          setIsPutPaymentSucceed(true);
-          queryClient.invalidateQueries({ queryKey: ['paymentDataResponse'] });
-          return;
-        }
-
-        toast.error('결제 진행중 문제가 발생하였습니다.');
+      onSuccess: () => {
+        setIsPutPaymentSucceed(true);
+      },
+      onError: (error) => {
+        toast.error(error.message);
       },
     });
   };
+
+  if (!paymentResponse) {
+    router.back();
+  }
 
   return (
     <form className={cn('checkout-form')} onSubmit={handleSubmit(onSubmit)}>

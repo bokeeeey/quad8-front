@@ -43,7 +43,8 @@ export default function CheckoutCompleted() {
 
       setIsConfirmed(true);
     },
-    onError: () => {
+    onError: (error) => {
+      router.replace(`${ROUTER.MY_PAGE.CHECKOUT_FAIL}?orderId=${orderId}&message=${error.message}`);
       setIsFailed(true);
     },
     retry: 0,
@@ -87,14 +88,6 @@ export default function CheckoutCompleted() {
     };
   }, [router]);
 
-  if (!isConfirmed) {
-    return <LogoLoading />;
-  }
-
-  if (isFailed) {
-    router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
-  }
-
   const paymentSuccessRequest = queryClient.getQueryData<PaymentSuccessRequest>(['paymentSuccessRequest']);
 
   const { paymentResponse, orderDetailResponse } = paymentSuccessRequest ?? {};
@@ -102,8 +95,16 @@ export default function CheckoutCompleted() {
   const { shippingAddress, orderItems } = orderDetailResponse ?? {};
 
   const handleButtonClick = () => {
-    router.push(ROUTER.MY_PAGE.ORDERS);
+    router.replace(ROUTER.MY_PAGE.ORDERS);
   };
+
+  if (!isConfirmed) {
+    return <LogoLoading />;
+  }
+
+  if (isFailed) {
+    router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
+  }
 
   return (
     <div className={cn('checkout-completed')}>
