@@ -59,3 +59,10 @@ export interface OrderDetailData {
   shippingAddressResponse: ShippingAddressResponse;
   totalPrice: number;
 }
+
+export interface OrderDataRequest {
+  page: number;
+  size: number;
+  startDate: string;
+  endDate: string;
+}

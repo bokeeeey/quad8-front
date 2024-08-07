@@ -18,7 +18,6 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
   }
 
   await queryClient.prefetchQuery({ queryKey: ['paymentResponse'], queryFn: () => getPayment(orderId) });
-
   await queryClient.prefetchQuery({ queryKey: ['addressesData'], queryFn: getAddresses });
 
   return (

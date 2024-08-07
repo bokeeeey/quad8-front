@@ -8,10 +8,19 @@ import { MyInfoEmptyCase } from '@/app/my-info/_components';
 import DatePicker from '@/components/DatePicker/DatePicker';
 import { formatStartDate } from '@/libs/formatStartDate';
 import type { Order } from '@/types/OrderTypes';
-import { OrderHeader, OrderItemList } from './index';
+import OrderHeader from './OrderHeader/OrderHeader';
+import OrderItemList from './OrderItemList/OrderItemList';
 
 export default function Orders() {
-  const { data: orders } = useQuery<{ data: Order[] }>({ queryKey: ['ordersData'], queryFn: getOrdersData });
+  // const [page, setPage] = useState(0);
+  // const [limit, setlimit] = useState(10);
+  // const [startDate, setStartDate] = useState('');
+  // const [endDate, setEndDate] = useState('');
+
+  const { data: orders } = useQuery<{ data: Order[] }>({
+    queryKey: ['ordersData'],
+    queryFn: () => getOrdersData({ page: 0, size: 10, startDate: '', endDate: '' }),
+  });
 
   const [searchDate, setSearchDate] = useState('');
   const [ordersData, setOrdersData] = useState(orders?.data ?? []);

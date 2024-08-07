@@ -28,7 +28,10 @@ export default async function MyInfoLayout({ children }: MyInfoLayoutProps) {
   }
 
   await queryClient.prefetchQuery({ queryKey: ['addressesData'], queryFn: getAddresses });
-  await queryClient.prefetchQuery({ queryKey: ['ordersData'], queryFn: getOrdersData });
+  await queryClient.prefetchQuery({
+    queryKey: ['ordersData'],
+    queryFn: () => getOrdersData({ page: 0, size: 10, startDate: '', endDate: '' }),
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

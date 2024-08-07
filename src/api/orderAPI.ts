@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import type { CreateOrderAPIType } from '@/types/OrderTypes';
+import type { CreateOrderAPIType, OrderDataRequest } from '@/types/OrderTypes';
 import { FieldValues } from 'react-hook-form';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
@@ -23,16 +23,18 @@ export const postCreateOrder = async (orderData: CreateOrderAPIType) => {
   }
 };
 
-export const getOrdersData = async () => {
+export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }: OrderDataRequest) => {
   const token = await getCookie('accessToken');
+  const initialDate = new Date();
+  const initialStartDate = new Date();
+  initialStartDate.setMonth(initialStartDate.getMonth() - 1);
 
-  if (!token) {
-    return null;
-  }
+  const formattedStartDate = startDate || initialStartDate.toISOString().split('.')[0];
+  const formattedEndDate = endDate || initialDate.toISOString().split('.')[0];
 
   try {
     const res = await fetch(
-      `${BASE_URL}/api/v1/order?page=0&size=10&startDate=2024-07-01T00:00:00&endDate=2024-07-30T23:59:59`,
+      `${BASE_URL}/api/v1/order?page=${page}&size=${size}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
       {
         method: 'GET',
         headers: {
@@ -44,22 +46,20 @@ export const getOrdersData = async () => {
 
     const data = await res.json();
 
-    if (data.status === 'FAIL') {
-      return null;
+    if (res.ok) {
+      return data;
     }
 
-    return data;
+    throw new Error('에러발생 끼얏호우!');
   } catch (error) {
+    console.error(error);
+
     throw error;
   }
 };
 
 export const getPayment = async (orderId?: string) => {
   const token = await getCookie('accessToken');
-
-  if (!token || !orderId) {
-    return null;
-  }
 
   try {
     const res = await fetch(`${BASE_URL}/api/v1/order/${orderId}/payment`, {
@@ -72,11 +72,11 @@ export const getPayment = async (orderId?: string) => {
 
     const data = await res.json();
 
-    if (data.status === 'FAIL') {
-      return null;
+    if (res.ok) {
+      return data;
     }
 
-    return data;
+    throw new Error('상품 정보를 가져오는것에 실패하였습니다.');
   } catch (error) {
     throw error;
   }
@@ -84,10 +84,6 @@ export const getPayment = async (orderId?: string) => {
 
 export const putPayment = async (orderId?: string, payload?: FieldValues) => {
   const token = await getCookie('accessToken');
-
-  if (!token) {
-    return null;
-  }
 
   try {
     const res = await fetch(`${BASE_URL}/api/v1/order/${orderId}/payment`, {
