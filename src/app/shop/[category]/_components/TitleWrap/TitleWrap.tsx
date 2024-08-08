@@ -2,7 +2,7 @@
 
 import CategoryTitle from '@/app/shop/_components/Category/CategoryTitle';
 import { CATEGORY_MAP } from '@/constants/product';
-import type { CategoryKey } from '@/types/Category';
+import type { CategoryKey } from '@/types/categoryType';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import Filter from './Filter';

@@ -1,19 +1,19 @@
 'use client';
 
-import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { useRouter } from 'next/navigation';
+import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import { getSearchSuggestion } from '@/api/searchAPI';
-import type { SuggestionDataType } from '@/types/SearchType';
-import { SearchIcon } from '@/public/index';
 import { ROUTER } from '@/constants/route';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { charMatcher } from '@/libs/charMatcher';
+import { SearchIcon } from '@/public/index';
+import type { SuggestionDataType } from '@/types/searchType';
 import { toast } from 'react-toastify';
-import SearchSuggestion from './SearchSuggestion';
 import SearchHistory from './SearchHistory';
+import SearchSuggestion from './SearchSuggestion';
 
 import styles from './SearchBox.module.scss';
 

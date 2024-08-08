@@ -9,7 +9,7 @@ import { getUserData } from '@/api/usersAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
-import type { OrderDetailData } from '@/types/OrderTypes';
+import type { OrderDetailData } from '@/types/orderType';
 import type { Users } from '@/types/userType';
 
 import styles from './PaymentContainer.module.scss';

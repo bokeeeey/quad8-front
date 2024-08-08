@@ -1,17 +1,19 @@
 'use client';
 
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
+import { ChangeEvent, useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { deleteProductLikes, getProductLikes } from '@/api/likesAPI';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
 import { Button, Dialog } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import Pagination from '@/components/Pagination/Pagination';
 import { QUERY_KEYS } from '@/constants/queryKey';
-import type { GetProductLikesParams, WishlistPageProps } from '@/types/LikeTypes';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
-import { ChangeEvent, useState } from 'react';
-import { toast } from 'react-toastify';
+import type { GetProductLikesParams, WishlistPageProps } from '@/types/likeType';
 import WishItem from './WishItem';
+
 import styles from './WishList.module.scss';
 
 const cn = classNames.bind(styles);

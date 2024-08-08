@@ -1,4 +1,4 @@
-import type { CustomKeyboardSwitchTypes, CustomKeyboardPointKeyType } from '@/types/CustomKeyboardTypes';
+import type { CustomKeyboardPointKeyType, CustomKeyboardSwitchTypes } from '@/types/customKeyboardType';
 
 export interface CommunityParamsType {
   sort: string;

@@ -11,7 +11,7 @@ import { getPayment, putPayment } from '@/api/orderAPI';
 import { Button, Dropdown, ItemOverview } from '@/components';
 import { Input, Label } from '@/components/parts';
 import { formatNumber } from '@/libs';
-import type { OrderDetailData, OrderItem, ShippingAddressResponse } from '@/types/OrderTypes';
+import type { OrderDetailData, OrderItem, ShippingAddressResponse } from '@/types/orderType';
 import type { UserAddress } from '@/types/shippingType';
 import CheckoutAddress from './parts/CheckoutAddress';
 import PaymentContainer from './parts/PaymentContainer';

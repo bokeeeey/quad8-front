@@ -1,27 +1,26 @@
 'use client';
 
-import { postCart } from '@/api/cartAPI';
-import { postCreateOrder } from '@/api/orderAPI';
-import { Button, CountInput, Dropdown } from '@/components';
-import Dialog from '@/components/Dialog/Dialog';
-import SignInModal from '@/components/SignInModal/SignInModal';
-import { ROUTER } from '@/constants/route';
-
-import type { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
-import type { CartProductType, ProductType } from '@/types/ProductTypes';
-import type { Users } from '@/types/userType';
-
-import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import type { CartAPIDataType, ShopDataType } from '@/types/cartType';
+import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/orderType';
+import type { CartProductType, ProductType } from '@/types/productType';
+import type { Users } from '@/types/userType';
+
+import { postCart } from '@/api/cartAPI';
+import { postCreateOrder } from '@/api/orderAPI';
 import { postRecentProducts } from '@/api/productAPI';
-import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/OrderTypes';
+import { Button, CountInput, Dropdown } from '@/components';
+import Dialog from '@/components/Dialog/Dialog';
+import SignInModal from '@/components/SignInModal/SignInModal';
+import { ROUTER } from '@/constants/route';
+import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
 import OptionContainer from './OptionContainer';
+
 import styles from './ProductDetail.module.scss';
 
 const cn = classNames.bind(styles);

@@ -1,14 +1,14 @@
 'use client';
 
+import { Button } from '@/components';
+import SecondOption from '@/components/CustomOption/SecondOption';
+import { IMAGE_BLUR } from '@/constants/blurImage';
+import { KeyboardDataContext } from '@/context';
+import type { CustomKeyboardKeyTypes } from '@/types/customKeyboardType';
 import classNames from 'classnames/bind';
 import Image, { StaticImageData } from 'next/image';
 import { MouseEvent, RefObject, useContext } from 'react';
-import type { CustomKeyboardKeyTypes } from '@/types/CustomKeyboardTypes';
-import { Button } from '@/components';
-import { KeyboardDataContext } from '@/context';
-import SecondOption from '@/components/CustomOption/SecondOption';
 
-import { IMAGE_BLUR } from '@/constants/blurImage';
 import styles from './CartModalOptionCard.module.scss';
 
 const cn = classNames.bind(styles);

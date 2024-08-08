@@ -11,8 +11,8 @@ import CheckoutAddress from '@/app/payment/_components/CheckoutForm/parts/Checko
 import { Button, ItemOverview } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
 import { ROUTER } from '@/constants/route';
-import type { OrderItem } from '@/types/OrderTypes';
-import type { PaymentSuccessRequest } from '@/types/PaymentsTypes';
+import type { OrderItem } from '@/types/orderType';
+import type { PaymentSuccessRequest } from '@/types/paymentsType';
 
 import styles from './CheckoutComplete.module.scss';
 

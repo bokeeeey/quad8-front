@@ -9,7 +9,7 @@ import { postAddress } from '@/api/shippingAPI';
 import { Button, Dropdown, Modal } from '@/components';
 import AddAddressModal from '@/components/AddAddresseModal/AddAddressModal';
 import { formatPhoneNumber } from '@/libs';
-import type { ShippingAddressResponse } from '@/types/OrderTypes';
+import type { ShippingAddressResponse } from '@/types/orderType';
 import type { UserAddress } from '@/types/shippingType';
 import CheckoutAddressModal from './CheckoutAddressModal';
 

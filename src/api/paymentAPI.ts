@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import type { PaymentConfirmRequest } from '@/types/PaymentsTypes';
+import type { PaymentConfirmRequest } from '@/types/paymentsType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

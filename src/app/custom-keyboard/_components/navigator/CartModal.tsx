@@ -1,26 +1,27 @@
 'use client';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { MouseEvent, useContext, useRef, RefObject, useState } from 'react';
 import { StaticImageData } from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { MouseEvent, RefObject, useContext, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
-import { POINT_KEY } from '@/constants/keyboardData';
-import type { CustomKeyboardStepTypes, OptionDataType, CustomKeyboardAPITypes } from '@/types/CustomKeyboardTypes';
-import { blackSwitchImg, blueSwitchImg, brownSwitchImg, redSwitchImg } from '@/public/index';
-import { Button, Dialog } from '@/components';
+import { putUpdateCustomKeyboardData } from '@/api/cartAPI';
+import { postCustomKeyboardOrder } from '@/api/customKeyboardAPI';
 import { getColorUpperCase } from '@/libs/getColorUpperCase';
 import { getCustomKeyboardPrice } from '@/libs/getCustomKeyboardPrice';
-import { postCustomKeyboardOrder } from '@/api/customKeyboardAPI';
-import { StepContext, KeyboardDataContext } from '@/context';
-import { putUpdateCustomKeyboardData } from '@/api/cartAPI';
-import { toast } from 'react-toastify';
-import { ROUTER } from '@/constants/route';
-import { getCookie } from '@/libs/manageCookie';
-import SignInModal from '@/components/SignInModal/SignInModal';
-import { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
 import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
+import type { CartAPIDataType, ShopDataType } from '@/types/cartType';
+import type { CustomKeyboardAPITypes, CustomKeyboardStepTypes, OptionDataType } from '@/types/customKeyboardType';
+
+import { Button, Dialog } from '@/components';
+import SignInModal from '@/components/SignInModal/SignInModal';
+import { POINT_KEY } from '@/constants/keyboardData';
+import { ROUTER } from '@/constants/route';
+import { KeyboardDataContext, StepContext } from '@/context';
+import { getCookie } from '@/libs/manageCookie';
+import { blackSwitchImg, blueSwitchImg, brownSwitchImg, redSwitchImg } from '@/public/index';
 import CartModalOptionCard from './parts/CartModalOptionCard';
 
 import styles from './CartModal.module.scss';

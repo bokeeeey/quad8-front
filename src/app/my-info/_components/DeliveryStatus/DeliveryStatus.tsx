@@ -8,7 +8,7 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import { getOrdersData } from '@/api/orderAPI';
 import { ROUTER } from '@/constants/route';
 import { ChevronIcon } from '@/public/index';
-import { Order, OrderStatus } from '@/types/OrderTypes';
+import { Order, OrderStatus } from '@/types/orderType';
 
 import styles from './DeliveryStatus.module.scss';
 

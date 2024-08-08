@@ -1,4 +1,4 @@
-import { OrderItem, ShippingAddressResponse } from './OrderTypes';
+import type { OrderItem, ShippingAddressResponse } from './orderType';
 
 interface PaymentResponse {
   id: number;

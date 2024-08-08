@@ -1,4 +1,4 @@
-import type { CustomKeyboardAPITypes } from './CustomKeyboardTypes';
+import type { CustomKeyboardAPITypes } from './customKeyboardType';
 
 export interface CustomDataType extends Omit<CustomKeyboardAPITypes, 'imgBase64' | 'option'> {
   id: number;

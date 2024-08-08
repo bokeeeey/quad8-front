@@ -1,6 +1,6 @@
 import { formatKORDate } from '@/libs/formatKORDate';
 import { getCookie } from '@/libs/manageCookie';
-import type { CreateOrderAPIType, OrderDataRequest } from '@/types/OrderTypes';
+import type { CreateOrderAPIType, OrderDataRequest } from '@/types/orderType';
 import { FieldValues } from 'react-hook-form';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;

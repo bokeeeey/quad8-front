@@ -1,4 +1,4 @@
-import type { FetchSignInInfoTypes } from '@/types/authTypes';
+import type { FetchSignInInfoTypes } from '@/types/authType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { formatDateToString } from '@/libs/formatDateToString';
-import { ProductType } from '@/types/ProductTypes';
+import { ProductType } from '@/types/productType';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import Link from 'next/link';

@@ -6,7 +6,7 @@ import { useContext, useState } from 'react';
 import { Button, Modal } from '@/components';
 import { KeyboardDataContext } from '@/context';
 import { CrossCircleIcon } from '@/public/index';
-import type { CustomKeyboardSwitchTypes } from '@/types/CustomKeyboardTypes';
+import type { CustomKeyboardSwitchTypes } from '@/types/customKeyboardType';
 import SwitchHelpModal from './SwitchHelpModal';
 
 import styles from './SwitchOption.module.scss';

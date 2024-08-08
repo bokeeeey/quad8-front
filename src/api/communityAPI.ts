@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import { CommunityParamsType } from '@/types/CommunityTypes';
+import type { CommunityParamsType } from '@/types/communityType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

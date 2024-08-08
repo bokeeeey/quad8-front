@@ -11,7 +11,7 @@ import { getCartData } from '@/api/cartAPI';
 import { getUserData } from '@/api/usersAPI';
 import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
-import type { CartAPIDataType } from '@/types/CartTypes';
+import type { CartAPIDataType } from '@/types/cartType';
 import type { Users } from '@/types/userType';
 import SignInModal from '../SignInModal/SignInModal';
 import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton } from './HeaderParts';

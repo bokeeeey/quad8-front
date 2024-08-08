@@ -11,8 +11,8 @@ import { postCreateOrder } from '@/api/orderAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { CartDataContext } from '@/context/CartDataContext';
-import type { CartAPIDataType } from '@/types/CartTypes';
-import type { CreateOrderResponseType } from '@/types/OrderTypes';
+import type { CartAPIDataType } from '@/types/cartType';
+import type { CreateOrderResponseType } from '@/types/orderType';
 
 import styles from './PurchaseButton.module.scss';
 

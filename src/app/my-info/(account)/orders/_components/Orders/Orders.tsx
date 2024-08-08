@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react';
 import { getOrdersData } from '@/api/orderAPI';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
 import DatePicker from '@/components/DatePicker/DatePicker';
-import type { Order } from '@/types/OrderTypes';
+import type { Order } from '@/types/orderType';
 import OrderHeader from './OrderHeader/OrderHeader';
 import OrderItemList from './OrderItemList/OrderItemList';
 

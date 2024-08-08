@@ -1,4 +1,4 @@
-import { CustomKeyboardAPITypes } from './CustomKeyboardTypes';
+import type { CustomKeyboardAPITypes } from './customKeyboardType';
 
 interface NewOrderType {
   productId: number;
