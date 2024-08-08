@@ -5,7 +5,8 @@
 
   .item {
     flex-grow: 4;
-    max-width: 58.6rem;
+    min-width: 56rem;
+    max-width: 56rem;
 
     .item-image {
       width: 10.4rem;

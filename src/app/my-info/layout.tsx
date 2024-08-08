@@ -29,8 +29,8 @@ export default async function MyInfoLayout({ children }: MyInfoLayoutProps) {
 
   await queryClient.prefetchQuery({ queryKey: ['addressesData'], queryFn: getAddresses });
   await queryClient.prefetchQuery({
-    queryKey: ['ordersResponse'],
-    queryFn: () => getOrdersData({ page: 0, size: 10, startDate: '', endDate: '' }),
+    queryKey: ['ordersResponse', 0, null, null],
+    queryFn: () => getOrdersData({ page: 0, size: 100, startDate: null, endDate: null }),
   });
 
   return (

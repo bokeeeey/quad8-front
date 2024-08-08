@@ -16,7 +16,8 @@
   .column1 {
     flex-grow: 4;
     width: 100%;
-    max-width: 58.6rem;
+    min-width: 56rem;
+    max-width: 56rem;
   }
 
   .column2 {
