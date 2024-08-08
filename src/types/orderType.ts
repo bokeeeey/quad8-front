@@ -35,7 +35,7 @@ export interface OrderItem {
 }
 
 export interface Order {
-  orderId: number;
+  orderId: number | string;
   orderItems: OrderItem[];
   orderStatus: OrderStatus;
   purchaseDate: string;
@@ -61,9 +61,14 @@ export interface OrderDetailData {
   totalPrice: number;
 }
 
-export interface OrderDataRequest {
+export interface OrdersRequest {
   page: number;
   size: number;
   startDate: Date | null;
   endDate: Date | null;
+}
+
+export interface OrderResponse extends Order {
+  shippingAddress: ShippingAddressResponse;
+  totalAmount: number;
 }

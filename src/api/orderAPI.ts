@@ -1,6 +1,6 @@
 import { formatKORDate } from '@/libs/formatKORDate';
 import { getCookie } from '@/libs/manageCookie';
-import type { CreateOrderAPIType, OrderDataRequest } from '@/types/orderType';
+import type { CreateOrderAPIType, OrdersRequest } from '@/types/orderType';
 import { FieldValues } from 'react-hook-form';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
@@ -24,7 +24,7 @@ export const postCreateOrder = async (orderData: CreateOrderAPIType) => {
   }
 };
 
-export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }: OrderDataRequest) => {
+export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }: OrdersRequest) => {
   const token = await getCookie('accessToken');
   const initialDate = new Date();
   const initialStartDate = new Date();
@@ -51,10 +51,32 @@ export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }:
       return data;
     }
 
-    return null;
+    throw new Error(data.message || '주문 정보를 가져오는것에 실패 하였습니다.');
   } catch (error) {
-    console.error(error);
+    throw error;
+  }
+};
 
+export const getOrder = async (orderId: string) => {
+  const token = await getCookie('accessToken');
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/v1/order/${orderId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      return data;
+    }
+
+    throw new Error(data.message || '주문 정보를 가져오는것에 실패 하였습니다.');
+  } catch (error) {
     throw error;
   }
 };
@@ -77,7 +99,7 @@ export const getPayment = async (orderId?: string) => {
       return data;
     }
 
-    throw new Error('상품 정보를 가져오는것에 실패하였습니다.');
+    throw new Error(data.message || '주문 정보를 가져오는것에 실패하였습니다.');
   } catch (error) {
     throw error;
   }

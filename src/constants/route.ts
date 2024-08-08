@@ -18,7 +18,7 @@ export const ROUTER = {
     MY_POSTS: '/my-info/my-posts', // 내 게시글
 
     ORDERS: '/my-info/orders', // 주문 / 배송조회
-    ORDER_INFO: '/my-info/order-info',
+    ORDER_INFO: '/order-info',
 
     CHECKOUT: '/payment', // 주문 / 결제
     CHECKOUT_SUCCESS: '/payment/success',
