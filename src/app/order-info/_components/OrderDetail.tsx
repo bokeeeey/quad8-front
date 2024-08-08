@@ -36,7 +36,7 @@ export default function OrderDetail() {
         </h1>
         <div className={cn('item-box')}>
           <h2>주문 상품</h2>
-          {orderItems && orderItems.map((item) => <ItemOverview item={item} />)}
+          {orderItems && orderItems.map((item) => <ItemOverview key={item.productId} item={item} />)}
         </div>
         <h2 className={cn('amount')}>
           총 주문금액 <span className={cn('amount-number')}>{formatNumber(totalAmount)} 원</span>
