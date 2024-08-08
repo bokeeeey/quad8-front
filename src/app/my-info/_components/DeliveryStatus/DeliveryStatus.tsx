@@ -26,8 +26,8 @@ export default function DeliveryStatus() {
   const [deliveryStatusList, setDeliveryStatusList] = useState(DELIVERY_STATUS_LIST);
 
   const { data: ordersResponse } = useQuery<{ data: Order[] }>({
-    queryKey: ['ordersResponse'],
-    queryFn: () => getOrdersData({ page: 0, size: 10, startDate: '', endDate: '' }),
+    queryKey: ['ordersResponse', 0, null, null],
+    queryFn: () => getOrdersData({ page: 0, size: 100, startDate: null, endDate: null }),
   });
 
   const orders = useMemo(() => ordersResponse?.data ?? [], [ordersResponse]);
