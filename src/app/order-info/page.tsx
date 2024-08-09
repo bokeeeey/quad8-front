@@ -23,7 +23,7 @@ export default async function OrderInfoPage({ searchParams }: OrderInfoPageProps
     redirect(ROUTER.MAIN);
   }
 
-  await queryClient.prefetchQuery({ queryKey: ['orderResponse'], queryFn: () => getOrder(orderId) });
+  await queryClient.prefetchQuery({ queryKey: ['orderResponse', orderId], queryFn: () => getOrder(orderId) });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

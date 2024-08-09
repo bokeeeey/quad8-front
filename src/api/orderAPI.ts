@@ -1,4 +1,4 @@
-import { formatKORDate } from '@/libs/formatKORDate';
+import { formatKSTSDate } from '@/libs/formatKSTSDate';
 import { getCookie } from '@/libs/manageCookie';
 import type { CreateOrderAPIType, OrdersRequest } from '@/types/orderType';
 import { FieldValues } from 'react-hook-form';
@@ -35,7 +35,7 @@ export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }:
 
   try {
     const res = await fetch(
-      `${BASE_URL}/api/v1/order?page=${page}&size=${size}&startDate=${formatKORDate(formattedStartDate)}&endDate=${formatKORDate(formattedEndDate)}`,
+      `${BASE_URL}/api/v1/order?page=${page}&size=${size}&startDate=${formatKSTSDate(formattedStartDate)}&endDate=${formatKSTSDate(formattedEndDate)}`,
       {
         method: 'GET',
         headers: {

@@ -24,9 +24,10 @@ interface CheckoutAddressProps {
   onClick?: (selectItem: UserAddress) => void;
   control?: Control<FieldValues>;
   isForm?: boolean;
+  deliveryMessage?: string;
 }
 
-export default function CheckoutAddress({ item, onClick, control, isForm = false }: CheckoutAddressProps) {
+export default function CheckoutAddress({ item, onClick, control, isForm, deliveryMessage }: CheckoutAddressProps) {
   const queryClient = useQueryClient();
 
   const [isAddressChangeModalOpen, setIsAddressChangeModalOpen] = useState(false);
@@ -109,6 +110,7 @@ export default function CheckoutAddress({ item, onClick, control, isForm = false
               <p>받는분</p>
               <p>연락처</p>
               <p>배송 주소</p>
+              {deliveryMessage && <p>배송 메세지</p>}
             </div>
             <div className={cn('address-value')}>
               <p>{name}</p>
@@ -116,6 +118,7 @@ export default function CheckoutAddress({ item, onClick, control, isForm = false
               <p>
                 ({zoneCode}){address} {detailAddress}
               </p>
+              {deliveryMessage && <p>{deliveryMessage}</p>}
             </div>
           </div>
           {isForm && (
