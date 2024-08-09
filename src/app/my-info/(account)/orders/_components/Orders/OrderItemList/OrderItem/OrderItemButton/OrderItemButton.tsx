@@ -1,52 +1,50 @@
 import { Button } from '@/components';
 import type { OrderStatus } from '@/types/orderType';
 import classNames from 'classnames/bind';
-
 import styles from './OrderItemButton.module.scss';
 
 const cn = classNames.bind(styles);
 
 interface OrderItemButtonProps {
   orderStatus: OrderStatus;
+  onEditReviewClick: () => void;
 }
 
-export default function OrderItemButton({ orderStatus }: OrderItemButtonProps) {
+export default function OrderItemButton({ orderStatus, onEditReviewClick }: OrderItemButtonProps) {
   const renderButton = () => {
     switch (orderStatus) {
-      case 'PREPARING' || 'DELIVERED':
+      case 'PAYMENT_COMPLETED' || 'PREPARING' || 'CONFIRMED':
         return (
-          <>
-            <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8}>
-              구매 확정
-            </Button>
-            <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8}>
-              교환/반품
-            </Button>
-          </>
-        );
-      case 'READY':
-        return (
-          <>
-            <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8}>
-              구매 하기
-            </Button>
-            <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8}>
-              더 둘러보기
-            </Button>
-          </>
-        );
-      case 'CONFIRMED':
-        return (
-          <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8}>
+          <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8} onClick={onEditReviewClick}>
             후기 작성
           </Button>
         );
-      case 'PAYMENT_COMPLETED' || 'SHIPPING':
+
+      case 'READY':
         return (
           <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8}>
-            배송 조회
+            구매 하기
           </Button>
         );
+
+      case 'SHIPPING' || 'DELIVERED':
+        return (
+          <>
+            <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8}>
+              배송 조회
+            </Button>
+            <Button
+              className={cn('button')}
+              type='button'
+              radioGroup='4'
+              paddingVertical={8}
+              onClick={onEditReviewClick}
+            >
+              후기 작성
+            </Button>
+          </>
+        );
+
       case 'CANCELED':
         return (
           <Button className={cn('button')} type='button' radioGroup='4' paddingVertical={8}>
