@@ -47,16 +47,11 @@ export default function EditProfileModal({ userData, onComplete }: EditProfileMo
 
   const { mutate: checkNicknameMutation } = useMutation({
     mutationFn: checkNickname,
-    onSuccess: (res) => {
-      if (res.status === 'SUCCESS') {
-        toast.success('사용 가능한 닉네임 입니다.');
-        return;
-      } else if (res.status === 'FAIL') {
-        toast.error('이미 사용중인 닉네임 입니다.');
-        return;
-      }
-
-      toast.error('중복확인에 실패 하였습니다.');
+    onSuccess: () => {
+      toast.success('사용 가능한 닉네임 입니다.');
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
