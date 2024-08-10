@@ -30,6 +30,7 @@ export { default as LogoLoading } from './LogoLoading/LogoLoading';
 export { default as MyInfoEmptyCase } from './MyInfoEmptyCase/MyInfoEmptyCase';
 export { default as ProductItem } from './Products/ProductItem';
 export { default as ProfileImage } from './ProfileImage/ProfileImage';
+export { default as ReviewItem } from './ReviewItem/ReviewItem';
 
 export { default as AddAddressModal } from './AddAddressModal/AddAddressModal';
 export { default as WriteEditModal } from './WriteEditModal/WriteEditModal';

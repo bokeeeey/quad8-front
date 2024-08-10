@@ -3,20 +3,16 @@
 import { getProductDetail } from '@/api/productAPI';
 import { getUserProductReviews } from '@/api/productReviewAPI';
 
-import DatePicker from '@/components/DatePicker/DatePicker';
-import ReviewItem from '@/components/ReviewItem/ReviewItem';
-
 import { formatDateToQueryString } from '@/libs/formatDateToQueryString';
 
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 
-import { MyInfoEmptyCase } from '@/app/my-info/_components';
-import { Pagination } from '@/components';
-import LogoLoading from '@/components/LogoLoading/LogoLoading';
-import { ReviewPageProps, ReviewParamsType } from '@/types/productReviewType';
+import { DatePicker, LogoLoading, MyInfoEmptyCase, Pagination, ReviewItem } from '@/components';
+import type { ReviewPageProps, ReviewParamsType } from '@/types/productReviewType';
 import MyReviewProduct from './MyReviewProduct';
+
 import styles from './MyReviewProduct.module.scss';
 
 const cn = classNames.bind(styles);
