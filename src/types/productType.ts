@@ -9,6 +9,8 @@ export type OptionTypes = {
   optionName: string;
 };
 
+export type CategoryNameType = 'switch' | 'keyboard' | 'keycap' | 'etc';
+
 export interface ProductType {
   id: number;
   name: string;
@@ -19,7 +21,7 @@ export interface ProductType {
   detailsImg: string;
   thubmnailList: ThumbnailTypes[];
   optionList: OptionTypes[];
-  categoryName: 'switch' | 'keyboard' | 'keycap' | 'etc';
+  categoryName: CategoryNameType;
   isLiked: boolean;
 }
 
@@ -39,7 +41,7 @@ export interface RecentProductType {
   name: string;
   thumbnail: string;
   price: number;
-  category: 'switch' | 'keyboard' | 'keycap' | 'etc';
+  category: CategoryNameType;
   reviewCount: number;
   liked: boolean;
 }

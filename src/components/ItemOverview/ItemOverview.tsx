@@ -1,8 +1,17 @@
-import { IMAGE_BLUR } from '@/constants/blurImage';
-import type { OrderItem } from '@/types/orderType';
-import classNames from 'classnames/bind';
+'use client';
+
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
+
+import { getProductDetail } from '@/api/productAPI';
+import type { ProductType } from '@/types/productType';
+import type { OrderItem } from '@/types/orderType';
+import { convertCategory } from '@/libs/convertProductCategory';
+import { IMAGE_BLUR } from '@/constants/blurImage';
 import CustomOption from '../CustomOption/CustomOption';
+import ItemWrapper from './ItemWrapper';
+import ShopOption from './ShopOption';
 
 import styles from './ItemOverview.module.scss';
 
@@ -13,26 +22,41 @@ interface ItemOverviewProps {
   imegeWidth?: number;
   imageHeight?: number;
   className?: string;
-  onClick?: () => void;
+  routeDetailPage?: boolean;
 }
+
+const CATEGORY_NAME = {
+  keyboard: '키보드',
+  keycap: '키캡',
+  switch: '스위치',
+  etc: '기타 용품',
+};
 
 export default function ItemOverview({
   item,
   imegeWidth = 107,
   imageHeight = 107,
   className,
-  onClick,
+  routeDetailPage,
 }: ItemOverviewProps) {
   const { productImgUrl, productName, switchOption, quantity } = item;
 
-  const handleItemClick = () => {
-    if (onClick) {
-      onClick();
-    }
-  };
+  const { data: productData } = useQuery<ProductType>({
+    queryKey: ['product', item.productId],
+    queryFn: () => getProductDetail(item.productId),
+    enabled: productName !== '커스텀 키보드',
+  });
+
+  const category = convertCategory(productData?.categoryName);
 
   return (
-    <div className={cn('item', className)} onClick={handleItemClick}>
+    <ItemWrapper
+      className={className}
+      productName={productName}
+      category={category}
+      routeDetailPage={routeDetailPage}
+      productId={item.productId}
+    >
       <Image
         src={productImgUrl}
         alt={productName}
@@ -44,7 +68,7 @@ export default function ItemOverview({
       />
       {productName === '커스텀 키보드' && typeof switchOption !== 'string' ? (
         <div className={cn('item-option')}>
-          <p className={cn('keydeuk-keyboard-title')}>키드 커스텀 키보드</p>
+          <p className={cn('title')}>키드 커스텀 키보드</p>
           <CustomOption
             customData={{
               texture: switchOption.customOption.appearanceTexture,
@@ -61,10 +85,11 @@ export default function ItemOverview({
         </div>
       ) : (
         <div className={cn('item-text')}>
+          <p className={cn('title')}>{category ? CATEGORY_NAME[category] : ''}</p>
           <p>{productName}</p>
-          <p className={cn('item-quantity')}>{quantity}개</p>
+          {typeof item.switchOption === 'string' && <ShopOption optionName={item.switchOption} count={quantity} />}
         </div>
       )}
-    </div>
+    </ItemWrapper>
   );
 }

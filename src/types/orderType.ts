@@ -51,6 +51,7 @@ export interface OrderItem {
   switchOption: string | SwitchOptionType;
   viewCount: number;
   price: number;
+  category?: 'switch' | 'keyboard' | 'keycap' | 'etc';
 }
 
 export interface Order {
