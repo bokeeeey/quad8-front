@@ -30,7 +30,7 @@ const DEFAULT_VALUES = {
   detailAddress: '',
   phone: '',
   isDefault: true,
-  id: -1,
+  id: 0,
 };
 
 interface AddAddressModalProps {
@@ -69,7 +69,7 @@ export default function AddAddressModal({ onClick, newAddressData, userAddressDa
       setValue('isDefault', userAddressData.isDefault || true);
       setValue('name', userAddressData.name || '');
       setValue('phone', formatPhoneNumber(userAddressData.phone) || '');
-      setValue('id', userAddressData.id || -1);
+      setValue('id', userAddressData.id ?? 0);
     }
   }, [setValue, userAddressData]);
 
@@ -83,14 +83,15 @@ export default function AddAddressModal({ onClick, newAddressData, userAddressDa
     setIsChecked((prevState) => !prevState);
   };
 
-  const handleFormSubmit: SubmitHandler<FieldValues> = (data) => {
+  const handleFormSubmit: SubmitHandler<FieldValues> = (payload) => {
     const checkId = getValues('id');
-    if (checkId === -1) {
-      const { id, ...postData } = data;
-      onSubmit(postData);
-    } else {
-      onSubmit(data);
+    if (!checkId) {
+      const { id, ...rest } = payload;
+      onSubmit(rest);
+      return;
     }
+
+    onSubmit(payload);
   };
 
   return (

@@ -6,10 +6,11 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { deleteAddress, putAddress } from '@/api/shippingAPI';
-import { Modal } from '@/components';
+import { Dialog, Modal } from '@/components';
+import AddAddressModal from '@/components/AddAddresseModal/AddAddressModal';
 import type { UserAddress } from '@/types/shippingType';
-import AddAddressModal from '../../../../../../../components/AddAddresseModal/AddAddressModal';
 
+import { formatPhoneNumber } from '@/libs';
 import styles from './Address.module.scss';
 
 const cn = classNames.bind(styles);
@@ -23,6 +24,7 @@ interface AddressProps {
 export default function Address({ item, isDisplayOnModal = false, onClick }: AddressProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPostcodeEmbedOpen, setIsPostcodeEmbedOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [addressData, setAddressData] = useState<AddressT | null>(null);
 
   const { phone, address, zoneCode, name, detailAddress, isDefault, id } = item;
@@ -40,12 +42,17 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
   };
 
   const handleDeleteButtonClick = () => {
+    setIsDialogOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleDelete = () => {
     deleteAddressMutate(id, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('삭제되었습니다.');
-          queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-        }
+      onSuccess: () => {
+        toast('삭제되었습니다.');
+        queryClient.invalidateQueries({ queryKey: ['addressesData'] });
+      },
+      onError: (error) => {
+        toast(error.message);
       },
     });
   };
@@ -87,7 +94,7 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
             <h1 className={cn('address-name')}>{name}</h1>
             {isDefault && <span className={cn('address-default-badge')}>기본 배송지</span>}
           </div>
-          <p>{phone}</p>
+          <p>010-{formatPhoneNumber(phone)}</p>
           <p>
             ({zoneCode}) {address} {detailAddress}
           </p>
@@ -106,6 +113,14 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
         )}
       </article>
 
+      <Dialog
+        isOpen={isDialogOpen}
+        buttonText={{ left: '취소', right: '삭제' }}
+        message='정말로 삭제 하시겠습니까?'
+        onClick={{ left: () => setIsDialogOpen(false), right: handleDelete }}
+        type='confirm'
+        iconType='warn'
+      />
       <Modal isOpen={isPostcodeEmbedOpen} onClose={() => setIsPostcodeEmbedOpen(false)}>
         <DaumPostcodeEmbed
           className={cn('postcode-embed')}

@@ -53,10 +53,6 @@ export const getAddresses = async () => {
 export const deleteAddress = async (addressId: number) => {
   const token = await getCookie('accessToken');
 
-  if (!token) {
-    return null;
-  }
-
   try {
     const res = await fetch(`${BASE_URL}/api/v1/shipping/address/${addressId}`, {
       method: 'DELETE',
@@ -67,7 +63,12 @@ export const deleteAddress = async (addressId: number) => {
     });
 
     const result = await res.json();
-    return result;
+
+    if (res.ok) {
+      return result;
+    }
+
+    throw new Error(result.message || '배송지 삭제에 실패 하였습니다.');
   } catch (error) {
     throw error;
   }
@@ -75,23 +76,25 @@ export const deleteAddress = async (addressId: number) => {
 
 export const putAddress = async (payload: FieldValues) => {
   const token = await getCookie('accessToken');
-
-  if (!token) {
-    return null;
-  }
+  const { id, ...rest } = payload;
 
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/shipping/address/${payload.id}`, {
+    const res = await fetch(`${BASE_URL}/api/v1/shipping/address/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(rest),
     });
 
     const result = await res.json();
-    return result;
+
+    if (res.ok) {
+      return result;
+    }
+
+    throw new Error(result.message || '배송지 변경에 실패 하였습니다.');
   } catch (error) {
     throw error;
   }
