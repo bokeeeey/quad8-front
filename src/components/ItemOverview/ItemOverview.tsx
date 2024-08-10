@@ -18,8 +18,8 @@ import styles from './ItemOverview.module.scss';
 const cn = classNames.bind(styles);
 
 interface ItemOverviewProps {
-  item: OrderItem;
-  imegeWidth?: number;
+  item: Omit<OrderItem, 'viewCount' | 'price'>;
+  imageWidth?: number;
   imageHeight?: number;
   className?: string;
   routeDetailPage?: boolean;
@@ -34,8 +34,8 @@ const CATEGORY_NAME = {
 
 export default function ItemOverview({
   item,
-  imegeWidth = 107,
-  imageHeight = 107,
+  imageWidth = 104,
+  imageHeight = 104,
   className,
   routeDetailPage,
 }: ItemOverviewProps) {
@@ -44,10 +44,10 @@ export default function ItemOverview({
   const { data: productData } = useQuery<ProductType>({
     queryKey: ['product', item.productId],
     queryFn: () => getProductDetail(item.productId),
-    enabled: productName !== '커스텀 키보드',
+    enabled: productName !== '커스텀 키보드' && !item.category,
   });
 
-  const category = convertCategory(productData?.categoryName);
+  const category = item.category ?? convertCategory(productData?.categoryName);
 
   return (
     <ItemWrapper
@@ -60,14 +60,14 @@ export default function ItemOverview({
       <Image
         src={productImgUrl}
         alt={productName}
-        width={imegeWidth}
+        width={imageWidth}
         height={imageHeight}
         placeholder={IMAGE_BLUR.placeholder}
         blurDataURL={IMAGE_BLUR.blurDataURL}
         className={cn('product-image')}
       />
       {productName === '커스텀 키보드' && typeof switchOption !== 'string' ? (
-        <div className={cn('item-option')}>
+        <div style={{ width: `calc(100% - ${imageWidth + 20}px)` }}>
           <p className={cn('title')}>키드 커스텀 키보드</p>
           <CustomOption
             customData={{
@@ -86,7 +86,7 @@ export default function ItemOverview({
       ) : (
         <div className={cn('item-text')}>
           <p className={cn('title')}>{category ? CATEGORY_NAME[category] : ''}</p>
-          <p>{productName}</p>
+          <p className={cn('item-name')}>{productName}</p>
           {typeof item.switchOption === 'string' && <ShopOption optionName={item.switchOption} count={quantity} />}
         </div>
       )}

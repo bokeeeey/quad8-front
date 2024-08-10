@@ -6,11 +6,11 @@ interface NewOrderType {
   quantity: number;
 }
 
-interface SwitchOptionType {
+export interface SwitchOptionType {
   individualColor: Record<string, string>;
   customOption: {
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
     id: number;
     layout: string;
     appearanceTexture: string;
@@ -18,7 +18,7 @@ interface SwitchOptionType {
     baseKeyColor: string;
     keyboardSwitch: CustomKeyboardSwitchTypes;
     hasPointKey: boolean;
-    pointKeyType: CustomKeyboardPointKeyType;
+    pointKeyType: CustomKeyboardPointKeyType | null;
     pointSetColor: null | string;
     imgUrl: string;
     price: number;

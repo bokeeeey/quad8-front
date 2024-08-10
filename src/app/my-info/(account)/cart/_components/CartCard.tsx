@@ -1,20 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { putChangeCartData } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
-import { Button, CustomOption, Modal } from '@/components';
+import { Button, ItemOverview, Modal } from '@/components';
 import { ROUTER } from '@/constants/route';
 import type { CustomDataType, OptionChageAPIType, ShopDataType } from '@/types/cartType';
-import type { CreateOrderResponseType } from '@/types/orderType';
+import type { CreateOrderResponseType, OrderItem, SwitchOptionType } from '@/types/orderType';
 import CardCheckBox from './CardCheckBox';
 import OptionEditModal from './OptionEditModal';
-import ShopOption from './ShopOption';
 
 import styles from './CartCard.module.scss';
 
@@ -30,22 +27,42 @@ interface ShopCardProps {
   cardData: ShopDataType;
 }
 
-const CATEGORY = {
-  keyboard: '키보드',
-  keycap: '키캡',
-  switch: '스위치',
-  etc: '기타 용품',
-};
-
 export default function CartCard({ cardData, type }: CustomCardProps | ShopCardProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const imageURL = type === 'custom' ? cardData.imgUrl : cardData.thumbsnail;
-  const title = type === 'custom' ? '키득 커스텀 키보드' : cardData.productTitle;
   const price = type === 'custom' ? cardData.price : Number(cardData.count * cardData.price);
-  const category = type === 'shop' ? CATEGORY[cardData.category] : '';
+  const cardItem: Omit<OrderItem, 'viewCount' | 'price'> =
+    type === 'custom'
+      ? {
+          productId: cardData.id,
+          productImgUrl: cardData.imgUrl,
+          productName: '커스텀 키보드',
+          quantity: 1,
+          switchOption: {
+            individualColor: cardData.individualColor as Record<string, string>,
+            customOption: {
+              id: cardData.id,
+              layout: cardData.type,
+              appearanceTexture: cardData.texture,
+              appearanceColor: cardData.boardColor as string,
+              baseKeyColor: cardData.baseKeyColor as string,
+              keyboardSwitch: cardData.switchType,
+              hasPointKey: cardData.hasPointKeyCap,
+              pointKeyType: cardData.pointKeyType,
+              imgUrl: cardData.imgUrl,
+              price: cardData.price,
+            },
+          } as SwitchOptionType,
+        }
+      : {
+          productId: cardData.id,
+          productImgUrl: cardData.thumbsnail,
+          productName: cardData.productTitle,
+          quantity: cardData.count,
+          switchOption: cardData.optionName ?? '',
+          category: cardData.category,
+        };
   const { mutate: createOrder } = useMutation({
     mutationFn: postCreateOrder,
     onSuccess: (response: CreateOrderResponseType) => {
@@ -116,24 +133,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
         <div>
           <CardCheckBox id={cardData.id} type={type} />
         </div>
-        {type === 'shop' ? (
-          <Link className={cn('product-wrapper')} href={`/shop/${cardData.category}/${cardData.productId}`}>
-            <Image src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
-            <div className={cn('information-wrapper')}>
-              {type === 'shop' && <div className={cn('type')}>{category}</div>}
-              <div className={cn('title')}> {title}</div>
-              <ShopOption optionName={cardData.optionName} count={cardData.count} />
-            </div>
-          </Link>
-        ) : (
-          <div className={cn('product-wrapper')}>
-            <Image src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
-            <div className={cn('information-wrapper')}>
-              <div className={cn('title')}> {title}</div>
-              <CustomOption customData={cardData} />
-            </div>
-          </div>
-        )}
+        <ItemOverview item={cardItem} routeDetailPage />
       </div>
       <div className={cn('price')}>{price.toLocaleString()}원</div>
       <div className={cn('button-wrapper')}>

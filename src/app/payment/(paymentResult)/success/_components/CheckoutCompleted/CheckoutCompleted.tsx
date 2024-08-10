@@ -118,10 +118,7 @@ export default function CheckoutCompleted() {
 
         <div className={cn('item-box')}>
           <h1>주문 상품</h1>
-          {orderItems &&
-            orderItems.map((item: OrderItem) => (
-              <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
-            ))}
+          {orderItems && orderItems.map((item: OrderItem) => <ItemOverview key={item.productId} item={item} />)}
         </div>
       </article>
 
