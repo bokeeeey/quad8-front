@@ -6,10 +6,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 export const postAddress = async (payload: FieldValues) => {
   const token = await getCookie('accessToken');
 
-  if (!token) {
-    return null;
-  }
-
   try {
     const res = await fetch(`${BASE_URL}/api/v1/shipping/address`, {
       method: 'POST',
@@ -21,7 +17,12 @@ export const postAddress = async (payload: FieldValues) => {
     });
 
     const result = await res.json();
-    return result;
+
+    if (res.ok) {
+      return result;
+    }
+
+    throw new Error(result.message || '배송지 추가에 실패 하였습니다.');
   } catch (error) {
     throw error;
   }
@@ -29,10 +30,6 @@ export const postAddress = async (payload: FieldValues) => {
 
 export const getAddresses = async () => {
   const token = await getCookie('accessToken');
-
-  if (!token) {
-    return null;
-  }
 
   try {
     const res = await fetch(`${BASE_URL}/api/v1/shipping/address`, {
@@ -44,7 +41,12 @@ export const getAddresses = async () => {
     });
 
     const data = await res.json();
-    return data;
+
+    if (res.ok) {
+      return data;
+    }
+
+    throw new Error(data.message || '배송지 정보를 가져오지 못했습니다.');
   } catch (error) {
     throw error;
   }

@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 import { postAddress } from '@/api/shippingAPI';
 import { Button, Modal } from '@/components';
-import AddAddressModal from '../../../../../../components/AddAddresseModal/AddAddressModal';
+import AddAddressModal from '@/components/AddAddresseModal/AddAddressModal';
 
 import styles from './AddressesHeader.module.scss';
 
@@ -44,19 +44,20 @@ export default function AddressesHeader() {
     setAddressData(null);
   };
 
-  const onSuccessClose = () => {
+  const handleSuccessClose = () => {
     setIsModalOpen(false);
     setAddressData(null);
   };
 
   const handleAddressPostSubmit: SubmitHandler<FieldValues> = (payload) => {
     postAddressesMutate(payload, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('배송지를 추가하였습니다.');
-          queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-          onSuccessClose();
-        }
+      onSuccess: () => {
+        toast('배송지를 추가하였습니다.');
+        queryClient.invalidateQueries({ queryKey: ['addressesData'] });
+        handleSuccessClose();
+      },
+      onError: (error) => {
+        toast(error.message);
       },
     });
   };

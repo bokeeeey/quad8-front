@@ -77,18 +77,13 @@ export default function CheckoutAddress({ item, onClick, control, isForm, delive
     e?.stopPropagation();
 
     postAddressMutate(payload, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('배송지를 추가하였습니다.');
-          queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-          handleSuccessClose();
-          return;
-        }
-
-        toast('배송지 추가에 실패하였습니다.');
+      onSuccess: () => {
+        toast('배송지를 추가하였습니다.');
+        queryClient.invalidateQueries({ queryKey: ['addressesData'] });
+        handleSuccessClose();
       },
-      onError: () => {
-        toast('배송지 추가에 실패하였습니다.');
+      onError: (error) => {
+        toast(error.message);
       },
     });
   };
