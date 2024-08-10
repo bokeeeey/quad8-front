@@ -1,4 +1,4 @@
-import type { AlarmDataType } from '@/types/alarmTypes';
+import type { AlarmDataType } from '@/types/alarmType';
 
 type AlarmCategory = '상품' | '이벤트' | '커뮤니티';
 type AlarmCategoryData = Record<AlarmCategory, AlarmDataType[]>;

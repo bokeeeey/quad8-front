@@ -4,7 +4,7 @@ import { EventSourcePolyfill, Event } from 'event-source-polyfill';
 import { MutableRefObject, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 
-import type { AlarmDataType } from '@/types/alarmTypes';
+import type { AlarmDataType } from '@/types/alarmType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

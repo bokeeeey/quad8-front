@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 
-import type { AlarmType } from '@/types/alarmTypes';
 import { CouponAlarmIcon, CommentAlarmIcon, OrderAlarmIcon } from '@/public/index';
+import type { AlarmType } from '@/types/alarmType';
 
 import styles from './NotificationCardIcon.module.scss';
 

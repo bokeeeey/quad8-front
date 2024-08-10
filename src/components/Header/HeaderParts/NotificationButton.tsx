@@ -8,7 +8,7 @@ import classNames from 'classnames/bind';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { NotificationIcon } from '@/public/index';
 import { getAlarm, postAlarmRead, deleteAlarm } from '@/api/alarmAPI';
-import type { AlarmAPIDataType, AlarmDataType, AlarmType } from '@/types/alarmTypes';
+import type { AlarmAPIDataType, AlarmDataType, AlarmType } from '@/types/alarmType';
 import { getCurrentAlarm } from '@/libs/getCurrentAlarm';
 import { useEventSource } from '@/hooks/useEventSource';
 import NotificationCard from './NotificationCard';
