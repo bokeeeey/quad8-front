@@ -8,8 +8,7 @@ import { useEffect, useState } from 'react';
 
 import { postPaymentConfirm, postPaymentSuccess } from '@/api/paymentAPI';
 import CheckoutAddress from '@/app/payment/_components/CheckoutForm/parts/CheckoutAddress';
-import { Button, ItemOverview } from '@/components';
-import LogoLoading from '@/components/LogoLoading/LogoLoading';
+import { Button, ItemOverview, LogoLoading } from '@/components';
 import { ROUTER } from '@/constants/route';
 import type { OrderItem } from '@/types/orderType';
 import type { PaymentSuccessRequest } from '@/types/paymentsType';

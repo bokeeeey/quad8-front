@@ -1,6 +1,5 @@
 import { CreditCardIcon, CrossIcon, CubeIcon } from '@/public/index';
 import classNames from 'classnames/bind';
-
 import styles from './CheckoutNavigation.module.scss';
 
 const cn = classNames.bind(styles);

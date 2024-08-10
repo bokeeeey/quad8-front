@@ -8,8 +8,7 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { postAddress } from '@/api/shippingAPI';
-import { Button, Modal } from '@/components';
-import AddAddressModal from '@/components/AddAddresseModal/AddAddressModal';
+import { AddAddresseModal, Button, Modal } from '@/components';
 
 import styles from './AddressesHeader.module.scss';
 
@@ -79,7 +78,7 @@ export default function AddressesHeader() {
         />
       </Modal>
       <Modal isOpen={isModalOpen} onClose={handleAddAddressModalClose}>
-        <AddAddressModal
+        <AddAddresseModal
           onClick={handleSearchPostClick}
           onSubmit={handleAddressPostSubmit}
           newAddressData={addressData}

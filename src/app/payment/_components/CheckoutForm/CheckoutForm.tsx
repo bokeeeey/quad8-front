@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { getPayment, putPayment } from '@/api/orderAPI';
 import { Button, Dropdown, ItemOverview } from '@/components';
 import { Input, Label } from '@/components/parts';
-import { formatNumber } from '@/libs';
+import { formatNumber } from '@/libs/formatNumber';
 import type { OrderDetailData, OrderItem, ShippingAddressResponse } from '@/types/orderType';
 import type { UserAddress } from '@/types/shippingType';
 import CheckoutAddress from './parts/CheckoutAddress';

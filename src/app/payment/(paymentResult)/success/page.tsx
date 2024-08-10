@@ -3,7 +3,7 @@ import { ROUTER } from '@/constants/route';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { redirect } from 'next/navigation';
 import CheckoutNavigation from '../../_components/CheckoutNavigation/CheckoutNavigation';
-import CheckoutCompleted from './_components/CheckoutCompleted/CheckoutCompleted';
+import CheckoutCompleted from './_components/CheckoutCompleted';
 
 interface SuccessPageProps {
   searchParams: { [key: string]: string };

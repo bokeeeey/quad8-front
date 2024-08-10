@@ -7,11 +7,12 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { checkNickname, putEditProfile } from '@/api/usersAPI';
-import { Button, InputField, RadioField } from '@/components';
-import ProfileImage from '@/components/ProfileImage/ProfileImage';
+import { Button, InputField, ProfileImage, RadioField } from '@/components';
 import { Label } from '@/components/parts';
 import { GENDER_OPTION } from '@/constants/dropdownOptions';
-import { changePhoneNumber, formatPhoneNumber, unFormatPhoneNumber } from '@/libs';
+import { changePhoneNumber } from '@/libs/changePhoneNumber';
+import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
+import { unFormatPhoneNumber } from '@/libs/unFormatPhoneNumber';
 import type { Users } from '@/types/userType';
 
 import styles from './EditProfileModal.module.scss';

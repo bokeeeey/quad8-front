@@ -6,11 +6,10 @@ import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { deleteAddress, putAddress } from '@/api/shippingAPI';
-import { Dialog, Modal } from '@/components';
-import AddAddressModal from '@/components/AddAddresseModal/AddAddressModal';
+import { AddAddressModal, Dialog, Modal } from '@/components';
+import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
 import type { UserAddress } from '@/types/shippingType';
 
-import { formatPhoneNumber } from '@/libs';
 import styles from './Address.module.scss';
 
 const cn = classNames.bind(styles);

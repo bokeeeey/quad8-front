@@ -1,13 +1,14 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import { getPayment } from '@/api/orderAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { AlertIcon, FailIcon } from '@/public/index';
 import { OrderDetailData } from '@/types/orderType';
-import { useQuery } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
-import { useRouter, useSearchParams } from 'next/navigation';
 import CheckoutNavigation from '../../_components/CheckoutNavigation/CheckoutNavigation';
 
 import styles from './page.module.scss';

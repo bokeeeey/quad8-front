@@ -5,8 +5,7 @@ import classNames from 'classnames/bind';
 import { useState } from 'react';
 
 import { getUserData } from '@/api/usersAPI';
-import { Modal } from '@/components';
-import ProfileImage from '@/components/ProfileImage/ProfileImage';
+import { Modal, ProfileImage } from '@/components';
 import type { Users } from '@/types/userType';
 import EditProfileModal from './EditProfileModal/EditProfileModal';
 
@@ -16,6 +15,7 @@ const cn = classNames.bind(styles);
 
 export default function UserProfile() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { data: userData, refetch } = useQuery<{ data: Users }>({ queryKey: ['userData'], queryFn: getUserData });
 
   const users = userData?.data;

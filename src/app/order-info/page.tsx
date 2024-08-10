@@ -1,10 +1,12 @@
-import { getOrder } from '@/api/orderAPI';
-import { getUserData } from '@/api/usersAPI';
-import { ROUTER } from '@/constants/route';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { redirect } from 'next/navigation';
+
+import { getOrder } from '@/api/orderAPI';
+import { getUserData } from '@/api/usersAPI';
+import { ROUTER } from '@/constants/route';
 import OrderDetail from './_components/OrderDetail';
+
 import styles from './page.module.scss';
 
 const cn = classNames.bind(styles);

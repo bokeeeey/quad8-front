@@ -5,10 +5,9 @@ import classNames from 'classnames/bind';
 
 import { getRecentProducts } from '@/api/productAPI';
 import { getUserData } from '@/api/usersAPI';
-import ProductItem from '@/components/Products/ProductItem';
+import { MyInfoEmptyCase, ProductItem } from '@/components';
 import type { RecentProductType } from '@/types/productType';
 import type { Users } from '@/types/userType';
-import MyInfoEmptyCase from '../MyInfoEmptyCase/MyInfoEmptyCase';
 
 import styles from './RecentProducts.module.scss';
 

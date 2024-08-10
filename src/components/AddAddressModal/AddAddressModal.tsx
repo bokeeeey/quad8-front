@@ -7,7 +7,9 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button, InputField } from '@/components';
 import { Input, Label } from '@/components/parts';
-import { changePhoneNumber, formatPhoneNumber, unFormatPhoneNumber } from '@/libs';
+import { changePhoneNumber } from '@/libs/changePhoneNumber';
+import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
+import { unFormatPhoneNumber } from '@/libs/unFormatPhoneNumber';
 import { CheckboxCircleIcon } from '@/public/index';
 import type { UserAddress } from '@/types/shippingType';
 
@@ -40,7 +42,7 @@ interface AddAddressModalProps {
   userAddressData?: UserAddress;
 }
 
-export default function AddAddressModal({ onClick, newAddressData, userAddressData, onSubmit }: AddAddressModalProps) {
+export default function AddAddresseModal({ onClick, newAddressData, userAddressData, onSubmit }: AddAddressModalProps) {
   const [isChecked, setIsChecked] = useState(true);
 
   const {

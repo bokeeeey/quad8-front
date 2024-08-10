@@ -7,8 +7,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { getOrder } from '@/api/orderAPI';
 import CheckoutAddress from '@/app/payment/_components/CheckoutForm/parts/CheckoutAddress';
 import { Button, ItemOverview } from '@/components';
-import { formatNumber } from '@/libs';
 import { formatDateToKSTString } from '@/libs/formatDateToKSTString';
+import { formatNumber } from '@/libs/formatNumber';
 import type { OrderResponse } from '@/types/orderType';
 
 import styles from './OrderDetail.module.scss';

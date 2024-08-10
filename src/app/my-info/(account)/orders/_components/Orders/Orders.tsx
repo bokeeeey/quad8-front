@@ -5,11 +5,9 @@ import { debounce } from 'lodash';
 import { useMemo, useState } from 'react';
 
 import { getOrdersData } from '@/api/orderAPI';
-import { MyInfoEmptyCase } from '@/app/my-info/_components';
-import DatePicker from '@/components/DatePicker/DatePicker';
+import { DatePicker, MyInfoEmptyCase } from '@/components';
 import type { Order } from '@/types/orderType';
-import OrderHeader from './OrderHeader/OrderHeader';
-import OrderItemList from './OrderItemList/OrderItemList';
+import { OrderHeader, OrderItemList } from './index';
 
 export default function Orders() {
   const queryClient = useQueryClient();
