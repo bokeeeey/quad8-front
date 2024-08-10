@@ -1,7 +1,7 @@
 'use client';
 
 import { MouseEvent, RefObject, useContext } from 'react';
-import type { StaticImageData } from 'next/image';
+import { StaticImageData } from 'next/image';
 import classNames from 'classnames/bind';
 
 import type { CustomKeyboardKeyTypes } from '@/types/CustomKeyboardTypes';
