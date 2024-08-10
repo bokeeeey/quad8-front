@@ -27,7 +27,7 @@ export default function CheckoutForm() {
   const orderId = searchParams.get('orderId') || '';
 
   const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
-    queryKey: ['paymentResponse'],
+    queryKey: ['paymentResponse', orderId],
     queryFn: () => getPayment(orderId),
     enabled: !!orderId,
   });
@@ -58,7 +58,7 @@ export default function CheckoutForm() {
   const { mutate: putPaymentMutation } = useMutation({
     mutationFn: (payload: FieldValues) => putPayment(orderId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['paymentDataResponse'] });
+      queryClient.invalidateQueries({ queryKey: ['paymentDataResponse', orderId] });
     },
   });
 

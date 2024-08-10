@@ -13,8 +13,7 @@ export default async function PaymentSuccessPage({ searchParams }: SuccessPagePr
   const queryClient = new QueryClient();
   const { orderId } = searchParams;
 
-  await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
-  const userData = queryClient.getQueryData(['userData']);
+  const userData = queryClient.fetchQuery({ queryKey: ['userData'], queryFn: getUserData });
 
   if (!userData) {
     redirect(ROUTER.MAIN);

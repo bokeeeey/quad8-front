@@ -30,7 +30,6 @@ export default function CheckoutCompleted() {
   const amount = searchParams.get('amount') || '';
 
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isFailed, setIsFailed] = useState(false);
 
   const { mutate: postPaymentSuccessMutation } = useMutation({
     mutationFn: () => postPaymentSuccess({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
@@ -38,6 +37,7 @@ export default function CheckoutCompleted() {
       jsConfetti.addConfetti({ confettiNumber: 500 });
 
       queryClient.invalidateQueries({ queryKey: ['cartData'] });
+      queryClient.invalidateQueries({ queryKey: ['paymentResponse'] });
       queryClient.setQueryData(['paymentSuccessRequest'], res.data);
       localStorage.setItem('paymentSuccessRequest', JSON.stringify(res.data));
 
@@ -45,7 +45,6 @@ export default function CheckoutCompleted() {
     },
     onError: (error) => {
       router.replace(`${ROUTER.MY_PAGE.CHECKOUT_FAIL}?orderId=${orderId}&message=${error.message}`);
-      setIsFailed(true);
     },
     retry: 0,
   });
@@ -57,8 +56,6 @@ export default function CheckoutCompleted() {
     },
     onError: (error) => {
       router.replace(`${ROUTER.MY_PAGE.CHECKOUT_FAIL}?orderId=${orderId}&message=${error.message}`);
-
-      setIsFailed(true);
     },
     retry: 0,
   });
@@ -100,10 +97,6 @@ export default function CheckoutCompleted() {
 
   if (!isConfirmed) {
     return <LogoLoading />;
-  }
-
-  if (isFailed) {
-    router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
   }
 
   return (
