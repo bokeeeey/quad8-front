@@ -71,4 +71,5 @@ export interface OrdersRequest {
 export interface OrderResponse extends Order {
   shippingAddress: ShippingAddressResponse;
   totalAmount: number;
+  paymentOrderId: string;
 }

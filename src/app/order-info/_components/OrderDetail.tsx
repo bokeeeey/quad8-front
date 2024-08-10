@@ -31,6 +31,7 @@ export default function OrderDetail() {
     totalAmount = '',
     purchaseDate = '',
     deliveryMessage,
+    paymentOrderId,
   } = orderResponse?.data ?? {};
 
   const handleButtonClick = () => {
@@ -43,7 +44,7 @@ export default function OrderDetail() {
         <div className={cn('info-box')}>
           <h1>{formatDateToKSTString(purchaseDate)}</h1>
           <h2 className={cn('order-number')}>
-            주문번호<span className={cn('number')}>이거 백엔드에 요청해야 할듯?</span>
+            주문번호<span className={cn('number')}>{paymentOrderId?.toUpperCase()}</span>
           </h2>
         </div>
         {shippingAddress && <CheckoutAddress item={shippingAddress} deliveryMessage={deliveryMessage} />}
