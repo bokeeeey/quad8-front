@@ -2,19 +2,29 @@
 
 import { useState } from 'react';
 import Image, { ImageProps } from 'next/image';
-import type { StaticImageData, StaticRequire } from 'next/dist/shared/lib/get-img-props';
 import { errorImg } from '@/public/index';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import { getValidImage, isValidImageURL } from '@/libs/checkValidImage';
 
 interface CustomImageProps extends ImageProps {
-  errorSrc?: string | StaticRequire | StaticImageData;
+  errorSrc?: string | StaticImport;
 }
 
 export default function CustomImage(props: CustomImageProps) {
   const { alt, src, errorSrc, ...imageProps } = props;
-  const [imgSrc, setImgSrc] = useState(src);
+  const [imgSrc, setImgSrc] = useState(getValidImage(src, errorImg, errorSrc));
 
   const handleImageError = () => {
-    setImgSrc(errorSrc ?? errorImg);
+    if (errorSrc) {
+      setImgSrc((prev) => {
+        if (prev !== errorSrc || isValidImageURL(errorSrc)) {
+          return errorSrc;
+        }
+        return errorImg;
+      });
+      return;
+    }
+    setImgSrc(errorImg);
   };
   return <Image alt={alt} src={imgSrc} {...imageProps} onError={handleImageError} />;
 }

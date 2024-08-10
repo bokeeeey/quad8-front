@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
@@ -11,7 +10,7 @@ import type { CartAPIDataType } from '@/types/CartTypes';
 import type { Users } from '@/types/userType';
 import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
-import SignInModal from '../SignInModal/SignInModal';
+import { CustomImage, SignInModal } from '@/components';
 import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton, NotificationButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
@@ -87,7 +86,7 @@ export default function Header() {
             {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton eventSource={eventSource} />}
             <button className={cn('user-icon', 'button')} type='button' onClick={handleUserIconClick}>
               {profileImage ? (
-                <Image src={profileImage} alt='profile' width={28} height={28} className={cn('profile-image')} />
+                <CustomImage src={profileImage} alt='profile' width={28} height={28} className={cn('profile-image')} />
               ) : (
                 <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={28} height={28} />
               )}

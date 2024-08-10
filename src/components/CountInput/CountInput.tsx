@@ -27,8 +27,12 @@ export default forwardRef<HTMLInputElement, CountInputProps>(function CountInput
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [count, setCount] = useState<number | '' | '-'>(value ? Math.max(Math.min(value, max), min) : min);
-  const [prevValue, setPrevValue] = useState<number>(value ? Math.max(Math.min(value, max), min) : min);
+  const [count, setCount] = useState<number | '' | '-'>(
+    typeof value === 'number' ? Math.max(Math.min(value, max), min) : min,
+  );
+  const [prevValue, setPrevValue] = useState<number>(
+    typeof value === 'number' ? Math.max(Math.min(value, max), min) : min,
+  );
 
   const handleChangeCount = (type: 'decrease' | 'increase') => {
     if (!inputRef.current || !NUMBER_REGEX.test(inputRef.current.value)) {
