@@ -1,15 +1,15 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import classNames from 'classnames/bind';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { postSignin } from '@/api/authAPI';
-import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
-import type { FetchSignInInfoTypes } from '@/types/authTypes';
 import { Button, InputField } from '@/components';
 import { ROUTER } from '@/constants/route';
+import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
+import type { FetchSignInInfoTypes } from '@/types/authTypes';
 
 import styles from './page.module.scss';
 
@@ -90,7 +90,7 @@ export default function Page() {
       <div className={cn('auth-section-wrapper')}>
         {AUTH_SECTION.map((text, i) => (
           <div key={text} className={cn('auth-section')}>
-            <div className={cn('auth-section-text')} onClick={() => handleClickLink(ROUTER.AHTH.SIGN_UP)}>
+            <div className={cn('auth-section-text')} onClick={() => handleClickLink(ROUTER.AUTH.SIGN_UP)}>
               {text}
             </div>
             {i === 2 || <div className={cn('bar')}>|</div>}
