@@ -7,11 +7,11 @@ import { ROUTER } from '@/constants/route';
 import { setCookie } from '@/libs/manageCookie';
 import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
 import type { FetchSignInInfoTypes } from '@/types/authTypes';
-import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import Modal from '../Modal/Modal';
+import { useRouter } from 'next/navigation';
 import Button from '../Buttons/Button/Button';
 import InputField from '../InputField/InputField';
+import Modal from '../Modal/Modal';
 
 import styles from './SigninModal.module.scss';
 
@@ -108,7 +108,7 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
         <div className={cn('auth-section-wrapper')}>
           {AUTH_SECTION.map((text, i) => (
             <div key={text} className={cn('auth-section')}>
-              <div className={cn('auth-section-text')} onClick={() => handleClickLink(ROUTER.AHTH.SIGN_UP)}>
+              <div className={cn('auth-section-text')} onClick={() => handleClickLink(ROUTER.AUTH.SIGN_UP)}>
                 {text}
               </div>
               {i === 2 || <div className={cn('bar')}>|</div>}

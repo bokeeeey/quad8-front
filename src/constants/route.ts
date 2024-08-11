@@ -5,7 +5,7 @@ export const ROUTER = {
 
   SEARCH: '/search',
 
-  AHTH: {
+  AUTH: {
     SIGN_UP: '/sign-up',
   },
 
