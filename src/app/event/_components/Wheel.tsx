@@ -7,7 +7,7 @@ import { Dialog } from '@/components';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import useCreateCouponMutation from '@/hooks/useCreateCouponMutation';
 import { getCookie } from '@/libs/manageCookie';
-import { CouponResponse } from '@/types/CouponTypes';
+import { CouponResponse } from '@/types/couponTypes';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import JSConfetti from 'js-confetti';

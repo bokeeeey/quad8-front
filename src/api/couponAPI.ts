@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import { CouponResponse, CreateCouponType } from '@/types/CouponTypes';
+import { CouponResponse, CreateCouponType } from '@/types/couponTypes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
