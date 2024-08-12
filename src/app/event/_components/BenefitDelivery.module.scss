@@ -1,6 +1,7 @@
 .container {
   width: 100%;
   background-color: $white;
+  scroll-margin-top: 10rem;
 }
 
 .inner {
@@ -19,7 +20,10 @@
 .center {
   @include pretendard-16-400;
 
-  margin-bottom: 200px;
+  width: 49.4rem;
+  margin: 0 auto 20rem;
+  padding: 3rem;
+  border: 0.1rem solid $gray-50;
   color: $gray-50;
 }
 

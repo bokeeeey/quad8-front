@@ -22,4 +22,10 @@
   @include flex-center;
 
   flex: 1;
+
+  &.active {
+    height: 100%;
+    background-color: #ecf5fe;
+    color: $black;
+  }
 }
