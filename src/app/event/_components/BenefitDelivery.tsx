@@ -1,4 +1,4 @@
-import { deliveryImg } from '@/public/index';
+import { FreeIcon, deliveryImg } from '@/public/index';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import styles from './BenefitDelivery.module.scss';
@@ -14,8 +14,9 @@ export default function BenefitDelivery() {
       <div className={cn('inner')}>
         <div className={cn('delivery-img-wrap')}>
           <Image src={deliveryImg} width={557} height={526} alt='무료배송이미지' className={cn('delivery-img')} />
+          <FreeIcon className={cn('icon')} />
         </div>
-        <span>키캡은 세트 구매시에만 적용됩니다</span>
+        <span className={cn('center')}> 📌 키캡은 세트 구매시에만 적용됩니다</span>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 .container {
   width: 100%;
-  height: 2000px;
   background-color: $white;
 }
 
@@ -9,5 +8,23 @@
 }
 
 .delivery-img-wrap {
+  position: relative;
+}
+
+.delivery-img-wrap,
+.center {
   @include flex-center;
+}
+
+.center {
+  @include pretendard-16-400;
+
+  margin-bottom: 200px;
+  color: $gray-50;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  right: 20rem;
 }
