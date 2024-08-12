@@ -34,6 +34,7 @@ export { default as LinkCopyIcon } from '@/public/svgs/link.svg';
 export { default as ShareIcon } from '@/public/svgs/share.svg';
 
 export { default as CalendarIcon } from './svgs/calendar.svg';
+export { default as FreeIcon } from './svgs/free.svg';
 export { default as ResetIcon } from './svgs/reset.svg';
 export { default as SearchIcon } from './svgs/search.svg';
 export { default as SoundVibrationIcon } from './svgs/soundVibration.svg';
@@ -68,6 +69,7 @@ export { default as heroItem6Img } from './images/heroItem6.png';
 export { default as pointImg } from './images/point.png';
 export { default as rouletteImg } from './images/roulette.png';
 
+export { default as couponDownImg } from './images/coupondown.png';
 export { default as keydeukProfileImg } from './images/kedeukProfile.png';
 export { default as keydeukImg } from './images/keydeuk.png';
 export { default as myProfileImg } from './images/myProfile.jpeg';
