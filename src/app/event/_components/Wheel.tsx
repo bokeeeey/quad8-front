@@ -3,12 +3,12 @@
 import { pointImg, rouletteImg } from '@/public/index';
 import { useEffect, useState } from 'react';
 
-import { postCreateCoupon } from '@/api/couponAPI';
-import { Button, Dialog } from '@/components';
+import { Dialog } from '@/components';
 import SignInModal from '@/components/SignInModal/SignInModal';
+import useCreateCouponMutation from '@/hooks/useCreateCouponMutation';
 import { getCookie } from '@/libs/manageCookie';
 import { CouponResponse } from '@/types/CouponTypes';
-import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import JSConfetti from 'js-confetti';
 import Image from 'next/image';
@@ -28,23 +28,15 @@ export default function Wheel() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isParticipated, setIsParticipated] = useState(false);
+  const [isTodayParticipated, setIsTodayParticipated] = useState(false);
 
   const { data: couponList } = useQuery<CouponResponse[]>({
     queryKey: ['coupons'],
   });
 
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
-  const { mutate: createCoupon } = useMutation({
-    mutationFn: postCreateCoupon,
-    onSuccess: () => {
-      setIsModalOpen(true);
-      // 조회 리스트 업데이트 로직 추가 해야함. // 의문점이 있음..
-      queryClient.invalidateQueries({
-        queryKey: ['coupons'],
-      });
-    },
-  });
+  const { mutate: createCoupon } = useCreateCouponMutation(queryClient, setIsModalOpen);
 
   useEffect(() => {
     const jsConfetti = new JSConfetti();
@@ -89,8 +81,10 @@ export default function Wheel() {
       setIsParticipated(true);
       return;
     }
+
     if (isAnimating) return;
     setIsAnimating(true);
+    setIsTodayParticipated(true);
   };
 
   return (
@@ -111,15 +105,14 @@ export default function Wheel() {
           />
         </div>
         <div className={cn('button-area')}>
-          <Button
-            onClick={startRoulette}
-            fontSize={24}
-            className={cn('start-button')}
-            disabled={isAnimating}
+          <button
             type='button'
+            onClick={startRoulette}
+            className={cn('start-button')}
+            disabled={isAnimating || isTodayParticipated}
           >
-            룰렛 돌리고 쿠폰 받기!
-          </Button>
+            {isTodayParticipated ? '참여완료' : '룰렛 돌리고 쿠폰 받기!'}
+          </button>
         </div>
         <Dialog
           type='alert'
