@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import BenefitDelivery from './_components/BenefitDelivery';
 import BenefitJoin from './_components/BenefitJoin';
 import BenefitRoulette from './_components/BenefitRoulette';
+import EventBottom from './_components/EventBottom';
 import EventTab from './_components/EventTab';
 import EventTop from './_components/EventTop';
 import styles from './page.module.scss';
@@ -15,8 +16,8 @@ export default function Page() {
       <EventTab />
       <BenefitJoin />
       <BenefitRoulette />
-      {/* <Test /> */}
       <BenefitDelivery />
+      <EventBottom />
     </div>
   );
 }
