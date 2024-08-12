@@ -6,7 +6,7 @@ import styles from './EventTitle.module.scss';
 const cn = classNames.bind(styles);
 
 interface EventTitleProps {
-  title: string;
+  title?: string;
   children: ReactNode;
   color: 'white' | 'black';
 }
