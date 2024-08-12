@@ -7,8 +7,9 @@ import { ROUTER } from '@/constants/route';
 import { setCookie } from '@/libs/manageCookie';
 import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
 import type { FetchSignInInfoTypes } from '@/types/authTypes';
-import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+
+import { useQueryClient } from '@tanstack/react-query';
 import Button from '../Buttons/Button/Button';
 import InputField from '../InputField/InputField';
 import Modal from '../Modal/Modal';
@@ -83,7 +84,7 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <form className={cn('container')} onSubmit={handleSubmit(onSubmit)}>
+      <form className={cn('container')} onSubmit={handleSubmit(onSubmit)} onClick={(e) => e.stopPropagation()}>
         <h1 className={cn('title')}>로그인</h1>
         <div className={cn('input-wrapper')}>
           <InputField

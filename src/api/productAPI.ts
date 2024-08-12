@@ -7,11 +7,11 @@ import type {
   TabType,
 } from '@/types/ProductItem';
 
-import type { ProductType } from '@/types/ProductTypes';
+import type { ProductType, RecentProductType } from '@/types/ProductTypes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
-export const getProductDetail = async (productId: string): Promise<ProductType> => {
+export const getProductDetail = async (productId: number): Promise<ProductType> => {
   const token = await getCookie('accessToken');
 
   try {
@@ -26,8 +26,8 @@ export const getProductDetail = async (productId: string): Promise<ProductType> 
     const result = await res.json();
 
     return result.data;
-  } catch {
-    throw new Error(`상품을 조회할 수 없습니다. `);
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -90,7 +90,7 @@ export async function getCategoryProductList({
     const rawData: ProductListResponse = await response.json();
     return rawData;
   } catch (error) {
-    throw new Error('에러');
+    throw error;
   }
 }
 
@@ -115,3 +115,39 @@ export async function getKeydeukBest() {
     throw error;
   }
 }
+
+export const getRecentProducts = async (): Promise<RecentProductType[]> => {
+  const token = await getCookie('accessToken');
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/v1/user/recent-products`, {
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+    });
+
+    const result = await res.json();
+
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postRecentProducts = async (productId: number) => {
+  const token = await getCookie('accessToken');
+
+  try {
+    await fetch(`${BASE_URL}/api/v1/user/recent-products/${productId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};

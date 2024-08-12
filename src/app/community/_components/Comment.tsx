@@ -1,18 +1,19 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { useState, forwardRef } from 'react';
+import { forwardRef, useState, MouseEvent } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
 import ProfileImage from '@/components/ProfileImage/ProfileImage';
 import { calculateTimeDifference } from '@/libs/calculateDate';
-import type { Users } from '@/types/userType';
+import type { UserDataResponseType } from '@/types/userType';
 import { PopOver } from '@/components';
 import { deleteComment } from '@/api/communityAPI';
-
 import { communityPopOverOption } from '@/libs/communityPopOverOption';
+
 import styles from './Comment.module.scss';
+import UserProfileCard from './UserProfileCard';
 
 const cn = classNames.bind(styles);
 
@@ -27,16 +28,17 @@ interface CommentDataType {
 
 interface CommentProps {
   cardId: number;
+  onOpenPopOver: (commentId: number) => void;
+  onClosePopOver: () => void;
   commentData: CommentDataType;
+  isOpenedPopOver: boolean;
+  onOpenProfileCard: () => void;
 }
 
-interface UserDataType {
-  data: Users;
-  status: string;
-  message: string;
-}
-
-export default forwardRef<HTMLDivElement, CommentProps>(function Comment({ cardId, commentData }, ref) {
+export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
+  { cardId, commentData, onOpenPopOver, onClosePopOver, isOpenedPopOver, onOpenProfileCard },
+  ref,
+) {
   const queryClient = useQueryClient();
 
   const {
@@ -47,12 +49,17 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment({ cardI
     content: comment,
     createdAt: createdTime,
   } = commentData;
+
   const createdTimeToDate = new Date(createdTime);
-
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
+  const [showIcon, setShowIcon] = useState(false);
+  const [isOpenProfileCard, setIsOpenProfileCard] = useState(false);
+  const [commentPositionTop, setCommentPositionTop] = useState(0);
 
-  const userData = queryClient.getQueryData<UserDataType>(['userData']);
+  const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
+
   const userID = userData?.data?.id;
+  const timeAgo = calculateTimeDifference(createdTimeToDate);
 
   const { mutate: deleteCommentMutation } = useMutation({
     mutationFn: deleteComment,
@@ -68,44 +75,64 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment({ cardI
     },
   });
 
-  const handleClickPopOver = () => {
-    setIsOpenPopOver(!isOpenPopOver);
+  const handleOpenProfile = (e: MouseEvent<HTMLDivElement>) => {
+    onOpenProfileCard();
+    const { top } = e.currentTarget.getBoundingClientRect();
+    setCommentPositionTop(top);
+    setIsOpenProfileCard(true);
   };
 
-  const handleClosePopOver = () => {
-    setIsOpenPopOver(false);
+  const handleCloseProfile = () => {
+    setIsOpenProfileCard(false);
+  };
+
+  const handleClickPopOver = () => {
+    if (isOpenPopOver) {
+      onClosePopOver();
+      setIsOpenPopOver(false);
+    } else {
+      onOpenPopOver(commentId);
+      setIsOpenPopOver(true);
+    }
   };
 
   const handleClickDelete = () => {
     deleteCommentMutation(commentId);
   };
 
-  const handleClickEdit = () => {};
-
-  const handleClickReport = () => {};
-
-  const timeAgo = calculateTimeDifference(createdTimeToDate);
-
   return (
-    <div className={cn('container')} ref={ref}>
-      <ProfileImage profileImage={profile && profile} />
+    <div
+      className={cn('container')}
+      ref={ref}
+      onMouseEnter={() => setShowIcon(true)}
+      onMouseLeave={() => (isOpenedPopOver ? setShowIcon(true) : setShowIcon(false))}
+    >
+      <div onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
+        <ProfileImage profileImage={profile && profile} />
+        <UserProfileCard
+          isOpenProfileCard={isOpenProfileCard}
+          userId={commentUserId}
+          positionTop={commentPositionTop}
+        />
+      </div>
       <div className={cn('content-wrapper')}>
         <div className={cn('user-info-wrapper')}>
-          <div className={cn('user-info')}>
+          <div className={cn('user-info')} onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
             <p className={cn('nickname')}>{nickname}</p>
             <p className={cn('time-ago')}>{timeAgo}</p>
           </div>
-          <PopOver
-            optionsData={communityPopOverOption({
-              isMine: userID === commentUserId,
-              onClickDelete: handleClickDelete,
-              onClickEdit: handleClickEdit,
-              onClickReport: handleClickReport,
-            })}
-            isOpenPopOver={isOpenPopOver}
-            onHandleOpen={handleClickPopOver}
-            onHandleClose={handleClosePopOver}
-          />
+          {showIcon && (
+            <PopOver
+              optionsData={communityPopOverOption({
+                isMine: userID === commentUserId,
+                onClickDelete: handleClickDelete,
+              })}
+              isOpenPopOver={isOpenPopOver && isOpenedPopOver}
+              onHandleOpen={handleClickPopOver}
+              onHandleClose={onClosePopOver}
+              position={{ left: 415, top: 15 }}
+            />
+          )}
         </div>
         <div className={cn('content')}>{comment}</div>
       </div>

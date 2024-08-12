@@ -1,0 +1,9 @@
+.container {
+  @include flex-center;
+  @include pretendard-20-600;
+
+  flex-direction: column;
+  gap: 3rem;
+  height: 70vh;
+  color: $gray-30;
+}

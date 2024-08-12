@@ -6,6 +6,8 @@
 }
 
 .review-container {
+  @include flex-column(4rem);
+
   margin-bottom: 10rem;
 }
 

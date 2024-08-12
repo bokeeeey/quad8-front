@@ -12,13 +12,15 @@ import styles from './DatePicker.module.scss';
 const cn = classNames.bind(styles);
 
 interface DatePickerProps {
+  startDate?: string;
+  endDate?: string;
   onDateChange: (startDate: { startDate: Date; endDate: Date }) => void;
 }
 
-function DatePicker({ onDateChange }: DatePickerProps) {
+function DatePicker({ startDate, endDate, onDateChange }: DatePickerProps) {
   const currentDate = new Date();
-  const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState<Date>(new Date());
+  const [selectedStartDate, setSelectedStartDate] = useState<Date>(startDate ? new Date(startDate) : new Date());
+  const [selectedEndDate, setSelectedEndDate] = useState<Date>(endDate ? new Date(endDate) : new Date());
 
   const [openCalendarType, setOpenCalendarType] = useState<'start' | 'end' | null>(null);
   const [selectedMonthOption, setSelectedMonthOption] = useState<number>(0);

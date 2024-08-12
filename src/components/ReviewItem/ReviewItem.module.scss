@@ -1,6 +1,5 @@
 .review-item {
   display: flex;
-  min-height: 26rem;
   padding: 4rem 6.8rem;
   border-collapse: collapse;
   border-bottom: 0.1rem solid $gray-10;
@@ -11,7 +10,7 @@
 }
 
 .expand {
-  background-color: $gray-10;
+  background-color: $gray-5;
 }
 
 .review-box {
@@ -76,6 +75,7 @@
 }
 
 .content {
+  min-height: 3rem;
   margin-bottom: 1rem;
 
   @include pretendard-16-400;
@@ -89,7 +89,6 @@
   @include flex-column(0);
 
   justify-content: space-between;
-  min-height: 15rem;
 }
 
 .image-section {
@@ -104,9 +103,15 @@
 }
 
 .big-image {
+  width: 100%;
   max-width: 60rem;
+  height: auto;
   max-height: 60rem;
-  object-fit: cover;
+  object-fit: contain;
+}
+
+.mypage-review-section {
+  display: flex;
 }
 
 .mypage-review-image {
@@ -140,4 +145,44 @@
   @include flex-center;
 
   margin-left: 17rem;
+}
+
+.review-item.modal-review {
+  @include flex-column(0);
+
+  flex-grow: 1;
+  padding: 2rem 0;
+}
+
+.modal-top-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 1.2rem;
+  border-bottom: 0.1rem solid $gray-10;
+}
+
+.modal-top-left-section {
+  display: flex;
+  align-items: center;
+}
+
+.modal-info-section {
+  @include flex-column(0.6rem);
+
+  margin-left: 2rem;
+}
+
+.modal-option-section {
+  @include flex-column(1.2rem);
+
+  padding: 1.2rem 0;
+  border-bottom: 0.1rem solid $gray-10;
+}
+
+.modal-content {
+  flex-grow: 1;
+  margin-top: 1.2rem;
+  @include pretendard-16-400;
 }

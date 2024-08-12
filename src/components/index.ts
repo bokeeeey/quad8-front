@@ -20,6 +20,7 @@ export { default as ImageInput } from './WriteEditModal/ImageInput';
 
 export { default as Button } from './Buttons/Button/Button';
 export { default as ScrollUpButton } from './Buttons/ScrollUpButton/ScrollUpButton';
+export { default as ModalSkeleton } from './ModalSkeleton/ModalSkeleton';
 
 export { default as HeartButton } from './Buttons/HeartButton/HeartButton';
 

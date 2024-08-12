@@ -1,6 +1,7 @@
 export type ThumbnailTypes = {
   id: number;
   imgUrl: string;
+  reviewId?: number;
 };
 
 export type OptionTypes = {
@@ -26,4 +27,19 @@ export interface CartProductType {
   productId: number;
   switchOptionId: number | undefined;
   count: number;
+}
+
+export interface PostRecentProductsParams {
+  uId: number;
+  pId: number;
+}
+
+export interface RecentProductType {
+  productId: number;
+  name: string;
+  thumbnail: string;
+  price: number;
+  category: 'switch' | 'keyboard' | 'keycap' | 'etc';
+  reviewCount: number;
+  liked: boolean;
 }
