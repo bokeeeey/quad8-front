@@ -1,6 +1,7 @@
 .wrapper {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .button {
@@ -16,10 +17,12 @@
 }
 
 .left {
+  border-right: 0;
   border-radius: 0.8rem 0 0 0.8rem;
 }
 
 .right {
+  border-left: 0;
   border-radius: 0 0.8rem 0.8rem 0;
 }
 
@@ -39,9 +42,8 @@
 
   width: 4.9rem;
   height: 3.5rem;
-  border-width: 0.1rem 0;
-  border-radius: 0;
-  border-color: $gray-30;
+  border: 0.1rem solid $gray-30;
+  outline: none;
   text-align: center;
 
   &:focus {

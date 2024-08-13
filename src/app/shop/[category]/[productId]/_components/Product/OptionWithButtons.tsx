@@ -6,19 +6,17 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import type { CartAPIDataType, ShopDataType } from '@/types/cartType';
-import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/orderType';
-import type { CartProductType, ProductType } from '@/types/productType';
-import type { Users } from '@/types/userType';
-
 import { postCart } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
 import { postRecentProducts } from '@/api/productAPI';
-import { Button, CountInput, Dropdown } from '@/components';
-import Dialog from '@/components/Dialog/Dialog';
-import SignInModal from '@/components/SignInModal/SignInModal';
+import type { CartAPIDataType, ShopDataType } from '@/types/cartType';
+import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/orderType';
+import type { CartProductType, ProductType } from '@/types/productType';
+
+import { Button, CountInput, Dialog, Dropdown, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
+import type { Users } from '@/types/userType';
 import OptionContainer from './OptionContainer';
 
 import styles from './ProductDetail.module.scss';
@@ -198,7 +196,9 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
         {optionList?.length ? (
           <Dropdown options={optionNames} placeholder={OPTION_PLACEHOLDER} value='' onChange={handleChangeOption} />
         ) : (
-          <CountInput value={noOptionCount} onChange={(count) => setNoOptionCount(count)} />
+          <div className={cn('option-count')}>
+            <CountInput value={noOptionCount} onChange={(count) => setNoOptionCount(count)} />
+          </div>
         )}
         {selectedOptions.map((option) => (
           <OptionContainer

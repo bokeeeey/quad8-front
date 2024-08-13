@@ -52,6 +52,7 @@
     "react/jsx-key": "warn",
     "react/jsx-curly-brace-presence": "warn",
     "no-else-return": "off",
-    "jsx-a11y/no-noninteractive-element-interactions": "off"
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "import/no-cycle": "off"
   }
 }
