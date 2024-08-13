@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 import { getOthersInfo } from '@/api/usersAPI';
 import { SpinLoading, keydeukProfileImg } from '@/public/index';
+import type { Users } from '@/types/userType';
 
 import styles from './UserProfileCard.module.scss';
 
@@ -21,16 +22,13 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   { isOpenProfileCard, userId, positionTop },
   ref,
 ) {
-  const {
-    data: userInfo,
-    refetch,
-    isFetching,
-  } = useQuery({
+  const queryClient = useQueryClient();
+  const savedUserInfo = queryClient.getQueryData<Users>(['clickedUserInfo']);
+
+  const { data: userInfo, isFetching } = useQuery({
     queryKey: ['clickedUserInfo'],
     queryFn: () => getOthersInfo(userId),
-    enabled: false,
   });
-  const queryClient = useQueryClient();
 
   const [isAboveProfile, setIsAboveProfile] = useState(false);
 
@@ -43,9 +41,10 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   }, [isOpenProfileCard, positionTop, isAboveProfile]);
 
   useEffect(() => {
-    queryClient.removeQueries({ queryKey: ['clickedUserInfo'] });
-    refetch();
-  }, [userId, refetch, isOpenProfileCard, queryClient]);
+    if (isOpenProfileCard && savedUserInfo && savedUserInfo.id !== userId) {
+      queryClient.invalidateQueries({ queryKey: ['clickedUserInfo'] });
+    }
+  }, [userId, isOpenProfileCard, queryClient, savedUserInfo]);
 
   return positionTop && positionTop === 0 ? null : (
     <div
