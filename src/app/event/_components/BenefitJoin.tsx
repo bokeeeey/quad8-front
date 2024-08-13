@@ -2,9 +2,10 @@
 
 import { Button } from '@/components';
 import SignInModal from '@/components/SignInModal/SignInModal';
-import useCreateCouponMutation from '@/hooks/useCreateCouponMutation';
-import { getCookie } from '@/libs/manageCookie';
+import { COUPON_LIST } from '@/constants/event';
+import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
 import { couponDownImg } from '@/public/index';
+import { CouponDataType } from '@/types/couponType';
 import { useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
@@ -15,21 +16,16 @@ import EventTitle from './EventTitle';
 
 const cn = classNames.bind(styles);
 
-const couponList = [
-  { price: 5000, minPrice: '3만원 이상 구매 시' },
-  // { price: 3000, minPrice: '2만원 이상 구매 시' },
-  // { price: 2000, minPrice: '1만원 이상 구매 시' },
-];
 export default function BenefitJoin() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  const { mutate: createCoupon } = useCreateCouponMutation(queryClient);
+  const { mutate: createCoupon } = useCreateCouponMutation();
 
   const handleClick = async (price: number, minPrice: string) => {
-    const accessToken = await getCookie('accessToken');
+    const couponData = queryClient.getQueryData<CouponDataType>(['userData']);
 
-    if (!accessToken) {
+    if (!couponData?.data) {
       setIsLoginOpen(true);
       return;
     }
@@ -42,13 +38,13 @@ export default function BenefitJoin() {
     });
   };
   return (
-    <div id='join' className={cn('container')}>
+    <section id='join' className={cn('container')}>
       <EventTitle title='WELCOME 쿠폰' color='black'>
         즉시 사용가능한 <br /> 신규 가입 쿠폰 증정
       </EventTitle>
       <div className={cn('inner')}>
         <div className={cn('coupon-area')}>
-          {couponList.map(({ price, minPrice }) => (
+          {COUPON_LIST.map(({ price, minPrice }) => (
             <button
               className={cn('coupon-down')}
               key={minPrice}
@@ -66,6 +62,6 @@ export default function BenefitJoin() {
         </Button>
       </div>
       <SignInModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-    </div>
+    </section>
   );
 }

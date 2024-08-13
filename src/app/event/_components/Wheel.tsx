@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 
 import { Dialog } from '@/components';
 import SignInModal from '@/components/SignInModal/SignInModal';
-import useCreateCouponMutation from '@/hooks/useCreateCouponMutation';
-import { getCookie } from '@/libs/manageCookie';
-import { CouponResponse } from '@/types/couponTypes';
+import { ANIMATION_DURATION, CONFETTI_NUMBER, EMOJI_SIZE, MIN_PRICE_MULTIPLIER, REWARDS } from '@/constants/event';
+import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
+import { calculateRotation, getRandomIndex, getTodayDateString, hasRouletteCoupon } from '@/libs/wheelutils';
+import { CouponDataType, CouponResponse } from '@/types/couponType';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import JSConfetti from 'js-confetti';
@@ -15,11 +16,6 @@ import Image from 'next/image';
 import styles from './Wheel.module.scss';
 
 const cn = classNames.bind(styles);
-
-const rewards = [3000, 1000, 2000, 3000, 1000, 2000];
-const animationDuration = 2500;
-const getRandomIndex = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min;
-const calculateRotation = (index: number, total: number): number => (360 / total) * index + 360 * 2;
 
 export default function Wheel() {
   const [result, setResult] = useState<number>(0);
@@ -35,54 +31,53 @@ export default function Wheel() {
   });
 
   const queryClient = useQueryClient();
-
-  const { mutate: createCoupon } = useCreateCouponMutation(queryClient, setIsModalOpen);
+  const { mutate: createCoupon } = useCreateCouponMutation(setIsModalOpen);
 
   useEffect(() => {
     const jsConfetti = new JSConfetti();
     if (isAnimating) {
-      const resultIndex = getRandomIndex(0, rewards.length - 1);
-      const newRotation = calculateRotation(resultIndex, rewards.length);
+      const resultIndex = getRandomIndex(0, REWARDS.length - 1);
+      const newRotation = calculateRotation(resultIndex, REWARDS.length);
       setRotation(newRotation);
 
       setTimeout(() => {
         setIsAnimating(false);
-        const finalResult = rewards[resultIndex];
+        const finalResult = REWARDS[resultIndex];
         setResult(finalResult);
         jsConfetti.addConfetti({
           emojis: ['💳', '💵', '💶', '💰', '🤑', '💸'],
-          emojiSize: 50,
-          confettiNumber: 70,
+          emojiSize: EMOJI_SIZE,
+          confettiNumber: CONFETTI_NUMBER,
         });
         createCoupon({
           name: '룰렛 쿠폰',
           price: finalResult,
-          minPrice: finalResult * 10,
+          minPrice: finalResult * MIN_PRICE_MULTIPLIER,
           expiredDate: new Date(),
           isWelcome: false,
         });
-      }, animationDuration);
+      }, ANIMATION_DURATION);
     }
   }, [isAnimating, createCoupon]);
 
   const startRoulette = async () => {
-    const accessToken = await getCookie('accessToken');
+    const couponData = queryClient.getQueryData<CouponDataType>(['userData']);
 
-    if (!accessToken) {
+    if (!couponData?.data) {
       setIsLoginOpen(true);
       return;
     }
 
-    const today = new Date().toISOString().slice(0, 10);
-    const filterList = couponList?.filter((coupon) => coupon.expiredAt.slice(0, 10) === today);
-    const hasRouletteCoupon = filterList?.some((coupon) => coupon.name === '룰렛 쿠폰');
-
-    if (hasRouletteCoupon) {
+    const today = getTodayDateString();
+    if (hasRouletteCoupon(couponList, '룰렛 쿠폰', today)) {
       setIsParticipated(true);
       return;
     }
 
-    if (isAnimating) return;
+    if (isAnimating) {
+      return;
+    }
+
     setIsAnimating(true);
     setIsTodayParticipated(true);
   };
@@ -100,7 +95,7 @@ export default function Wheel() {
             height={650}
             style={{
               transform: `rotate(${rotation}deg)`,
-              transition: isAnimating ? `transform ${animationDuration / 1000}s ease-out` : 'none',
+              transition: isAnimating ? `transform ${ANIMATION_DURATION / 1000}s ease-out` : 'none',
             }}
           />
         </div>

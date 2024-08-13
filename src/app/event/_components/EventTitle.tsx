@@ -12,14 +12,14 @@ interface EventTitleProps {
 }
 
 export default function EventTitle({ title, children, color }: EventTitleProps) {
+  const fillColor = color === 'white' ? '#fff' : '#000';
   return (
-    <div className={cn('title-wrap', { white: color === 'white', black: color === 'black' })}>
+    <div className={cn('title-wrap', color)}>
       <div className={cn('title-top')}>
-        <CloverIcon fill={color === 'white' ? '#fff' : '#000'} />
-        <h2>{title}</h2>
-        <CloverIcon fill={color === 'white' ? '#fff' : '#000'} />
+        <CloverIcon fill={fillColor} />
+        {title && <h2>{title}</h2>}
+        <CloverIcon fill={fillColor} />
       </div>
-
       <h1 className={cn('main-title')}>{children}</h1>
     </div>
   );

@@ -3,19 +3,17 @@ import { QueryClient, useMutation } from '@tanstack/react-query';
 import { SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 
-const useCreateCouponMutation = (
-  queryClient: QueryClient,
-  setIsModalOpen?: (value: SetStateAction<boolean>) => void,
-) => {
+const queryClient = new QueryClient();
+
+export const useCreateCouponMutation = (setIsModalOpen?: (value: SetStateAction<boolean>) => void) => {
   return useMutation({
     mutationFn: postCreateCoupon,
     onSuccess: () => {
       if (setIsModalOpen) {
         setIsModalOpen(true);
+        return;
       }
-      if (!setIsModalOpen) {
-        toast.success('쿠폰이 발행됐습니다.');
-      }
+      toast.success('쿠폰이 발행됐습니다.');
       queryClient.invalidateQueries({
         queryKey: ['coupons'],
       });
@@ -25,4 +23,3 @@ const useCreateCouponMutation = (
     },
   });
 };
-export default useCreateCouponMutation;

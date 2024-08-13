@@ -7,7 +7,7 @@ import EventTitle from './EventTitle';
 const cn = classNames.bind(styles);
 export default function BenefitDelivery() {
   return (
-    <div id='delivery' className={cn('container')}>
+    <section id='delivery' className={cn('container')}>
       <EventTitle title='배송비 FREE' color='black'>
         키득은 하나를 사도 <br /> 배송비 무료
       </EventTitle>
@@ -18,6 +18,6 @@ export default function BenefitDelivery() {
         </div>
         <span className={cn('center')}> 📌 키캡은 세트 구매시에만 적용됩니다</span>
       </div>
-    </div>
+    </section>
   );
 }

@@ -1,3 +1,9 @@
+export interface CouponDataType {
+  data: CouponResponse;
+  status: string;
+  message: string;
+}
+
 export interface CreateCouponType {
   name: string;
   price: number;
