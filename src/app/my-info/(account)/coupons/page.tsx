@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { getCoupons } from '@/api/coupon';
+import { getCoupons } from '@/api/couponAPI';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
 import CouponList from './_components/CouponList';
 
@@ -11,12 +11,10 @@ const cn = classNames.bind(styles);
 export default async function CouponsPage() {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
+  const coupons = await queryClient.fetchQuery({
     queryKey: ['coupons'],
     queryFn: getCoupons,
   });
-
-  const coupons = queryClient.getQueryData(['coupons']);
 
   return (
     <div className={cn('container')}>

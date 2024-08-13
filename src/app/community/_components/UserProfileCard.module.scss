@@ -45,18 +45,15 @@
   border-left: 0.2rem solid $gray-20;
 }
 
-.info-wrapper p {
+.info-wrapper .info-list {
   @include pretendard-14-400;
 
-  & > strong {
+  strong {
     @include pretendard-14-600;
   }
 }
 
-.info-wrapper .nickname {
-  @include pretendard-20-700;
-}
-
+.info-wrapper .nickname,
 .not-found-text {
   @include pretendard-20-700;
 }

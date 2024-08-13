@@ -45,24 +45,24 @@ export default function AuthorCard({
     setIsOpenUserCard(false);
   };
 
+  const profileHandlers = {
+    onMouseEnter: handleOpenProfile,
+    onMouseLeave: handleCloseProfile,
+  };
+
+  const containerHandlers = {
+    onMouseEnter: () => setIsHovering(true),
+    onMouseLeave: () => setIsHovering(false),
+  };
+
   return (
-    <div
-      className={cn('container')}
-      onClick={(e) => e.stopPropagation()}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
-      <div
-        onMouseEnter={handleOpenProfile}
-        onMouseLeave={handleCloseProfile}
-        className={cn('user-profile')}
-        ref={userProfileCardRef}
-      >
+    <div className={cn('container')} onClick={(e) => e.stopPropagation()} {...containerHandlers}>
+      <div className={cn('user-profile')} ref={userProfileCardRef} {...profileHandlers}>
         <ProfileImage profileImage={userImage} />
         <UserProfileCard isOpenProfileCard={isOpenUserCard} userId={userId} />
       </div>
       <div className={cn('info-textbox')}>
-        <p className={cn('user-name')} onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
+        <p className={cn('user-name')} {...profileHandlers}>
           {nickname}
         </p>
         <p className={cn('sub-info')}>{dateText}</p>

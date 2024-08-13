@@ -100,13 +100,21 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
     deleteCommentMutation(commentId);
   };
 
+  const handleMouseEnter = () => {
+    setShowIcon(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowIcon(!!isOpenedPopOver);
+  };
+
+  const commentHandlers = {
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
+  };
+
   return (
-    <div
-      className={cn('container')}
-      ref={ref}
-      onMouseEnter={() => setShowIcon(true)}
-      onMouseLeave={() => (isOpenedPopOver ? setShowIcon(true) : setShowIcon(false))}
-    >
+    <div className={cn('container')} ref={ref} {...commentHandlers}>
       <div onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
         <ProfileImage profileImage={profile && profile} />
         <UserProfileCard

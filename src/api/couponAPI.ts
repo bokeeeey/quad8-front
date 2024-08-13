@@ -1,8 +1,9 @@
 import { getCookie } from '@/libs/manageCookie';
+import { CouponTypes } from '@/types/couponType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
-export const getCoupons = async () => {
+export const getCoupons = async (): Promise<CouponTypes[] | null> => {
   const token = await getCookie('accessToken');
 
   if (!token) {
@@ -18,7 +19,12 @@ export const getCoupons = async () => {
       },
     });
     const { data } = await res.json();
-    return data;
+
+    if (res.ok) {
+      return data;
+    }
+
+    throw new Error(data.message || '쿠폰을 가져오는데 실패하였습니다.');
   } catch (error) {
     throw error;
   }

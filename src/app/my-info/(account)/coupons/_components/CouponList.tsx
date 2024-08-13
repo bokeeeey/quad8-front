@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { getCoupons } from '@/api/coupon';
+import { getCoupons } from '@/api/couponAPI';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import type { CouponTypes } from '@/types/CouponTypes';
 import Coupon from './Coupon';

@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
 import { NoReviewIcon } from '@/public/index';
+import Link from 'next/link';
 
 import { Button } from '@/components';
-import Link from 'next/link';
 
 import styles from './MyPostsEmptyCase.module.scss';
 

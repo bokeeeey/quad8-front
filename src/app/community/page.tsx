@@ -6,7 +6,7 @@ import CommunityEmptyCase from './_components/CommunityEmptyCase';
 import PostCardList from './_components/PostCardList';
 
 interface CommunityPageProps {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: { [key: string]: string };
 }
 
 export default async function CommunityPage({ searchParams }: CommunityPageProps) {
