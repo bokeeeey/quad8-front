@@ -9,19 +9,17 @@ import { toast } from 'react-toastify';
 
 import { putUpdateCustomKeyboardData } from '@/api/cartAPI';
 import { postCustomKeyboardOrder } from '@/api/customKeyboardAPI';
-import { getColorUpperCase } from '@/libs/getColorUpperCase';
-import { getCustomKeyboardPrice } from '@/libs/getCustomKeyboardPrice';
-import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
-import type { CartAPIDataType, ShopDataType } from '@/types/cartType';
-import type { CustomKeyboardAPITypes, CustomKeyboardStepTypes, OptionDataType } from '@/types/customKeyboardType';
-
-import { Button, Dialog } from '@/components';
-import SignInModal from '@/components/SignInModal/SignInModal';
+import { Button, Dialog, SignInModal } from '@/components';
 import { POINT_KEY } from '@/constants/keyboardData';
 import { ROUTER } from '@/constants/route';
 import { KeyboardDataContext, StepContext } from '@/context';
-import { getCookie } from '@/libs/manageCookie';
+import { getColorUpperCase } from '@/libs/getColorUpperCase';
+import { getCustomKeyboardPrice } from '@/libs/getCustomKeyboardPrice';
+import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
 import { blackSwitchImg, blueSwitchImg, brownSwitchImg, redSwitchImg } from '@/public/index';
+import type { CartAPIDataType, ShopDataType } from '@/types/cartType';
+import type { CustomKeyboardAPITypes, CustomKeyboardStepTypes, OptionDataType } from '@/types/customKeyboardType';
+import type { Users } from '@/types/userType';
 import CartModalOptionCard from './parts/CartModalOptionCard';
 
 import styles from './CartModal.module.scss';
@@ -152,9 +150,9 @@ export default function CartModal({
 
   const handleClickPutButton = async () => {
     const id = params.get('orderId');
-    const accessToken = await getCookie('accessToken');
+    const userData = queryClient.getQueryData<{ data: Users }>(['userData']);
 
-    if (!accessToken) {
+    if (!userData?.data) {
       changeLoginModal(true);
       return;
     }

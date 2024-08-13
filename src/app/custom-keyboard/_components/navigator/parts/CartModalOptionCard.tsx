@@ -1,13 +1,14 @@
 'use client';
 
-import { Button } from '@/components';
+import classNames from 'classnames/bind';
+import { StaticImageData } from 'next/image';
+import { MouseEvent, RefObject, useContext } from 'react';
+
+import { Button, CustomImage } from '@/components';
 import SecondOption from '@/components/CustomOption/SecondOption';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { KeyboardDataContext } from '@/context';
 import type { CustomKeyboardKeyTypes } from '@/types/customKeyboardType';
-import classNames from 'classnames/bind';
-import Image, { StaticImageData } from 'next/image';
-import { MouseEvent, RefObject, useContext } from 'react';
 
 import styles from './CartModalOptionCard.module.scss';
 
@@ -47,7 +48,7 @@ export default function CartModalOptionCard({
 
   return (
     <div className={cn('wrapper')}>
-      <Image
+      <CustomImage
         src={imageSrc}
         width={104}
         height={104}

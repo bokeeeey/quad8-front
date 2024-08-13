@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -8,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import { putChangeCartData } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
-import { Button, CustomOption, Modal } from '@/components';
+import { Button, CustomImage, CustomOption, Modal } from '@/components';
 import { ROUTER } from '@/constants/route';
 import type { CustomDataType, OptionChageAPIType, ShopDataType } from '@/types/cartType';
 import type { CreateOrderResponseType } from '@/types/orderType';
@@ -111,7 +110,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
         </div>
         {type === 'shop' ? (
           <Link className={cn('product-wrapper')} href={`/shop/${cardData.category}/${cardData.productId}`}>
-            <Image src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
+            <CustomImage src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
             <div className={cn('information-wrapper')}>
               {type === 'shop' && <div className={cn('type')}>{category}</div>}
               <div className={cn('title')}> {title}</div>
@@ -120,7 +119,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
           </Link>
         ) : (
           <div className={cn('product-wrapper')}>
-            <Image src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
+            <CustomImage src={imageURL} width={104} height={104} alt='이미지' className={cn('image')} priority />
             <div className={cn('information-wrapper')}>
               <div className={cn('title')}> {title}</div>
               <CustomOption customData={cardData} />
