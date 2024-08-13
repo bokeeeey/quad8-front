@@ -1,40 +1,56 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { debounce } from 'lodash';
+import { useMemo, useState } from 'react';
 
 import { getOrdersData } from '@/api/orderAPI';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
 import DatePicker from '@/components/DatePicker/DatePicker';
-import { formatStartDate } from '@/libs/formatStartDate';
-import type { Order } from '@/types/OrderTypes';
-import { OrderHeader, OrderItemList } from './index';
+import type { Order } from '@/types/orderType';
+import OrderHeader from './OrderHeader/OrderHeader';
+import OrderItemList from './OrderItemList/OrderItemList';
 
 export default function Orders() {
-  const { data: orders } = useQuery<{ data: Order[] }>({ queryKey: ['ordersData'], queryFn: getOrdersData });
+  const queryClient = useQueryClient();
+  const [page, setPage] = useState(0);
+  // const [limit, setlimit] = useState(10);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const [searchDate, setSearchDate] = useState('');
-  const [ordersData, setOrdersData] = useState(orders?.data ?? []);
+  const { data: ordersResponse } = useQuery<{ data: Order[] }>({
+    queryKey: ['ordersResponse', page, startDate, endDate],
+    queryFn: () => getOrdersData({ page, size: 100, startDate, endDate }),
+    placeholderData: (prevData) => prevData,
+  });
 
-  useEffect(() => {
-    if (orders && searchDate !== '') {
-      const filteredOrders = orders.data.filter((order) => new Date(order.purchaseDate) > new Date(searchDate));
-      setOrdersData(filteredOrders);
-    }
-  }, [searchDate, orders]);
+  const orders = ordersResponse?.data ?? [];
+
+  const debouncedRefetch = useMemo(
+    () =>
+      debounce(() => {
+        queryClient.invalidateQueries({ queryKey: ['ordersResponse'] });
+      }, 300),
+    [queryClient],
+  );
 
   const handleDateClick = (date: { startDate: Date; endDate: Date }) => {
-    const startDate = new Date(date.startDate);
-    setSearchDate(formatStartDate(startDate));
+    setStartDate(date.startDate);
+    setEndDate(date.endDate);
+    setPage(0);
+
+    debouncedRefetch();
   };
 
   return (
     <>
       <DatePicker onDateChange={handleDateClick} />
-      {ordersData?.length > 0 ? (
+      {orders.length > 0 ? (
         <>
           <OrderHeader />
-          {ordersData?.map((order: Order) => <OrderItemList key={order.orderId} order={order} />)}
+          {orders.map((order: Order) => (
+            <OrderItemList key={order.orderId} order={order} />
+          ))}
         </>
       ) : (
         <MyInfoEmptyCase message='구매내역이 없습니다.' />

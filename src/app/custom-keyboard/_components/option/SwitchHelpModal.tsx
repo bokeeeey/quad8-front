@@ -3,9 +3,9 @@
 import classNames from 'classnames/bind';
 import { useRef, useState } from 'react';
 
-import type { CustomKeyboardSwitchTypes } from '@/types/CustomKeyboardTypes';
 import { Button } from '@/components';
 import { SoundVibrationIcon } from '@/public/index';
+import type { CustomKeyboardSwitchTypes } from '@/types/customKeyboardType';
 
 import styles from './SwitchHelpModal.module.scss';
 

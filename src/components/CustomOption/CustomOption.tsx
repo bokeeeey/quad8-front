@@ -1,7 +1,7 @@
-import { RefObject } from 'react';
 import classNames from 'classnames/bind';
+import { RefObject } from 'react';
 
-import type { CustomKeyboardAPITypes } from '@/types/CustomKeyboardTypes';
+import type { CustomKeyboardAPITypes } from '@/types/customKeyboardType';
 import FirstOption from './FirstOption';
 import SecondOption from './SecondOption';
 

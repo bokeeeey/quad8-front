@@ -1,6 +1,6 @@
 import { getAllProductList } from '@/api/productAPI';
 import Pagination from '@/components/Pagination/Pagination';
-import type { ProductParams } from '@/types/ProductItem';
+import type { ProductParams } from '@/types/productItemType';
 import classNames from 'classnames/bind';
 import CategoryMenu from './_components/Category/CategoryMenu';
 import CategoryTitle from './_components/Category/CategoryTitle';

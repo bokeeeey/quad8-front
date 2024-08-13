@@ -1,14 +1,14 @@
 'use client';
 
-import classNames from 'classnames/bind';
 import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 
 import { getAllCommunityPost } from '@/api/communityAPI';
 import type {
+  CommunityAllPostCardDataType,
   CommunityParamsType,
   CommunityPostCardDataType,
-  CommunityAllPostCardDataType,
-} from '@/types/CommunityTypes';
+} from '@/types/communityType';
 import PostCard from './PostCard';
 
 import styles from './PostCardList.module.scss';

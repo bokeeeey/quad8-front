@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useMemo, useCallback, createContext, PropsWithChildren, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { getCartData } from '@/api/cartAPI';
-import type { CartAPIDataType } from '@/types/CartTypes';
+import type { CartAPIDataType } from '@/types/cartType';
 
 interface CartDataContextType {
   checkedCustomList: Record<string, boolean>;

@@ -1,23 +1,23 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useContext, useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
 import { getRandomOptionProduct } from '@/api/customKeyboardAPI';
+import { Button, Modal } from '@/components';
+import { FocusKeyContext, KeyboardDataContext, StepContext } from '@/context';
+import { useCaptureCanvas } from '@/hooks/useCanvasCaptrue';
+import { getBlurImageList } from '@/libs/getBlurImage';
+import { getCustomKeyboardPrice } from '@/libs/getCustomKeyboardPrice';
+import { ChevronIcon } from '@/public/index';
 import type {
   CustomKeyboardStepStatusTypes,
   CustomKeyboardStepTypes,
   OptionDataType,
-} from '@/types/CustomKeyboardTypes';
-import { FocusKeyContext, KeyboardDataContext, StepContext } from '@/context';
-import { getCustomKeyboardPrice } from '@/libs/getCustomKeyboardPrice';
-import { getBlurImageList } from '@/libs/getBlurImage';
-import { ChevronIcon } from '@/public/index';
-import { Modal, Button } from '@/components';
-import { useCaptureCanvas } from '@/hooks/useCanvasCaptrue';
-import OptionProductModal from './OptionProductModal';
+} from '@/types/customKeyboardType';
 import CartModal from './CartModal';
+import OptionProductModal from './OptionProductModal';
 
 import styles from './TotalCostWithNavigation.module.scss';
 

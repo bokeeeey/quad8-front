@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
 import { Pagination } from '@/components';
 import LogoLoading from '@/components/LogoLoading/LogoLoading';
-import { ReviewPageProps, ReviewParamsType } from '@/types/ProductReviewTypes';
+import { ReviewPageProps, ReviewParamsType } from '@/types/productReviewType';
 import MyReviewProduct from './MyReviewProduct';
 import styles from './MyReviewProduct.module.scss';
 

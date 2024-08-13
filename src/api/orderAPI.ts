@@ -1,6 +1,7 @@
+import { formatKORDate } from '@/libs/formatKORDate';
 import { getCookie } from '@/libs/manageCookie';
-
-import type { CreateOrderAPIType } from '@/types/OrderTypes';
+import type { CreateOrderAPIType, OrderDataRequest } from '@/types/orderType';
+import { FieldValues } from 'react-hook-form';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -23,16 +24,18 @@ export const postCreateOrder = async (orderData: CreateOrderAPIType) => {
   }
 };
 
-export const getOrdersData = async () => {
+export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }: OrderDataRequest) => {
   const token = await getCookie('accessToken');
+  const initialDate = new Date();
+  const initialStartDate = new Date();
+  initialStartDate.setMonth(initialStartDate.getMonth() - 1);
 
-  if (!token) {
-    return null;
-  }
+  const formattedStartDate = startDate || initialStartDate;
+  const formattedEndDate = endDate || initialDate;
 
   try {
     const res = await fetch(
-      `${BASE_URL}/api/v1/order?page=0&size=10&startDate=2024-07-01T00:00:00&endDate=2024-07-30T23:59:59`,
+      `${BASE_URL}/api/v1/order?page=${page}&size=${size}&startDate=${formatKORDate(formattedStartDate)}&endDate=${formatKORDate(formattedEndDate)}`,
       {
         method: 'GET',
         headers: {
@@ -44,22 +47,20 @@ export const getOrdersData = async () => {
 
     const data = await res.json();
 
-    if (data.status === 'FAIL') {
-      return null;
+    if (res.ok) {
+      return data;
     }
 
-    return data;
+    return null;
   } catch (error) {
+    console.error(error);
+
     throw error;
   }
 };
 
-export const getPaymentData = async (orderId: string | undefined) => {
+export const getPayment = async (orderId?: string) => {
   const token = await getCookie('accessToken');
-
-  if (!token) {
-    return null;
-  }
 
   try {
     const res = await fetch(`${BASE_URL}/api/v1/order/${orderId}/payment`, {
@@ -72,11 +73,36 @@ export const getPaymentData = async (orderId: string | undefined) => {
 
     const data = await res.json();
 
-    if (data.status === 'FAIL') {
-      return null;
+    if (res.ok) {
+      return data;
     }
 
-    return data;
+    throw new Error('상품 정보를 가져오는것에 실패하였습니다.');
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const putPayment = async (orderId?: string, payload?: FieldValues) => {
+  const token = await getCookie('accessToken');
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/v1/order/${orderId}/payment`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      return result;
+    }
+
+    throw new Error(result.message || '결제 진행중 문제가 발생하였습니다.');
   } catch (error) {
     throw error;
   }

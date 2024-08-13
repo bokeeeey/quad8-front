@@ -1,15 +1,15 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import classNames from 'classnames/bind';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { postSignin } from '@/api/authAPI';
-import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
-import type { FetchSignInInfoTypes } from '@/types/authTypes';
 import { Button, InputField } from '@/components';
 import { ROUTER } from '@/constants/route';
+import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
+import type { FetchSignInInfoTypes } from '@/types/authType';
 
 import styles from './page.module.scss';
 

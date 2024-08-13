@@ -11,10 +11,9 @@ import { postCreateOrder } from '@/api/orderAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { CartDataContext } from '@/context/CartDataContext';
-import type { CartAPIDataType } from '@/types/CartTypes';
-import type { CreateOrderResponseType } from '@/types/OrderTypes';
+import type { CartAPIDataType } from '@/types/cartType';
+import type { CreateOrderResponseType } from '@/types/orderType';
 
-import { setCookie } from '@/libs/manageCookie';
 import styles from './PurchaseButton.module.scss';
 
 const cn = classNames.bind(styles);
@@ -29,9 +28,7 @@ export default function PurchaseButton() {
   const { mutate: createOrder } = useMutation({
     mutationFn: postCreateOrder,
     onSuccess: (response: CreateOrderResponseType) => {
-      setCookie('orderId', response.data.toString());
-
-      router.push(ROUTER.MY_PAGE.CHECKOUT);
+      router.push(`${ROUTER.MY_PAGE.CHECKOUT}?orderId=${response.data.toString()}`);
     },
     onError: () => {
       toast.error('주문 정보 생성에 실패하였습니다');
@@ -55,9 +52,6 @@ export default function PurchaseButton() {
 
     const orderData = [...customSelectedData, ...shopSelectedData];
     createOrder(orderData, {
-      onSuccess: () => {
-        router.push(ROUTER.MY_PAGE.CHECKOUT);
-      },
       onError: () => {
         toast.error('주문 정보 생성에 실패하였습니다');
       },
@@ -81,9 +75,6 @@ export default function PurchaseButton() {
 
     const orderData = [...customData, ...shopData];
     createOrder(orderData, {
-      onSuccess: () => {
-        router.push(ROUTER.MY_PAGE.CHECKOUT);
-      },
       onError: () => {
         toast.error('주문 정보 생성에 실패하였습니다');
       },

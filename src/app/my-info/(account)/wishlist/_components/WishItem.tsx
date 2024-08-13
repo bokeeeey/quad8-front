@@ -13,7 +13,7 @@ import { IMAGE_BLUR } from '@/constants/blurImage';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { ROUTER } from '@/constants/route';
 import { CartIcon, DeleteIcon } from '@/public/index';
-import { ProductLike } from '@/types/LikeTypes';
+import { ProductLike } from '@/types/likeType';
 import AddCartModal from './AddCartModal';
 import WishCheckBox from './WishCheckBox';
 

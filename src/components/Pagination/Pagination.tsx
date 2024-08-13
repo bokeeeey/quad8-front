@@ -1,5 +1,5 @@
 import { CaretLeftIcon, CaretRightIcon } from '@/public/index';
-import { ProductDataResponse } from '@/types/ProductItem';
+import { ProductDataResponse } from '@/types/productItemType';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';

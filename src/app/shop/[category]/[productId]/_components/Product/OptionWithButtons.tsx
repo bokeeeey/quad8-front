@@ -1,23 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { postCart } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
 import { postRecentProducts } from '@/api/productAPI';
+import type { CartAPIDataType, ShopDataType } from '@/types/cartType';
+import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/orderType';
+import type { CartProductType, ProductType } from '@/types/productType';
 
-import type { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
-import type { CartProductType, ProductType } from '@/types/ProductTypes';
-import type { Users } from '@/types/userType';
-import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
-import { setCookie } from '@/libs/manageCookie';
-import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/OrderTypes';
-import { Button, CountInput, Dropdown, Dialog, SignInModal } from '@/components';
+import { Button, CountInput, Dialog, Dropdown, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';
+import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
+import type { Users } from '@/types/userType';
 import OptionContainer from './OptionContainer';
 
 import styles from './ProductDetail.module.scss';
@@ -154,8 +153,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
   const handleBuyProduct = (data: CreateOrderAPIType) => {
     createOrderMutate(data, {
       onSuccess: (response: CreateOrderResponseType) => {
-        setCookie('orderId', response.data.toString());
-        router.push(ROUTER.MY_PAGE.CHECKOUT);
+        router.push(`${ROUTER.MY_PAGE.CHECKOUT}?orderId=${response.data.toString()}`);
       },
       onError: () => {
         toast.error('주문 정보 생성에 실패하였습니다');

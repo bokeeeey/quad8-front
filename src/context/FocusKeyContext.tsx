@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo, useCallback, createContext, PropsWithChildren } from 'react';
+import type { CustomKeyboardKeyTypes } from '@/types/customKeyboardType';
 import type { Color } from '@react-three/fiber';
-import type { CustomKeyboardKeyTypes } from '@/types/CustomKeyboardTypes';
+import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react';
 
 interface FocusKeyContextType {
   focusKey: CustomKeyboardKeyTypes | null;

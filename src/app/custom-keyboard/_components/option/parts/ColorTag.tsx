@@ -1,10 +1,9 @@
 'use client';
 
-import classNames from 'classnames/bind';
-import type { CustomKeyboardKeyTypes } from '@/types/CustomKeyboardTypes';
-import { Color } from '@react-three/fiber';
-
 import { DeleteIcon } from '@/public/index';
+import type { CustomKeyboardKeyTypes } from '@/types/customKeyboardType';
+import { Color } from '@react-three/fiber';
+import classNames from 'classnames/bind';
 
 import styles from './ColorTag.module.scss';
 

@@ -1,19 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import type { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
-import { Button, ImageInput, InputField, Rating, TextField, CustomOption } from '@/components';
-import { keydeukImg } from '@/public/index';
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
-import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { postProductReviews } from '@/api/productReviewAPI';
+import { Button, CustomOption, ImageInput, InputField, Rating, TextField } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
+import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
+import { keydeukImg } from '@/public/index';
+import type { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/communityType';
 
 import styles from './WriteEditModal.module.scss';
 

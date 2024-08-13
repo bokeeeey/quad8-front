@@ -1,6 +1,6 @@
 import { getCookie } from '@/libs/manageCookie';
 import { useQueryClient } from '@tanstack/react-query';
-import { EventSourcePolyfill, Event } from 'event-source-polyfill';
+import { Event, EventSourcePolyfill } from 'event-source-polyfill';
 import { MutableRefObject, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 
