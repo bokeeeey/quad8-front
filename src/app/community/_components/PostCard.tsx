@@ -138,7 +138,6 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
           <Suspense fallback={<DetailModalSkeleton />}>
             <PostCardDetailModal
               cardId={id}
-              userId={userId}
               onClose={handleClosePostModal}
               isMine={isMine}
               commentCount={commentCount}

@@ -35,19 +35,12 @@ interface PostCardListResponseData {
 
 interface PostCardDetailModalProps {
   cardId: number;
-  userId: number;
   onClose: () => void;
   isMine?: boolean;
-  commentCount: number;
+  commentCount?: number;
 }
 
-export default function PostCardDetailModal({
-  cardId,
-  userId,
-  onClose,
-  isMine,
-  commentCount,
-}: PostCardDetailModalProps) {
+export default function PostCardDetailModal({ cardId, onClose, isMine, commentCount }: PostCardDetailModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const lastCommentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
@@ -201,7 +194,19 @@ export default function PostCardDetailModal({
     return null;
   }
 
-  const { content, likeCount, nickName, reviewImages, title, updatedAt, userImage, custom, isLiked } = postData;
+  const {
+    content,
+    likeCount,
+    commentCount: postCommentCount,
+    nickName,
+    reviewImages,
+    title,
+    updatedAt,
+    userId,
+    userImage,
+    custom,
+    isLiked,
+  } = postData;
 
   const createdDateString = formatDateToString(new Date(updatedAt));
 
@@ -311,7 +316,12 @@ export default function PostCardDetailModal({
               <CustomOption wrapperRef={containerRef} customData={custom} />
               <p className={cn('content')}>{content}</p>
               <div className={cn('post-iteractions-wrapper')}>
-                <PostInteractions likeCount={likeCount} commentCount={commentCount} cardId={cardId} isLiked={isLiked} />
+                <PostInteractions
+                  likeCount={likeCount}
+                  commentCount={typeof commentCount === 'number' ? commentCount : postCommentCount}
+                  cardId={cardId}
+                  isLiked={isLiked}
+                />
               </div>
               <div className={cn('comment-wrapper')}>
                 {visibleComments.map((comment) => (

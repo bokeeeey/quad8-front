@@ -2,11 +2,10 @@
 
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import Image from 'next/image';
 import { useRef, useState } from 'react';
 
 import { getProductDetail } from '@/api/productAPI';
-import { Button, CountInput, Dropdown } from '@/components';
+import { Button, CountInput, CustomImage, Dropdown } from '@/components';
 import type { OptionChageAPIType } from '@/types/CartTypes';
 import type { ProductType } from '@/types/ProductTypes';
 
@@ -73,7 +72,7 @@ export default function OptionEditModal({
     <div className={cn('wrapper')}>
       <div className={cn('title')}>주문 수정</div>
       <div className={cn('header-wrapper')}>
-        <Image
+        <CustomImage
           alt='상품 이미지'
           src={productData.thubmnailList[0].imgUrl}
           width={104}
@@ -105,7 +104,9 @@ export default function OptionEditModal({
               {productData.optionList.find((option) => option.id === optionId)?.optionName}
             </div>
           )}
-          <CountInput value={count} ref={inputRef} onChange={(value) => setCount(Number(value))} />
+          <div className={cn('option-count')}>
+            <CountInput value={count} ref={inputRef} onChange={(value) => setCount(Number(value))} />
+          </div>
         </div>
         <div className={cn('cart-wrapper')} />
         <div className={cn('price-wrapper')}>
