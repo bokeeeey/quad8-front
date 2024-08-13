@@ -10,13 +10,17 @@ interface CartButtonProps {
 
 const cn = classNames.bind(styles);
 
+const MAX_CART_COUNT = 9;
+
 export default function CartButton({ cartCount, isBlack, onClick }: CartButtonProps) {
-  const countStatus = cartCount > 9 ? '9+' : String(cartCount);
+  const countStatus = cartCount > MAX_CART_COUNT ? `${MAX_CART_COUNT}+` : String(cartCount);
 
   return (
     <div className={cn('wrapper')} onClick={onClick}>
       <CartIcon className={cn('cart-icon', { black: isBlack })} />
-      {cartCount > 0 && <div className={cn('cart-count', cartCount > 9 && 'count-more-digit')}>{countStatus}</div>}
+      {cartCount > 0 && (
+        <div className={cn('cart-count', cartCount > MAX_CART_COUNT && 'count-more-digit')}>{countStatus}</div>
+      )}
     </div>
   );
 }

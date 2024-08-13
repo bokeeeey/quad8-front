@@ -25,6 +25,9 @@ interface NotificationButtonProps {
 const CATEGORY_LIST = ['전체', '상품', '이벤트', '커뮤니티'] as const;
 type CategoryType = (typeof CATEGORY_LIST)[number];
 
+const MAX_ALARM_COUNT = 9;
+const MAX_PREV_ALARM_COUNT = 99;
+
 export default function NotificationButton({ isBlack, eventSource }: NotificationButtonProps) {
   const queryClient = useQueryClient();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -167,8 +170,11 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
           onClick={handleClickButton}
         />
         {totalUnreadCount > 0 && (
-          <div className={cn('alarm-count', totalUnreadCount > 9 && 'count-more-digit')} onClick={handleClickButton}>
-            {totalUnreadCount > 9 ? '9+' : totalUnreadCount}
+          <div
+            className={cn('alarm-count', totalUnreadCount > MAX_ALARM_COUNT && 'count-more-digit')}
+            onClick={handleClickButton}
+          >
+            {totalUnreadCount > MAX_ALARM_COUNT ? `${MAX_ALARM_COUNT}+` : totalUnreadCount}
           </div>
         )}
         {isRender && (
@@ -196,7 +202,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
                     <div className={cn('content-title-wrapper')}>
                       <div
                         className={cn('content-title')}
-                      >{`지난 알림(${currentAlarm.count <= 99 ? currentAlarm.count : '99+'})`}</div>
+                      >{`지난 알림(${currentAlarm.count <= MAX_PREV_ALARM_COUNT ? currentAlarm.count : `${MAX_PREV_ALARM_COUNT}+`})`}</div>
                       <button type='button' className={cn('content-delete-all')} onClick={handleDeleteButtonClick}>
                         전체 삭제
                       </button>
