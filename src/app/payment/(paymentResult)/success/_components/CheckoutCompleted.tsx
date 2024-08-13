@@ -112,7 +112,7 @@ export default function CheckoutCompleted() {
           <h1>주문 상품</h1>
           {orderItems &&
             orderItems.map((item: OrderItem) => (
-              <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
+              <ItemOverview key={item.productId} imageWidth={104} imageHeight={104} item={item} />
             ))}
         </div>
       </article>

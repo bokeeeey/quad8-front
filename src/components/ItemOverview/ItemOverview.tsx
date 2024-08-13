@@ -10,7 +10,7 @@ const cn = classNames.bind(styles);
 
 interface ItemOverviewProps {
   item: OrderItem;
-  imegeWidth?: number;
+  imageWidth?: number;
   imageHeight?: number;
   className?: string;
   onClick?: () => void;
@@ -18,7 +18,7 @@ interface ItemOverviewProps {
 
 export default function ItemOverview({
   item,
-  imegeWidth = 107,
+  imageWidth = 107,
   imageHeight = 107,
   className,
   onClick,
@@ -30,7 +30,7 @@ export default function ItemOverview({
       <Image
         src={productImgUrl}
         alt={productName}
-        width={imegeWidth}
+        width={imageWidth}
         height={imageHeight}
         placeholder={IMAGE_BLUR.placeholder}
         blurDataURL={IMAGE_BLUR.blurDataURL}
