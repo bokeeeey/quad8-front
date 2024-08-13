@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
-import Image from 'next/image';
 
 import { CheckboxCircleIcon } from '@/public/index';
+import { CustomImage } from '@/components';
 
 import styles from './OptionProductCard.module.scss';
 
@@ -27,7 +27,7 @@ export default function OptionProductCard({
   return (
     <div className={cn('wrapper')} onClick={onClick}>
       <div className={cn('image-wrapper')}>
-        <Image
+        <CustomImage
           src={productImage}
           alt='옵션'
           width={221}

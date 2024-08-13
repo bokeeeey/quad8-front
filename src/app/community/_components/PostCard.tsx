@@ -38,8 +38,8 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
 
   const { userId, id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage, isLiked } = cardData;
 
-  const ApdatedDate = new Date(updateAt);
-  const timeToString = calculateTimeDifference(ApdatedDate);
+  const updatedDate = new Date(updateAt);
+  const timeToString = calculateTimeDifference(updatedDate);
 
   const handleClickPopOver = () => {
     setIsPopOverOpen((prevIsOpen) => !prevIsOpen);
@@ -138,7 +138,6 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
           <Suspense fallback={<DetailModalSkeleton />}>
             <PostCardDetailModal
               cardId={id}
-              userId={userId}
               onClose={handleClosePostModal}
               isMine={isMine}
               commentCount={commentCount}

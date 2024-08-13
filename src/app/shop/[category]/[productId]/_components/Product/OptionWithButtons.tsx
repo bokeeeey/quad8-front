@@ -1,28 +1,25 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import classNames from 'classnames/bind';
+
 import { postCart } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
-import { Button, CountInput, Dropdown } from '@/components';
-import Dialog from '@/components/Dialog/Dialog';
-import SignInModal from '@/components/SignInModal/SignInModal';
-import { ROUTER } from '@/constants/route';
+import { postRecentProducts } from '@/api/productAPI';
 
 import type { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
 import type { CartProductType, ProductType } from '@/types/ProductTypes';
 import type { Users } from '@/types/userType';
-
 import { getUpdatedCartCountData } from '@/libs/getUpdatedCartData';
-
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-
-import { postRecentProducts } from '@/api/productAPI';
 import { setCookie } from '@/libs/manageCookie';
 import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/OrderTypes';
+import { Button, CountInput, Dropdown, Dialog, SignInModal } from '@/components';
+import { ROUTER } from '@/constants/route';
 import OptionContainer from './OptionContainer';
+
 import styles from './ProductDetail.module.scss';
 
 const cn = classNames.bind(styles);
@@ -201,7 +198,9 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
         {optionList?.length ? (
           <Dropdown options={optionNames} placeholder={OPTION_PLACEHOLDER} value='' onChange={handleChangeOption} />
         ) : (
-          <CountInput value={noOptionCount} onChange={(count) => setNoOptionCount(count)} />
+          <div className={cn('option-count')}>
+            <CountInput value={noOptionCount} onChange={(count) => setNoOptionCount(count)} />
+          </div>
         )}
         {selectedOptions.map((option) => (
           <OptionContainer

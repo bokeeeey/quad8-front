@@ -19,7 +19,6 @@ interface ImageZoomProps {
   width: number;
   height: number;
 }
-
 interface ScannerProps {
   position: Position;
 }

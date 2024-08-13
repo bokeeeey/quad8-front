@@ -1,10 +1,10 @@
 'use client';
 
-// 테스트 페이지 입니다.
-import { Button } from '@/components';
-import classNames from 'classnames/bind';
 import { useState } from 'react';
-import SignInModal from '../../../components/SignInModal/SignInModal';
+import classNames from 'classnames/bind';
+
+import { Button, SignInModal } from '@/components';
+
 import styles from './page.module.scss';
 
 const cn = classNames.bind(styles);
