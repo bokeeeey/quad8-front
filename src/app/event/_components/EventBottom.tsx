@@ -8,7 +8,7 @@ const cn = classNames.bind(styles);
 export default function EventBottom() {
   return (
     <div className={cn('container')}>
-      <EventTitle title='키득은 사실 유무명한 키덕필수템임' color='white'>
+      <EventTitle title='키득은 사실 유명한 키덕필수템임' color='white'>
         아직도 키득회원이 아니라면?
       </EventTitle>
       <div className={cn('button-area')}>
