@@ -1,10 +1,6 @@
 import classNames from 'classnames/bind';
-import BenefitDelivery from './_components/BenefitDelivery';
-import BenefitJoin from './_components/BenefitJoin';
-import BenefitRoulette from './_components/BenefitRoulette';
-import EventBottom from './_components/EventBottom';
-import EventTab from './_components/EventTab';
-import EventTop from './_components/EventTop';
+
+import { BenefitDelivery, BenefitJoin, BenefitRoulette, EventBottom, EventTab, EventTop } from './_components';
 import styles from './page.module.scss';
 
 const cn = classNames.bind(styles);
