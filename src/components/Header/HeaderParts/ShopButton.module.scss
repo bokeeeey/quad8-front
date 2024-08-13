@@ -6,6 +6,20 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+
+  &:hover {
+    .button {
+      color: $black;
+    }
+  }
+}
+
+.bg-black {
+  &:hover {
+    .button {
+      color: $white;
+    }
+  }
 }
 
 .button {

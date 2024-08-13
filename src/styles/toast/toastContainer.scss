@@ -1,61 +1,59 @@
 /* stylelint-disable */
 
-$toastify: 'Toastify';
+@import '../_globals';
 
-.#{$toastify}__toast {
-  display: flex;
-  position: relative;
-  z-index: 0;
-  top: 2rem;
-  box-sizing: border-box;
-  justify-content: space-between;
-  min-height: 6.4rem;
-  margin-bottom: 1rem;
-  padding: 2rem 3rem;
-  overflow: hidden;
-  border-radius: 1.6rem;
-  background-color: #787878;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
-  color: #fff;
-  font-size: 2rem;
-  cursor: default;
-  touch-action: none;
-  direction: ltr;
+.Toastify__toast {
+  @include pretendard-20-500;
+
+  width: max-content;
+  padding: 2rem !important;
+  border-radius: 1.6rem !important;
+  box-shadow: 0 0.4rem 1.2rem rgb(0 0 0 / 10%) !important;
+  cursor: default !important;
+
+  &:has(> button) {
+    padding-right: 4rem !important;
+  }
 }
 
-.#{$toastify}__toast-container {
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 50%;
-  box-sizing: border-box;
-  padding-bottom: 0;
-  transform: translateX(-50%);
-  font-weight: 500;
+.Toastify__toast-container {
+  width: fit-content !important;
 }
 
-.#{$toastify}__toast-icon {
-  box-sizing: border-box;
+.Toastify__close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+}
+
+.Toastify__toast-icon {
   width: 2rem;
   height: 2rem;
-  animation: #616161;
+  margin: 0;
   border-radius: 100%;
-  animation-fill-mode: both;
 }
 
-.#{$toastify}__toast-body {
+.Toastify__toast-body {
   display: flex;
   gap: 1rem;
 }
 
-.#{$toastify}__toast--success .#{$toastify}__toast-body .#{$toastify}__toast-icon svg {
+.Toastify__progress-bar-theme--light {
+  background: $primary;
+}
+
+.Toastify__toast-theme--dark {
+  background-color: $gray-50 !important;
+}
+
+.Toastify__toast--success .Toastify__toast-icon svg {
   fill: #1ae710;
 }
 
-.#{$toastify}__toast--error .#{$toastify}__toast-body .#{$toastify}__toast-icon svg {
-  fill: red;
+.Toastify__toast--error .Toastify__toast-icon svg {
+  fill: $red;
 }
 
-.#{$toastify}__toast--warning .#{$toastify}__toast-body .#{$toastify}__toast-icon svg {
+.Toastify__toast--warning .Toastify__toast-icon svg {
   fill: #f8fc00;
 }

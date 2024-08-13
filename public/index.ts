@@ -9,6 +9,8 @@ export { default as CartIcon } from './svgs/cart.svg';
 export { default as CheckboxCircleIcon } from './svgs/checkboxCircle.svg';
 export { default as ChevronIcon } from './svgs/chevron.svg';
 export { default as CommentIcon } from './svgs/comment.svg';
+export { default as CommentAlarmIcon } from './svgs/commentAlarm.svg';
+export { default as CouponAlarmIcon } from './svgs/couponAlarm.svg';
 export { default as CreditCardIcon } from './svgs/creditCard.svg';
 export { default as CubeIcon } from './svgs/cube.svg';
 
@@ -23,6 +25,8 @@ export { default as HeartIcon } from './svgs/heart.svg';
 export { default as LogoIcon } from './svgs/logo.svg';
 
 export { default as NoReviewIcon } from './svgs/noReview.svg';
+export { default as NotificationIcon } from './svgs/notification.svg';
+export { default as OrderAlarmIcon } from './svgs/orderAlarm.svg';
 export { default as SpeechBubbleIcon } from './svgs/speechBubble.svg';
 
 export { default as PlusIcon } from './svgs/plus.svg';
@@ -51,6 +55,7 @@ export { default as banner2Img } from './images/banner2.png';
 export { default as blackSwitchImg } from './images/blackSwitch.jpg';
 export { default as blueSwitchImg } from './images/blueSwitch.jpg';
 export { default as brownSwitchImg } from './images/brownSwitch.jpg';
+export { default as errorImg } from './images/error.png';
 export { default as guide1Img } from './images/guide1.png';
 export { default as guide2Img } from './images/guide2.png';
 export { default as guide3Img } from './images/guide3.png';
