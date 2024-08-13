@@ -3,7 +3,7 @@
 import classNames from 'classnames/bind';
 import { getCoupons } from '@/api/couponAPI';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { CouponTypes } from '@/types/CouponTypes';
+import type { CouponTypes } from '@/types/couponType';
 import Coupon from './Coupon';
 
 import styles from './CouponList.module.scss';
@@ -18,9 +18,7 @@ export default function CouponList() {
 
   return (
     <div className={cn('container')}>
-      {myCoupons.map((coupon: CouponTypes) => (
-        <Coupon data={coupon} key={coupon.id} />
-      ))}
+      {myCoupons?.map((coupon: CouponTypes) => <Coupon data={coupon} key={coupon.id} />)}
     </div>
   );
 }
