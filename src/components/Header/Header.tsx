@@ -1,24 +1,24 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import classNames from 'classnames/bind';
-import Image from 'next/image';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 
-import { ROUTER } from '@/constants/route';
-import { LogoIcon, UserIcon } from '@/public/index';
 import type { CartAPIDataType } from '@/types/CartTypes';
 import type { Users } from '@/types/userType';
-import SignInModal from '../SignInModal/SignInModal';
-import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton } from './HeaderParts';
+import { ROUTER } from '@/constants/route';
+import { LogoIcon, UserIcon } from '@/public/index';
+import { CustomImage, SignInModal } from '@/components';
+import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton, NotificationButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
 
 const cn = classNames.bind(styles);
 
 export default function Header() {
+  const eventSource = useRef<null | EventSource>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
@@ -75,7 +75,7 @@ export default function Header() {
               >
                 커스텀 키보드 만들기
               </Link>
-              <ShopButton pathname={pathname} />
+              <ShopButton />
               <Link href={ROUTER.COMMUNITY} className={cn('button', { 'current-page': pathname === ROUTER.COMMUNITY })}>
                 커뮤니티
               </Link>
@@ -83,15 +83,16 @@ export default function Header() {
           </div>
           <div className={cn('left-wrapper')}>
             <SearchButton isBlack={isBlack} />
-            {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
-            <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
-              {profileImage && profileImage !== 'null' ? (
-                <Image src={profileImage} alt='profile' width={31} height={31} className={cn('profile-image')} />
+            {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton eventSource={eventSource} />}
+            <button className={cn('user-icon', 'button')} type='button' onClick={handleUserIconClick}>
+              {profileImage ? (
+                <CustomImage src={profileImage} alt='profile' width={28} height={28} className={cn('profile-image')} />
               ) : (
-                <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={31} height={31} />
+                <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={28} height={28} />
               )}
             </button>
             <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
+            {users && <NotificationButton isBlack={isBlack} eventSource={eventSource} />}
           </div>
         </div>
       </header>

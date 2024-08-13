@@ -32,6 +32,10 @@
   line-height: $line-height;
 }
 
+@mixin pretendard-12-400 {
+  @include font-mixin('Pretendard', 1.2, 400);
+}
+
 @mixin pretendard-14-400 {
   @include font-mixin('Pretendard', 1.4, 400);
 }

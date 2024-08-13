@@ -1,13 +1,14 @@
 'use client';
 
-import { ScrollUpButton } from '@/components';
+import { ReactNode, useRef } from 'react';
 import { QueryClient, QueryClientProvider, isServer } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import classNames from 'classnames/bind';
-import { ReactNode, useRef } from 'react';
-import { ToastContainer, Zoom } from 'react-toastify';
 
-import '@/styles/toast/toastAnimation.scss';
+import { ToastContainer, Zoom } from 'react-toastify';
+import { ScrollUpButton } from '@/components';
+
+import 'react-toastify/ReactToastify.min.css';
 import '@/styles/toast/toastContainer.scss';
 import styles from './providers.module.scss';
 
@@ -58,6 +59,7 @@ export function Providers({ children }: ProvidersProps) {
         pauseOnFocusLoss={false}
         closeOnClick
         hideProgressBar
+        closeButton={false}
       />
     </QueryClientProvider>
   );
