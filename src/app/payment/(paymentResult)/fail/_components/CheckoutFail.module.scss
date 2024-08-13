@@ -1,0 +1,30 @@
+.container {
+  @include flex-column(2rem);
+  @include pretendard-20-500;
+
+  align-items: center;
+  width: 70rem;
+  padding: 4rem 2rem;
+  border-radius: 0.4rem;
+  background: $white;
+  color: $black;
+
+  .error-box {
+    @include pretendard-16-400;
+  }
+
+  .text-box {
+    @include flex-column(0);
+    @include pretendard-16-400;
+
+    align-items: center;
+  }
+
+  .fail-icon {
+    width: 32rem;
+  }
+}
+
+.button {
+  width: 34.8rem;
+}

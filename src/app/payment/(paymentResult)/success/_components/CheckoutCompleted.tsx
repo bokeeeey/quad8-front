@@ -118,7 +118,7 @@ export default function CheckoutCompleted() {
       </article>
 
       <div className={cn('confirm-box')}>
-        <Button className={cn('confirm-button')} type='submit' onClick={handleButtonClick}>
+        <Button className={cn('confirm-button')} type='button' onClick={handleButtonClick}>
           주문 상세보기
         </Button>
       </div>
