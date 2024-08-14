@@ -1,4 +1,5 @@
 import type { CustomKeyboardSwitchTypes, CustomKeyboardPointKeyType } from './customKeyboardType';
+import type { CategoryNameType } from './productType';
 
 interface NewOrderType {
   productId: number;
@@ -51,7 +52,7 @@ export interface OrderItem {
   switchOption: string | SwitchOptionType;
   viewCount: number;
   price: number;
-  category?: 'switch' | 'keyboard' | 'keycap' | 'etc';
+  category?: CategoryNameType;
 }
 
 export interface Order {
