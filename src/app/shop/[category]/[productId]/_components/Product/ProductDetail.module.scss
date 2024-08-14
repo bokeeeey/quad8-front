@@ -99,6 +99,10 @@
   @include pretendard-16-400;
 }
 
+.option-count {
+  max-width: 12.9rem;
+}
+
 .option-price {
   @include pretendard-16-700;
 }

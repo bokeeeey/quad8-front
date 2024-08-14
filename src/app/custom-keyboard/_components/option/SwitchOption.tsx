@@ -49,10 +49,10 @@ export default function SwitchOption() {
           ))}
         </div>
       </div>
-      <div className={cn('help')}>
+      <div className={cn('help')} onClick={() => setIsOpenModal(true)}>
         <div className={cn('help-title')}>
           <div>스위치 선택이 어려우신가요?</div>
-          <CrossCircleIcon width={17} height={17} fill='#A5A5A5' onClick={() => setIsOpenModal(true)} />
+          <CrossCircleIcon width={17} height={17} fill='#A5A5A5' />
         </div>
         <div className={cn('help-content')}>종류에 따라 타건감이나 소리가 다를 수 있습니다.</div>
       </div>

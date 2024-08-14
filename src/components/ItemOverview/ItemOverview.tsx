@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
@@ -9,7 +8,7 @@ import type { ProductType } from '@/types/productType';
 import type { OrderItem } from '@/types/orderType';
 import { convertCategory } from '@/libs/convertProductCategory';
 import { IMAGE_BLUR } from '@/constants/blurImage';
-import CustomOption from '../CustomOption/CustomOption';
+import { CustomImage, CustomOption } from '@/components';
 import ItemWrapper from './ItemWrapper';
 import ShopOption from './ShopOption';
 
@@ -57,7 +56,7 @@ export default function ItemOverview({
       routeDetailPage={routeDetailPage}
       productId={item.productId}
     >
-      <Image
+      <CustomImage
         src={productImgUrl}
         alt={productName}
         width={imageWidth}
