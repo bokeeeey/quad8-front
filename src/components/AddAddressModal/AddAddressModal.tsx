@@ -42,7 +42,7 @@ interface AddAddressModalProps {
   userAddressData?: UserAddress;
 }
 
-export default function AddAddresseModal({ onClick, newAddressData, userAddressData, onSubmit }: AddAddressModalProps) {
+export default function AddAddressModal({ onClick, newAddressData, userAddressData, onSubmit }: AddAddressModalProps) {
   const [isChecked, setIsChecked] = useState(true);
 
   const {
