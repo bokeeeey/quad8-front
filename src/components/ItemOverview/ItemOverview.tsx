@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 
 import { getProductDetail } from '@/api/productAPI';
 import type { ProductType } from '@/types/productType';
-import type { OrderItem } from '@/types/orderType';
+import type { OrderItem, SwitchOptionType } from '@/types/orderType';
 import { convertCategory } from '@/libs/convertProductCategory';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { CustomImage, CustomOption } from '@/components';
@@ -16,8 +16,14 @@ import styles from './ItemOverview.module.scss';
 
 const cn = classNames.bind(styles);
 
+type OptionalSwitchOptionOrderItem = Omit<OrderItem, 'switchOption' | 'quantity' | 'viewCount' | 'price'> & {
+  switchOption?: string | SwitchOptionType;
+  quantity?: number;
+  price?: number;
+};
+
 interface ItemOverviewProps {
-  item: Omit<OrderItem, 'viewCount' | 'price'>;
+  item: OptionalSwitchOptionOrderItem;
   imageWidth?: number;
   imageHeight?: number;
   className?: string;
@@ -38,7 +44,7 @@ export default function ItemOverview({
   className,
   routeDetailPage,
 }: ItemOverviewProps) {
-  const { productImgUrl, productName, switchOption, quantity } = item;
+  const { productImgUrl, productName, switchOption, quantity, price } = item;
 
   const { data: productData } = useQuery<ProductType>({
     queryKey: ['product', item.productId],
@@ -65,7 +71,7 @@ export default function ItemOverview({
         blurDataURL={IMAGE_BLUR.blurDataURL}
         className={cn('product-image')}
       />
-      {productName === '커스텀 키보드' && typeof switchOption !== 'string' ? (
+      {productName === '커스텀 키보드' && typeof switchOption === 'object' ? (
         <div style={{ width: `calc(100% - ${imageWidth + 20}px)` }}>
           <p className={cn('title')}>키드 커스텀 키보드</p>
           <CustomOption
@@ -86,7 +92,10 @@ export default function ItemOverview({
         <div className={cn('item-text')}>
           <p className={cn('title')}>{category ? CATEGORY_NAME[category] : ''}</p>
           <p className={cn('item-name')}>{productName}</p>
-          {typeof item.switchOption === 'string' && <ShopOption optionName={item.switchOption} count={quantity} />}
+          {typeof switchOption === 'string' && typeof quantity === 'number' && (
+            <ShopOption optionName={switchOption} count={quantity} />
+          )}
+          {typeof price === 'number' && <p className={cn('price')}>{price.toLocaleString()}원</p>}
         </div>
       )}
     </ItemWrapper>
