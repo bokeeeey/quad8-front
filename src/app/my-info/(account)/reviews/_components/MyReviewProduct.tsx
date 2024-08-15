@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import type { ReviewDto } from '@/types/ProductReviewType';
-import type { ProductType } from '@/types/ProductType';
+import type { ProductType } from '@/types/productType';
 
 import styles from './MyReviewProduct.module.scss';
 

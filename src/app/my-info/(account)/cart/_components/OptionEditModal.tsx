@@ -8,7 +8,7 @@ import { getProductDetail } from '@/api/productAPI';
 import { Button, CountInput, CustomImage, Dropdown } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import type { OptionChageAPIType } from '@/types/cartType';
-import type { ProductType } from '@/types/ProductType';
+import type { ProductType } from '@/types/productType';
 
 import styles from './OptionEditModal.module.scss';
 

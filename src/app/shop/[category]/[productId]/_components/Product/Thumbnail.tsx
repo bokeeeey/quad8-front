@@ -1,7 +1,7 @@
 'use client';
 
 import { IMAGE_BLUR } from '@/constants/blurImage';
-import type { ThumbnailTypes } from '@/types/ProductType';
+import type { ThumbnailTypes } from '@/types/productType';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useState } from 'react';

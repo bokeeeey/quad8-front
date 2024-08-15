@@ -6,7 +6,7 @@ import type {
   ProductParams,
   TabType,
 } from '@/types/productItemType';
-import type { ProductType, RecentProductType } from '@/types/ProductType';
+import type { ProductType, RecentProductType } from '@/types/productType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

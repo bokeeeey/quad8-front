@@ -11,7 +11,7 @@ import { postCreateOrder } from '@/api/orderAPI';
 import { postRecentProducts } from '@/api/productAPI';
 import type { CartAPIDataType, ShopDataType } from '@/types/cartType';
 import type { CreateOrderAPIType, CreateOrderResponseType } from '@/types/orderType';
-import type { CartProductType, ProductType } from '@/types/ProductType';
+import type { CartProductType, ProductType } from '@/types/productType';
 
 import { Button, CountInput, Dialog, Dropdown, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';

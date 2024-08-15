@@ -1,7 +1,7 @@
 'use client';
 
 import { ShareIcon } from '@/public/index';
-import type { ProductType } from '@/types/ProductType';
+import type { ProductType } from '@/types/productType';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import ShareBox from './ShareBox';
