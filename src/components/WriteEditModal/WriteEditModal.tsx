@@ -8,13 +8,16 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
-import { postProductReviews } from '@/api/productReviewAPI';
+import { postProductReviews, putUserProductReview } from '@/api/productReviewAPI';
+
 import { Button, CustomOption, ImageInput, InputField, Rating, TextField } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { keydeukImg } from '@/public/index';
+
 import type { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/communityType';
 
+import { ReviewDto } from '@/types/productReviewType';
 import styles from './WriteEditModal.module.scss';
 
 const cn = classNames.bind(styles);
@@ -31,20 +34,27 @@ interface CustomReviewEditProps {
   onSuccessReview: () => void;
 }
 
-interface OtherReviewProps {
-  reviewType: 'otherReview';
+interface ProductReviewProps {
+  reviewType: 'productReview';
   productData: ProductDataType;
   onSuccessReview: () => void;
 }
 
-type WriteEditModalProps = CustomReviewProps | CustomReviewEditProps | OtherReviewProps;
+interface ProductReviewEditProps {
+  reviewType: 'productReviewEdit';
+  productData: ProductDataType;
+  reviewData?: ReviewDto;
+  onSuccessReview: () => void;
+}
+
+type WriteEditModalProps = CustomReviewProps | CustomReviewEditProps | ProductReviewProps | ProductReviewEditProps;
 
 interface ProductDataType {
   productId: number;
   productImgUrl: string;
   productName: string;
   orderId: number;
-  option?: string;
+  switchOption?: string;
 }
 
 const TITLE_MAX_LENGTH = 16;
@@ -55,16 +65,19 @@ export default function WriteEditModal(props: WriteEditModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
-  const [deletedImageId, setDeleteImageId] = useState<number[]>([]);
-  const [clickedFeedback, setClickedFeedback] = useState<Array<number>>([0, 0, 0]);
-  const [rating, setRating] = useState<number>(0);
-  const [isImageError, setIsImageError] = useState<boolean>(false);
-
   const { reviewType, onSuccessReview } = props;
   const isCustom = reviewType === 'customReview' || reviewType === 'customReviewEdit';
   const { keyboardInfo } = props as CustomReviewProps;
   const { editCustomData } = props as CustomReviewEditProps;
-  const { productData } = props as OtherReviewProps;
+  const { productData } = (props as ProductReviewProps) || (props as ProductReviewEditProps);
+  const { reviewData } = props as ProductReviewEditProps;
+
+  const [deletedImageId, setDeleteImageId] = useState<number[]>([]);
+  const [clickedFeedback, setClickedFeedback] = useState<Array<number>>(
+    reviewData ? [reviewData.option1 - 1, reviewData.option2 - 1, reviewData.option3 - 1] : [0, 0, 0],
+  );
+  const [rating, setRating] = useState<number>(reviewData ? reviewData.score : 0);
+  const [isImageError, setIsImageError] = useState<boolean>(false);
 
   /**
    * 커스텀 리뷰 작성 관련 입니다.
@@ -108,22 +121,31 @@ export default function WriteEditModal(props: WriteEditModalProps) {
     },
   });
 
-  /** 상품 리뷰 관련 입니다. */
-
+  /** 상품 리뷰 등록 관련 입니다. */
   const handleClickFeedback = (optionIndex: number, feedbackIndex: number) => {
-    setClickedFeedback((prev) => prev.map((feedback, i) => (i === optionIndex ? feedback : feedbackIndex)));
+    setClickedFeedback((prev) => prev.map((feedback, i) => (i === optionIndex ? feedbackIndex : feedback)));
   };
 
   const { mutate: postProductReviewMutation } = useMutation({
     mutationFn: ({ productId, formData }: { productId: number; formData: FormData }) =>
       postProductReviews({ productId, formData }),
-    onSuccess: (res) => {
-      if (res.status === 'SUCCESS') {
-        onSuccessReview();
-        toast.success('리뷰 등록이 완료되었습니다.');
-      } else {
-        toast.error('데이터를 불러오는 중 오류가 발생하였습니다.');
-      }
+    onSuccess: () => {
+      onSuccessReview();
+      toast.success('리뷰 작성이 완료되었습니다.');
+    },
+    onError: () => {
+      toast.error('리뷰 등록 중 오류가 발생했습니다.');
+    },
+  });
+
+  /** 상품 리뷰 수정 관련 입니다. */
+  const { mutate: putProductReviewMutation } = useMutation({
+    mutationFn: ({ reviewId, formData }: { reviewId: number; formData: FormData }) =>
+      putUserProductReview({ reviewId, formData }),
+    onSuccess: () => {
+      onSuccessReview();
+      queryClient.invalidateQueries({ queryKey: ['userProductReviews'] });
+      toast.success('리뷰 수정이 완료되었습니다.');
     },
     onError: () => {
       toast.error('리뷰 등록 중 오류가 발생했습니다.');
@@ -150,7 +172,13 @@ export default function WriteEditModal(props: WriteEditModalProps) {
         files: editCustomData.reviewImages || [],
       });
     }
-  }, [editCustomData, reset]);
+    if (reviewData?.content) {
+      reset({
+        content: reviewData.content || '',
+        files: reviewData.reviewImgs || [],
+      });
+    }
+  }, [editCustomData, reviewData, reset]);
 
   const registers = {
     title: register('title', {
@@ -200,10 +228,9 @@ export default function WriteEditModal(props: WriteEditModalProps) {
       return putEditPostMutation({ id: editCustomData.id, formData: fetchFormData });
     }
 
-    // 3. 커스텀 외 상품 리뷰 수정
-    if (reviewType === 'otherReview') {
+    // 3. 커스텀 외 상품 리뷰 작성
+    if (reviewType === 'productReview') {
       const createReviewRequest = {
-        orderId: productData?.orderId,
         content: payload.content,
         option1: clickedFeedback[0] + 1,
         option2: clickedFeedback[1] + 1,
@@ -219,7 +246,34 @@ export default function WriteEditModal(props: WriteEditModalProps) {
       }
 
       if (productData) {
-        return postProductReviewMutation({ productId: productData?.productId, formData: fetchFormData });
+        return postProductReviewMutation({ productId: productData.productId, formData: fetchFormData });
+      }
+    }
+
+    // 4. 커스텀 외 상품 리뷰 수정
+    if (reviewType === 'productReviewEdit') {
+      const editReviewRequest = {
+        content: payload.content,
+        score: rating,
+        option1: clickedFeedback[0] + 1,
+        option2: clickedFeedback[1] + 1,
+        option3: clickedFeedback[2] + 1,
+        existingReviewImgs: reviewData?.reviewImgs,
+      };
+
+      fetchFormData.append('updateReviewRequest', JSON.stringify(editReviewRequest));
+
+      if (payload.files && payload.files.length > 0) {
+        payload.files.forEach((file: File) => {
+          fetchFormData.append('reviewImgs', file as File);
+        });
+      }
+
+      if (productData && reviewData) {
+        return putProductReviewMutation({
+          reviewId: reviewData.id,
+          formData: fetchFormData,
+        });
       }
     }
 
@@ -262,7 +316,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
             {isCustom && keyboardInfo ? (
               <CustomOption customData={keyboardInfo} wrapperRef={containerRef} />
             ) : (
-              <div className={cn('product-option')}>{productData?.option}</div>
+              <div className={cn('product-option')}>{productData?.switchOption}</div>
             )}
           </div>
         </div>
@@ -312,7 +366,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
         <ImageInput
           register={register}
           setValue={setValue}
-          editCustomImages={editCustomData?.reviewImages}
+          editImages={editCustomData?.reviewImages || reviewData?.reviewImgs}
           onSaveDeletedImageId={handleSaveDeletedImageId}
           isCustom={isCustom}
         />
@@ -327,7 +381,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
       <div className={cn('button-wrapper')}>
         {isCustom ? (
           <Button type='submit' backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}>
-            등록
+            {reviewType === 'customReview' ? '등록' : '수정'}
           </Button>
         ) : (
           <Button
@@ -335,7 +389,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
             disabled={isCustom ? false : rating === 0}
             backgroundColor={isValid && rating > 0 ? 'background-primary' : 'background-gray-40'}
           >
-            등록
+            {reviewType === 'productReview' ? '등록' : '수정'}
           </Button>
         )}
       </div>
