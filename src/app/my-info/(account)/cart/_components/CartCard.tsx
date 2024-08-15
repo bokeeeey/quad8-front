@@ -8,8 +8,9 @@ import { putChangeCartData } from '@/api/cartAPI';
 import { postCreateOrder } from '@/api/orderAPI';
 import { Button, ItemOverview, Modal } from '@/components';
 import { ROUTER } from '@/constants/route';
-import type { CustomDataType, OptionChageAPIType, ShopDataType } from '@/types/cartType';
-import type { CreateOrderResponseType, OrderItem, SwitchOptionType } from '@/types/orderType';
+import type { OptionChageAPIType, CustomCardProps, ShopCardProps } from '@/types/cartType';
+import type { CreateOrderResponseType } from '@/types/orderType';
+import { formatCartDataToItemOverview } from '@/libs/formatCartDataToItemOverview';
 import CardCheckBox from './CardCheckBox';
 import OptionEditModal from './OptionEditModal';
 
@@ -17,52 +18,15 @@ import styles from './CartCard.module.scss';
 
 const cn = classNames.bind(styles);
 
-interface CustomCardProps {
-  type: 'custom';
-  cardData: CustomDataType;
-}
-
-interface ShopCardProps {
-  type: 'shop';
-  cardData: ShopDataType;
-}
-
 export default function CartCard({ cardData, type }: CustomCardProps | ShopCardProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+
   const [isOpenModal, setIsOpenModal] = useState(false);
+
   const price = type === 'custom' ? cardData.price : Number(cardData.count * cardData.price);
-  const cardItem: Omit<OrderItem, 'viewCount' | 'price'> =
-    type === 'custom'
-      ? {
-          productId: cardData.id,
-          productImgUrl: cardData.imgUrl,
-          productName: '커스텀 키보드',
-          quantity: 1,
-          switchOption: {
-            individualColor: cardData.individualColor as Record<string, string>,
-            customOption: {
-              id: cardData.id,
-              layout: cardData.type,
-              appearanceTexture: cardData.texture,
-              appearanceColor: cardData.boardColor as string,
-              baseKeyColor: cardData.baseKeyColor as string,
-              keyboardSwitch: cardData.switchType,
-              hasPointKey: cardData.hasPointKeyCap,
-              pointKeyType: cardData.pointKeyType,
-              imgUrl: cardData.imgUrl,
-              price: cardData.price,
-            },
-          } as SwitchOptionType,
-        }
-      : {
-          productId: cardData.id,
-          productImgUrl: cardData.thumbsnail,
-          productName: cardData.productTitle,
-          quantity: cardData.count,
-          switchOption: cardData.optionName ?? '',
-          category: cardData.category,
-        };
+  const cardItem = formatCartDataToItemOverview({ cardData, type } as CustomCardProps | ShopCardProps);
+
   const { mutate: createOrder } = useMutation({
     mutationFn: postCreateOrder,
     onSuccess: (response: CreateOrderResponseType) => {
@@ -133,7 +97,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
         <div>
           <CardCheckBox id={cardData.id} type={type} />
         </div>
-        <ItemOverview item={cardItem} routeDetailPage />
+        <ItemOverview item={cardItem} isroutingDetailPage />
       </div>
       <div className={cn('price')}>{price.toLocaleString()}원</div>
       <div className={cn('button-wrapper')}>

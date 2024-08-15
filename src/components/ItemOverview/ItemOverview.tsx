@@ -27,7 +27,7 @@ interface ItemOverviewProps {
   imageWidth?: number;
   imageHeight?: number;
   className?: string;
-  routeDetailPage?: boolean;
+  isroutingDetailPage?: boolean;
 }
 
 const CATEGORY_NAME = {
@@ -42,7 +42,7 @@ export default function ItemOverview({
   imageWidth = 104,
   imageHeight = 104,
   className,
-  routeDetailPage,
+  isroutingDetailPage,
 }: ItemOverviewProps) {
   const { productImgUrl, productName, switchOption, quantity, price } = item;
 
@@ -59,7 +59,7 @@ export default function ItemOverview({
       className={className}
       productName={productName}
       category={category}
-      routeDetailPage={routeDetailPage}
+      routeDetailPage={isroutingDetailPage}
       productId={item.productId}
     >
       <CustomImage
@@ -73,7 +73,7 @@ export default function ItemOverview({
       />
       {productName === '커스텀 키보드' && typeof switchOption === 'object' ? (
         <div style={{ width: `calc(100% - ${imageWidth + 20}px)` }}>
-          <p className={cn('title')}>키드 커스텀 키보드</p>
+          <p className={cn('title')}>키득 커스텀 키보드</p>
           <CustomOption
             customData={{
               texture: switchOption.customOption.appearanceTexture,
