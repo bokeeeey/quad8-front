@@ -1,4 +1,4 @@
-import type { OptionRatio } from '@/types/ProductReviewTypes';
+import type { OptionRatio } from '@/types/ProductReviewType';
 import classNames from 'classnames/bind';
 import styles from './ScoreGraph.module.scss';
 

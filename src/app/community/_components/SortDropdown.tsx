@@ -1,14 +1,21 @@
 'use client';
 
+import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Dropdown } from '@/components';
 import { COMMUNITY_REVIEW_SORT_OPTIONS } from '@/constants/dropdownOptions';
 
+import styles from './SortDropdown.module.scss';
+
+const cn = classNames.bind(styles);
+
 export default function SortDropdown() {
   const [selectedOption, setSelectedOption] = useState(COMMUNITY_REVIEW_SORT_OPTIONS[0].label);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const updateQuery = (queryValue: string) => {
     const query = new URLSearchParams(window.location.search);
@@ -23,14 +30,19 @@ export default function SortDropdown() {
       return;
     }
     updateQuery(queryValue);
+    queryClient.invalidateQueries({
+      queryKey: ['postCardsList'],
+    });
   };
 
   return (
-    <Dropdown
-      options={COMMUNITY_REVIEW_SORT_OPTIONS.map((option) => option.label)}
-      sizeVariant='xs'
-      onChange={handleDropdownChange}
-      value={selectedOption}
-    />
+    <div className={cn('container')}>
+      <Dropdown
+        options={COMMUNITY_REVIEW_SORT_OPTIONS.map((option) => option.label)}
+        sizeVariant='xs'
+        onChange={handleDropdownChange}
+        value={selectedOption}
+      />
+    </div>
   );
 }

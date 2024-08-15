@@ -2,23 +2,25 @@
 
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
+import { getCartData } from '@/api/cartAPI';
+import { getUserData } from '@/api/usersAPI';
+import { CustomImage, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
-import type { CartAPIDataType } from '@/types/CartTypes';
+import type { CartAPIDataType } from '@/types/cartType';
 import type { Users } from '@/types/userType';
-import SignInModal from '../SignInModal/SignInModal';
-import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton } from './HeaderParts';
+import { CartButton, LoginButton, LogoutButton, NotificationButton, SearchButton, ShopButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
 
 const cn = classNames.bind(styles);
 
 export default function Header() {
+  const eventSource = useRef<null | EventSource>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
@@ -27,10 +29,12 @@ export default function Header() {
 
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
+    queryFn: getUserData,
   });
 
   const { data: cartData } = useQuery<CartAPIDataType>({
     queryKey: ['cartData'],
+    queryFn: getCartData,
   });
 
   const cartCount = cartData?.totalCount ?? 0;
@@ -75,7 +79,7 @@ export default function Header() {
               >
                 커스텀 키보드 만들기
               </Link>
-              <ShopButton pathname={pathname} />
+              <ShopButton />
               <Link href={ROUTER.COMMUNITY} className={cn('button', { 'current-page': pathname === ROUTER.COMMUNITY })}>
                 커뮤니티
               </Link>
@@ -83,15 +87,16 @@ export default function Header() {
           </div>
           <div className={cn('left-wrapper')}>
             <SearchButton isBlack={isBlack} />
-            {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton />}
-            <button className={cn('user-icon')} type='button' onClick={handleUserIconClick}>
-              {profileImage && profileImage !== 'null' ? (
-                <Image src={profileImage} alt='profile' width={31} height={31} className={cn('profile-image')} />
+            {!users ? <LoginButton onClick={handleLoginButtonClick} /> : <LogoutButton eventSource={eventSource} />}
+            <button className={cn('user-icon', 'button')} type='button' onClick={handleUserIconClick}>
+              {profileImage ? (
+                <CustomImage src={profileImage} alt='profile' width={28} height={28} className={cn('profile-image')} />
               ) : (
-                <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={31} height={31} />
+                <UserIcon className={cn(isBlack ? 'user-black' : 'user-white')} width={28} height={28} />
               )}
             </button>
             <CartButton cartCount={cartCount} isBlack={isBlack} onClick={handleCartIconClick} />
+            {users && <NotificationButton isBlack={isBlack} eventSource={eventSource} />}
           </div>
         </div>
       </header>

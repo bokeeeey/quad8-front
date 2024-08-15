@@ -1,6 +1,6 @@
 import { Rating } from '@/components';
 import { SpeechBubbleIcon } from '@/public/index';
-import type { ProductReviewPreview } from '@/types/ProductReviewTypes';
+import type { ProductReviewPreview } from '@/types/ProductReviewType';
 import classNames from 'classnames/bind';
 import KeywordRatios from './KeywordRatios';
 import styles from './ReviewPreview.module.scss';

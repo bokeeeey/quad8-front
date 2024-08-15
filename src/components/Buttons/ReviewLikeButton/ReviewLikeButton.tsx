@@ -3,7 +3,7 @@
 import { deleteReviewLikes, postReviewLikes } from '@/api/likesAPI';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { ThumbIcon } from '@/public/index';
-import type { ProductReviewType } from '@/types/ProductReviewTypes';
+import type { ProductReviewType } from '@/types/ProductReviewType';
 import type { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';

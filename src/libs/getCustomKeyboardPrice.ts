@@ -1,5 +1,5 @@
 import { BOARD_PRICE_LIST } from '@/constants/keyboardData';
-import { KeyboardDataType } from '@/types/CustomKeyboardTypes';
+import { KeyboardDataType } from '@/types/customKeyboardType';
 
 export const getCustomKeyboardPrice = ({
   type,

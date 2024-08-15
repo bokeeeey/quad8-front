@@ -1,5 +1,5 @@
-import { myProfileImg, keydeukProfileImg } from '@/public/index';
-import { PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
+import { keydeukProfileImg, myProfileImg } from '@/public/index';
+import type { PostCardDetailModalCustomKeyboardType } from '@/types/communityType';
 import { StaticImageData } from 'next/image';
 
 export const COMMUNITY_DATA = {

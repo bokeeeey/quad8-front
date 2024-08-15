@@ -1,4 +1,8 @@
+'use client';
+
+import { useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { useRouter } from 'next/navigation';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -6,14 +10,10 @@ import { postSignin } from '@/api/authAPI';
 import { ROUTER } from '@/constants/route';
 import { setCookie } from '@/libs/manageCookie';
 import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
-import type { FetchSignInInfoTypes } from '@/types/authTypes';
-import { useRouter } from 'next/navigation';
-
-import { useQueryClient } from '@tanstack/react-query';
-import Modal from '../Modal/Modal';
-
+import type { FetchSignInInfoTypes } from '@/types/authType';
 import Button from '../Buttons/Button/Button';
 import InputField from '../InputField/InputField';
+import Modal from '../Modal/Modal';
 
 import styles from './SigninModal.module.scss';
 
@@ -63,9 +63,10 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
         toast.success('로그인이 성공적으로 완료되었습니다.', {
           autoClose: 2000,
         });
-        queryClient.invalidateQueries({
-          queryKey: ['postCardsList'],
-        });
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['postCardsList'] }),
+          queryClient.invalidateQueries({ queryKey: ['userData'] }),
+        ]);
       } else if (responseData.status === 'FAIL') {
         toast.error(responseData.message);
       }

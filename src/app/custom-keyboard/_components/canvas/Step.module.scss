@@ -2,6 +2,7 @@
   @include flex-column(3.7rem);
 
   position: absolute;
+  z-index: 2;
   top: 50%;
   left: 4rem;
   width: 9.9rem;

@@ -1,0 +1,66 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border: 0.1rem solid $gray-10;
+  border-radius: 1rem;
+  background-color: $white;
+  cursor: pointer;
+}
+
+.read {
+  opacity: 0.5;
+}
+
+.icon-wrapper {
+  @include flex-center;
+
+  width: 4rem;
+  height: 4rem;
+  margin: auto 0;
+  border-radius: 100%;
+  background-color: $gray-10;
+}
+
+.icon {
+  fill: $gray-50;
+}
+
+.content-wrapper {
+  width: 24rem;
+  padding-left: 1.5rem;
+}
+
+.title {
+  @include pretendard-16-700;
+
+  color: $black;
+}
+
+.content {
+  @include pretendard-14-400;
+
+  display: -webkit-box;
+  max-height: 4.4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.date {
+  @include pretendard-12-400;
+
+  color: $gray-40;
+}
+
+.delete-icon {
+  fill: $gray-40;
+  cursor: pointer;
+
+  &:hover {
+    fill: $gray-50;
+  }
+}

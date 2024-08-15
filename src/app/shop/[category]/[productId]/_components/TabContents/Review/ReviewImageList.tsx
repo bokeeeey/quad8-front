@@ -3,7 +3,7 @@
 import { Modal } from '@/components';
 import RenderImages from '@/components/ReviewItem/RenderImages';
 import { ChevronIcon } from '@/public/index';
-import type { ReviewImage } from '@/types/ProductReviewTypes';
+import type { ReviewImage } from '@/types/ProductReviewType';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import styles from './ReviewImageList.module.scss';

@@ -9,13 +9,15 @@ import { toast } from 'react-toastify';
 
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
 import { postProductReviews, putUserProductReview } from '@/api/productReviewAPI';
+
 import { Button, CustomOption, ImageInput, InputField, Rating, TextField } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { keydeukImg } from '@/public/index';
-import type { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/CommunityTypes';
 
-import { ReviewDto } from '@/types/ProductReviewTypes';
+import type { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/communityType';
+
+import { ReviewDto } from '@/types/ProductReviewType';
 import styles from './WriteEditModal.module.scss';
 
 const cn = classNames.bind(styles);

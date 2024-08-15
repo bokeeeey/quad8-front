@@ -1,24 +1,25 @@
 'use client';
 
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import { useState, useEffect, Suspense } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Suspense, useEffect, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { toast } from 'react-toastify';
 
-import { Modal } from '@/components';
-import { calculateTimeDifference } from '@/libs/calculateDate';
-import type { CommunityPostCardDataType } from '@/types/CommunityTypes';
-import { IMAGE_BLUR } from '@/constants/blurImage';
-import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { deletePostCard, getPostDetail } from '@/api/communityAPI';
-import { ErrorBoundary } from 'react-error-boundary';
+import { calculateTimeDifference } from '@/libs/calculateDate';
 import { communityPopOverOption } from '@/libs/communityPopOverOption';
+import type { CommunityPostCardDataType } from '@/types/communityType';
+
+import { Modal } from '@/components';
+import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
+import { IMAGE_BLUR } from '@/constants/blurImage';
+import DetailModalSkeleton from '../../../components/ModalSkeleton/ModalSkeleton';
 import AuthorCard from './AuthorCard';
+import ErrorFallbackDetailModal from './PostCardDetailModal/ErrorFallbackDetailModal';
 import PostCardDetailModal from './PostCardDetailModal/PostCardDetailModal';
 import { PostInteractions } from './PostInteractions';
-import DetailModalSkeleton from './PostCardDetailModal/ModalSkeleton';
-import ErrorFallbackDetailModal from './PostCardDetailModal/ErrorFallbackDetailModal';
 
 import styles from './PostCard.module.scss';
 
@@ -36,10 +37,10 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const { id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage, isLiked } = cardData;
+  const { userId, id, nickName, updateAt, title, thumbnail, likeCount, commentCount, userImage, isLiked } = cardData;
 
-  const ApdatedDate = new Date(updateAt);
-  const timeToString = calculateTimeDifference(ApdatedDate);
+  const updatedDate = new Date(updateAt);
+  const timeToString = calculateTimeDifference(updatedDate);
 
   const handleClickPopOver = () => {
     setIsPopOverOpen((prevIsOpen) => !prevIsOpen);
@@ -100,25 +101,23 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
     }
   };
 
-  const handleClickReport = () => {};
-
   return (
     <div className={cn('container')}>
+      <AuthorCard
+        userId={userId}
+        nickname={nickName}
+        dateText={timeToString}
+        userImage={userImage}
+        onClickPopOver={handleClickPopOver}
+        onClosePopOver={handleClosePopOver}
+        isOpenPopOver={isPopOverOpen}
+        popOverOptions={communityPopOverOption({
+          isMine,
+          onClickDelete: handleClickDelete,
+          onClickEdit: handleClickEdit,
+        })}
+      />
       <div className={cn('container')} onClick={handleClickPostModal}>
-        <AuthorCard
-          nickname={nickName}
-          dateText={timeToString}
-          userImage={userImage}
-          onClickPopOver={handleClickPopOver}
-          onClosePopOver={handleClosePopOver}
-          isOpenPopOver={isPopOverOpen}
-          popOverOptions={communityPopOverOption({
-            isMine,
-            onClickDelete: handleClickDelete,
-            onClickReport: handleClickReport,
-            onClickEdit: handleClickEdit,
-          })}
-        />
         <div className={cn('keyboard-image-wrapper')}>
           <Image
             fill

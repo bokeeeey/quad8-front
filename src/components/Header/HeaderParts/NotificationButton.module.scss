@@ -1,0 +1,201 @@
+.button-wrapper {
+  position: relative;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.icon {
+  fill: $primary;
+  cursor: pointer;
+}
+
+.bg-black {
+  fill: $white;
+}
+
+.wrapper {
+  position: fixed;
+  z-index: $zindex-dropdown - 1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  animation: fade-in 0.3s ease forwards;
+  background-color: rgb(0 0 0 / 70%);
+}
+
+.notification-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36rem;
+  height: 100%;
+  overflow: hidden;
+  transform-origin: 100% 0%;
+  animation: slide-in 0.3s ease forwards;
+  border-radius: 1.5rem 0 0 1.5rem;
+  background-color: $white;
+  box-shadow: -0.1rem 0.1rem 0 solid $gray-40;
+}
+
+.slide-out {
+  animation: slide-out 0.3s ease forwards;
+}
+
+.fade-out {
+  animation: fade-out 0.3s ease forwards;
+}
+
+@keyframes slide-in {
+  from {
+    transform: scaleX(0.4);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0.4);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.title-wrapper {
+  @include flex-column(2rem);
+
+  padding: 3rem;
+  padding-bottom: 0;
+}
+
+.title {
+  @include pretendard-20-700;
+
+  color: $black;
+}
+
+.category-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.category {
+  @include pretendard-16-700;
+
+  padding: 0.2rem 0;
+  transition:
+    border,
+    color 0.4s;
+  border-bottom: 0.3rem solid $white;
+  color: $gray-40;
+}
+
+.is-selected-category {
+  border-bottom-color: $black;
+  color: $black;
+}
+
+.content-wrapper {
+  width: 100%;
+  height: calc(100vh - 10.4rem);
+  padding: 2rem;
+  background-color: $gray-5;
+}
+
+.content-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content-title {
+  @include pretendard-16-700;
+
+  color: $black;
+}
+
+.content-delete-all {
+  @include pretendard-14-400;
+
+  color: $gray-40;
+
+  &:hover {
+    color: $gray-50;
+  }
+}
+
+.content-card-wrapper {
+  @include flex-column(2rem);
+
+  height: 100%;
+  max-height: calc(100vh - 18.8rem);
+  margin-top: 2.5rem;
+  overflow: auto;
+}
+
+.hollow-card-wrapper {
+  @include flex-center;
+
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+}
+
+.hollow-card-icon {
+  fill: $gray-20;
+}
+
+.hollow-card-text {
+  @include pretendard-12-400;
+
+  color: $black;
+}
+
+.toast-body {
+  font-size: 1.6rem;
+}
+
+.alarm-count {
+  @include pretendard-14-400;
+  @include flex-center;
+
+  position: absolute;
+  top: -0.5rem;
+  right: -0.7rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 30rem;
+  background-color: $red;
+  color: $white;
+  cursor: pointer;
+}
+
+.count-more-digit {
+  width: 2.3rem;
+}

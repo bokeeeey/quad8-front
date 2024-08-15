@@ -1,19 +1,19 @@
 'use client';
 
+import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useState } from 'react';
 
 import { Rating } from '@/components';
-import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
-import type { ReviewDto } from '@/types/ProductReviewTypes';
-
 import { CATEGORY_MAP } from '@/constants/product';
+import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { formatDateToString } from '@/libs/formatDateToString';
-import classNames from 'classnames/bind';
+import type { ReviewDto } from '@/types/ProductReviewType';
 import ReviewLikeButton from '../Buttons/ReviewLikeButton/ReviewLikeButton';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import RenderImages from './RenderImages';
 import RenderKeywords from './RenderKeywords';
+
 import styles from './ReviewItem.module.scss';
 
 const cn = classNames.bind(styles);

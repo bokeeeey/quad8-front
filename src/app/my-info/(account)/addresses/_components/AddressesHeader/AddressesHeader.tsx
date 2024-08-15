@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 import { postAddress } from '@/api/shippingAPI';
 import { Button, Modal } from '@/components';
-import AddAddressModal from '../AddAddresseModal/AddAddressModal';
+import AddAddressModal from '../../../../../../components/AddAddresseModal/AddAddressModal';
 
 import styles from './AddressesHeader.module.scss';
 

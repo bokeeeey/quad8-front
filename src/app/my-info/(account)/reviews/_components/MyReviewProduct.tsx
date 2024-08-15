@@ -6,8 +6,6 @@ import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 
 import { formatDateToString } from '@/libs/formatDateToString';
 
-import type { ReviewDto } from '@/types/ProductReviewTypes';
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
@@ -15,7 +13,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import type { ProductType } from '@/types/ProductTypes';
+import type { ReviewDto } from '@/types/ProductReviewType';
+import type { ProductType } from '@/types/ProductType';
+
 import styles from './MyReviewProduct.module.scss';
 
 const cn = classNames.bind(styles);

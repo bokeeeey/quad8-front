@@ -8,7 +8,7 @@ import { postCart } from '@/api/cartAPI';
 import { getProductDetail } from '@/api/productAPI';
 import { Button, CountInput, Dropdown } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
-import type { ProductType } from '@/types/ProductTypes';
+import type { ProductType } from '@/types/ProductType';
 
 import styles from './AddCartModal.module.scss';
 
@@ -106,7 +106,9 @@ export default function AddCartModal({ productId, closeModal }: AddCartModalProp
                 productData.optionList[0].optionName}
             </div>
           )}
-          <CountInput value={count} onChange={(value) => setCount(Number(value))} />
+          <div className={cn('option-count')}>
+            <CountInput value={count} onChange={(value) => setCount(Number(value))} />
+          </div>
         </div>
         <div className={cn('cart-wrapper')} />
         <div className={cn('price-wrapper')}>

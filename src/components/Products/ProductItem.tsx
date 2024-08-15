@@ -1,10 +1,11 @@
+import classNames from 'classnames/bind';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { IMAGE_BLUR } from '@/constants/blurImage';
-import type { CategoryKey } from '@/types/Category';
-import classNames from 'classnames/bind';
+import type { CategoryKey } from '@/types/categoryType';
 import HeartButton from '../Buttons/HeartButton/HeartButton';
+
 import styles from './ProductItem.module.scss';
 
 const cn = classNames.bind(styles);

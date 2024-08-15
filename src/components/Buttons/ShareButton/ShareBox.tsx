@@ -1,7 +1,7 @@
 import useKakaoShare from '@/hooks/useKakaoShare';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { KakaoIcon, LinkCopyIcon } from '@/public/index';
-import type { ProductType } from '@/types/ProductTypes';
+import type { ProductType } from '@/types/ProductType';
 import classNames from 'classnames/bind';
 import { MouseEvent, useRef } from 'react';
 import { toast } from 'react-toastify';

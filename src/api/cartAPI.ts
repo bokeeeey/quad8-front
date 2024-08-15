@@ -1,8 +1,8 @@
 import { getCookie } from '@/libs/manageCookie';
 
-import type { CartProductType } from '@/types/ProductTypes';
-import type { OptionChageAPIType } from '@/types/CartTypes';
-import type { CustomKeyboardAPITypes } from '@/types/CustomKeyboardTypes';
+import type { OptionChageAPIType } from '@/types/cartType';
+import type { CustomKeyboardAPITypes } from '@/types/customKeyboardType';
+import type { CartProductType } from '@/types/ProductType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

@@ -10,6 +10,7 @@ import Calendar from './Calendar';
 import styles from './DatePicker.module.scss';
 
 const cn = classNames.bind(styles);
+const MONTH_OPTIONS = [1, 2, 3];
 
 interface DatePickerProps {
   startDate?: string;
@@ -17,22 +18,23 @@ interface DatePickerProps {
   onDateChange: (startDate: { startDate: Date; endDate: Date }) => void;
 }
 
-function DatePicker({ startDate, endDate, onDateChange }: DatePickerProps) {
+export default function DatePicker({ startDate, endDate, onDateChange }: DatePickerProps) {
   const currentDate = new Date();
-  const [selectedStartDate, setSelectedStartDate] = useState<Date>(startDate ? new Date(startDate) : new Date());
+  const initialStartDate = startDate ? new Date(startDate) : new Date();
+  initialStartDate.setMonth(initialStartDate.getMonth() - 1);
+
+  const [selectedStartDate, setSelectedStartDate] = useState<Date>(initialStartDate);
   const [selectedEndDate, setSelectedEndDate] = useState<Date>(endDate ? new Date(endDate) : new Date());
 
   const [openCalendarType, setOpenCalendarType] = useState<'start' | 'end' | null>(null);
-  const [selectedMonthOption, setSelectedMonthOption] = useState<number>(0);
+  const [selectedMonthOption, setSelectedMonthOption] = useState<number>(1);
 
   const handleOpenStartCalendar = () => {
     setOpenCalendarType('start');
-    setSelectedMonthOption(0);
   };
 
   const handleOpenEndCalendar = () => {
     setOpenCalendarType('end');
-    setSelectedMonthOption(0);
   };
 
   const handleCloseCalendar = () => {
@@ -45,10 +47,12 @@ function DatePicker({ startDate, endDate, onDateChange }: DatePickerProps) {
 
   const handleSetSelectedStartDate = (date: Date) => {
     setSelectedStartDate(date);
+    setSelectedMonthOption(0);
   };
 
   const handleSetSelectedEndDate = (date: Date) => {
     setSelectedEndDate(date);
+    setSelectedMonthOption(0);
   };
 
   const formatDateToString = (date: Date) => {
@@ -66,40 +70,24 @@ function DatePicker({ startDate, endDate, onDateChange }: DatePickerProps) {
 
     selectedStart.setMonth(currentDate.getMonth() - month);
     setSelectedStartDate(selectedStart);
-
     setSelectedEndDate(selectedEnd);
   };
 
   return (
     <div className={cn('container')}>
       <div className={cn('month-picker-wrapper')}>
-        <Button
-          hoverColor='outline-primary'
-          paddingVertical={8}
-          width={90}
-          backgroundColor={selectedMonthOption === 1 ? 'outline-primary' : 'outline-gray-40'}
-          onClick={() => handleClickMonthOption(1)}
-        >
-          1개월
-        </Button>
-        <Button
-          hoverColor='outline-primary'
-          paddingVertical={8}
-          width={90}
-          backgroundColor={selectedMonthOption === 2 ? 'outline-primary' : 'outline-gray-40'}
-          onClick={() => handleClickMonthOption(2)}
-        >
-          2개월
-        </Button>
-        <Button
-          hoverColor='outline-primary'
-          paddingVertical={8}
-          width={90}
-          backgroundColor={selectedMonthOption === 3 ? 'outline-primary' : 'outline-gray-40'}
-          onClick={() => handleClickMonthOption(3)}
-        >
-          3개월
-        </Button>
+        {MONTH_OPTIONS.map((month) => (
+          <Button
+            key={month}
+            hoverColor='outline-primary'
+            paddingVertical={8}
+            width={90}
+            backgroundColor={selectedMonthOption === month ? 'outline-primary' : 'outline-gray-40'}
+            onClick={() => handleClickMonthOption(month)}
+          >
+            {month}개월
+          </Button>
+        ))}
       </div>
       <div className={cn('custom-picker-wrapper')}>
         <div
@@ -147,5 +135,3 @@ function DatePicker({ startDate, endDate, onDateChange }: DatePickerProps) {
     </div>
   );
 }
-
-export default DatePicker;

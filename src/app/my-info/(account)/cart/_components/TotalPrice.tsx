@@ -1,12 +1,12 @@
 'use client';
 
-import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { useContext } from 'react';
 
 import { getCartData } from '@/api/cartAPI';
 import { CartDataContext } from '@/context/CartDataContext';
-import type { CartAPIDataType } from '@/types/CartTypes';
+import type { CartAPIDataType } from '@/types/cartType';
 
 import styles from './TotalPrice.module.scss';
 

@@ -1,4 +1,4 @@
-import { OrderStatus } from '@/types/OrderTypes';
+import { OrderStatus } from '@/types/orderType';
 
 export const OrderStatusDescriptions: { [key in string]: string } = {
   [OrderStatus.READY]: '결제 준비중',

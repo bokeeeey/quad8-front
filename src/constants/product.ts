@@ -1,4 +1,4 @@
-import type { TabKeyword } from '@/types/ProductItem';
+import type { TabKeyword } from '@/types/productItemType';
 
 export const CATEGORY_MAP = {
   keyboard: '키보드',

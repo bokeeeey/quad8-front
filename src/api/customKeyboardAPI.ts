@@ -1,5 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
-import type { CustomKeyboardAPITypes } from '@/types/CustomKeyboardTypes';
+import type { CustomKeyboardAPITypes } from '@/types/customKeyboardType';
 
 export const getRandomOptionProduct = async () => {
   try {

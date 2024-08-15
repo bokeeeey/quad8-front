@@ -4,7 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
 import { getCartData } from '@/api/cartAPI';
-import type { CartAPIDataType } from '@/types/CartTypes';
+import type { CartAPIDataType } from '@/types/cartType';
 import CartCard from './CartCard';
 
 import styles from './CustomCardList.module.scss';

@@ -1,7 +1,7 @@
 'use client';
 
-import type { CustomKeyboardStepTypes, CustomKeyboardStepStatusTypes } from '@/types/CustomKeyboardTypes';
-import { RefObject, PropsWithChildren, createContext, useRef, useCallback, useMemo, useState } from 'react';
+import type { CustomKeyboardStepStatusTypes, CustomKeyboardStepTypes } from '@/types/customKeyboardType';
+import { PropsWithChildren, RefObject, createContext, useCallback, useMemo, useRef, useState } from 'react';
 import { OrbitControls } from 'three-stdlib';
 
 interface StepContextType {

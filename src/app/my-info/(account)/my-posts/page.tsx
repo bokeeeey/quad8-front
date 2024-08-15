@@ -6,6 +6,7 @@ import { MyInfoEmptyCase } from '../../_components';
 import MyPostCardList from './_components/MyPostCardList';
 
 import styles from './page.module.scss';
+import MyPostsEmptyCase from './_components/MyPostsEmptyCase';
 
 const cn = classNames.bind(styles);
 
@@ -27,6 +28,10 @@ export default async function MyPostsPage({ searchParams }: MyPostsPageProps) {
   };
 
   const data = await getMyPosts(initialParams);
+
+  if (!data) {
+    return <MyPostsEmptyCase />;
+  }
 
   const { content, ...rest } = data;
 

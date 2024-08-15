@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { useRef, MouseEvent } from 'react';
+import { useRef } from 'react';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { VerticalTripleDotIcon } from '@/public/index';
 
@@ -11,7 +11,7 @@ const cn = classNames.bind(styles);
 
 interface OptionType {
   label: string;
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onClick?: () => void;
 }
 
 interface PopOverProps {
@@ -19,19 +19,28 @@ interface PopOverProps {
   onHandleClose: () => void;
   onHandleOpen: () => void;
   isOpenPopOver: boolean;
+  position?: { left: number; top: number };
 }
 
-export default function PopOver({ optionsData, onHandleClose, onHandleOpen, isOpenPopOver }: PopOverProps) {
+export default function PopOver({ optionsData, onHandleClose, onHandleOpen, isOpenPopOver, position }: PopOverProps) {
   const ref = useRef(null);
 
   useOutsideClick(ref, onHandleClose);
 
   const handleClickDotIcon = () => {
-    onHandleOpen();
+    if (isOpenPopOver) {
+      onHandleClose();
+    } else {
+      onHandleOpen();
+    }
   };
 
   return (
-    <div className={cn('container')} onClick={(e) => e.stopPropagation()}>
+    <div
+      className={cn('container')}
+      onClick={(e) => e.stopPropagation()}
+      style={{ top: position?.top, left: position?.left }}
+    >
       <VerticalTripleDotIcon onClick={handleClickDotIcon} />
       {isOpenPopOver && (
         <div className={cn('pop-over-container')} ref={ref}>
