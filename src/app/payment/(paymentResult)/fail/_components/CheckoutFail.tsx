@@ -18,7 +18,7 @@ export default function CheckoutFail() {
   const orderId = searchParams.get('orderId') || '';
   const errorMessage = searchParams.get('message') || '';
 
-  const { data: paymentResponse } = usePaymentQuery({ orderId });
+  const { data: paymentResponse } = usePaymentQuery();
 
   const handleButtonClick = () => {
     if (paymentResponse) {
