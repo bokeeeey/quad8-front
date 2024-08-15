@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import type { ReviewDto } from '@/types/ProductReviewType';
+import type { ReviewDto } from '@/types/productReviewType';
 import type { ProductType } from '@/types/productType';
 
 import styles from './MyReviewProduct.module.scss';

@@ -1,4 +1,4 @@
-import type { ReviewKeywordType } from '@/types/ProductReviewType';
+import type { ReviewKeywordType } from '@/types/productReviewType';
 
 export const REVIEW_KEYWORD: ReviewKeywordType = {
   키보드: {

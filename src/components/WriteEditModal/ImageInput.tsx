@@ -8,7 +8,7 @@ import { FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { CameraIcon, DeleteIcon, keydeukProfileImg } from '@/public/index';
 
-import type { ReviewImage } from '@/types/ProductReviewType';
+import type { ReviewImage } from '@/types/productReviewType';
 import styles from './ImageInput.module.scss';
 
 const cn = classNames.bind(styles);

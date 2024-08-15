@@ -17,7 +17,7 @@ import { keydeukImg } from '@/public/index';
 
 import type { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/communityType';
 
-import { ReviewDto } from '@/types/ProductReviewType';
+import { ReviewDto } from '@/types/productReviewType';
 import styles from './WriteEditModal.module.scss';
 
 const cn = classNames.bind(styles);

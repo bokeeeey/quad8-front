@@ -1,4 +1,4 @@
-import type { OptionRatio } from '@/types/ProductReviewType';
+import type { OptionRatio } from '@/types/productReviewType';
 
 export const getMaxKey = (options: OptionRatio) => {
   return Object.keys(options).reduce((maxKey, key) => {

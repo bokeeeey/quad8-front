@@ -1,6 +1,6 @@
 import { formatDateToQueryString } from '@/libs/formatDateToQueryString';
 import { getCookie } from '@/libs/manageCookie';
-import type { ProductReviewParams, ProductReviewType, ReviewResponse } from '@/types/ProductReviewType';
+import type { ProductReviewParams, ProductReviewType, ReviewResponse } from '@/types/productReviewType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

@@ -7,7 +7,7 @@ import { PRODUCT_REVIEW_SORT_OPTIONS } from '@/constants/dropdownOptions';
 import { searchParamsToObject } from '@/libs/searchParamsToObject';
 
 import { NoReviewIcon } from '@/public/index';
-import type { ProductReviewType, ReviewParamsType } from '@/types/ProductReviewType';
+import type { ProductReviewType, ReviewParamsType } from '@/types/productReviewType';
 import { useQuery } from '@tanstack/react-query';
 
 import classNames from 'classnames/bind';
