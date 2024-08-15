@@ -1,12 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { Address as AddressT, DaumPostcodeEmbed } from 'react-daum-postcode';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { deleteAddress, putAddress } from '@/api/shippingAPI';
 import { AddAddressModal, Dialog, Modal } from '@/components';
+import { useDeleteAddress } from '@/hooks/useDeleteAddress';
+import { useUpdateAddress } from '@/hooks/useUpdateAddress';
 import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
 import type { UserAddress } from '@/types/shippingType';
 
@@ -28,13 +28,8 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
 
   const { phone, address, zoneCode, name, detailAddress, isDefault, id } = item;
 
-  const queryClient = useQueryClient();
-
-  const { mutate: putAddressMutate } = useMutation({ mutationFn: putAddress });
-
-  const { mutate: deleteAddressMutate } = useMutation({
-    mutationFn: deleteAddress,
-  });
+  const { mutate: putAddressMutate } = useUpdateAddress();
+  const { mutate: deleteAddressMutate } = useDeleteAddress();
 
   const handleModifyButtonClick = () => {
     setIsModalOpen(true);
@@ -48,7 +43,6 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
     deleteAddressMutate(id, {
       onSuccess: () => {
         toast('삭제되었습니다.');
-        queryClient.invalidateQueries({ queryKey: ['addressesData'] });
       },
       onError: (error) => {
         toast(error.message);
@@ -72,12 +66,12 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
 
   const handleAddressPutSubmit: SubmitHandler<FieldValues> = (payload) => {
     putAddressMutate(payload, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('수정되었습니다.');
-          queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-          onSuccessClose();
-        }
+      onSuccess: () => {
+        toast('수정되었습니다.');
+        onSuccessClose();
+      },
+      onError: (error) => {
+        toast(error.message);
       },
     });
   };

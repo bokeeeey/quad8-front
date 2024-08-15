@@ -1,15 +1,15 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { ChangeEvent, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { checkNickname, putEditProfile } from '@/api/usersAPI';
 import { Button, InputField, ProfileImage, RadioField } from '@/components';
 import { Label } from '@/components/parts';
 import { GENDER_OPTION } from '@/constants/dropdownOptions';
+import { useCheckNickname } from '@/hooks/useCheckNickname';
+import { useUpdateProfile } from '@/hooks/useUpdateProfile';
 import { changePhoneNumber } from '@/libs/changePhoneNumber';
 import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
 import { unFormatPhoneNumber } from '@/libs/unFormatPhoneNumber';
@@ -25,7 +25,6 @@ interface EditProfileModalProps {
 }
 
 export default function EditProfileModal({ userData, onComplete }: EditProfileModalProps) {
-  const queryClient = useQueryClient();
   const { birth, gender, nickname, phone, imgUrl } = userData;
 
   const [changedNickname, setChangedNickname] = useState(nickname);
@@ -46,19 +45,8 @@ export default function EditProfileModal({ userData, onComplete }: EditProfileMo
     },
   });
 
-  const { mutate: checkNicknameMutation } = useMutation({
-    mutationFn: checkNickname,
-    onSuccess: () => {
-      toast.success('사용 가능한 닉네임 입니다.');
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-
-  const { mutate: putProfileMutation } = useMutation({
-    mutationFn: putEditProfile,
-  });
+  const { mutate: checkNicknameMutation } = useCheckNickname();
+  const { mutate: putProfileMutation } = useUpdateProfile();
 
   const onSubmit: SubmitHandler<FieldValues> = (payload) => {
     const formData = new FormData();
@@ -77,15 +65,12 @@ export default function EditProfileModal({ userData, onComplete }: EditProfileMo
     }
 
     putProfileMutation(formData, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('회원정보가 변경되었습니다');
-          queryClient.invalidateQueries({ queryKey: ['userData'] }).then(() => {
-            onComplete();
-          });
-        } else {
-          toast.error('회원정보 변경에 실패 하였습니다');
-        }
+      onSuccess: () => {
+        toast('회원정보가 변경되었습니다');
+        onComplete();
+      },
+      onError: (error) => {
+        toast.error(error.message);
       },
     });
   };
@@ -95,7 +80,14 @@ export default function EditProfileModal({ userData, onComplete }: EditProfileMo
   };
 
   const handleNicknameCheck = () => {
-    checkNicknameMutation(nickname);
+    checkNicknameMutation(nickname, {
+      onSuccess: () => {
+        toast.success('사용 가능한 닉네임 입니다.');
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
   };
 
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {

@@ -1,12 +1,10 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 
-import { getUserData } from '@/api/usersAPI';
 import { Modal, ProfileImage } from '@/components';
-import type { Users } from '@/types/userType';
+import { useUser } from '@/hooks/useUser';
 import EditProfileModal from './EditProfileModal/EditProfileModal';
 
 import styles from './UserProfile.module.scss';
@@ -16,7 +14,7 @@ const cn = classNames.bind(styles);
 export default function UserProfile() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: userData, refetch } = useQuery<{ data: Users }>({ queryKey: ['userData'], queryFn: getUserData });
+  const { data: userData } = useUser();
 
   const users = userData?.data;
 
@@ -26,7 +24,6 @@ export default function UserProfile() {
 
   const handleComplete = () => {
     setIsModalOpen(false);
-    refetch();
   };
 
   return (

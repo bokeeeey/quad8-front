@@ -1,12 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { BaseSyntheticEvent, useState } from 'react';
 import DaumPostcodeEmbed, { Address } from 'react-daum-postcode';
 import { Control, Controller, FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { postAddress } from '@/api/shippingAPI';
 import { AddAddressModal, Button, Dropdown, Modal } from '@/components';
+import { useCreateAddress } from '@/hooks/useCreateAddress';
 import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
 import type { ShippingAddressResponse } from '@/types/orderType';
 import type { UserAddress } from '@/types/shippingType';
@@ -27,8 +26,6 @@ interface CheckoutAddressProps {
 }
 
 export default function CheckoutAddress({ item, onClick, control, isForm, deliveryMessage }: CheckoutAddressProps) {
-  const queryClient = useQueryClient();
-
   const [isAddressChangeModalOpen, setIsAddressChangeModalOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [isPostcodeEmbedOpen, setIsPostcodeEmbedOpen] = useState(false);
@@ -36,9 +33,7 @@ export default function CheckoutAddress({ item, onClick, control, isForm, delive
 
   const { address, detailAddress, name, phone, zoneCode } = item;
 
-  const { mutate: postAddressMutate } = useMutation({
-    mutationFn: postAddress,
-  });
+  const { mutate: postAddressMutate } = useCreateAddress();
 
   const handleAddressButtonClick = () => {
     setIsAddressChangeModalOpen((prevIsOpen) => !prevIsOpen);
@@ -78,7 +73,6 @@ export default function CheckoutAddress({ item, onClick, control, isForm, delive
     postAddressMutate(payload, {
       onSuccess: () => {
         toast('배송지를 추가하였습니다.');
-        queryClient.invalidateQueries({ queryKey: ['addressesData'] });
         handleSuccessClose();
       },
       onError: (error) => {

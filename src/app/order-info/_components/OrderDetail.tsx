@@ -1,15 +1,13 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-import { getOrder } from '@/api/orderAPI';
 import CheckoutAddress from '@/app/payment/_components/CheckoutForm/parts/CheckoutAddress';
 import { Button, ItemOverview } from '@/components';
+import { useOrderQuery } from '@/hooks/useOrderQuery';
 import { formatDateToKSTString } from '@/libs/formatDateToKSTString';
 import { formatNumber } from '@/libs/formatNumber';
-import type { OrderResponse } from '@/types/orderType';
 
 import styles from './OrderDetail.module.scss';
 
@@ -17,13 +15,8 @@ const cn = classNames.bind(styles);
 
 export default function OrderDetail() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get('orderId') || '';
 
-  const { data: orderResponse } = useQuery<{ data: OrderResponse }>({
-    queryKey: ['orderResponse', orderId],
-    queryFn: () => getOrder(orderId),
-  });
+  const { data: orderResponse } = useOrderQuery();
 
   const {
     orderItems,

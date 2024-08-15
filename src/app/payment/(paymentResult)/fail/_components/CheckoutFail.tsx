@@ -1,11 +1,9 @@
 'use client';
 
-import { getPayment } from '@/api/orderAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
+import { usePaymentQuery } from '@/hooks/usePaymentQuery';
 import { AlertIcon, FailIcon } from '@/public/index';
-import type { OrderDetailData } from '@/types/orderType';
-import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -20,12 +18,7 @@ export default function CheckoutFail() {
   const orderId = searchParams.get('orderId') || '';
   const errorMessage = searchParams.get('message') || '';
 
-  const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
-    queryKey: ['paymentDataResponse', orderId],
-    queryFn: () => getPayment(orderId),
-    enabled: !!orderId,
-    retry: 0,
-  });
+  const { data: paymentResponse } = usePaymentQuery({ orderId });
 
   const handleButtonClick = () => {
     if (paymentResponse) {
