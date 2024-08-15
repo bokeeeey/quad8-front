@@ -20,7 +20,7 @@ interface CustomImagesType {
 interface ImageInputProps {
   register: UseFormRegister<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
-  editCustomImages?: CustomImagesType[] | ReviewImage[];
+  editImages?: CustomImagesType[] | ReviewImage[];
   onSaveDeletedImageId?: (id: number) => void;
   isCustom: boolean;
 }
@@ -28,7 +28,7 @@ interface ImageInputProps {
 export default function ImageInput({
   register,
   setValue,
-  editCustomImages,
+  editImages,
   onSaveDeletedImageId,
   isCustom,
 }: ImageInputProps) {
@@ -37,13 +37,13 @@ export default function ImageInput({
   const [isImageError, setIsImageError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (editCustomImages) {
-      const initialUrls = editCustomImages.map((image) =>
+    if (editImages) {
+      const initialUrls = editImages.map((image) =>
         isCustom ? (image as CustomImagesType).imgUrl : (image as ReviewImage).imageUrl,
       );
       setSelectedImageUrls(initialUrls);
     }
-  }, [editCustomImages, isCustom]);
+  }, [editImages, isCustom]);
 
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -65,8 +65,8 @@ export default function ImageInput({
 
     const clickedImageUrl = selectedImageUrls[clickedImageIndex];
 
-    if (editCustomImages && onSaveDeletedImageId) {
-      const imageToDelete = editCustomImages.find((image) =>
+    if (editImages && onSaveDeletedImageId) {
+      const imageToDelete = editImages.find((image) =>
         isCustom
           ? (image as CustomImagesType).imgUrl === clickedImageUrl
           : (image as ReviewImage).imageUrl === clickedImageUrl,

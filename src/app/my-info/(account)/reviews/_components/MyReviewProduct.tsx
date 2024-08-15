@@ -8,14 +8,14 @@ import { formatDateToString } from '@/libs/formatDateToString';
 
 import type { ReviewDto } from '@/types/ProductReviewTypes';
 
-import { QueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { ProductType } from '@/types/ProductTypes';
+import type { ProductType } from '@/types/ProductTypes';
 import styles from './MyReviewProduct.module.scss';
 
 const cn = classNames.bind(styles);
@@ -39,7 +39,7 @@ export default function MyReviewProduct({ reviewData, productData }: MyReviewPro
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const { mutate: reviewDeleteMutation } = useMutation({
     mutationFn: async () => {
@@ -121,7 +121,7 @@ export default function MyReviewProduct({ reviewData, productData }: MyReviewPro
       <Dialog
         type='confirm'
         iconType='warn'
-        message='리뷰 삭제시 복구 및 재작성 할 수 없습니다.\n삭제하시겠습니까?'
+        message='리뷰 삭제 시 복구 및 재작성 할 수 없습니다.\n삭제하시겠습니까?'
         isOpen={isDeleteModalOpen}
         onClick={{ left: () => setIsDeleteModalOpen(false), right: handleDeleteReview }}
         buttonText={{ left: '취소', right: '확인' }}

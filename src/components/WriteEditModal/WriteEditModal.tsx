@@ -119,8 +119,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
     },
   });
 
-  /** 상품 리뷰 관련 입니다. */
-
+  /** 상품 리뷰 등록 관련 입니다. */
   const handleClickFeedback = (optionIndex: number, feedbackIndex: number) => {
     setClickedFeedback((prev) => prev.map((feedback, i) => (i === optionIndex ? feedbackIndex : feedback)));
   };
@@ -128,13 +127,9 @@ export default function WriteEditModal(props: WriteEditModalProps) {
   const { mutate: postProductReviewMutation } = useMutation({
     mutationFn: ({ productId, formData }: { productId: number; formData: FormData }) =>
       postProductReviews({ productId, formData }),
-    onSuccess: (res) => {
-      if (res.status === 'SUCCESS') {
-        onSuccessReview();
-        toast.success('리뷰 작성이 완료되었습니다.');
-      } else {
-        toast.error('리뷰 작성 중 오류가 발생했습니다.');
-      }
+    onSuccess: () => {
+      onSuccessReview();
+      toast.success('리뷰 작성이 완료되었습니다.');
     },
     onError: () => {
       toast.error('리뷰 등록 중 오류가 발생했습니다.');
@@ -142,18 +137,13 @@ export default function WriteEditModal(props: WriteEditModalProps) {
   });
 
   /** 상품 리뷰 수정 관련 입니다. */
-
   const { mutate: putProductReviewMutation } = useMutation({
     mutationFn: ({ reviewId, formData }: { reviewId: number; formData: FormData }) =>
       putUserProductReview({ reviewId, formData }),
-    onSuccess: (res) => {
-      if (res.status === 'SUCCESS') {
-        onSuccessReview();
-        queryClient.invalidateQueries({ queryKey: ['userProductReviews'] });
-        toast.success('리뷰 수정이 완료되었습니다.');
-      } else {
-        toast.error('리뷰 수정 중 오류가 발생했습니다.');
-      }
+    onSuccess: () => {
+      onSuccessReview();
+      queryClient.invalidateQueries({ queryKey: ['userProductReviews'] });
+      toast.success('리뷰 수정이 완료되었습니다.');
     },
     onError: () => {
       toast.error('리뷰 등록 중 오류가 발생했습니다.');
@@ -374,7 +364,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
         <ImageInput
           register={register}
           setValue={setValue}
-          editCustomImages={editCustomData?.reviewImages || reviewData?.reviewImgs}
+          editImages={editCustomData?.reviewImages || reviewData?.reviewImgs}
           onSaveDeletedImageId={handleSaveDeletedImageId}
           isCustom={isCustom}
         />
@@ -389,7 +379,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
       <div className={cn('button-wrapper')}>
         {isCustom ? (
           <Button type='submit' backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}>
-            등록
+            {reviewType === 'customReview' ? '등록' : '수정'}
           </Button>
         ) : (
           <Button

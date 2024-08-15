@@ -31,13 +31,16 @@ export const postProductReviews = async ({ productId, formData }: { productId: n
   const token = await getCookie('accessToken');
 
   try {
-    await fetch(`${BASE_URL}/api/v1/reviews?productId=${productId}`, {
+    const res = await fetch(`${BASE_URL}/api/v1/reviews?productId=${productId}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
+    if (!res.ok) {
+      throw new Error('리뷰 등록 중 오류가 발생했습니다');
+    }
   } catch (error) {
     throw error;
   }
@@ -91,13 +94,17 @@ export const putUserProductReview = async ({ reviewId, formData }: { reviewId: n
   const token = await getCookie('accessToken');
 
   try {
-    await fetch(`${BASE_URL}/api/v1/reviews/${reviewId}`, {
+    const res = await fetch(`${BASE_URL}/api/v1/reviews/${reviewId}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
+
+    if (!res.ok) {
+      throw new Error('리뷰 수정 중 오류가 발생했습니다');
+    }
   } catch (error) {
     throw error;
   }
