@@ -22,13 +22,13 @@ interface AddCartModalProps {
 export default function AddCartModal({ productId, closeModal }: AddCartModalProps) {
   const queryClient = useQueryClient();
 
-  const [optionId, setOptionId] = useState<number>(-1);
-  const [count, setCount] = useState(1);
-
   const { data: productData, isPending: isPendingProductData } = useQuery<ProductType>({
     queryKey: ['product', productId],
     queryFn: () => getProductDetail(productId),
   });
+
+  const [optionId, setOptionId] = useState<number>(productData?.optionList[0].id ?? -1);
+  const [count, setCount] = useState(1);
 
   const { mutate: postCartItem, isPending: isPendingPostCartItem } = useMutation({
     mutationFn: postCart,

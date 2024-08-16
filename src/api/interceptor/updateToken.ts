@@ -24,6 +24,7 @@ export const updateToken = async () => {
     }
 
     setCookie('accessToken', token);
+    return token;
   } catch (error) {
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
