@@ -7,6 +7,10 @@ export const getCheckEmailDuplication = async (emailValue: string) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
     return data;
   } catch (error) {
     throw error;
@@ -18,6 +22,10 @@ export const getCheckNicknameDuplication = async (nickname: string) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
     return data;
   } catch (error) {
     throw error;
@@ -36,6 +44,10 @@ export const postSignup = async (formData: FormData) => {
       body: formData,
     });
     const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
     return data;
   } catch (error) {
     throw error;
@@ -55,6 +67,10 @@ export const postSignin = async (formData: FetchSignInInfoTypes) => {
       body: JSON.stringify(formData),
     });
     const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
     return data;
   } catch (error) {
     throw error;

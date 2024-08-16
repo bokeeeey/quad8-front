@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 import { getCartData } from '@/api/cartAPI';
+import { updateToken } from '@/api/interceptor/updateToken';
 import { CustomImage, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { useUser } from '@/hooks/useUser';
@@ -31,6 +32,13 @@ export default function Header() {
   const { data: cartData } = useQuery<CartAPIDataType>({
     queryKey: ['cartData'],
     queryFn: getCartData,
+  });
+
+  useQuery({
+    queryKey: ['token'],
+    queryFn: updateToken,
+    refetchInterval: 3600000,
+    enabled: typeof userData?.data !== undefined,
   });
 
   const cartCount = cartData?.totalCount ?? 0;

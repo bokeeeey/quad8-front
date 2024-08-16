@@ -5,6 +5,7 @@ import { MutableRefObject, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 
 import type { AlarmDataType } from '@/types/alarmType';
+import { updateToken } from '@/api/interceptor/updateToken';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -41,7 +42,8 @@ export const useEventSource = (
       newEventSource.addEventListener('error', async (error: any) => {
         closeEvent(eventRef);
         if (error.status === 401) {
-          /* updateToken */
+          await updateToken();
+          await addServerSentEvent();
         }
       });
 
