@@ -8,6 +8,10 @@ export const updateToken = async () => {
   const accessToken = await getCookie('accessToken');
   const refreshToken = await getCookie('refreshToken');
 
+  if (!accessToken || !refreshToken) {
+    return null;
+  }
+
   try {
     const response = await fetch(`${BASE_URL}/api/v1/reissue`, {
       method: 'POST',

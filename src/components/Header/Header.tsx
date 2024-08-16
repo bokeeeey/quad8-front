@@ -32,13 +32,13 @@ export default function Header() {
   const { data: cartData } = useQuery<CartAPIDataType>({
     queryKey: ['cartData'],
     queryFn: getCartData,
+    retry: false,
   });
 
   useQuery({
     queryKey: ['token'],
     queryFn: updateToken,
     refetchInterval: 3600000,
-    enabled: typeof userData?.data !== undefined,
   });
 
   const cartCount = cartData?.totalCount ?? 0;
