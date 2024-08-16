@@ -24,10 +24,6 @@ export interface ProductDataResponse {
   last: boolean;
 }
 
-export interface ProductListResponse {
-  data: ProductDataResponse;
-}
-
 export interface ProductParams {
   sort: string;
   page?: string;

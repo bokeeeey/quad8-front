@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Rating } from '@/components';
 import { CATEGORY_MAP } from '@/constants/product';
 import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
-import { formatDateWithDot } from '@/libs/formatDateToString';
+import { formatDateToString } from '@/libs/formatDateToString';
 import type { ReviewDto } from '@/types/productReviewType';
 import ReviewLikeButton from '../Buttons/ReviewLikeButton/ReviewLikeButton';
 import ProfileImage from '../ProfileImage/ProfileImage';
@@ -70,7 +70,7 @@ export default function ReviewItem({ usage, reviewData }: ReviewItemProps) {
               <div className={cn('modal-info-section')}>
                 <Rating rating={score} />
                 <h2 className={cn('name')}>
-                  {nickname} · {formatDateWithDot(new Date(updatedAt))}
+                  {nickname} · {formatDateToString(new Date(updatedAt))}
                 </h2>
               </div>
             </div>
@@ -95,7 +95,7 @@ export default function ReviewItem({ usage, reviewData }: ReviewItemProps) {
                 {usage === 'mypage' ? (
                   <h2 className={cn('star')}>{score}</h2>
                 ) : (
-                  <h2 className={cn('date')}>{formatDateWithDot(new Date(updatedAt))}</h2>
+                  <h2 className={cn('date')}>{formatDateToString(new Date(updatedAt))}</h2>
                 )}
               </div>
               {usage !== 'mypage' && (

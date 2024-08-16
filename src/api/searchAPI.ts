@@ -1,4 +1,5 @@
-import { getCookie } from '@/libs/manageCookie';
+import type { SearchResultType } from '@/types/searchType';
+import { baseAPI } from './interceptor/interceptor';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -15,17 +16,10 @@ export const getSearchSuggestion = async () => {
 };
 
 export const getSearchResult = async (keyword: string, page: number, size = 16) => {
-  const token = await getCookie('accessToken');
-
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/search?search=${keyword}&size=${size}&page=${page}`, {
+    const { data } = await baseAPI.get<SearchResultType>(`/api/v1/search?search=${keyword}&size=${size}&page=${page}`, {
       cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ? `Bearer ${token}` : '',
-      },
     });
-    const { data } = await res.json();
     return data;
   } catch (error) {
     throw error;

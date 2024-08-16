@@ -1,49 +1,34 @@
-import { getCookie } from '@/libs/manageCookie';
 import type {
   GetCategoryListParams,
   KeydeukPickResponse,
-  ProductListResponse,
+  ProductDataResponse,
   ProductParams,
   TabType,
 } from '@/types/productItemType';
 import type { ProductType, RecentProductType } from '@/types/productType';
+import { baseAPI } from './interceptor/interceptor';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
 export const getProductDetail = async (productId: number): Promise<ProductType> => {
-  const token = await getCookie('accessToken');
-
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/product/${productId}`, {
+    const { data } = await baseAPI.get<ProductType>(`/api/v1/product/${productId}`, {
       cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ? `Bearer ${token}` : '',
-      },
     });
 
-    const result = await res.json();
-
-    return result.data;
+    return data;
   } catch (error) {
     throw error;
   }
 };
 
-export async function getAllProductList({ sort, page, size }: ProductParams): Promise<ProductListResponse> {
-  const token = await getCookie('accessToken');
-
+export async function getAllProductList({ sort, page, size }: ProductParams) {
   try {
-    const response = await fetch(`${BASE_URL}/api/v1/product/all?&sort=${sort}&page=${page}&size=${size}`, {
+    const data = await baseAPI.get<ProductDataResponse>(`/api/v1/product/all?&sort=${sort}&page=${page}&size=${size}`, {
       cache: 'no-cache',
-      headers: {
-        'Cache-Control': 'no-cache',
-        Authorization: token ? `Bearer ${token}` : '',
-      },
     });
-    const rawData: ProductListResponse = await response.json();
 
-    return rawData;
+    return data;
   } catch (error) {
     throw error;
   }
@@ -58,9 +43,7 @@ export async function getCategoryProductList({
   switchTypes,
   minPrice,
   maxPrice,
-}: GetCategoryListParams): Promise<ProductListResponse> {
-  const token = await getCookie('accessToken');
-
+}: GetCategoryListParams) {
   try {
     const queryParams: Record<string, string> = {
       keyword,
@@ -76,21 +59,10 @@ export async function getCategoryProductList({
 
     const queryString = new URLSearchParams(queryParams).toString();
 
-    const response = await fetch(`${BASE_URL}/api/v1/product/category/${keyword}?${queryString}`, {
+    const data = await baseAPI.get<ProductDataResponse>(`/api/v1/product/category/${keyword}?${queryString}`, {
       cache: 'no-cache',
-      headers: {
-        'Cache-Control': 'no-cache',
-        Authorization: token ? `Bearer ${token}` : '',
-      },
     });
-
-    if (!response.ok) {
-      const errorDetails = await response.text();
-      throw new Error(`${keyword} 카테고리 : ${response.status} ${response.statusText} - ${errorDetails}`);
-    }
-
-    const rawData: ProductListResponse = await response.json();
-    return rawData;
+    return data;
   } catch (error) {
     throw error;
   }
@@ -118,37 +90,21 @@ export async function getKeydeukBest() {
   }
 }
 
-export const getRecentProducts = async (): Promise<RecentProductType[]> => {
-  const token = await getCookie('accessToken');
-
+export const getRecentProducts = async () => {
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/user/recent-products`, {
+    const { data } = await baseAPI.get<RecentProductType[]>('/api/v1/user/recent-products', {
       cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ? `Bearer ${token}` : '',
-      },
     });
 
-    const result = await res.json();
-
-    return result.data;
+    return data;
   } catch (error) {
     throw error;
   }
 };
 
 export const postRecentProducts = async (productId: number) => {
-  const token = await getCookie('accessToken');
-
   try {
-    await fetch(`${BASE_URL}/api/v1/user/recent-products/${productId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await baseAPI.post(`/api/v1/user/recent-products/${productId}`);
   } catch (error) {
     throw error;
   }

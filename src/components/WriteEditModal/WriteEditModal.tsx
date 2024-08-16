@@ -85,14 +85,10 @@ export default function WriteEditModal(props: WriteEditModalProps) {
 
   const { mutate: postCreatePostMutation } = useMutation({
     mutationFn: postCreateCustomReview,
-    onSuccess: (res) => {
-      if (res.status === 'SUCCESS') {
-        onSuccessReview();
-        queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
-        toast.success('리뷰가 달렸습니다.');
-      } else {
-        toast.error('데이터를 불러오는 중 오류가 발생하였습니다.');
-      }
+    onSuccess: () => {
+      onSuccessReview();
+      queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+      toast.success('리뷰가 달렸습니다.');
     },
     onError: () => {
       toast.error('리뷰 등록 중 오류가 발생했습니다.');
@@ -107,14 +103,10 @@ export default function WriteEditModal(props: WriteEditModalProps) {
 
   const { mutate: putEditPostMutation } = useMutation({
     mutationFn: ({ id, formData }: { id: number; formData: FormData }) => putEditCustomReview({ id, formData }),
-    onSuccess: (res) => {
-      if (res.status === 'SUCCESS') {
-        onSuccessReview();
-        queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
-        toast.success('리뷰 수정이 완료되었습니다.');
-      } else {
-        toast.error('데이터를 불러오는 중 오류가 발생하였습니다.');
-      }
+    onSuccess: () => {
+      onSuccessReview();
+      queryClient.invalidateQueries({ queryKey: ['postCardsList'] });
+      toast.success('리뷰 수정이 완료되었습니다.');
     },
     onError: () => {
       toast.error('리뷰 수정 중 오류가 발생했습니다.');

@@ -1,51 +1,24 @@
-import { getCookie } from '@/libs/manageCookie';
+import type { Users } from '@/types/userType';
+import { baseAPI } from './interceptor/interceptor';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
 export const getUserData = async () => {
-  const token = await getCookie('accessToken');
-
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/users/me`, {
-      method: 'GET',
+    const data = await baseAPI.get<Users>('/api/v1/users/me', {
       cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
     });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      return data;
-    }
-
-    throw new Error(data.message || '인증에 실패 하였습니다.');
+    return data;
   } catch (error) {
     throw error;
   }
 };
 
 export const putEditProfile = async (formData: FormData) => {
-  const token = await getCookie('accessToken');
-
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/users/me`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    await baseAPI.put('/api/v1/users/me', {
       body: formData,
     });
-
-    const result = await res.json();
-
-    if (res.ok) {
-      return result;
-    }
-
-    throw new Error(result.message);
   } catch (error) {
     throw error;
   }
