@@ -24,11 +24,6 @@ export interface CommunityPostListResponse {
   pageable: {
     pageNumber: number;
     pageSize: number;
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
     offset: number;
     paged: boolean;
     unpaged: boolean;
@@ -38,11 +33,6 @@ export interface CommunityPostListResponse {
   last: boolean;
   size: number;
   number: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
   numberOfElements: number;
   first: boolean;
   empty: boolean;
