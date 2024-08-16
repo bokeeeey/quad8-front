@@ -1,13 +1,13 @@
 'use client';
 
-import classNames from 'classnames/bind';
-import { HexColorPicker } from 'react-colorful';
-import { useContext, useState } from 'react';
 import { Color } from '@react-three/fiber';
+import classNames from 'classnames/bind';
+import { useContext, useState } from 'react';
+import { HexColorPicker } from 'react-colorful';
 
-import { FocusKeyContext, KeyboardDataContext } from '@/context';
-import type { CustomKeyboardKeyTypes, CustomKeyboardPointKeyType } from '@/types/CustomKeyboardTypes';
 import { Button } from '@/components';
+import { FocusKeyContext, KeyboardDataContext } from '@/context';
+import type { CustomKeyboardKeyTypes, CustomKeyboardPointKeyType } from '@/types/customKeyboardType';
 import ColorTag from './parts/ColorTag';
 
 import styles from './KeyCapOption.module.scss';

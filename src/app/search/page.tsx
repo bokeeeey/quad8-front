@@ -1,12 +1,12 @@
-import { redirect } from 'next/navigation';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import { redirect } from 'next/navigation';
 
 import { getSearchResult } from '@/api/searchAPI';
-import type { SearchResultType } from '@/types/searchType';
-import { ROUTER } from '@/constants/route';
 import { Pagination, SearchBox } from '@/components';
-import { NoResult, CardList } from './_components';
+import { ROUTER } from '@/constants/route';
+import type { SearchResultType } from '@/types/searchType';
+import { CardList, NoResult } from './_components';
 
 import styles from './page.module.scss';
 

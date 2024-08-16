@@ -1,4 +1,4 @@
-import { OrderItem } from '@/types/OrderTypes';
+import { OrderItem } from '@/types/orderType';
 
 interface RenderPaymentProductNameProps {
   orderItemResponses: OrderItem[] | null;

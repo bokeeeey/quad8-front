@@ -2,7 +2,6 @@
 
 export { default as AlertIcon } from './svgs/alertIcon.svg';
 export { default as CameraIcon } from './svgs/camera.svg';
-export { default as SpinLoading } from './svgs/spinLoading.svg';
 export { default as CaretLeftIcon } from './svgs/caretLeft.svg';
 export { default as CaretRightIcon } from './svgs/caretRight.svg';
 export { default as CartIcon } from './svgs/cart.svg';
@@ -13,6 +12,7 @@ export { default as CommentAlarmIcon } from './svgs/commentAlarm.svg';
 export { default as CouponAlarmIcon } from './svgs/couponAlarm.svg';
 export { default as CreditCardIcon } from './svgs/creditCard.svg';
 export { default as CubeIcon } from './svgs/cube.svg';
+export { default as SpinLoading } from './svgs/spinLoading.svg';
 
 export { default as CrossIcon } from './svgs/cross.svg';
 export { default as CrossCircleIcon } from './svgs/crossCircle.svg';
@@ -50,6 +50,7 @@ export { default as WarnCircleIcon } from './svgs/warnCircle.svg';
 export { default as KeydeukBlueIcon } from './svgs/keydeukBlueIcon.svg';
 
 export { default as ErrorIcon } from './svgs/404.svg';
+export { default as FailIcon } from './svgs/failIcon.svg';
 
 export { default as banner1Img } from './images/banner1.png';
 export { default as banner2Img } from './images/banner2.png';

@@ -3,7 +3,7 @@
 import { InputField } from '@/components';
 import { FILTER_OPTIONS } from '@/constants/product';
 import { DeleteIcon, ResetIcon } from '@/public/index';
-import type { CategoryKey } from '@/types/Category';
+import type { CategoryKey } from '@/types/categoryType';
 import classNames from 'classnames/bind';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import queryString from 'query-string';

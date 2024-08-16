@@ -1,12 +1,12 @@
-import { RefObject } from 'react';
 import { Color } from '@react-three/fiber';
 import classNames from 'classnames/bind';
+import { RefObject } from 'react';
 
 import type {
-  CustomKeyboardTypeTypes,
-  CustomKeyboardTextureTypes,
   CustomKeyboardSwitchTypes,
-} from '@/types/CustomKeyboardTypes';
+  CustomKeyboardTextureTypes,
+  CustomKeyboardTypeTypes,
+} from '@/types/customKeyboardType';
 import OptionWrapper from './OptionWrapper';
 
 import styles from './CustomOption.module.scss';

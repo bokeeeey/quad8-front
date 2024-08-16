@@ -1,5 +1,5 @@
 import ProductItem from '@/components/Products/ProductItem';
-import type { Product } from '@/types/ProductItem';
+import type { Product } from '@/types/productItemType';
 import classNames from 'classnames/bind';
 import styles from './ProductList.module.scss';
 

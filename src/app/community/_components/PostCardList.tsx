@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { getAllCommunityPost } from '@/api/communityAPI';
-import type { CommunityParamsType, CommunityAllPostCardDataType } from '@/types/CommunityTypes';
+import type { CommunityParamsType, CommunityAllPostCardDataType } from '@/types/communityType';
 import PostCard from './PostCard';
 
 import styles from './PostCardList.module.scss';

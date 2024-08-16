@@ -1,5 +1,5 @@
 import { IMAGE_BLUR } from '@/constants/blurImage';
-import type { ReviewImage } from '@/types/ProductReviewTypes';
+import type { ReviewImage } from '@/types/productReviewType';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import styles from './ReviewItem.module.scss';

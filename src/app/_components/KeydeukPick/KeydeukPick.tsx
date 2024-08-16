@@ -4,7 +4,7 @@ import { getKeydeukPick } from '@/api/productAPI';
 import ProductItem from '@/components/Products/ProductItem';
 import { TAB_KEYWORD } from '@/constants/product';
 import { QUERY_KEYS } from '@/constants/queryKey';
-import type { TabType } from '@/types/ProductItem';
+import type { TabType } from '@/types/productItemType';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';

@@ -1,8 +1,7 @@
+import { IMAGE_BLUR } from '@/constants/blurImage';
+import type { OrderItem } from '@/types/orderType';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-
-import { IMAGE_BLUR } from '@/constants/blurImage';
-import type { OrderItem } from '@/types/OrderTypes';
 import CustomOption from '../CustomOption/CustomOption';
 
 import styles from './ItemOverview.module.scss';

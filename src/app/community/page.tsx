@@ -1,6 +1,6 @@
 import { getAllCommunityPost } from '@/api/communityAPI';
 import Pagination from '@/components/Pagination/Pagination';
-import type { CommunityParamsType, CommunityPostListResponse } from '@/types/CommunityTypes';
+import type { CommunityParamsType, CommunityPostListResponse } from '@/types/communityType';
 import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import CommunityEmptyCase from './_components/CommunityEmptyCase';
 import PostCardList from './_components/PostCardList';

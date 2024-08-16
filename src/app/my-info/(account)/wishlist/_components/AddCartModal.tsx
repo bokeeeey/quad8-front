@@ -8,7 +8,7 @@ import { postCart } from '@/api/cartAPI';
 import { getProductDetail } from '@/api/productAPI';
 import { Button, CountInput, Dropdown } from '@/components';
 import { IMAGE_BLUR } from '@/constants/blurImage';
-import type { ProductType } from '@/types/ProductTypes';
+import type { ProductType } from '@/types/productType';
 
 import styles from './AddCartModal.module.scss';
 

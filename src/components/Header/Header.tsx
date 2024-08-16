@@ -1,17 +1,19 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
 
-import type { CartAPIDataType } from '@/types/CartTypes';
-import type { Users } from '@/types/userType';
+import { getCartData } from '@/api/cartAPI';
+import { getUserData } from '@/api/usersAPI';
+import { CustomImage, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { LogoIcon, UserIcon } from '@/public/index';
-import { CustomImage, SignInModal } from '@/components';
-import { CartButton, LoginButton, LogoutButton, SearchButton, ShopButton, NotificationButton } from './HeaderParts';
+import type { CartAPIDataType } from '@/types/cartType';
+import type { Users } from '@/types/userType';
+import { CartButton, LoginButton, LogoutButton, NotificationButton, SearchButton, ShopButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
 
@@ -27,10 +29,12 @@ export default function Header() {
 
   const { data: userData } = useQuery<{ data: Users }>({
     queryKey: ['userData'],
+    queryFn: getUserData,
   });
 
   const { data: cartData } = useQuery<CartAPIDataType>({
     queryKey: ['cartData'],
+    queryFn: getCartData,
   });
 
   const cartCount = cartData?.totalCount ?? 0;
