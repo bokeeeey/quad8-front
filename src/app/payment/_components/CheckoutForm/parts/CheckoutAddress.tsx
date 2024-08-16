@@ -1,14 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { BaseSyntheticEvent, useState } from 'react';
 import DaumPostcodeEmbed, { Address } from 'react-daum-postcode';
 import { Control, Controller, FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { postAddress } from '@/api/shippingAPI';
-import { Button, Dropdown, Modal } from '@/components';
-import AddAddressModal from '@/components/AddAddresseModal/AddAddressModal';
-import { formatPhoneNumber } from '@/libs';
+import { AddAddressModal, Button, Dropdown, Modal } from '@/components';
+import { useCreateAddress } from '@/hooks/useCreateAddress';
+import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
 import type { ShippingAddressResponse } from '@/types/orderType';
 import type { UserAddress } from '@/types/shippingType';
 import CheckoutAddressModal from './CheckoutAddressModal';
@@ -24,11 +22,10 @@ interface CheckoutAddressProps {
   onClick?: (selectItem: UserAddress) => void;
   control?: Control<FieldValues>;
   isForm?: boolean;
+  deliveryMessage?: string;
 }
 
-export default function CheckoutAddress({ item, onClick, control, isForm = false }: CheckoutAddressProps) {
-  const queryClient = useQueryClient();
-
+export default function CheckoutAddress({ item, onClick, control, isForm, deliveryMessage }: CheckoutAddressProps) {
   const [isAddressChangeModalOpen, setIsAddressChangeModalOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [isPostcodeEmbedOpen, setIsPostcodeEmbedOpen] = useState(false);
@@ -36,9 +33,7 @@ export default function CheckoutAddress({ item, onClick, control, isForm = false
 
   const { address, detailAddress, name, phone, zoneCode } = item;
 
-  const { mutate: postAddressMutate } = useMutation({
-    mutationFn: postAddress,
-  });
+  const { mutate: postAddressMutate } = useCreateAddress();
 
   const handleAddressButtonClick = () => {
     setIsAddressChangeModalOpen((prevIsOpen) => !prevIsOpen);
@@ -76,18 +71,12 @@ export default function CheckoutAddress({ item, onClick, control, isForm = false
     e?.stopPropagation();
 
     postAddressMutate(payload, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('배송지를 추가하였습니다.');
-          queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-          handleSuccessClose();
-          return;
-        }
-
-        toast('배송지 추가에 실패하였습니다.');
+      onSuccess: () => {
+        toast('배송지를 추가하였습니다.');
+        handleSuccessClose();
       },
-      onError: () => {
-        toast('배송지 추가에 실패하였습니다.');
+      onError: (error) => {
+        toast(error.message);
       },
     });
   };
@@ -109,6 +98,7 @@ export default function CheckoutAddress({ item, onClick, control, isForm = false
               <p>받는분</p>
               <p>연락처</p>
               <p>배송 주소</p>
+              {deliveryMessage && <p>배송 메세지</p>}
             </div>
             <div className={cn('address-value')}>
               <p>{name}</p>
@@ -116,6 +106,7 @@ export default function CheckoutAddress({ item, onClick, control, isForm = false
               <p>
                 ({zoneCode}){address} {detailAddress}
               </p>
+              {deliveryMessage && <p>{deliveryMessage}</p>}
             </div>
           </div>
           {isForm && (

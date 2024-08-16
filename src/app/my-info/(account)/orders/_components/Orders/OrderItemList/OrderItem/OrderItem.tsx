@@ -13,9 +13,10 @@ interface OrderItemProps {
   orderItem: OrderItemT;
   confirmationDate: string;
   orderStatus: OrderStatus;
+  handleEditReviewClick: () => void;
 }
 
-export default function OrderItem({ orderItem, confirmationDate, orderStatus }: OrderItemProps) {
+export default function OrderItem({ orderItem, confirmationDate, orderStatus, handleEditReviewClick }: OrderItemProps) {
   const status = getOrderStatusDescription(orderStatus);
 
   return (
@@ -28,7 +29,7 @@ export default function OrderItem({ orderItem, confirmationDate, orderStatus }: 
         <p className={cn('status')}>{status}</p>
       </div>
       <div className={cn('button-box')}>
-        <OrderItemButton orderStatus={orderStatus} />
+        <OrderItemButton orderStatus={orderStatus} onEditReviewClick={handleEditReviewClick} />
       </div>
     </div>
   );

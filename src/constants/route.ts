@@ -19,7 +19,7 @@ export const ROUTER = {
     COUPONS: '/my-info/coupons',
 
     ORDERS: '/my-info/orders', // 주문 / 배송조회
-    ORDER_INFO: '/my-info/order-info',
+    ORDER_INFO: '/order-info',
 
     CHECKOUT: '/payment', // 주문 / 결제
     CHECKOUT_SUCCESS: '/payment/success',

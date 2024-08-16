@@ -4,6 +4,7 @@ import { ROUTER } from '@/constants/route';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 import styles from './SNB.module.scss';
 
 const cn = classNames.bind(styles);

@@ -1,18 +1,18 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { getPayment, putPayment } from '@/api/orderAPI';
 import { Button, Dropdown, ItemOverview } from '@/components';
 import { Input, Label } from '@/components/parts';
-import { formatNumber } from '@/libs';
-import type { OrderDetailData, OrderItem, ShippingAddressResponse } from '@/types/orderType';
-import type { UserAddress } from '@/types/shippingType';
+import { usePaymentQuery } from '@/hooks/usePaymentQuery';
+import { useSelectedAddress } from '@/hooks/useSelectedAddress';
+import { useUpdatePaymentInfo } from '@/hooks/useUpdatePaymentInfo';
+import { formatNumber } from '@/libs/formatNumber';
+import type { OrderItem } from '@/types/orderType';
+import { UserAddress } from '@/types/shippingType';
 import CheckoutAddress from './parts/CheckoutAddress';
 import PaymentContainer from './parts/PaymentContainer';
 
@@ -21,26 +21,18 @@ import styles from './CheckoutForm.module.scss';
 const cn = classNames.bind(styles);
 
 export default function CheckoutForm() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get('orderId') || '';
-
-  const { data: paymentResponse } = useQuery<{ data: OrderDetailData }>({
-    queryKey: ['paymentResponse'],
-    queryFn: () => getPayment(orderId),
-    enabled: !!orderId,
-  });
-
-  const [selectedAddress, setSelectedAddress] = useState<ShippingAddressResponse | null>(
-    paymentResponse?.data.shippingAddressResponse ?? null,
-  );
   const [isPutPaymentSucceed, setIsPutPaymentSucceed] = useState(false);
+
+  const { data: paymentResponse } = usePaymentQuery();
+  const { mutate: putPaymentMutation } = useUpdatePaymentInfo();
+  const { selectedAddress, onSelectAddress } = useSelectedAddress({ paymentResponse });
+
+  const shippingAddressId = paymentResponse?.data.shippingAddressResponse.id || 0;
 
   const { handleSubmit, control, setValue } = useForm<FieldValues>({
     mode: 'onTouched',
     defaultValues: {
-      shippingAddressId: selectedAddress?.id || -1,
+      shippingAddressId,
       deliveryMessage: '',
     },
   });
@@ -49,21 +41,8 @@ export default function CheckoutForm() {
 
   const formattedTotalPrice = totalPrice > 0 ? formatNumber(totalPrice) : 0;
 
-  useEffect(() => {
-    if (paymentResponse) {
-      setSelectedAddress(paymentResponse.data.shippingAddressResponse);
-    }
-  }, [paymentResponse]);
-
-  const { mutate: putPaymentMutation } = useMutation({
-    mutationFn: (payload: FieldValues) => putPayment(orderId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['paymentDataResponse'] });
-    },
-  });
-
   const handleAddressClick = (selectItem: UserAddress) => {
-    setSelectedAddress(selectItem);
+    onSelectAddress(selectItem);
     setValue('shippingAddressId', selectItem.id);
   };
 
@@ -78,10 +57,6 @@ export default function CheckoutForm() {
     });
   };
 
-  if (!paymentResponse) {
-    router.back();
-  }
-
   return (
     <form className={cn('checkout-form')} onSubmit={handleSubmit(onSubmit)}>
       <article className={cn('form')}>
@@ -89,7 +64,7 @@ export default function CheckoutForm() {
           <h1>주문 상품</h1>
           {orderItemResponses &&
             orderItemResponses.map((item: OrderItem) => (
-              <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
+              <ItemOverview key={item.productId} imageWidth={104} imageHeight={104} item={item} />
             ))}
         </div>
 

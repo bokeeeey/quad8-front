@@ -1,12 +1,11 @@
 import classNames from 'classnames/bind';
 
-import Pagination from '@/components/Pagination/Pagination';
 import { getMyPosts } from '@/api/communityAPI';
-import { MyInfoEmptyCase } from '../../_components';
+import { MyInfoEmptyCase, Pagination } from '@/components';
 import MyPostCardList from './_components/MyPostCardList';
+import MyPostsEmptyCase from './_components/MyPostsEmptyCase';
 
 import styles from './page.module.scss';
-import MyPostsEmptyCase from './_components/MyPostsEmptyCase';
 
 const cn = classNames.bind(styles);
 
