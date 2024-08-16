@@ -58,7 +58,7 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   );
 
   if (savedUserInfo?.id !== userId) {
-    return null;
+    return <div ref={ref} className={CONTAINER_CLASSNAME} />;
   }
 
   if (isFetching || !userInfo) {
