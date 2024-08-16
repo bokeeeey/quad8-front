@@ -1,7 +1,7 @@
-import classNames from 'classnames/bind';
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { getCoupons } from '@/api/couponAPI';
+import { getCoupon } from '@/api/couponAPI';
 import { MyInfoEmptyCase } from '@/app/my-info/_components';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 import CouponList from './_components/CouponList';
 
 import styles from './page.module.scss';
@@ -13,7 +13,7 @@ export default async function CouponsPage() {
 
   const coupons = await queryClient.fetchQuery({
     queryKey: ['coupons'],
-    queryFn: getCoupons,
+    queryFn: getCoupon,
   });
 
   return (
