@@ -1,0 +1,93 @@
+.container {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  border: 0.1rem solid #eee;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 0.7rem 0 rgb(0 0 0 / 10%);
+}
+
+.expired-overlay {
+  background-color: rgb(128 128 128 / 10%);
+  pointer-events: none;
+  filter: grayscale(50%);
+}
+
+.expired-text {
+  @include pretendard-16-700;
+
+  color: red;
+}
+
+.coupon-info {
+  @include pretendard-12-400;
+
+  line-height: 130%;
+}
+
+.discount-rate {
+  @include pretendard-30-700;
+
+  margin-bottom: 2rem;
+  color: $primary;
+}
+
+.expired-price {
+  color: $gray-50;
+}
+
+.name {
+  @include pretendard-16-600;
+
+  margin-bottom: 0.5rem;
+}
+
+.explanation-list {
+  width: 80%;
+  margin-left: 2rem;
+  list-style-type: circle;
+  line-height: 60%;
+
+  & > * {
+    @include pretendard-12-400;
+  }
+}
+
+.icon {
+  position: absolute;
+  right: 2rem;
+  width: 2rem;
+  height: 2rem;
+  transform: rotate(90deg);
+  cursor: pointer;
+}
+
+.icon.chevron {
+  top: 2.3rem;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.slit-in-vertical {
+  animation: slit-in-vertical 0.3s ease-out both;
+}
+
+@keyframes slit-in-vertical {
+  0% {
+    transform: translateZ(-80rem) rotateY(90deg);
+    opacity: 1;
+  }
+
+  54% {
+    transform: translateZ(-16rem) rotateY(87deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateZ(0) rotateY(0);
+    opacity: 1;
+  }
+}

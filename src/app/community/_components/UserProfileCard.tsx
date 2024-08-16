@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 import { getOthersInfo } from '@/api/usersAPI';
 import { SpinLoading, keydeukProfileImg } from '@/public/index';
+import type { Users } from '@/types/userType';
 
 import styles from './UserProfileCard.module.scss';
 
@@ -21,16 +22,13 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   { isOpenProfileCard, userId, positionTop },
   ref,
 ) {
-  const {
-    data: userInfo,
-    refetch,
-    isFetching,
-  } = useQuery({
+  const queryClient = useQueryClient();
+  const savedUserInfo = queryClient.getQueryData<Users>(['clickedUserInfo']);
+
+  const { data: userInfo, isFetching } = useQuery({
     queryKey: ['clickedUserInfo'],
     queryFn: () => getOthersInfo(userId),
-    enabled: false,
   });
-  const queryClient = useQueryClient();
 
   const [isAboveProfile, setIsAboveProfile] = useState(false);
 
@@ -43,45 +41,56 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   }, [isOpenProfileCard, positionTop, isAboveProfile]);
 
   useEffect(() => {
-    queryClient.removeQueries({ queryKey: ['clickedUserInfo'] });
-    refetch();
-  }, [userId, refetch, isOpenProfileCard, queryClient]);
+    if (isOpenProfileCard && !savedUserInfo && userId) {
+      queryClient.invalidateQueries({ queryKey: ['clickedUserInfo'] });
+    }
+
+    if (isOpenProfileCard && savedUserInfo && savedUserInfo.id !== userId) {
+      queryClient.invalidateQueries({ queryKey: ['clickedUserInfo'] });
+    }
+  }, [userId, isOpenProfileCard, queryClient, savedUserInfo]);
+
+  const CONTAINER_CLASSNAME = cn(
+    'user-detail-profile-card',
+    { 'display-none': !isOpenProfileCard },
+    { 'loading-div': isFetching || !userInfo },
+    { 'above-profile': isAboveProfile },
+  );
+
+  if (savedUserInfo?.id !== userId) {
+    return <div ref={ref} className={CONTAINER_CLASSNAME} />;
+  }
+
+  if (isFetching || !userInfo) {
+    return (
+      <div ref={ref} className={CONTAINER_CLASSNAME}>
+        <SpinLoading />
+      </div>
+    );
+  }
+
+  const USER_INFO = [
+    { label: 'email', value: userInfo?.email },
+    { label: 'birthday', value: userInfo?.birth },
+    { label: 'phone', value: userInfo?.phone },
+    { label: 'gender', value: userInfo?.gender },
+  ];
 
   return positionTop && positionTop === 0 ? null : (
-    <div
-      ref={ref}
-      className={cn(
-        'user-detail-profile-card',
-        { 'display-none': !isOpenProfileCard },
-        { 'loading-div': isFetching },
-        { 'above-profile': isAboveProfile },
-      )}
-      onClick={(e) => e.stopPropagation()}
-    >
-      {isFetching ? (
-        <SpinLoading />
-      ) : (
-        <>
-          <div className={cn('profile-image')}>
-            <Image src={userInfo?.imgUrl || keydeukProfileImg} alt='프로필 이미지' fill sizes='12rem' />
-          </div>
-          <div className={cn('info-wrapper')}>
-            <p className={cn('nickname')}>{userInfo?.nickname || '사용자를 찾을 수 없습니다.'}</p>
-            <p>
-              <strong>email:</strong> {userInfo?.email}
-            </p>
-            <p>
-              <strong>birthday:</strong> {userInfo?.birth}
-            </p>
-            <p>
-              <strong>phone:</strong> {userInfo?.phone}
-            </p>
-            <p>
-              <strong>gender:</strong> {userInfo?.gender}
-            </p>
-          </div>
-        </>
-      )}
+    <div ref={ref} className={CONTAINER_CLASSNAME} onClick={(e) => e.stopPropagation()}>
+      <div className={cn('profile-image')}>
+        <Image src={userInfo?.imgUrl || keydeukProfileImg} alt='프로필 이미지' fill sizes='12rem' />
+      </div>
+      <div className={cn('info-wrapper')}>
+        <p className={cn('nickname')}>{userInfo?.nickname || '사용자를 찾을 수 없습니다.'}</p>
+        <ul>
+          {USER_INFO.map((item) => (
+            <li key={item.label} className={cn('info-list')}>
+              <strong>{item.label}:</strong> {item.value}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 });

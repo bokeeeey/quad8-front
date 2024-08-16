@@ -6,6 +6,7 @@ import Image, { StaticImageData } from 'next/image';
 
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { keydeukProfileImg } from '@/public/index';
+import type { Position } from '@/types/zoomViewType';
 import ZoomView from './ZoomView';
 
 import styles from './ImageZoom.module.scss';
@@ -18,19 +19,16 @@ interface ImageZoomProps {
   width: number;
   height: number;
 }
-
-type Position = Pick<DOMRect, 'left' | 'top'>;
-
 interface ScannerProps {
   position: Position;
 }
 
-const scannerSize = 250;
+const SCANNER_SIZE = 250;
 
 function Scanner({ position }: ScannerProps) {
   return (
     <div
-      style={{ top: position.top, left: position.left, width: scannerSize, height: scannerSize }}
+      style={{ top: position.top, left: position.left, width: SCANNER_SIZE, height: SCANNER_SIZE }}
       className={cn('scanner')}
     />
   );
@@ -59,18 +57,18 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
 
     if (!containerRect) return;
 
-    const scannerPosLeft = e.clientX - scannerSize / 2 - containerRect.x;
-    const scannerPosTop = e.clientY - scannerSize / 2 - containerRect.y;
+    const scannerPosLeft = e.clientX - SCANNER_SIZE / 2 - containerRect.x;
+    const scannerPosTop = e.clientY - SCANNER_SIZE / 2 - containerRect.y;
 
-    const allowedPosLeft = scannerPosLeft >= 0 && scannerPosLeft <= width - scannerSize;
-    const allowedPosTop = scannerPosTop >= 0 && scannerPosTop <= height - scannerSize;
+    const allowedPosLeft = scannerPosLeft >= 0 && scannerPosLeft <= width - SCANNER_SIZE;
+    const allowedPosTop = scannerPosTop >= 0 && scannerPosTop <= height - SCANNER_SIZE;
 
     if (allowedPosLeft) {
       updatedScannerPosition.left = scannerPosLeft;
     } else if (scannerPosLeft < 0) {
       updatedScannerPosition.left = 0;
     } else {
-      updatedScannerPosition.left = containerRect.width - scannerSize;
+      updatedScannerPosition.left = containerRect.width - SCANNER_SIZE;
     }
 
     if (allowedPosTop) {
@@ -78,7 +76,7 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
     } else if (scannerPosTop < 0) {
       updatedScannerPosition.top = 0;
     } else {
-      updatedScannerPosition.top = containerRect.height - scannerSize;
+      updatedScannerPosition.top = containerRect.height - SCANNER_SIZE;
     }
 
     setScannerPosition(updatedScannerPosition);
@@ -86,12 +84,12 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
     if (imageDimensions.width > imageDimensions.height) {
       setViewPosition({
         left: updatedScannerPosition.left * -2.0,
-        top: (updatedScannerPosition.top + scannerSize / 2) * -(2 / imageAspectRatio),
+        top: (updatedScannerPosition.top + SCANNER_SIZE / 2) * -(2 / imageAspectRatio),
       });
     } else {
       setViewPosition({
         left: updatedScannerPosition.left * -(2 * imageAspectRatio),
-        top: (updatedScannerPosition.top + scannerSize / 2) * -2,
+        top: (updatedScannerPosition.top + SCANNER_SIZE / 2) * -2,
       });
     }
   };
