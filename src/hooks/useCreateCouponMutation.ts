@@ -1,11 +1,11 @@
 import { postCreateCoupon } from '@/api/couponAPI';
-import { QueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 
-const queryClient = new QueryClient();
-
 export const useCreateCouponMutation = (setIsModalOpen?: (value: SetStateAction<boolean>) => void) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: postCreateCoupon,
     onSuccess: () => {
