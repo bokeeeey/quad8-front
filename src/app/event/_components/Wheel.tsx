@@ -8,7 +8,7 @@ import SignInModal from '@/components/SignInModal/SignInModal';
 import { ANIMATION_DURATION, CONFETTI_NUMBER, EMOJI_SIZE, MIN_PRICE_MULTIPLIER, REWARDS } from '@/constants/event';
 import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
 import { calculateRotation, getRandomIndex, getTodayDateString, hasRouletteCoupon } from '@/libs/wheelUtils';
-import { CouponDataType, CouponResponse } from '@/types/couponType';
+import type { CouponDataType, CouponResponse } from '@/types/couponType';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import JSConfetti from 'js-confetti';

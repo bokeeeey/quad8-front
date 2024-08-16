@@ -5,7 +5,7 @@ import SignInModal from '@/components/SignInModal/SignInModal';
 import { COUPON_LIST } from '@/constants/event';
 import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
 import { couponDownImg } from '@/public/index';
-import { CouponDataType } from '@/types/couponType';
+import type { CouponDataType } from '@/types/couponType';
 import { useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
