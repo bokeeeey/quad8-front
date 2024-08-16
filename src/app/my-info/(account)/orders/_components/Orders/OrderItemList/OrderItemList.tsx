@@ -2,9 +2,9 @@ import classNames from 'classnames/bind';
 import Link from 'next/link';
 
 import { ROUTER } from '@/constants/route';
-import { formatDateToString } from '@/libs/formatDateToString';
+import { formatDateWithDot } from '@/libs/formatDateToString';
 import { ChevronIcon } from '@/public/index';
-import type { Order } from '@/types/OrderTypes';
+import type { Order } from '@/types/orderType';
 import OrderItem from './OrderItem/OrderItem';
 
 import styles from './OrderItemList.module.scss';
@@ -16,10 +16,10 @@ interface OrderItemListProps {
 }
 
 export default function OrderItemList({ order }: OrderItemListProps) {
-  const { confirmationDate, purchaseDate, orderStatus, orderItems } = order;
+  const { confirmationDate, purchaseDate, orderStatus, orderItems, orderId } = order;
 
-  const formmattedPurchaseDate = formatDateToString(new Date(purchaseDate));
-  const formmattedConfirmationDate = formatDateToString(new Date(confirmationDate));
+  const formmattedPurchaseDate = formatDateWithDot(new Date(purchaseDate));
+  const formmattedConfirmationDate = formatDateWithDot(new Date(confirmationDate));
 
   const isPaymented = orderStatus !== 'READY';
 
@@ -28,7 +28,7 @@ export default function OrderItemList({ order }: OrderItemListProps) {
       <div className={cn('order-header')}>
         <h2>{formmattedPurchaseDate}</h2>
         {isPaymented && (
-          <Link className={cn('header-button')} href={ROUTER.MY_PAGE.ORDER_INFO}>
+          <Link className={cn('header-button')} href={`${ROUTER.MY_PAGE.ORDER_INFO}?orderId=${orderId}`}>
             주문 상세보기
             <ChevronIcon className={cn('header-link-icon')} />
           </Link>

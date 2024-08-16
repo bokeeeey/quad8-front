@@ -1,11 +1,12 @@
 import { getAllCommunityPost } from '@/api/communityAPI';
 import Pagination from '@/components/Pagination/Pagination';
-import type { CommunityParamsType } from '@/types/CommunityTypes';
+import type { CommunityParamsType, CommunityPostListResponse } from '@/types/communityType';
+import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import CommunityEmptyCase from './_components/CommunityEmptyCase';
 import PostCardList from './_components/PostCardList';
 
 interface CommunityPageProps {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: { [key: string]: string };
 }
 
 export default async function CommunityPage({ searchParams }: CommunityPageProps) {
@@ -15,18 +16,25 @@ export default async function CommunityPage({ searchParams }: CommunityPageProps
     size: searchParams.size || '16',
   };
 
-  const data = await getAllCommunityPost(initialParams);
+  const queryClient = new QueryClient();
 
-  if (!data) {
+  const posts = await queryClient.fetchQuery<CommunityPostListResponse | null>({
+    queryKey: ['postCardsList'],
+    queryFn: () => getAllCommunityPost(initialParams),
+  });
+
+  if (!posts) {
     return <CommunityEmptyCase />;
   }
 
-  const { content, ...rest } = data;
+  const { content, ...rest } = posts;
 
   return (
     <div>
-      <PostCardList searchParams={searchParams} initialData={content} />
-      <Pagination {...rest} searchParams={searchParams} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <PostCardList searchParams={searchParams} />
+        <Pagination {...rest} searchParams={searchParams} />
+      </HydrationBoundary>
     </div>
   );
 }

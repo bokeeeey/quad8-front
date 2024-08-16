@@ -4,7 +4,7 @@ import { deleteCommunityLikes, deleteProductLikes, postCommunityLikes, postProdu
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import { HeartIcon } from '@/public/index';
-import type { CommunityPostCardDataType } from '@/types/CommunityTypes';
+import type { CommunityPostCardDataType } from '@/types/communityType';
 import type { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';

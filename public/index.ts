@@ -39,6 +39,7 @@ export { default as ShareIcon } from '@/public/svgs/share.svg';
 
 export { default as CalendarIcon } from './svgs/calendar.svg';
 export { default as FreeIcon } from './svgs/free.svg';
+export { default as KeydeukBlueIcon } from './svgs/keydeukBlueIcon.svg';
 export { default as ResetIcon } from './svgs/reset.svg';
 export { default as SearchIcon } from './svgs/search.svg';
 export { default as SoundVibrationIcon } from './svgs/soundVibration.svg';
@@ -52,6 +53,7 @@ export { default as WarnCircleIcon } from './svgs/warnCircle.svg';
 export { default as eventTopImg } from './images/eventTop.png';
 export { default as ErrorIcon } from './svgs/404.svg';
 export { default as CloverIcon } from './svgs/clover.svg';
+export { default as FailIcon } from './svgs/failIcon.svg';
 
 export { default as backConfettiImg } from './images/backconfetti.png';
 export { default as banner1Img } from './images/banner1.png';

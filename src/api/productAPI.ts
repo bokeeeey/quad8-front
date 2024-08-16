@@ -5,9 +5,8 @@ import type {
   ProductListResponse,
   ProductParams,
   TabType,
-} from '@/types/ProductItem';
-
-import type { ProductType, RecentProductType } from '@/types/ProductTypes';
+} from '@/types/productItemType';
+import type { ProductType, RecentProductType } from '@/types/productType';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 

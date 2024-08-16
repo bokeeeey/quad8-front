@@ -3,7 +3,7 @@
 import classNames from 'classnames/bind';
 
 import { StepCompleteIcon } from '@/public/index';
-import type { CustomKeyboardStepStatusTypes } from '@/types/CustomKeyboardTypes';
+import type { CustomKeyboardStepStatusTypes } from '@/types/customKeyboardType';
 
 import styles from './StepIcon.module.scss';
 

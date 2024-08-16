@@ -1,6 +1,6 @@
 import { getCategoryProductList } from '@/api/productAPI';
 import Pagination from '@/components/Pagination/Pagination';
-import type { CategoryKey } from '@/types/Category';
+import type { CategoryKey } from '@/types/categoryType';
 import classNames from 'classnames/bind';
 import ProductList from '../_components/Product/ProductList';
 import TitleWrap from './_components/TitleWrap/TitleWrap';

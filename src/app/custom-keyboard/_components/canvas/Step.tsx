@@ -3,9 +3,9 @@
 import classNames from 'classnames/bind';
 import { useContext } from 'react';
 
-import type { CustomKeyboardStepStatusTypes, CustomKeyboardStepTypes } from '@/types/CustomKeyboardTypes';
-import { useCaptureCanvas } from '@/hooks/useCanvasCaptrue';
 import { FocusKeyContext, KeyboardDataContext, StepContext } from '@/context';
+import { useCaptureCanvas } from '@/hooks/useCanvasCaptrue';
+import type { CustomKeyboardStepStatusTypes, CustomKeyboardStepTypes } from '@/types/customKeyboardType';
 import StepIcon from './parts/StepIcon';
 
 import styles from './Step.module.scss';

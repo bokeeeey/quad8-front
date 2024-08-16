@@ -1,14 +1,14 @@
 'use client';
 
-import { RefObject } from 'react';
 import classNames from 'classnames/bind';
+import { RefObject } from 'react';
 
-import { getColorUpperCase } from '@/libs/getColorUpperCase';
-import type { CustomKeyboardPointKeyType, CustomKeyboardKeyTypes } from '@/types/CustomKeyboardTypes';
 import { POINT_KEY } from '@/constants/keyboardData';
+import { getColorUpperCase } from '@/libs/getColorUpperCase';
+import type { CustomKeyboardKeyTypes, CustomKeyboardPointKeyType } from '@/types/customKeyboardType';
 import { Color } from '@react-three/fiber';
-import TooltipColor from './TooltipColor';
 import OptionWrapper from './OptionWrapper';
+import TooltipColor from './TooltipColor';
 
 import styles from './CustomOption.module.scss';
 

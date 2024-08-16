@@ -4,7 +4,7 @@ import { getProductReviews } from '@/api/productReviewAPI';
 import ReviewItem from '@/components/ReviewItem/ReviewItem';
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { ChevronIcon } from '@/public/index';
-import { ProductReviewType, ReviewDto } from '@/types/ProductReviewTypes';
+import { ProductReviewType, ReviewDto } from '@/types/productReviewType';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';

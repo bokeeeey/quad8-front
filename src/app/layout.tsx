@@ -3,13 +3,13 @@ import classNames from 'classnames/bind';
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
+import { getAlarm } from '@/api/alarmAPI';
 import { getCartData } from '@/api/cartAPI';
 import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
 import Script from 'next/script';
-import { getAlarm } from '@/api/alarmAPI';
-import { Providers } from './providers';
 import AOSWrapper from './_components/Aos/AOSWrapper';
+import { Providers } from './providers';
 
 import '@/styles/reset.css';
 import styles from './layout.module.scss';
@@ -34,7 +34,6 @@ export default async function RootLayout({
 
   await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
   await queryClient.prefetchQuery({ queryKey: ['communityAlarm'], queryFn: getAlarm });
-
   await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
 
   return (

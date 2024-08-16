@@ -27,13 +27,13 @@ export default async function MyPostsPage({ searchParams }: MyPostsPageProps) {
     size: searchParams.size || '12',
   };
 
-  const data = await getMyPosts(initialParams);
+  const myPosts = await getMyPosts(initialParams);
 
-  if (!data) {
+  if (!myPosts) {
     return <MyPostsEmptyCase />;
   }
 
-  const { content, ...rest } = data;
+  const { content, ...rest } = myPosts;
 
   return (
     <div className={cn('container')}>

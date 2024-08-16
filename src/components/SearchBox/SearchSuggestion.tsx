@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 
-import type { SuggestionDataType } from '@/types/SearchType';
+import type { SuggestionDataType } from '@/types/searchType';
 import styles from './SearchSuggestion.module.scss';
 
 const cn = classNames.bind(styles);

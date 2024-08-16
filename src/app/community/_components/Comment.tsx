@@ -55,6 +55,7 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   const [showIcon, setShowIcon] = useState(false);
   const [isOpenProfileCard, setIsOpenProfileCard] = useState(false);
   const [commentPositionTop, setCommentPositionTop] = useState(0);
+  const [openedTimeoutId, setIsOpenedTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
 
@@ -76,13 +77,21 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
   });
 
   const handleOpenProfile = (e: MouseEvent<HTMLDivElement>) => {
-    onOpenProfileCard();
     const { top } = e.currentTarget.getBoundingClientRect();
     setCommentPositionTop(top);
-    setIsOpenProfileCard(true);
+
+    const timeoutId = setTimeout(() => {
+      onOpenProfileCard();
+      setIsOpenProfileCard(true);
+    }, 300);
+    setIsOpenedTimeoutId(timeoutId);
   };
 
   const handleCloseProfile = () => {
+    if (openedTimeoutId) {
+      clearTimeout(openedTimeoutId);
+      setIsOpenedTimeoutId(null);
+    }
     setIsOpenProfileCard(false);
   };
 
@@ -100,13 +109,21 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
     deleteCommentMutation(commentId);
   };
 
+  const handleMouseEnter = () => {
+    setShowIcon(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowIcon(!!isOpenedPopOver);
+  };
+
+  const commentHandlers = {
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
+  };
+
   return (
-    <div
-      className={cn('container')}
-      ref={ref}
-      onMouseEnter={() => setShowIcon(true)}
-      onMouseLeave={() => (isOpenedPopOver ? setShowIcon(true) : setShowIcon(false))}
-    >
+    <div className={cn('container')} ref={ref} {...commentHandlers}>
       <div onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
         <ProfileImage profileImage={profile && profile} />
         <UserProfileCard

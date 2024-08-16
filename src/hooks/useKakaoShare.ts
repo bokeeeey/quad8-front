@@ -1,7 +1,7 @@
 'use client';
 
 import { Kakao } from '@/types/kakaoType';
-import { ProductType } from '@/types/ProductTypes';
+import { ProductType } from '@/types/productType';
 import { useEffect } from 'react';
 
 declare global {

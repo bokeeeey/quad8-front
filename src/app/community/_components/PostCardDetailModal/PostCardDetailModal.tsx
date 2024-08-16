@@ -1,23 +1,24 @@
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
 import { ErrorBoundary } from 'react-error-boundary';
+import { toast } from 'react-toastify';
 
 import { deletePostCard, getCommentsInfiniteScroll, getPostDetail, postComment } from '@/api/communityAPI';
+import { IMAGE_BLUR } from '@/constants/blurImage';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
+import { formatDateWithDot } from '@/libs/formatDateToString';
+import { communityPopOverOption } from '@/libs/communityPopOverOption';
+import { keydeukImg, SpinLoading } from '@/public/index';
+import type { UserDataResponseType } from '@/types/userType';
+import type { CommunityPostCardDetailDataType, CommentType } from '@/types/communityType';
+
 import { Button, CustomOption, InputField, Modal, ModalSkeleton } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
-import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
-import { IMAGE_BLUR } from '@/constants/blurImage';
-import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
-import { formatDateToString } from '@/libs/formatDateToString';
-import { keydeukImg, SpinLoading } from '@/public/index';
-import type { CommunityPostCardDetailDataType, CommentType } from '@/types/CommunityTypes';
-import type { UserDataResponseType } from '@/types/userType';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { communityPopOverOption } from '@/libs/communityPopOverOption';
 import ImageZoom from '@/components/ImageZoom/ImageZoom';
+import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import AuthorCard from '../AuthorCard';
 import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
@@ -208,7 +209,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
     isLiked,
   } = postData;
 
-  const createdDateString = formatDateToString(new Date(updatedAt));
+  const createdDateString = formatDateWithDot(new Date(updatedAt));
 
   const handleClickThumbnail = (i: number) => {
     setClickedImage(reviewImages[i].imgUrl);

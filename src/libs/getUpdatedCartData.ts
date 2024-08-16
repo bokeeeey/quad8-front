@@ -1,4 +1,4 @@
-import { CartAPIDataType, ShopDataType } from '@/types/CartTypes';
+import { CartAPIDataType, ShopDataType } from '@/types/cartType';
 
 export const getUpdatedCartCountData = (cartData: CartAPIDataType | null, shopData: ShopDataType[]) => {
   const cartShopDataId = cartData?.SHOP.map((shop) => shop.productId) ?? [];

@@ -9,7 +9,7 @@ import { postSignin } from '@/api/authAPI';
 import { Button, InputField } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
-import type { FetchSignInInfoTypes } from '@/types/authTypes';
+import type { FetchSignInInfoTypes } from '@/types/authType';
 
 import styles from './page.module.scss';
 

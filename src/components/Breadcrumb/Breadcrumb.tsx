@@ -2,6 +2,7 @@
 
 import { ROUTER } from '@/constants/route';
 import { ChevronIcon } from '@/public/index';
+import type { CategoryKey } from '@/types/categoryType';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -15,8 +16,6 @@ const CATEGORY_MAP = {
   switch: '스위치',
   etc: '기타용품',
 } as const;
-
-type CategoryKey = keyof typeof CATEGORY_MAP;
 
 export default function Breadcrumb() {
   const { category }: { category: CategoryKey } = useParams();

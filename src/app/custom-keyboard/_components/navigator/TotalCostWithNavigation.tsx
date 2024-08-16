@@ -15,10 +15,10 @@ import type {
   CustomKeyboardStepStatusTypes,
   CustomKeyboardStepTypes,
   OptionDataType,
-} from '@/types/CustomKeyboardTypes';
-import CartModal from './CartModal';
+} from '@/types/customKeyboardType';
 import OptionProductModal from './OptionProductModal';
 
+import CartModal from './CartModal';
 import styles from './TotalCostWithNavigation.module.scss';
 
 const cn = classNames.bind(styles);

@@ -1,7 +1,7 @@
 import { CATEGORY_MAP } from '@/constants/product';
 import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { getMaxKey } from '@/libs/getMaxKey';
-import type { KeywordStatistics } from '@/types/ProductReviewTypes';
+import type { KeywordStatistics } from '@/types/productReviewType';
 import classNames from 'classnames/bind';
 import { usePathname } from 'next/navigation';
 import styles from './KeywordRatio.module.scss';
