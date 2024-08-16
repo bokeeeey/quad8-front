@@ -3,7 +3,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import classNames from 'classnames/bind';
 
 import { getSearchResult } from '@/api/searchAPI';
-import type { SearchResultType } from '@/types/SearchType';
+import type { SearchResultType } from '@/types/searchType';
 import { ROUTER } from '@/constants/route';
 import { Pagination, SearchBox } from '@/components';
 import { NoResult, CardList } from './_components';

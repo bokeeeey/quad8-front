@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 
 import ProductItem from '@/components/Products/ProductItem';
-import type { ContentType } from '@/types/SearchType';
+import type { ContentType } from '@/types/searchType';
 
 import styles from './CardList.module.scss';
 

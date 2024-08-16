@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
 import { getSearchSuggestion } from '@/api/searchAPI';
-import type { SuggestionDataType } from '@/types/SearchType';
+import type { SuggestionDataType } from '@/types/searchType';
 import { SearchIcon } from '@/public/index';
 import { ROUTER } from '@/constants/route';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
