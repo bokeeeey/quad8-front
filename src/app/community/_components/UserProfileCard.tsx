@@ -41,6 +41,10 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   }, [isOpenProfileCard, positionTop, isAboveProfile]);
 
   useEffect(() => {
+    if (isOpenProfileCard && !savedUserInfo && userId) {
+      queryClient.invalidateQueries({ queryKey: ['clickedUserInfo'] });
+    }
+
     if (isOpenProfileCard && savedUserInfo && savedUserInfo.id !== userId) {
       queryClient.invalidateQueries({ queryKey: ['clickedUserInfo'] });
     }
@@ -49,14 +53,18 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   const CONTAINER_CLASSNAME = cn(
     'user-detail-profile-card',
     { 'display-none': !isOpenProfileCard },
-    { 'loading-div': isFetching },
+    { 'loading-div': isFetching || !userInfo },
     { 'above-profile': isAboveProfile },
   );
 
-  if (isFetching) {
+  if (savedUserInfo?.id !== userId) {
+    return null;
+  }
+
+  if (isFetching || !userInfo) {
     return (
-      <div ref={ref} className={CONTAINER_CLASSNAME} onClick={(e) => e.stopPropagation()}>
-        <SpinLoading />{' '}
+      <div ref={ref} className={CONTAINER_CLASSNAME}>
+        <SpinLoading />
       </div>
     );
   }
@@ -70,25 +78,19 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
 
   return positionTop && positionTop === 0 ? null : (
     <div ref={ref} className={CONTAINER_CLASSNAME} onClick={(e) => e.stopPropagation()}>
-      {isFetching ? (
-        <SpinLoading />
-      ) : (
-        <>
-          <div className={cn('profile-image')}>
-            <Image src={userInfo?.imgUrl || keydeukProfileImg} alt='프로필 이미지' fill sizes='12rem' />
-          </div>
-          <div className={cn('info-wrapper')}>
-            <p className={cn('nickname')}>{userInfo?.nickname || '사용자를 찾을 수 없습니다.'}</p>
-            <ul>
-              {USER_INFO.map((item) => (
-                <li key={item.label} className={cn('info-list')}>
-                  <strong>{item.label}:</strong> {item.value}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </>
-      )}
+      <div className={cn('profile-image')}>
+        <Image src={userInfo?.imgUrl || keydeukProfileImg} alt='프로필 이미지' fill sizes='12rem' />
+      </div>
+      <div className={cn('info-wrapper')}>
+        <p className={cn('nickname')}>{userInfo?.nickname || '사용자를 찾을 수 없습니다.'}</p>
+        <ul>
+          {USER_INFO.map((item) => (
+            <li key={item.label} className={cn('info-list')}>
+              <strong>{item.label}:</strong> {item.value}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 });

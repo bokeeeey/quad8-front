@@ -36,12 +36,20 @@ export default function AuthorCard({
   const userProfileCardRef = useRef<HTMLDivElement>(null);
   const [isOpenUserCard, setIsOpenUserCard] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [openedTimeoutId, setIsOpenedTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const handleOpenProfile = () => {
-    setIsOpenUserCard(true);
+    const timeoutId = setTimeout(() => {
+      setIsOpenUserCard(true);
+    }, 300);
+    setIsOpenedTimeoutId(timeoutId);
   };
 
   const handleCloseProfile = () => {
+    if (openedTimeoutId) {
+      clearTimeout(openedTimeoutId);
+      setIsOpenedTimeoutId(null);
+    }
     setIsOpenUserCard(false);
   };
 
