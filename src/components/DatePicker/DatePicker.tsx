@@ -141,6 +141,7 @@ function DatePicker({ startDate, endDate, onDateChange }: DatePickerProps) {
         paddingVertical={8}
         radius={4}
         onClick={handleQueryButtonClick}
+        hoverColor='background-primary-60'
       >
         조회
       </Button>
