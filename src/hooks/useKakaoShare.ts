@@ -1,6 +1,6 @@
 'use client';
 
-import { Kakao } from '@/types/KakaoType';
+import { Kakao } from '@/types/kakaoType';
 import { ProductType } from '@/types/ProductTypes';
 import { useEffect } from 'react';
 
