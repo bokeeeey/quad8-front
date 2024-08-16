@@ -26,11 +26,11 @@ export const putEditProfile = async (formData: FormData) => {
 
 export const checkNickname = async (nickname: string) => {
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/users/check/nickname?nickname=${nickname}`);
+    const response = await fetch(`${BASE_URL}/api/v1/users/check/nickname?nickname=${nickname}`);
 
-    const result = await res.json();
+    const result = await response.json();
 
-    if (res.ok) {
+    if (response.ok) {
       return result;
     }
 
@@ -43,7 +43,10 @@ export const checkNickname = async (nickname: string) => {
 export const getOthersInfo = async (userId: number) => {
   try {
     const res = await fetch(`${BASE_URL}/api/v1/users/${userId}`);
-    const { data } = await res.json();
+    const { data, message } = await res.json();
+    if (!res.ok) {
+      throw new Error(message);
+    }
     return data;
   } catch (error) {
     throw error;

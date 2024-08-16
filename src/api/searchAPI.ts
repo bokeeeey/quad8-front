@@ -5,10 +5,13 @@ const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
 export const getSearchSuggestion = async () => {
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/search/all/products-name`, {
+    const response = await fetch(`${BASE_URL}/api/v1/search/all/products-name`, {
       cache: 'no-store',
     });
-    const { data } = await res.json();
+    const { data, message } = await response.json();
+    if (!response.ok) {
+      throw new Error(message);
+    }
     return data;
   } catch (error) {
     throw error;

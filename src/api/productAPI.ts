@@ -71,9 +71,13 @@ export async function getCategoryProductList({
 export async function getKeydeukPick(param: TabType) {
   try {
     const response = await fetch(`${BASE_URL}/api/v1/product/keydeuk-pick?&param=${param}`);
-    const rawData: KeydeukPickResponse = await response.json();
+    const { data, message }: KeydeukPickResponse = await response.json();
 
-    return rawData.data;
+    if (!response.ok) {
+      throw new Error(message);
+    }
+
+    return data;
   } catch (error) {
     throw error;
   }
@@ -82,9 +86,12 @@ export async function getKeydeukPick(param: TabType) {
 export async function getKeydeukBest() {
   try {
     const response = await fetch(`${BASE_URL}/api/v1/product/keydeuk-best`);
-    const rawData: KeydeukPickResponse = await response.json();
+    const { data, message }: KeydeukPickResponse = await response.json();
 
-    return rawData.data;
+    if (!response.ok) {
+      throw new Error(message);
+    }
+    return data;
   } catch (error) {
     throw error;
   }

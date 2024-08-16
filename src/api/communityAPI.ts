@@ -55,12 +55,15 @@ export const getCommentsInfiniteScroll = async ({
   commentId: number;
 }) => {
   try {
-    const res = await fetch(`${BASE_URL}/api/v1/community/comment/${communityId}/${commentId}`, {
+    const response = await fetch(`${BASE_URL}/api/v1/community/comment/${communityId}/${commentId}`, {
       headers: {
         'Cache-Control': 'no-cache',
       },
     });
-    const data = await res.json();
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
     return data;
   } catch (error) {
     throw error;

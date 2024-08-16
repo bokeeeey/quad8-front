@@ -3,7 +3,7 @@ import { baseAPI } from './interceptor/interceptor';
 
 export const getRandomOptionProduct = async () => {
   try {
-    const res = await fetch(
+    const response = await fetch(
       `${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/custom/get/random-option-products`,
       {
         cache: 'no-cache',
@@ -12,7 +12,10 @@ export const getRandomOptionProduct = async () => {
         },
       },
     );
-    const { data } = await res.json();
+    const { data, message } = await response.json();
+    if (!response.ok) {
+      throw new Error(message);
+    }
     return data;
   } catch (error) {
     throw error;
