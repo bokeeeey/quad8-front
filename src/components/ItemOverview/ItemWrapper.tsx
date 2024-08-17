@@ -12,7 +12,7 @@ interface ItemWrapperPropse {
   className?: string;
   productName: string;
   category: CategoryNameType | undefined;
-  routeDetailPage?: boolean;
+  isRouteDetailPage?: boolean;
   productId: number;
 }
 
@@ -23,10 +23,10 @@ export default function ItemWrapper({
   className,
   productName,
   category,
-  routeDetailPage,
+  isRouteDetailPage,
   productId,
 }: ItemWrapperPropse) {
-  if (productName === '커스텀 키보드' || !routeDetailPage || !category) {
+  if (productName === '커스텀 키보드' || !isRouteDetailPage || !category) {
     return <div className={cn('item', className)}>{children}</div>;
   }
   return (

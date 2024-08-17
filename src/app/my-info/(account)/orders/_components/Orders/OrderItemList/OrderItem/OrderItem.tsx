@@ -21,7 +21,7 @@ export default function OrderItem({ orderItem, confirmationDate, orderStatus }: 
   return (
     <div className={cn('order-item')}>
       <div className={cn('item')}>
-        <ItemOverview item={orderItem} isroutingDetailPage />
+        <ItemOverview item={orderItem} isRouteDetailPage />
       </div>
       <div className={cn('order-status')}>
         <p>{confirmationDate}</p>

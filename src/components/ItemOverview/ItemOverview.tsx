@@ -8,7 +8,7 @@ import type { ProductType } from '@/types/productType';
 import type { OrderItem, SwitchOptionType } from '@/types/orderType';
 import { convertCategory } from '@/libs/convertProductCategory';
 import { IMAGE_BLUR } from '@/constants/blurImage';
-import { CustomImage, CustomOption } from '@/components';
+import { CustomImage, CustomOption, Skeleton } from '@/components';
 import ItemWrapper from './ItemWrapper';
 import ShopOption from './ShopOption';
 
@@ -27,7 +27,7 @@ interface ItemOverviewProps {
   imageWidth?: number;
   imageHeight?: number;
   className?: string;
-  isroutingDetailPage?: boolean;
+  isRouteDetailPage?: boolean;
 }
 
 const CATEGORY_NAME = {
@@ -42,36 +42,45 @@ export default function ItemOverview({
   imageWidth = 104,
   imageHeight = 104,
   className,
-  isroutingDetailPage,
+  isRouteDetailPage,
 }: ItemOverviewProps) {
   const { productImgUrl, productName, switchOption, quantity, price } = item;
 
-  const { data: productData } = useQuery<ProductType>({
+  const { data: productData, isPending } = useQuery<ProductType>({
     queryKey: ['product', item.productId],
     queryFn: () => getProductDetail(item.productId),
     enabled: productName !== '커스텀 키보드' && !item.category,
   });
 
-  const category = item.category ?? convertCategory(productData?.categoryName);
+  const category = item.category ?? convertCategory(productData?.categoryName ?? '');
 
   return (
     <ItemWrapper
       className={className}
       productName={productName}
       category={category}
-      routeDetailPage={isroutingDetailPage}
+      isRouteDetailPage={isRouteDetailPage}
       productId={item.productId}
     >
-      <CustomImage
-        src={productImgUrl}
-        alt={productName}
+      <Skeleton
+        isPending={isPending}
         width={imageWidth}
         height={imageHeight}
-        placeholder={IMAGE_BLUR.placeholder}
-        blurDataURL={IMAGE_BLUR.blurDataURL}
-        className={cn('product-image')}
-      />
-      {productName === '커스텀 키보드' && typeof switchOption === 'object' ? (
+        condition={productName !== '커스텀 키보드' && !item.category}
+        isImage
+        radius={10}
+      >
+        <CustomImage
+          src={productImgUrl}
+          alt={productName}
+          width={imageWidth}
+          height={imageHeight}
+          placeholder={IMAGE_BLUR.placeholder}
+          blurDataURL={IMAGE_BLUR.blurDataURL}
+          className={cn('product-image')}
+        />
+      </Skeleton>
+      {typeof switchOption === 'object' ? (
         <div style={{ width: `calc(100% - ${imageWidth + 20}px)` }}>
           <p className={cn('title')}>키득 커스텀 키보드</p>
           <CustomOption
@@ -90,12 +99,28 @@ export default function ItemOverview({
         </div>
       ) : (
         <div className={cn('item-text')}>
-          <p className={cn('title')}>{category ? CATEGORY_NAME[category] : ''}</p>
-          <p className={cn('item-name')}>{productName}</p>
-          {typeof switchOption === 'string' && typeof quantity === 'number' && (
-            <ShopOption optionName={switchOption} count={quantity} />
+          <Skeleton isPending={isPending} width={60} height={18} condition={!item.category}>
+            <p className={cn('title')}>{category ? CATEGORY_NAME[category] : ''}</p>
+          </Skeleton>
+          <Skeleton isPending={isPending} width='70%' height={16} condition={!item.category}>
+            <p className={cn('item-name')}>{productName}</p>
+          </Skeleton>
+          {typeof switchOption === 'string' && switchOption && (
+            <Skeleton isPending={isPending} width={80} height={20} condition={!item.category}>
+              <ShopOption optionName={switchOption} />
+            </Skeleton>
           )}
-          {typeof price === 'number' && <p className={cn('price')}>{price.toLocaleString()}원</p>}
+          {typeof quantity === 'number' && (
+            <Skeleton isPending={isPending} width={60} height={20} condition={!item.category}>
+              <div className={cn('count')}>{quantity}개</div>
+            </Skeleton>
+          )}
+
+          {typeof price === 'number' && (
+            <Skeleton isPending={isPending} width={80} height={16} condition={!item.category}>
+              <p className={cn('price')}>{price.toLocaleString()}원</p>
+            </Skeleton>
+          )}
         </div>
       )}
     </ItemWrapper>

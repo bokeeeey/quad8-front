@@ -97,7 +97,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
         <div>
           <CardCheckBox id={cardData.id} type={type} />
         </div>
-        <ItemOverview item={cardItem} isroutingDetailPage />
+        <ItemOverview item={cardItem} isRouteDetailPage />
       </div>
       <div className={cn('price')}>{price.toLocaleString()}원</div>
       <div className={cn('button-wrapper')}>

@@ -29,6 +29,13 @@
   -webkit-box-orient: vertical;
 }
 
+.count {
+  @include pretendard-14-500;
+
+  flex-shrink: 0;
+  color: $black;
+}
+
 .price {
   @include pretendard-14-400;
 

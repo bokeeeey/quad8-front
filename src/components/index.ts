@@ -20,4 +20,5 @@ export { default as Rating } from './Rating/Rating';
 export { default as ScrollUpButton } from './Buttons/ScrollUpButton/ScrollUpButton';
 export { default as SearchBox } from './SearchBox/SearchBox';
 export { default as SignInModal } from './SignInModal/SignInModal';
+export { default as Skeleton } from './Skeleton/Skeleton';
 export { default as TextField } from './TextField/TextField';
