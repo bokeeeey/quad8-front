@@ -66,7 +66,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
   });
 
   const { mutate: deleteAlarmMutate } = useMutation({
-    mutationFn: (id: number) => deleteAlarm(id),
+    mutationFn: (id: number[]) => deleteAlarm(id),
   });
 
   const handleClickButton = () => {
@@ -100,9 +100,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
   const handleDeleteButtonClick = () => {
     if (currentCategory === '전체' || currentCategory === '커뮤니티') {
       queryClient.setQueryData(['communityAlarm'], (prev: AlarmAPIDataType) => {
-        prev.alarmDtoList.forEach((alarm) => {
-          deleteAlarmMutate(alarm.id);
-        });
+        deleteAlarmMutate(prev.alarmDtoList.map((alarm) => alarm.id));
         return { count: 0, alarmDtoList: [] };
       });
     }
@@ -139,7 +137,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
         count: prev.count - 1 ?? 0,
         alarmDtoList: prev.alarmDtoList.filter((alarm) => alarm.id !== id),
       }));
-      deleteAlarmMutate(id);
+      deleteAlarmMutate([id]);
       return;
     }
 

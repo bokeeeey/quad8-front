@@ -30,6 +30,7 @@ export const useEventSource = (
       if (eventSource || !accessToken) {
         return;
       }
+      closeEvent(eventRef);
       const newEventSource = new EventSourcePolyfill(`${BASE_URL}/api/v1/alarm/subscribe`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,

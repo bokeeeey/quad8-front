@@ -20,9 +20,11 @@ export const postAlarmRead = async (alarmId: number) => {
   }
 };
 
-export const deleteAlarm = async (alarmId: number) => {
+export const deleteAlarm = async (alarmId: number[]) => {
   try {
-    await baseAPI.delete(`/api/v1/alarm/${alarmId}`);
+    await baseAPI.delete(`/api/v1/alarm`, {
+      body: JSON.stringify(alarmId),
+    });
   } catch (error) {
     throw error;
   }
