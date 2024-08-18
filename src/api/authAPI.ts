@@ -38,6 +38,7 @@ export const postSignup = async (formData: FormData) => {
   try {
     const response = await fetch(url, {
       method: 'POST',
+      cache: 'no-cache',
       headers: {
         accept: 'application/json',
       },

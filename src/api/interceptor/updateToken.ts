@@ -4,7 +4,7 @@ import { deleteCookie, getCookie, setCookie } from '@/libs/manageCookie';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
-export const updateToken = async () => {
+export const updateToken = async (): Promise<null | string> => {
   const accessToken = await getCookie('accessToken');
   const refreshToken = await getCookie('refreshToken');
 
