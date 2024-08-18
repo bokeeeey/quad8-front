@@ -40,7 +40,7 @@ export const usePaymentSuccess = ({ orderId, paymentKey, orderIdFromParams, amou
         type: 'PRODUCT_ORDER',
         isRead: false,
         relatedId,
-        createdAt: new Date().toString(),
+        createdAt: new Date().toDateString(),
       } as AlarmDataType;
       addAlarm(newAlarm);
       setIsConfirmed(true);

@@ -3,9 +3,10 @@ import { baseAPI } from './interceptor/interceptor';
 
 export const postCreateCoupon = async (payload: CreateCouponType) => {
   try {
-    await baseAPI.post('/api/v1/coupon/create', {
+    const { data } = await baseAPI.post<CouponResponse>('/api/v1/coupon/create', {
       body: JSON.stringify(payload),
     });
+    return data;
   } catch (error) {
     throw error;
   }
