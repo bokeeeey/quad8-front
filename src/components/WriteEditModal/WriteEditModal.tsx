@@ -16,8 +16,8 @@ import { REVIEW_KEYWORD } from '@/constants/reviewKeyword';
 import { keydeukImg } from '@/public/index';
 
 import type { CommunityPostCardDetailDataType, PostCardDetailModalCustomKeyboardType } from '@/types/communityType';
+import type { ReviewDto } from '@/types/productReviewType';
 
-import { ReviewDto } from '@/types/productReviewType';
 import styles from './WriteEditModal.module.scss';
 
 const cn = classNames.bind(styles);
@@ -53,7 +53,7 @@ interface ProductDataType {
   productId: number;
   productImgUrl: string;
   productName: string;
-  orderId: number;
+  orderId: number | string;
   switchOption?: string;
 }
 
