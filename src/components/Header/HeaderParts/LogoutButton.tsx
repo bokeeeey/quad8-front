@@ -25,6 +25,7 @@ export default function LogoutButton({ eventSource }: LogoutButtonProps) {
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
     queryClient.removeQueries();
+    localStorage.clear();
 
     if (eventSource.current) {
       eventSource.current.close();

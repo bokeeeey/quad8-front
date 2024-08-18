@@ -19,14 +19,13 @@ export const useCreateCouponMutation = (setIsModalOpen?: (value: SetStateAction<
       queryClient.invalidateQueries({
         queryKey: ['coupons'],
       });
-      console.log(new Date());
       addAlarm({
         id: Math.random() * 10 ** 16,
         message: `'${res.name}'이 쿠폰함에 들어갔습니다`,
         type: 'EVENT',
         isRead: false,
         relatedId: res.id,
-        createdAt: new Date().toDateString(),
+        createdAt: new Date().toString(),
       });
     },
     onError: (err) => {
