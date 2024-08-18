@@ -6,10 +6,7 @@ import { ChangeEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { deleteProductLikes, getProductLikes } from '@/api/likesAPI';
-import { MyInfoEmptyCase } from '@/app/my-info/_components';
-import { Button, Dialog } from '@/components';
-import LogoLoading from '@/components/LogoLoading/LogoLoading';
-import Pagination from '@/components/Pagination/Pagination';
+import { Button, Dialog, LogoLoading, MyInfoEmptyCase, Pagination } from '@/components';
 import { QUERY_KEYS } from '@/constants/queryKey';
 import type { GetProductLikesParams, WishlistPageProps } from '@/types/likeType';
 import WishItem from './WishItem';

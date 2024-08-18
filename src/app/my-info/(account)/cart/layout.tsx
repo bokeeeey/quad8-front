@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
 import { CartDataContextProvider } from '@/context/CartDataContext';
+import { ReactNode } from 'react';
 
 interface LayoutProps {
   children: ReactNode;

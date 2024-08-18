@@ -1,15 +1,13 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { Address, DaumPostcodeEmbed } from 'react-daum-postcode';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { postAddress } from '@/api/shippingAPI';
-import { Button, Modal } from '@/components';
-import AddAddressModal from '../../../../../../components/AddAddresseModal/AddAddressModal';
+import { AddAddressModal, Button, Modal } from '@/components';
+import { useCreateAddress } from '@/hooks/useCreateAddress';
 
 import styles from './AddressesHeader.module.scss';
 
@@ -20,11 +18,7 @@ export default function AddressesHeader() {
   const [isPostcodeEmbedOpen, setIsPostcodeEmbedOpen] = useState(false);
   const [addressData, setAddressData] = useState<Address | null>(null);
 
-  const queryClient = useQueryClient();
-
-  const { mutate: postAddressesMutate } = useMutation({
-    mutationFn: postAddress,
-  });
+  const { mutate: postAddressesMutate } = useCreateAddress();
 
   const handleButtonClick = () => {
     setIsModalOpen(true);
@@ -44,19 +38,19 @@ export default function AddressesHeader() {
     setAddressData(null);
   };
 
-  const onSuccessClose = () => {
+  const handleSuccessClose = () => {
     setIsModalOpen(false);
     setAddressData(null);
   };
 
   const handleAddressPostSubmit: SubmitHandler<FieldValues> = (payload) => {
     postAddressesMutate(payload, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('배송지를 추가하였습니다.');
-          queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-          onSuccessClose();
-        }
+      onSuccess: () => {
+        toast('배송지를 추가하였습니다.');
+        handleSuccessClose();
+      },
+      onError: (error) => {
+        toast(error.message);
       },
     });
   };
