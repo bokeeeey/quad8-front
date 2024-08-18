@@ -36,33 +36,41 @@ export default function AuthorCard({
   const userProfileCardRef = useRef<HTMLDivElement>(null);
   const [isOpenUserCard, setIsOpenUserCard] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [openedTimeoutId, setIsOpenedTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const handleOpenProfile = () => {
-    setIsOpenUserCard(true);
+    const timeoutId = setTimeout(() => {
+      setIsOpenUserCard(true);
+    }, 300);
+    setIsOpenedTimeoutId(timeoutId);
   };
 
   const handleCloseProfile = () => {
+    if (openedTimeoutId) {
+      clearTimeout(openedTimeoutId);
+      setIsOpenedTimeoutId(null);
+    }
     setIsOpenUserCard(false);
   };
 
+  const profileHandlers = {
+    onMouseEnter: handleOpenProfile,
+    onMouseLeave: handleCloseProfile,
+  };
+
+  const containerHandlers = {
+    onMouseEnter: () => setIsHovering(true),
+    onMouseLeave: () => setIsHovering(false),
+  };
+
   return (
-    <div
-      className={cn('container')}
-      onClick={(e) => e.stopPropagation()}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
-      <div
-        onMouseEnter={handleOpenProfile}
-        onMouseLeave={handleCloseProfile}
-        className={cn('user-profile')}
-        ref={userProfileCardRef}
-      >
+    <div className={cn('container')} onClick={(e) => e.stopPropagation()} {...containerHandlers}>
+      <div className={cn('user-profile')} ref={userProfileCardRef} {...profileHandlers}>
         <ProfileImage profileImage={userImage} />
         <UserProfileCard isOpenProfileCard={isOpenUserCard} userId={userId} />
       </div>
       <div className={cn('info-textbox')}>
-        <p className={cn('user-name')} onMouseEnter={handleOpenProfile} onMouseLeave={handleCloseProfile}>
+        <p className={cn('user-name')} {...profileHandlers}>
           {nickname}
         </p>
         <p className={cn('sub-info')}>{dateText}</p>

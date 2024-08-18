@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { Modal, WriteEditModal } from '@/components';
 import { ROUTER } from '@/constants/route';
-import { formatDateToString } from '@/libs/formatDateToString';
+import { formatDateWithDot } from '@/libs/formatDateToString';
 import { ChevronIcon } from '@/public/index';
 import type { Order } from '@/types/orderType';
 import OrderItem from './OrderItem/OrderItem';
@@ -30,8 +30,8 @@ export default function OrderItemList({ order }: OrderItemListProps) {
 
   const { confirmationDate, purchaseDate, orderStatus, orderItems, orderId } = order;
 
-  const formmattedPurchaseDate = formatDateToString(new Date(purchaseDate));
-  const formmattedConfirmationDate = formatDateToString(new Date(confirmationDate));
+  const formmattedPurchaseDate = formatDateWithDot(new Date(purchaseDate));
+  const formmattedConfirmationDate = formatDateWithDot(new Date(confirmationDate));
 
   const isPaymented = orderStatus !== 'READY';
 

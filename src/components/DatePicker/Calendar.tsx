@@ -60,14 +60,16 @@ export default function Calendar({ selectedDate, onSetSelectedDate, onCloseCalen
             width={24}
             height={24}
           />
-          <Dropdown
-            options={['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']}
-            sizeVariant='xs'
-            value={`${currentDate.getMonth() + 1}월`}
-            onChange={(month) => handleMonthSelect(month)}
-            isDate
-            maxHeight={4}
-          />
+          <div onClick={(e) => e.stopPropagation()}>
+            <Dropdown
+              options={['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']}
+              sizeVariant='xs'
+              value={`${currentDate.getMonth() + 1}월`}
+              onChange={(month) => handleMonthSelect(month)}
+              isDate
+              maxHeight={4}
+            />
+          </div>
           {currentDate.getFullYear()}
           <ArrowIcon className={cn('arrow-right')} onClick={handleNextMonth} width={24} height={24} />
         </div>

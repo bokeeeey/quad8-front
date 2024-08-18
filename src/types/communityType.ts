@@ -19,6 +19,25 @@ export interface CommunityPostCardDataType {
   updateAt: string;
 }
 
+export interface CommunityPostListResponse {
+  content: CommunityPostCardDataType[];
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  size: number;
+  number: number;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
+
 export interface CommunityAllPostCardDataType {
   content: CommunityPostCardDataType[];
   pageable: {
