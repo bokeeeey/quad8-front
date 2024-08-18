@@ -10,7 +10,7 @@ import { ROUTER } from '@/constants/route';
 import { usePaymentProcess } from '@/hooks/usePaymentProcess';
 import { usePreventNavigation } from '@/hooks/usePreventNavigation';
 import type { OrderItem } from '@/types/orderType';
-import type { PaymentSuccessRequest } from '@/types/paymentsType';
+import type { PaymentSuccessResponse } from '@/types/paymentsType';
 
 import styles from './CheckoutComplete.module.scss';
 
@@ -24,9 +24,9 @@ export default function CheckoutCompleted() {
   // 새로고침 및 뒤로가기 관련 로직
   usePreventNavigation();
 
-  const paymentSuccessRequest = queryClient.getQueryData<PaymentSuccessRequest>(['paymentSuccessRequest']);
+  const paymentSuccessResponse = queryClient.getQueryData<PaymentSuccessResponse>(['paymentSuccessResponse']);
 
-  const { paymentResponse, orderDetailResponse } = paymentSuccessRequest ?? {};
+  const { paymentResponse, orderDetailResponse } = paymentSuccessResponse ?? {};
 
   const { shippingAddress, orderItems } = orderDetailResponse ?? {};
 
