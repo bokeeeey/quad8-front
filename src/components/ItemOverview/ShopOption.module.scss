@@ -47,13 +47,6 @@
   background-color: $gray-40;
 }
 
-.count-text {
-  @include pretendard-14-500;
-
-  flex-shrink: 0;
-  color: $black;
-}
-
 .price-button-wrapper {
   @include flex-column(6rem);
 }

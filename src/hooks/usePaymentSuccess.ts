@@ -32,6 +32,7 @@ export const usePaymentSuccess = ({ orderId, paymentKey, orderIdFromParams, amou
       queryClient.invalidateQueries({ queryKey: ['cartData'] });
       queryClient.invalidateQueries({ queryKey: ['paymentResponse'] });
       queryClient.setQueryData(['paymentSuccessRequest'], res.data);
+
       const { orderId: relatedId } = res.data.paymentResponse;
       const newAlarm = {
         id: Math.floor(Math.random() * 10 ** 32),

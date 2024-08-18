@@ -1,11 +1,22 @@
-import type { CouponTypes } from '@/types/couponType';
+import { CouponResponse, CreateCouponType } from '@/types/couponType';
 import { baseAPI } from './interceptor/interceptor';
 
-export const getCoupons = async () => {
+export const postCreateCoupon = async (payload: CreateCouponType) => {
   try {
-    const { data } = await baseAPI.get<CouponTypes[]>('/api/v1/user/coupon', {
+    await baseAPI.post('/api/v1/coupon/create', {
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getCoupon = async (): Promise<CouponResponse[]> => {
+  try {
+    const { data } = await baseAPI.get<CouponResponse[]>('/api/v1/user/coupon', {
       cache: 'no-cache',
     });
+
     return data;
   } catch (error) {
     throw error;

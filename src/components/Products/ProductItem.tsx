@@ -18,7 +18,7 @@ interface ProductItemProps {
   reviewscount: number;
   size: 'sm' | 'lg';
   category: CategoryKey;
-  hasShop: boolean;
+  hasShop?: boolean;
   isLiked?: boolean;
 }
 

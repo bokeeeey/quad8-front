@@ -28,6 +28,7 @@ export { default as RadioField } from './RadioField/RadioField';
 export { default as Rating } from './Rating/Rating';
 export { default as SearchBox } from './SearchBox/SearchBox';
 export { default as SignInModal } from './SignInModal/SignInModal';
+export { default as Skeleton } from './Skeleton/Skeleton';
 export { default as TextField } from './TextField/TextField';
 export { default as ImageInput } from './WriteEditModal/ImageInput';
 export { default as WriteEditModal } from './WriteEditModal/WriteEditModal';

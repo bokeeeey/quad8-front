@@ -3,11 +3,11 @@ import type { UserAddress } from '@/types/shippingType';
 import { useEffect, useState } from 'react';
 
 interface UseSelectedAddressProps {
-  paymentResponse?: { data: { shippingAddressResponse: ShippingAddressResponse | null } };
+  paymentResponse?: { data: { shippingAddressResponse: ShippingAddressResponse } };
 }
 
 export const useSelectedAddress = ({ paymentResponse }: UseSelectedAddressProps) => {
-  const [selectedAddress, setSelectedAddress] = useState(paymentResponse?.data.shippingAddressResponse ?? null);
+  const [selectedAddress, setSelectedAddress] = useState(paymentResponse?.data.shippingAddressResponse);
 
   useEffect(() => {
     if (paymentResponse) {

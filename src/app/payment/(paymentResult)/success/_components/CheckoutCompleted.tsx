@@ -10,7 +10,7 @@ import { ROUTER } from '@/constants/route';
 import { usePaymentProcess } from '@/hooks/usePaymentProcess';
 import { usePreventNavigation } from '@/hooks/usePreventNavigation';
 import type { OrderItem } from '@/types/orderType';
-import type { PaymentSuccessRequest } from '@/types/paymentsType';
+import type { PaymentSuccessResponse } from '@/types/paymentsType';
 
 import styles from './CheckoutComplete.module.scss';
 
@@ -21,12 +21,11 @@ export default function CheckoutCompleted() {
   const queryClient = useQueryClient();
   const { isConfirmed } = usePaymentProcess();
 
-  // 새로고침 및 뒤로가기 관련 로직
   usePreventNavigation();
 
-  const paymentSuccessRequest = queryClient.getQueryData<PaymentSuccessRequest>(['paymentSuccessRequest']);
+  const paymentSuccessResponse = queryClient.getQueryData<PaymentSuccessResponse>(['paymentSuccessResponse']);
 
-  const { paymentResponse, orderDetailResponse } = paymentSuccessRequest ?? {};
+  const { paymentResponse, orderDetailResponse } = paymentSuccessResponse ?? {};
 
   const { shippingAddress, orderItems } = orderDetailResponse ?? {};
 
@@ -50,10 +49,7 @@ export default function CheckoutCompleted() {
 
         <div className={cn('item-box')}>
           <h1>주문 상품</h1>
-          {orderItems &&
-            orderItems.map((item: OrderItem) => (
-              <ItemOverview key={item.productId} imageWidth={104} imageHeight={104} item={item} />
-            ))}
+          {orderItems && orderItems.map((item: OrderItem) => <ItemOverview key={item.productId} item={item} />)}
         </div>
       </article>
 

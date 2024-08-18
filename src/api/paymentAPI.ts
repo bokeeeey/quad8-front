@@ -1,4 +1,4 @@
-import type { PaymentConfirmRequest, PaymentSuccessRequest } from '@/types/paymentsType';
+import type { PaymentConfirmRequest, PaymentSuccessResponse } from '@/types/paymentsType';
 import { baseAPI } from './interceptor/interceptor';
 
 export const postPaymentConfirm = async (payload: PaymentConfirmRequest) => {
@@ -13,7 +13,7 @@ export const postPaymentConfirm = async (payload: PaymentConfirmRequest) => {
 
 export const postPaymentSuccess = async (payload: PaymentConfirmRequest) => {
   try {
-    const data = await baseAPI.post<PaymentSuccessRequest>('/api/v1/payments/success', {
+    const data = await baseAPI.post<PaymentSuccessResponse>('/api/v1/payments/success', {
       body: JSON.stringify(payload),
     });
     return data;
