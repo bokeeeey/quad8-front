@@ -1,14 +1,14 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { Address as AddressT, DaumPostcodeEmbed } from 'react-daum-postcode';
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { deleteAddress, putAddress } from '@/api/shippingAPI';
-import { Modal } from '@/components';
+import { AddAddressModal, Dialog, Modal } from '@/components';
+import { useDeleteAddress } from '@/hooks/useDeleteAddress';
+import { useUpdateAddress } from '@/hooks/useUpdateAddress';
+import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
 import type { UserAddress } from '@/types/shippingType';
-import AddAddressModal from '../../../../../../../components/AddAddresseModal/AddAddressModal';
 
 import styles from './Address.module.scss';
 
@@ -23,29 +23,29 @@ interface AddressProps {
 export default function Address({ item, isDisplayOnModal = false, onClick }: AddressProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPostcodeEmbedOpen, setIsPostcodeEmbedOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [addressData, setAddressData] = useState<AddressT | null>(null);
 
   const { phone, address, zoneCode, name, detailAddress, isDefault, id } = item;
 
-  const queryClient = useQueryClient();
-
-  const { mutate: putAddressMutate } = useMutation({ mutationFn: putAddress });
-
-  const { mutate: deleteAddressMutate } = useMutation({
-    mutationFn: deleteAddress,
-  });
+  const { mutate: putAddressMutate } = useUpdateAddress();
+  const { mutate: deleteAddressMutate } = useDeleteAddress();
 
   const handleModifyButtonClick = () => {
     setIsModalOpen(true);
   };
 
   const handleDeleteButtonClick = () => {
+    setIsDialogOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleDelete = () => {
     deleteAddressMutate(id, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('삭제되었습니다.');
-          queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-        }
+      onSuccess: () => {
+        toast('삭제되었습니다.');
+      },
+      onError: (error) => {
+        toast(error.message);
       },
     });
   };
@@ -66,12 +66,12 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
 
   const handleAddressPutSubmit: SubmitHandler<FieldValues> = (payload) => {
     putAddressMutate(payload, {
-      onSuccess: (res) => {
-        if (res.status === 'SUCCESS') {
-          toast('수정되었습니다.');
-          queryClient.invalidateQueries({ queryKey: ['addressesData'] });
-          onSuccessClose();
-        }
+      onSuccess: () => {
+        toast('수정되었습니다.');
+        onSuccessClose();
+      },
+      onError: (error) => {
+        toast(error.message);
       },
     });
   };
@@ -87,7 +87,7 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
             <h1 className={cn('address-name')}>{name}</h1>
             {isDefault && <span className={cn('address-default-badge')}>기본 배송지</span>}
           </div>
-          <p>{phone}</p>
+          <p>010-{formatPhoneNumber(phone)}</p>
           <p>
             ({zoneCode}) {address} {detailAddress}
           </p>
@@ -106,6 +106,14 @@ export default function Address({ item, isDisplayOnModal = false, onClick }: Add
         )}
       </article>
 
+      <Dialog
+        isOpen={isDialogOpen}
+        buttonText={{ left: '취소', right: '삭제' }}
+        message='정말로 삭제 하시겠습니까?'
+        onClick={{ left: () => setIsDialogOpen(false), right: handleDelete }}
+        type='confirm'
+        iconType='warn'
+      />
       <Modal isOpen={isPostcodeEmbedOpen} onClose={() => setIsPostcodeEmbedOpen(false)}>
         <DaumPostcodeEmbed
           className={cn('postcode-embed')}

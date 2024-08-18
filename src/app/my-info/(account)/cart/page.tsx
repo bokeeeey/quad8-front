@@ -1,12 +1,12 @@
-import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
 import { getCartData } from '@/api/cartAPI';
-import TotalCheckBox from './_components/TotalCheckBox';
-import DeleteButton from './_components/DeleteButton';
 import CustomCardList from './_components/CustomCardList';
-import ShopCardList from './_components/ShopCardList';
+import DeleteButton from './_components/DeleteButton';
 import PurchaseButton from './_components/PurchaseButton';
+import ShopCardList from './_components/ShopCardList';
+import TotalCheckBox from './_components/TotalCheckBox';
 import TotalPrice from './_components/TotalPrice';
 
 import styles from './page.module.scss';

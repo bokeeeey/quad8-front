@@ -30,7 +30,7 @@ export interface PaymentConfirmRequest {
   amount: string;
 }
 
-export interface PaymentSuccessRequest {
+export interface PaymentSuccessResponse {
   paymentResponse: PaymentResponse;
   orderDetailResponse: OrderDetailResponse;
 }

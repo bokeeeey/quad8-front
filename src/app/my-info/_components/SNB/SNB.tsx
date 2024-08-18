@@ -4,6 +4,7 @@ import { ROUTER } from '@/constants/route';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 import styles from './SNB.module.scss';
 
 const cn = classNames.bind(styles);
@@ -22,6 +23,10 @@ const SECTIONS = [
   {
     category: '커뮤니티',
     items: [{ name: '내 게시글', route: ROUTER.MY_PAGE.MY_POSTS }],
+  },
+  {
+    category: '쿠폰',
+    items: [{ name: '보유 중인 쿠폰', route: ROUTER.MY_PAGE.COUPONS }],
   },
 ];
 

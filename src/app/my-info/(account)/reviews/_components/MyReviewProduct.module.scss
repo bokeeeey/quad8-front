@@ -55,3 +55,26 @@
 
   margin-top: 5rem;
 }
+
+.button-section {
+  @include pretendard-16-500;
+
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 0;
+  color: $gray-40;
+}
+
+.edit-button {
+  padding-right: 1.2rem;
+}
+
+.delete-button {
+  padding-left: 1.2rem;
+}
+
+.line {
+  @include pretendard-16-400;
+
+  color: $gray-30;
+}

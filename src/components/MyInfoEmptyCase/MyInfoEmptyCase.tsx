@@ -3,6 +3,7 @@ import { ROUTER } from '@/constants/route';
 import { AlertIcon } from '@/public/index';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
+
 import styles from './MyInfoEmptyCase.module.scss';
 
 const cn = classNames.bind(styles);

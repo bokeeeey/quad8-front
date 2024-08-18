@@ -129,6 +129,7 @@ export default function DatePicker({ startDate, endDate, onDateChange }: DatePic
         paddingVertical={8}
         radius={4}
         onClick={handleQueryButtonClick}
+        hoverColor='background-primary-60'
       >
         조회
       </Button>

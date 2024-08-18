@@ -1,5 +1,6 @@
 .container {
   position: absolute;
+  z-index: $zindex-dropdown;
   top: 5rem;
   left: 0;
   width: 38.3rem;
@@ -14,7 +15,7 @@
 
 @keyframes slide-in-top {
   0% {
-    transform: translateY(-4.3rem);
+    transform: translateY(-3.5rem);
     opacity: 0;
   }
 

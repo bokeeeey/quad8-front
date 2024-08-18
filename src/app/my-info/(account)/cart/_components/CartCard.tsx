@@ -33,7 +33,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
       router.push(`${ROUTER.MY_PAGE.CHECKOUT}?orderId=${response.data}`);
     },
     onError: () => {
-      toast.error('주문 정보 생성에 실팽하였습니다');
+      toast.error('주문 정보 생성에 실패하였습니다');
     },
   });
 
@@ -81,14 +81,7 @@ export default function CartCard({ cardData, type }: CustomCardProps | ShopCardP
             switchOptionId: cardData.optionId,
             quantity: cardData.count,
           };
-    createOrder([orderData], {
-      onSuccess: () => {
-        router.push(ROUTER.MY_PAGE.CHECKOUT);
-      },
-      onError: () => {
-        toast.error('주문 정보 생성에 실패하였습니다');
-      },
-    });
+    createOrder([orderData]);
   };
 
   return (

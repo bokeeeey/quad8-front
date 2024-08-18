@@ -3,20 +3,16 @@
 import { getProductDetail } from '@/api/productAPI';
 import { getUserProductReviews } from '@/api/productReviewAPI';
 
-import DatePicker from '@/components/DatePicker/DatePicker';
-import ReviewItem from '@/components/ReviewItem/ReviewItem';
-
 import { formatDateToQueryString } from '@/libs/formatDateToQueryString';
 
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 
-import { MyInfoEmptyCase } from '@/app/my-info/_components';
-import { Pagination } from '@/components';
-import LogoLoading from '@/components/LogoLoading/LogoLoading';
-import { ReviewPageProps, ReviewParamsType } from '@/types/productReviewType';
+import { DatePicker, LogoLoading, MyInfoEmptyCase, Pagination, ReviewItem } from '@/components';
+import type { ReviewPageProps, ReviewParamsType } from '@/types/productReviewType';
 import MyReviewProduct from './MyReviewProduct';
+
 import styles from './MyReviewProduct.module.scss';
 
 const cn = classNames.bind(styles);
@@ -34,7 +30,7 @@ export default function MyReviewList({ searchParams }: ReviewPageProps) {
   const queryClient = useQueryClient();
 
   const { data: reviewsData, isPending: isReviewsPending } = useQuery({
-    queryKey: ['userProductReviews', searchDate],
+    queryKey: ['userProductReviews'],
     queryFn: () =>
       getUserProductReviews({ startDate: searchDate.startDate, endDate: searchDate.endDate, ...initialParams }),
   });
@@ -54,7 +50,7 @@ export default function MyReviewList({ searchParams }: ReviewPageProps) {
       endDate: formatDateToQueryString('end', date.endDate),
     };
     setSearchDate(newSearchDate);
-    queryClient.invalidateQueries({ queryKey: ['userProductReviews', searchDate] });
+    queryClient.invalidateQueries({ queryKey: ['userProductReviews'] });
   };
 
   if (isPending) {
@@ -69,12 +65,9 @@ export default function MyReviewList({ searchParams }: ReviewPageProps) {
           <div className={cn('review-list')}>
             {reviewsData.reviewDtoList.map((reviewData, index) => (
               <div key={reviewData.id}>
-                <MyReviewProduct
-                  productId={reviewData.productId}
-                  updatedAt={reviewData.updatedAt}
-                  switchOption={reviewData.switchOption}
-                  productData={productQueries[index].data}
-                />
+                {productQueries[index]?.data && (
+                  <MyReviewProduct reviewData={reviewData} productData={productQueries[index].data} />
+                )}
                 <ReviewItem reviewData={reviewData} usage='mypage' />
               </div>
             ))}

@@ -2,13 +2,15 @@ import { formatDateToQueryString } from '@/libs/formatDateToQueryString';
 import { getCookie } from '@/libs/manageCookie';
 import type { ProductReviewParams, ProductReviewType, ReviewResponse } from '@/types/productReviewType';
 
+const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
+
 export const getProductReviews = async (params: ProductReviewParams): Promise<ProductReviewType> => {
   const { productId, sort = 'createdAt', page = 0, size = 10 } = params;
   const token = await getCookie('accessToken');
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/reviews?productId=${productId}&sort=${sort}&page=${page}&size=${size}`,
+      `${BASE_URL}/api/v1/reviews?productId=${productId}&sort=${sort}&page=${page}&size=${size}`,
       {
         cache: 'no-store',
         headers: {
@@ -20,6 +22,25 @@ export const getProductReviews = async (params: ProductReviewParams): Promise<Pr
     const { data } = await res.json();
 
     return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postProductReviews = async ({ productId, formData }: { productId: number; formData: FormData }) => {
+  const token = await getCookie('accessToken');
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/v1/reviews?productId=${productId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    if (!res.ok) {
+      throw new Error('리뷰 등록 중 오류가 발생했습니다');
+    }
   } catch (error) {
     throw error;
   }
@@ -37,7 +58,7 @@ export const getUserProductReviews = async (params: ProductReviewParams): Promis
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/reviews/user?sort=${sort}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}`,
+      `${BASE_URL}/api/v1/reviews/user?sort=${sort}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}`,
       {
         cache: 'no-store',
         headers: {
@@ -54,23 +75,36 @@ export const getUserProductReviews = async (params: ProductReviewParams): Promis
   }
 };
 
-export const postProductReviews = async ({ productId, formData }: { productId: number; formData: FormData }) => {
+export const deleteUserProductReview = async (reviewId: number) => {
   const token = await getCookie('accessToken');
 
-  if (!token) {
-    return null;
+  try {
+    await fetch(`${BASE_URL}/api/v1/reviews/${reviewId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    throw error;
   }
+};
+
+export const putUserProductReview = async ({ reviewId, formData }: { reviewId: number; formData: FormData }) => {
+  const token = await getCookie('accessToken');
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL}/api/v1/reviews?productId=${productId}`, {
-      method: 'POST',
+    const res = await fetch(`${BASE_URL}/api/v1/reviews/${reviewId}`, {
+      method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
-    const data = await res.json();
-    return data;
+
+    if (!res.ok) {
+      throw new Error('리뷰 수정 중 오류가 발생했습니다');
+    }
   } catch (error) {
     throw error;
   }

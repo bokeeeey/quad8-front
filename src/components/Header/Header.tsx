@@ -7,12 +7,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 import { getCartData } from '@/api/cartAPI';
-import { getUserData } from '@/api/usersAPI';
 import { CustomImage, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';
+import { useUser } from '@/hooks/useUser';
 import { LogoIcon, UserIcon } from '@/public/index';
 import type { CartAPIDataType } from '@/types/cartType';
-import type { Users } from '@/types/userType';
 import { CartButton, LoginButton, LogoutButton, NotificationButton, SearchButton, ShopButton } from './HeaderParts';
 
 import styles from './Header.module.scss';
@@ -27,10 +26,7 @@ export default function Header() {
   const pathname = usePathname();
   const isBlack = pathname === '/' || pathname === 'sign-up';
 
-  const { data: userData } = useQuery<{ data: Users }>({
-    queryKey: ['userData'],
-    queryFn: getUserData,
-  });
+  const { data: userData } = useUser();
 
   const { data: cartData } = useQuery<CartAPIDataType>({
     queryKey: ['cartData'],

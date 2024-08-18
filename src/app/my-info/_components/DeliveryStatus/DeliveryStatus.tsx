@@ -1,44 +1,17 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { ROUTER } from '@/constants/route';
+import { useDeliveryStatus } from '@/hooks/useDeliveryStatus';
+import { ChevronIcon } from '@/public/index';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
-import { Fragment, useEffect, useMemo, useState } from 'react';
-
-import { getOrdersData } from '@/api/orderAPI';
-import { ROUTER } from '@/constants/route';
-import { ChevronIcon } from '@/public/index';
-import { Order, OrderStatus } from '@/types/orderType';
-
+import { Fragment } from 'react';
 import styles from './DeliveryStatus.module.scss';
 
 const cn = classNames.bind(styles);
 
-const DELIVERY_STATUS_LIST = [
-  { label: '결제 완료', status: OrderStatus.PAYMENT_COMPLETED, count: 0 },
-  { label: '배송 준비중', status: OrderStatus.PREPARING, count: 0 },
-  { label: '배송 중', status: OrderStatus.SHIPPING, count: 0 },
-  { label: '배송 완료', status: OrderStatus.DELIVERED, count: 0 },
-  { label: '구매 확정', status: OrderStatus.CONFIRMED, count: 0 },
-];
-
 export default function DeliveryStatus() {
-  const [deliveryStatusList, setDeliveryStatusList] = useState(DELIVERY_STATUS_LIST);
-
-  const { data: ordersResponse } = useQuery<{ data: Order[] }>({
-    queryKey: ['ordersResponse', 0, null, null],
-    queryFn: () => getOrdersData({ page: 0, size: 100, startDate: null, endDate: null }),
-  });
-
-  const orders = useMemo(() => ordersResponse?.data ?? [], [ordersResponse]);
-
-  useEffect(() => {
-    const updatedStatusList = DELIVERY_STATUS_LIST.map((statusItem) => ({
-      ...statusItem,
-      count: orders.filter((order) => order.orderStatus === statusItem.status).length,
-    }));
-    setDeliveryStatusList(updatedStatusList);
-  }, [orders]);
+  const deliveryStatusList = useDeliveryStatus();
 
   return (
     <article className={cn('delivery-status')}>
