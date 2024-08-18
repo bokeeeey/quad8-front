@@ -39,6 +39,6 @@ export const useEventAlarmStore = create<AlarmStoreType>()(
         })),
       deleteAllAlarm: () => set(() => ({ alarm: [] })),
     }),
-    { name: 'eventAlarmStorage' },
+    { name: 'eventAlarmStore' },
   ),
 );
