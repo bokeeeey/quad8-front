@@ -13,5 +13,6 @@ export const useUpdatePaymentInfo = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['paymentDataResponse', orderId] });
     },
+    retry: 0,
   });
 };

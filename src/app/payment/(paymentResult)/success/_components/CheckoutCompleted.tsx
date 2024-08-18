@@ -21,7 +21,6 @@ export default function CheckoutCompleted() {
   const queryClient = useQueryClient();
   const { isConfirmed } = usePaymentProcess();
 
-  // 새로고침 및 뒤로가기 관련 로직
   usePreventNavigation();
 
   const paymentSuccessResponse = queryClient.getQueryData<PaymentSuccessResponse>(['paymentSuccessResponse']);

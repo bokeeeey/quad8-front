@@ -3,7 +3,6 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 
 import { Button, Dropdown, ItemOverview } from '@/components';
 import { Input, Label } from '@/components/parts';
@@ -12,7 +11,7 @@ import { useSelectedAddress } from '@/hooks/useSelectedAddress';
 import { useUpdatePaymentInfo } from '@/hooks/useUpdatePaymentInfo';
 import { formatNumber } from '@/libs/formatNumber';
 import type { OrderItem } from '@/types/orderType';
-import { UserAddress } from '@/types/shippingType';
+import type { UserAddress } from '@/types/shippingType';
 import CheckoutAddress from './parts/CheckoutAddress';
 import PaymentContainer from './parts/PaymentContainer';
 
@@ -27,12 +26,10 @@ export default function CheckoutForm() {
   const { mutate: putPaymentMutation } = useUpdatePaymentInfo();
   const { selectedAddress, onSelectAddress } = useSelectedAddress({ paymentResponse });
 
-  const shippingAddressId = paymentResponse?.data.shippingAddressResponse.id || 0;
-
   const { handleSubmit, control, setValue } = useForm<FieldValues>({
     mode: 'onTouched',
     defaultValues: {
-      shippingAddressId,
+      shippingAddressId: paymentResponse?.data.shippingAddressResponse.id,
       deliveryMessage: '',
     },
   });
@@ -50,9 +47,6 @@ export default function CheckoutForm() {
     putPaymentMutation(payload, {
       onSuccess: () => {
         setIsPutPaymentSucceed(true);
-      },
-      onError: (error) => {
-        toast.error(error.message);
       },
     });
   };
