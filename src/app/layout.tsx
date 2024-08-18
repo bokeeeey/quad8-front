@@ -32,11 +32,9 @@ export default async function RootLayout({
   const queryClient = new QueryClient();
   const entireQueryClient = new QueryClient();
 
-  const userData = await queryClient.fetchQuery({ queryKey: ['userData'], queryFn: getUserData });
-  if (userData?.data) {
-    await queryClient.prefetchQuery({ queryKey: ['communityAlarm'], queryFn: getAlarm });
-    await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
-  }
+  await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData, retry: false });
+  await queryClient.prefetchQuery({ queryKey: ['communityAlarm'], queryFn: getAlarm, retry: false });
+  await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData, retry: false });
 
   return (
     <html lang='ko'>
