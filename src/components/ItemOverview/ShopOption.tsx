@@ -10,10 +10,9 @@ const cn = classNames.bind(styles);
 
 interface ShopOptionProps {
   optionName: string | null;
-  count: number;
 }
 
-export default function ShopOption({ optionName, count }: ShopOptionProps) {
+export default function ShopOption({ optionName }: ShopOptionProps) {
   const optionRef = useRef<HTMLDivElement>(null);
   const [isHover, setIsHover] = useState(false);
 
@@ -38,8 +37,6 @@ export default function ShopOption({ optionName, count }: ShopOptionProps) {
           {isHover && <div className={cn('tooltip-wrapper')}>{optionName}</div>}
         </div>
       )}
-
-      <div className={cn('count-text')}>{count}개</div>
     </div>
   );
 }

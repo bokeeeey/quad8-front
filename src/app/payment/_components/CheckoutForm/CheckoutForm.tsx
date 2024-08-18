@@ -57,9 +57,7 @@ export default function CheckoutForm() {
         <div className={cn('item-box')}>
           <h1>주문 상품</h1>
           {orderItemResponses &&
-            orderItemResponses.map((item: OrderItem) => (
-              <ItemOverview key={item.productId} imageWidth={104} imageHeight={104} item={item} />
-            ))}
+            orderItemResponses.map((item: OrderItem) => <ItemOverview key={item.productId} item={item} />)}
         </div>
 
         <div className={cn('price-box')}>
