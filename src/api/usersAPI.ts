@@ -1,9 +1,15 @@
 import type { Users } from '@/types/userType';
+import { getCookie } from '@/libs/manageCookie';
 import { baseAPI } from './interceptor/interceptor';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
 export const getUserData = async () => {
+  const accessToken = await getCookie('accessToken');
+
+  if (!accessToken) {
+    return null;
+  }
   try {
     const data = await baseAPI.get<Users>('/api/v1/users/me', {
       cache: 'no-cache',
