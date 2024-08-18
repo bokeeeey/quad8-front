@@ -1,0 +1,77 @@
+@mixin default-layout {
+  padding: 2rem;
+  border-radius: 0.4rem;
+  background-color: $white;
+}
+
+.container {
+  @include flex-column(4rem);
+
+  align-items: center;
+  width: 66rem;
+  color: $black;
+
+  .content {
+    width: 100%;
+    @include flex-column(0.8rem);
+    @include pretendard-20-500;
+
+    .info-box {
+      @include default-layout;
+
+      @include flex-column(0.8rem);
+
+      .order-number {
+        @include pretendard-16-400;
+
+        display: flex;
+        gap: 1.2rem;
+      }
+
+      .number {
+        color: $primary;
+      }
+    }
+
+    .item-box {
+      @include default-layout;
+      @include flex-column(1.2rem);
+    }
+  }
+
+  .amount {
+    @include default-layout;
+    @include pretendard-18-500;
+
+    display: flex;
+    justify-content: space-between;
+    background-color: $primary-20;
+    color: $primary;
+
+    .amount-number {
+      @include pretendard-18-700;
+    }
+  }
+
+  .payment-box {
+    @include default-layout;
+    @include flex-column(1.2rem);
+
+    .payment-method {
+      @include pretendard-16-400;
+
+      display: flex;
+      gap: 1.2rem;
+      color: $gray-40;
+
+      .payment-price {
+        color: $black;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .button {
+    width: 34.8rem;
+  }
+}

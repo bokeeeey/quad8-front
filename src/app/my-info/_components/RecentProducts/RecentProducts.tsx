@@ -4,21 +4,16 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
 import { getRecentProducts } from '@/api/productAPI';
-import { getUserData } from '@/api/usersAPI';
-import ProductItem from '@/components/Products/ProductItem';
+import { MyInfoEmptyCase, ProductItem } from '@/components';
+import { useUser } from '@/hooks/useUser';
 import type { RecentProductType } from '@/types/productType';
-import type { Users } from '@/types/userType';
-import MyInfoEmptyCase from '../MyInfoEmptyCase/MyInfoEmptyCase';
 
 import styles from './RecentProducts.module.scss';
 
 const cn = classNames.bind(styles);
 
 export default function RecentProducts() {
-  const { data: userData } = useQuery<{ data: Users }>({
-    queryKey: ['userData'],
-    queryFn: getUserData,
-  });
+  const { data: userData } = useUser();
 
   const userId = userData?.data.id;
 

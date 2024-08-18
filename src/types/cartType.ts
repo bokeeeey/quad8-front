@@ -1,6 +1,7 @@
 import type { CustomKeyboardAPITypes } from './customKeyboardType';
+import type { CategoryNameType } from './productType';
 
-export interface CustomDataType extends Omit<CustomKeyboardAPITypes, 'imgBase64' | 'option'> {
+interface CustomDataType extends Omit<CustomKeyboardAPITypes, 'imgBase64' | 'option'> {
   id: number;
   productId: number;
   imgUrl: string;
@@ -17,7 +18,7 @@ export interface ShopDataType {
   thumbsnail: string;
   count: number;
   classification: 'SHOP';
-  category: 'keyboard' | 'keycap' | 'switch' | 'etc';
+  category: CategoryNameType;
 }
 
 export interface CartAPIDataType {
@@ -29,4 +30,14 @@ export interface CartAPIDataType {
 export interface OptionChageAPIType {
   count: number;
   switchOptionId: number | null;
+}
+
+export interface CustomCardProps {
+  type: 'custom';
+  cardData: CustomDataType;
+}
+
+export interface ShopCardProps {
+  type: 'shop';
+  cardData: ShopDataType;
 }
