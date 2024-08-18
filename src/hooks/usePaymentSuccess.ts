@@ -31,7 +31,8 @@ export const usePaymentSuccess = ({ orderId, paymentKey, orderIdFromParams, amou
 
       queryClient.invalidateQueries({ queryKey: ['cartData'] });
       queryClient.invalidateQueries({ queryKey: ['paymentResponse'] });
-      queryClient.setQueryData(['paymentSuccessRequest'], res.data);
+      queryClient.setQueryData(['paymentSuccessResponse'], res.data);
+      localStorage.setItem('paymentSuccessResponse', JSON.stringify(res.data));
 
       const { orderId: relatedId } = res.data.paymentResponse;
       const newAlarm = {
