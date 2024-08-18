@@ -1,8 +1,8 @@
-import { MouseEvent } from 'react';
 import classNames from 'classnames/bind';
+import { MouseEvent } from 'react';
 
-import Modal from '../Modal/Modal';
 import Button from '../Buttons/Button/Button';
+import Modal from '../Modal/Modal';
 import { DialogIcon } from './DialogIcon';
 
 import styles from './Dialog.module.scss';

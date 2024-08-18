@@ -16,9 +16,9 @@ import type {
   CustomKeyboardStepTypes,
   OptionDataType,
 } from '@/types/customKeyboardType';
-import CartModal from './CartModal';
 import OptionProductModal from './OptionProductModal';
 
+import CartModal from './CartModal';
 import styles from './TotalCostWithNavigation.module.scss';
 
 const cn = classNames.bind(styles);
@@ -152,7 +152,7 @@ export default function TotalCostWithNavigation() {
     setIsOpenCartModal(true);
   };
 
-  const handleCloseCartMoal = () => {
+  const handleCloseCartModal = () => {
     if (isOpenAnyModalOnCartModal) {
       return;
     }
@@ -229,13 +229,13 @@ export default function TotalCostWithNavigation() {
           openCartModal={handleOpenCartModal}
         />
       </Modal>
-      <Modal isOpen={isOpenCartModal} onClose={handleCloseCartMoal}>
+      <Modal isOpen={isOpenCartModal} onClose={handleCloseCartModal}>
         <CartModal
           optionData={optionData}
           optionPrice={optionPrice}
           isOpenConfirmDialog={isOpenConfirmDialog}
           isOpenLoginModal={isOpenLoginModal}
-          onClose={handleCloseCartMoal}
+          onClose={handleCloseCartModal}
           updateOptionPrice={updateOptionPrice}
           changeConfirmDialog={handleConfirmDialog}
           changeLoginModal={setIsOpenLoginModal}

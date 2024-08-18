@@ -1,0 +1,31 @@
+.container {
+  position: sticky;
+  z-index: 999;
+  top: 8rem;
+  width: 100%;
+  height: 7.2rem;
+  background-color: #3363ff;
+}
+
+.inner {
+  max-width: 120rem;
+  height: 100%;
+  margin: 0 auto;
+  color: $white;
+  gap: 5rem;
+
+  @include flex-center;
+  @include pretendard-24-500;
+}
+
+.event-title {
+  @include flex-center;
+
+  flex: 1;
+
+  &.active {
+    height: 100%;
+    background-color: #ecf5fe;
+    color: $black;
+  }
+}
