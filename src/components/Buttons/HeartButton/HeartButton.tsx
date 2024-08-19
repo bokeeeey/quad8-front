@@ -153,7 +153,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
     }
 
     if (likeCount > 1) {
-      return '1';
+      return likeCount;
     }
 
     if (likeCount > MAX_COUNT) {
