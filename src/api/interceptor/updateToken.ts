@@ -1,6 +1,7 @@
 'use client';
 
 import { deleteCookie, getCookie, setCookie } from '@/libs/manageCookie';
+import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
@@ -32,6 +33,7 @@ export const updateToken = async (): Promise<null | string> => {
   } catch (error) {
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
+    toast.error('세션이 만료되어 로그아웃되었습니다.');
     throw error;
   }
 };
