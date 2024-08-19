@@ -10,35 +10,23 @@ interface AlarmStoreType {
   deleteAllAlarm: () => void;
 }
 
-export const useProductAlarmStore = create<AlarmStoreType>()(
-  persist(
-    (set) => ({
-      alarm: [],
+const createAlarmStore = (name: string) =>
+  create<AlarmStoreType>()(
+    persist(
+      (set) => ({
+        alarm: [],
 
-      addAlarm: (newAlarm) => set((prev) => ({ alarm: [newAlarm, ...prev.alarm] })),
-      deleteAlarm: (id) => set((prev) => ({ alarm: prev.alarm.filter((alarm) => alarm.id !== id) })),
-      readAlarm: (id) =>
-        set((prev) => ({
-          alarm: prev.alarm.map((alarmData) => (alarmData.id !== id ? alarmData : { ...alarmData, isRead: true })),
-        })),
-      deleteAllAlarm: () => set(() => ({ alarm: [] })),
-    }),
-    { name: 'productAlarmStore' },
-  ),
-);
+        addAlarm: (newAlarm) => set((prev) => ({ alarm: [newAlarm, ...prev.alarm] })),
+        deleteAlarm: (id) => set((prev) => ({ alarm: prev.alarm.filter((alarm) => alarm.id !== id) })),
+        readAlarm: (id) =>
+          set((prev) => ({
+            alarm: prev.alarm.map((alarmData) => (alarmData.id !== id ? alarmData : { ...alarmData, isRead: true })),
+          })),
+        deleteAllAlarm: () => set(() => ({ alarm: [] })),
+      }),
+      { name },
+    ),
+  );
 
-export const useEventAlarmStore = create<AlarmStoreType>()(
-  persist(
-    (set) => ({
-      alarm: [],
-      addAlarm: (newAlarm) => set((prev) => ({ alarm: [newAlarm, ...prev.alarm] })),
-      deleteAlarm: (id) => set((prev) => ({ alarm: prev.alarm.filter((alarm) => alarm.id !== id) })),
-      readAlarm: (id) =>
-        set((prev) => ({
-          alarm: prev.alarm.map((alarmData) => (alarmData.id !== id ? alarmData : { ...alarmData, isRead: true })),
-        })),
-      deleteAllAlarm: () => set(() => ({ alarm: [] })),
-    }),
-    { name: 'eventAlarmStore' },
-  ),
-);
+export const useProductAlarmStore = createAlarmStore('productStore');
+export const useEventAlarmStore = createAlarmStore('eventStore');
