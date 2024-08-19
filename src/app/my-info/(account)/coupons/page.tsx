@@ -1,8 +1,8 @@
-import { getCoupon } from '@/api/couponAPI';
-import { MyInfoEmptyCase } from '@/components';
-
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
+
+import { getCoupon } from '@/api/couponAPI';
+import { MyInfoEmptyCase } from '@/components';
 import CouponList from './_components/CouponList';
 
 import styles from './page.module.scss';
