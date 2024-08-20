@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 
 import { getCartData } from '@/api/cartAPI';
 import { offCookieChange, onCookieChange } from '@/api/interceptor/event';
-import { updateToken } from '@/api/interceptor/updateToken';
 import { CustomImage, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';
 import { deleteCookie } from '@/libs/manageCookie';
@@ -26,6 +25,7 @@ export default function Header() {
   const eventSource = useRef<null | EventSource>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const queryClient = useQueryClient();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -36,17 +36,6 @@ export default function Header() {
   const { data: cartData } = useQuery<CartAPIDataType>({
     queryKey: ['cartData'],
     queryFn: getCartData,
-    enabled: Boolean(userData?.data),
-  });
-
-  useQuery({
-    queryKey: ['token'],
-    queryFn: async () => {
-      const token = await updateToken();
-      queryClient.invalidateQueries({ queryKey: ['userData'] });
-      return token;
-    },
-    refetchInterval: 3600000,
     enabled: Boolean(userData?.data),
   });
 
@@ -79,7 +68,10 @@ export default function Header() {
 
   useEffect(() => {
     const handleCookieChange = () => {
-      setTimeout(() => {
+      if (timerRef.current) {
+        return;
+      }
+      timerRef.current = setTimeout(() => {
         toast.error('세션이 만료되어 로그아웃되었습니다.');
         deleteCookie('accessToken');
         deleteCookie('refreshToken');
@@ -88,7 +80,8 @@ export default function Header() {
           eventSource.current.close();
           Object.assign(eventSource, { current: null });
         }
-      }, 100);
+        timerRef.current = null;
+      }, 300);
     };
     onCookieChange(handleCookieChange);
     return () => offCookieChange(handleCookieChange);

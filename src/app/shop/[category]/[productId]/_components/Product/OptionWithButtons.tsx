@@ -51,7 +51,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
 
   const handleChangeOption = (value: string) => {
     if (value !== OPTION_PLACEHOLDER) {
-      const selectedOption = optionList.find((option) => option.optionName === value);
+      const selectedOption = optionList ? optionList.find((option) => option.optionName === value) : undefined;
       if (selectedOption) {
         const { id, optionName } = selectedOption;
 
@@ -193,7 +193,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     <>
       <div className={cn('option-section')}>
         <h2 className={cn('explain-title')}>상품 선택</h2>
-        {optionList?.length ? (
+        {optionList?.length && optionNames ? (
           <Dropdown options={optionNames} placeholder={OPTION_PLACEHOLDER} value='' onChange={handleChangeOption} />
         ) : (
           <div className={cn('option-count')}>

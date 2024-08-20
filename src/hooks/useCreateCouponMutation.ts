@@ -21,10 +21,10 @@ export const useCreateCouponMutation = (setIsModalOpen?: (value: SetStateAction<
       });
       addAlarm({
         id: Math.random() * 10 ** 16,
-        message: `'${res.name}'이 쿠폰함에 들어갔습니다`,
+        message: `'${res.data.name}'이 쿠폰함에 들어갔습니다`,
         type: 'EVENT',
         isRead: false,
-        relatedId: res.id,
+        relatedId: res.data.id,
         createdAt: new Date().toString(),
       });
     },

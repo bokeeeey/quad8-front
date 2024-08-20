@@ -27,7 +27,7 @@ export default function AddCartModal({ productId, closeModal }: AddCartModalProp
     queryFn: () => getProductDetail(productId),
   });
 
-  const [optionId, setOptionId] = useState<number>(productData?.optionList[0].id ?? -1);
+  const [optionId, setOptionId] = useState<number>(productData?.optionList ? productData?.optionList[0].id : -1);
   const [count, setCount] = useState(1);
 
   const { mutate: postCartItem, isPending: isPendingPostCartItem } = useMutation({

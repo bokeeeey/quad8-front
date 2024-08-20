@@ -49,26 +49,30 @@ const requestAPI = async <T>(
     if (!response.ok) {
       const isClient = typeof window !== 'undefined';
       const refreshToken = await getCookie('refreshToken');
-      if (response.status === 401 && accessToken && refreshToken && isClient) {
-        await updateToken();
-        const result: ResponseAPIType<T> = await requestAPI(baseURL, url, option);
-        return result;
-      }
-      emitCookieChange();
-      if (response.status === 401 && retryWithoutToken) {
-        const res = await fetch(baseURL + url, {
-          ...option,
-          headers: {
-            'Content-Type': 'application/json',
-            ...option?.headers,
-          },
-        });
-        const result: ResponseAPIType<T> = await res.json();
-        if (!res.ok) {
-          throw new Error(result.message);
+      if (response.status === 401) {
+        if (accessToken && refreshToken && isClient) {
+          await updateToken();
+          const result: ResponseAPIType<T> = await requestAPI(baseURL, url, option);
+          return result;
         }
-        return result;
+        if (retryWithoutToken) {
+          const res = await fetch(baseURL + url, {
+            ...option,
+            headers: {
+              'Content-Type': 'application/json',
+              ...option?.headers,
+            },
+          });
+
+          const result: ResponseAPIType<T> = await res.json();
+          if (!res.ok) {
+            throw new Error(result.message);
+          }
+          return result;
+        }
+        emitCookieChange();
       }
+      throw new Error(data.message);
     }
 
     return data;
