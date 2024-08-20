@@ -46,7 +46,7 @@ export default function ReviewItem({ usage, reviewData }: ReviewItemProps) {
   const { nickname, imgUrl } = writer;
   const optionsValues = [option1, option2, option3];
 
-  const optionKeywords = Object.entries(REVIEW_KEYWORD[PRODUCT_LIST[productCategoryId - 1]]);
+  const optionKeywords = Object.entries(REVIEW_KEYWORD[PRODUCT_LIST[Math.min(productCategoryId - 1, 3)]]);
 
   const handleToggleExpanded = () => {
     if (!usage && reviewImgs?.length > 0) {
