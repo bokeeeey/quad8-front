@@ -115,7 +115,7 @@ export default function TotalCostWithNavigation() {
           updateCurrentStep(nextStep);
           return;
         }
-        if (isInitialOpenOptionModal && optionData && !orderId && randomProductData) {
+        if (isInitialOpenOptionModal && optionData.length > 0 && !orderId) {
           setIsOpenOptionModal(true);
           return;
         }
@@ -221,14 +221,17 @@ export default function TotalCostWithNavigation() {
           {currentStep !== 'keyCap' && <ChevronIcon width={16} height={16} className={cn('next-button-icon')} />}
         </Button>
       </div>
-      <Modal isOpen={isOpenOptionModal} onClose={() => {}}>
-        <OptionProductModal
-          optionData={optionData}
-          onClose={handleCloseOptionModal}
-          updateOptionPrice={updateOptionPrice}
-          openCartModal={handleOpenCartModal}
-        />
-      </Modal>
+      {optionData.length > 0 && (
+        <Modal isOpen={isOpenOptionModal} onClose={() => {}}>
+          <OptionProductModal
+            optionData={optionData}
+            onClose={handleCloseOptionModal}
+            updateOptionPrice={updateOptionPrice}
+            openCartModal={handleOpenCartModal}
+          />
+        </Modal>
+      )}
+
       <Modal isOpen={isOpenCartModal} onClose={handleCloseCartModal}>
         <CartModal
           optionData={optionData}
