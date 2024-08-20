@@ -1,0 +1,52 @@
+.container {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.event-area {
+  @include flex-column(2rem);
+}
+
+.button-area {
+  @include flex-center;
+
+  margin-top: 6rem;
+}
+
+.start-button {
+  width: 100%;
+  max-width: 49.4rem;
+  margin-bottom: 20rem;
+  padding: 2rem 0;
+  border-radius: 0.8rem;
+  background-color: $black;
+  color: $white;
+  text-align: center;
+
+  @include pretendard-18-400;
+
+  &:disabled {
+    background-color: $gray-50;
+  }
+}
+
+.roulette-area {
+  position: relative;
+}
+
+.point-img {
+  position: absolute;
+  z-index: 3;
+  top: -0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.result {
+  font-size: 3rem;
+}
+
+.tag {
+  margin-top: 7.2rem;
+  @include flex-center;
+}

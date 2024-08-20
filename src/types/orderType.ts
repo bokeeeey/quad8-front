@@ -1,9 +1,29 @@
-import type { CustomKeyboardAPITypes } from './customKeyboardType';
+import type { CustomKeyboardSwitchTypes, CustomKeyboardPointKeyType } from './customKeyboardType';
+import type { CategoryNameType } from './productType';
 
 interface NewOrderType {
   productId: number;
   switchOptionId: number | null;
   quantity: number;
+}
+
+export interface SwitchOptionType {
+  individualColor: Record<string, string>;
+  customOption: {
+    createdAt?: string;
+    updatedAt?: string;
+    id: number;
+    layout: string;
+    appearanceTexture: string;
+    appearanceColor: string;
+    baseKeyColor: string;
+    keyboardSwitch: CustomKeyboardSwitchTypes;
+    hasPointKey: boolean;
+    pointKeyType: CustomKeyboardPointKeyType | null;
+    pointSetColor: null | string;
+    imgUrl: string;
+    price: number;
+  };
 }
 
 export type CreateOrderAPIType = NewOrderType[];
@@ -29,13 +49,14 @@ export interface OrderItem {
   productImgUrl: string;
   productName: string;
   quantity: number;
-  switchOption: CustomKeyboardAPITypes;
+  switchOption: string | SwitchOptionType;
   viewCount: number;
   price: number;
+  category?: CategoryNameType;
 }
 
 export interface Order {
-  orderId: number;
+  orderId: number | string;
   orderItems: OrderItem[];
   orderStatus: OrderStatus;
   purchaseDate: string;
@@ -61,9 +82,15 @@ export interface OrderDetailData {
   totalPrice: number;
 }
 
-export interface OrderDataRequest {
+export interface OrdersRequest {
   page: number;
   size: number;
   startDate: Date | null;
   endDate: Date | null;
+}
+
+export interface OrderResponse extends Order {
+  shippingAddress: ShippingAddressResponse;
+  totalAmount: number;
+  paymentOrderId: string;
 }

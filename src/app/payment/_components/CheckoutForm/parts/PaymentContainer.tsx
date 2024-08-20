@@ -1,16 +1,14 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 
-import { getUserData } from '@/api/usersAPI';
 import { Button } from '@/components';
 import { ROUTER } from '@/constants/route';
+import { useUser } from '@/hooks/useUser';
 import { renderPaymentProductName } from '@/libs/renderPaymentProductName';
 import type { OrderDetailData } from '@/types/orderType';
-import type { Users } from '@/types/userType';
 
 import styles from './PaymentContainer.module.scss';
 
@@ -46,7 +44,7 @@ export default function PaymentContainer({ amountValue, paymentData, isPutPaymen
   const [ready, setReady] = useState(isPutPaymentSucceed);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
-  const { data: userDataResponse } = useQuery<{ data: Users }>({ queryKey: ['userData'], queryFn: getUserData });
+  const { data: userDataResponse } = useUser();
 
   const { nickname: customerName, email: customerEmail } = userDataResponse?.data ?? {};
 

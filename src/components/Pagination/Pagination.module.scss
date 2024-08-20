@@ -13,17 +13,21 @@
   .pagination-list {
     @include flex-center;
 
+    gap: 0.8rem;
+
     .pagination-item {
       @include flex-center;
 
       width: 3.6rem;
-      height: 2.4rem;
+      height: 2.8rem;
+      color: $gray-50;
 
       .selected-page {
         @include flex-center;
+        @include pretendard-14-400;
 
-        width: 2.4rem;
-        height: 2.4rem;
+        width: 2.8rem;
+        height: 2.8rem;
         border-radius: 100%;
         background-color: $primary;
         color: $white;
@@ -34,4 +38,5 @@
 
 .page {
   padding: 1rem 1.6rem;
+  @include pretendard-14-400;
 }

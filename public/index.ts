@@ -38,6 +38,8 @@ export { default as LinkCopyIcon } from '@/public/svgs/link.svg';
 export { default as ShareIcon } from '@/public/svgs/share.svg';
 
 export { default as CalendarIcon } from './svgs/calendar.svg';
+export { default as FreeIcon } from './svgs/free.svg';
+export { default as KeydeukBlueIcon } from './svgs/keydeukBlueIcon.svg';
 export { default as ResetIcon } from './svgs/reset.svg';
 export { default as SearchIcon } from './svgs/search.svg';
 export { default as SoundVibrationIcon } from './svgs/soundVibration.svg';
@@ -47,17 +49,21 @@ export { default as ThumbIcon } from './svgs/thumb.svg';
 export { default as UserIcon } from './svgs/user.svg';
 export { default as VerticalTripleDotIcon } from './svgs/verticalTripleDot.svg';
 export { default as WarnCircleIcon } from './svgs/warnCircle.svg';
-export { default as KeydeukBlueIcon } from './svgs/keydeukBlueIcon.svg';
 
+export { default as eventTopImg } from './images/eventTop.png';
 export { default as ErrorIcon } from './svgs/404.svg';
+export { default as CloverIcon } from './svgs/clover.svg';
 export { default as FailIcon } from './svgs/failIcon.svg';
 
+export { default as backConfettiImg } from './images/backconfetti.png';
 export { default as banner1Img } from './images/banner1.png';
 export { default as banner2Img } from './images/banner2.png';
 export { default as blackSwitchImg } from './images/blackSwitch.jpg';
 export { default as blueSwitchImg } from './images/blueSwitch.jpg';
 export { default as brownSwitchImg } from './images/brownSwitch.jpg';
+export { default as deliveryImg } from './images/delivery.png';
 export { default as errorImg } from './images/error.png';
+
 export { default as guide1Img } from './images/guide1.png';
 export { default as guide2Img } from './images/guide2.png';
 export { default as guide3Img } from './images/guide3.png';
@@ -68,6 +74,10 @@ export { default as heroItem3Img } from './images/heroItem3.png';
 export { default as heroItem4Img } from './images/heroItem4.png';
 export { default as heroItem5Img } from './images/heroItem5.png';
 export { default as heroItem6Img } from './images/heroItem6.png';
+export { default as pointImg } from './images/point.png';
+export { default as rouletteImg } from './images/roulette.png';
+
+export { default as couponDownImg } from './images/couponDown.png';
 export { default as keydeukProfileImg } from './images/kedeukProfile.png';
 export { default as keydeukImg } from './images/keydeuk.png';
 export { default as myProfileImg } from './images/myProfile.jpeg';

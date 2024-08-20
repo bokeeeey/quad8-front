@@ -10,8 +10,9 @@ import { getCheckEmailDuplication, getCheckNicknameDuplication, postSignup } fro
 import { Button, InputField, RadioField } from '@/components';
 import { GENDER_OPTION } from '@/constants/dropdownOptions';
 import { ERROR_MESSAGE, PLACEHOLDER, REGEX } from '@/constants/signUpConstants';
-import { changePhoneNumber, unFormatPhoneNumber } from '@/libs';
+import { changePhoneNumber } from '@/libs/changePhoneNumber';
 import { formatOnInputBirthChange, unFormatBirthDate } from '@/libs/formatBirthDate';
+import { unFormatPhoneNumber } from '@/libs/unFormatPhoneNumber';
 import { CaretRightIcon, CheckboxCircleIcon } from '@/public/index';
 
 import styles from './SignupForm.module.scss';

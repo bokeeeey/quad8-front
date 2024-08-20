@@ -1,3 +1,5 @@
+import type { CategoryNameType } from './productType';
+
 export interface SuggestionDataType {
   name: string;
   range: number[];
@@ -18,7 +20,7 @@ export interface ContentType {
   thumbnail: string;
   price: number;
   reviewCount: number;
-  category: 'keyboard' | 'keycap' | 'switch' | 'etc';
+  category: CategoryNameType;
   liked: boolean;
 }
 

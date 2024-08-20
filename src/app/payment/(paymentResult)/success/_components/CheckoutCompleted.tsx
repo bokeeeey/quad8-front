@@ -1,18 +1,16 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import JSConfetti from 'js-confetti';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { postPaymentConfirm, postPaymentSuccess } from '@/api/paymentAPI';
 import CheckoutAddress from '@/app/payment/_components/CheckoutForm/parts/CheckoutAddress';
-import { Button, ItemOverview } from '@/components';
-import LogoLoading from '@/components/LogoLoading/LogoLoading';
+import { Button, ItemOverview, LogoLoading } from '@/components';
 import { ROUTER } from '@/constants/route';
+import { usePaymentProcess } from '@/hooks/usePaymentProcess';
+import { usePreventNavigation } from '@/hooks/usePreventNavigation';
 import type { OrderItem } from '@/types/orderType';
-import type { PaymentSuccessRequest } from '@/types/paymentsType';
+import type { PaymentSuccessResponse } from '@/types/paymentsType';
 
 import styles from './CheckoutComplete.module.scss';
 
@@ -21,76 +19,13 @@ const cn = classNames.bind(styles);
 export default function CheckoutCompleted() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const searchParams = useSearchParams();
-  const jsConfetti = new JSConfetti();
+  const { isConfirmed } = usePaymentProcess();
 
-  const orderId = searchParams.get('paymentOrderId') || '';
-  const orderIdFromParams = searchParams.get('orderId') || '';
-  const paymentKey = searchParams.get('paymentKey') || '';
-  const amount = searchParams.get('amount') || '';
+  usePreventNavigation();
 
-  const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isFailed, setIsFailed] = useState(false);
+  const paymentSuccessResponse = queryClient.getQueryData<PaymentSuccessResponse>(['paymentSuccessResponse']);
 
-  const { mutate: postPaymentSuccessMutation } = useMutation({
-    mutationFn: () => postPaymentSuccess({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
-    onSuccess: (res) => {
-      jsConfetti.addConfetti({ confettiNumber: 500 });
-
-      queryClient.invalidateQueries({ queryKey: ['cartData'] });
-      queryClient.setQueryData(['paymentSuccessRequest'], res.data);
-      localStorage.setItem('paymentSuccessRequest', JSON.stringify(res.data));
-
-      setIsConfirmed(true);
-    },
-    onError: (error) => {
-      router.replace(`${ROUTER.MY_PAGE.CHECKOUT_FAIL}?orderId=${orderId}&message=${error.message}`);
-      setIsFailed(true);
-    },
-    retry: 0,
-  });
-
-  const { mutate: postPaymentConfirmMutation } = useMutation({
-    mutationFn: () => postPaymentConfirm({ orderId, paymentKey, paymentOrderId: orderIdFromParams, amount }),
-    onSuccess: () => {
-      postPaymentSuccessMutation();
-    },
-    onError: (error) => {
-      router.replace(`${ROUTER.MY_PAGE.CHECKOUT_FAIL}?orderId=${orderId}&message=${error.message}`);
-
-      setIsFailed(true);
-    },
-    retry: 0,
-  });
-
-  useEffect(() => {
-    if (orderId && paymentKey && orderIdFromParams && amount) {
-      postPaymentConfirmMutation();
-    }
-  }, [amount, orderId, orderIdFromParams, paymentKey, postPaymentConfirmMutation]);
-
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = '';
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    const handlePopState = () => {
-      router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
-    };
-    window.history.pushState(null, '', window.location.href);
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [router]);
-
-  const paymentSuccessRequest = queryClient.getQueryData<PaymentSuccessRequest>(['paymentSuccessRequest']);
-
-  const { paymentResponse, orderDetailResponse } = paymentSuccessRequest ?? {};
+  const { paymentResponse, orderDetailResponse } = paymentSuccessResponse ?? {};
 
   const { shippingAddress, orderItems } = orderDetailResponse ?? {};
 
@@ -100,10 +35,6 @@ export default function CheckoutCompleted() {
 
   if (!isConfirmed) {
     return <LogoLoading />;
-  }
-
-  if (isFailed) {
-    router.replace(ROUTER.MY_PAGE.CHECKOUT_FAIL);
   }
 
   return (
@@ -118,15 +49,12 @@ export default function CheckoutCompleted() {
 
         <div className={cn('item-box')}>
           <h1>주문 상품</h1>
-          {orderItems &&
-            orderItems.map((item: OrderItem) => (
-              <ItemOverview key={item.productId} imegeWidth={104} imageHeight={104} item={item} />
-            ))}
+          {orderItems && orderItems.map((item: OrderItem) => <ItemOverview key={item.productId} item={item} />)}
         </div>
       </article>
 
       <div className={cn('confirm-box')}>
-        <Button className={cn('confirm-button')} type='submit' onClick={handleButtonClick}>
+        <Button className={cn('confirm-button')} type='button' onClick={handleButtonClick}>
           주문 상세보기
         </Button>
       </div>

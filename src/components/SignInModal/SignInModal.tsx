@@ -111,7 +111,7 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
         <div className={cn('auth-section-wrapper')}>
           {AUTH_SECTION.map((text, i) => (
             <div key={text} className={cn('auth-section')}>
-              <div className={cn('auth-section-text')} onClick={() => handleClickLink(ROUTER.AHTH.SIGN_UP)}>
+              <div className={cn('auth-section-text')} onClick={() => handleClickLink(ROUTER.AUTH.SIGN_UP)}>
                 {text}
               </div>
               {i === 2 || <div className={cn('bar')}>|</div>}

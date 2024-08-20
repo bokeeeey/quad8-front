@@ -1,0 +1,54 @@
+.container {
+  width: 100%;
+  background-image: linear-gradient(#ecf5fe, #fff);
+  scroll-margin-top: 10rem;
+}
+
+.inner {
+  @include inner;
+}
+
+.coupon-area {
+  @include flex-center;
+
+  flex-wrap: wrap;
+  margin: 8rem 0;
+  gap: 5.2rem;
+}
+
+.coupon-down {
+  position: relative;
+  width: 49.4rem;
+  height: 24rem;
+}
+
+.coupon {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.discount {
+  position: absolute;
+  top: 10rem;
+  left: 3.6rem;
+  color: $white;
+  font-size: 7.4rem;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 3.2rem;
+}
+
+.min-price {
+  position: absolute;
+  top: 15rem;
+  left: 4rem;
+  color: $white;
+  @include pretendard-24-500;
+}
+
+.button {
+  max-width: 49.4rem;
+  margin: 0 auto 16rem;
+  background-color: #212530;
+}

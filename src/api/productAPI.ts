@@ -31,14 +31,11 @@ export const getProductDetail = async (productId: number): Promise<ProductType> 
 };
 
 export async function getAllProductList({ sort, page, size }: ProductParams): Promise<ProductListResponse> {
-  const token = await getCookie('accessToken');
-
   try {
     const response = await fetch(`${BASE_URL}/api/v1/product/all?&sort=${sort}&page=${page}&size=${size}`, {
       cache: 'no-cache',
       headers: {
         'Cache-Control': 'no-cache',
-        Authorization: token ? `Bearer ${token}` : '',
       },
     });
     const rawData: ProductListResponse = await response.json();

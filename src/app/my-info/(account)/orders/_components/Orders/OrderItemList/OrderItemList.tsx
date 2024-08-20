@@ -37,6 +37,7 @@ export default function OrderItemList({ order }: OrderItemListProps) {
       <div className={cn('order-item-list')}>
         {orderItems.map((orderItem) => (
           <OrderItem
+            orderId={orderId}
             key={orderItem.productId}
             orderItem={orderItem}
             confirmationDate={formmattedConfirmationDate}

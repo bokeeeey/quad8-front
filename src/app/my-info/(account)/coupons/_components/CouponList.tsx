@@ -1,9 +1,9 @@
 'use client';
 
-import classNames from 'classnames/bind';
-import { getCoupons } from '@/api/couponAPI';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { getCoupon } from '@/api/couponAPI';
 import type { CouponTypes } from '@/types/couponType';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import classNames from 'classnames/bind';
 import Coupon from './Coupon';
 
 import styles from './CouponList.module.scss';
@@ -13,7 +13,7 @@ const cn = classNames.bind(styles);
 export default function CouponList() {
   const { data: myCoupons } = useSuspenseQuery({
     queryKey: ['coupons'],
-    queryFn: () => getCoupons(),
+    queryFn: () => getCoupon(),
   });
 
   return (
