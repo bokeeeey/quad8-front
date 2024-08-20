@@ -39,7 +39,6 @@ export default async function RootLayout({
     const userData = await fetchQueryBonding(queryClient, {
       queryKey: ['userData'],
       queryFn: getUserData,
-      retry: false,
     });
     if (!userData?.data) {
       await queryClient.prefetchQuery({ queryKey: ['communityAlarm'], queryFn: getAlarm, retry: false });

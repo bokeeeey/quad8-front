@@ -41,7 +41,11 @@ export default function Header() {
 
   useQuery({
     queryKey: ['token'],
-    queryFn: updateToken,
+    queryFn: async () => {
+      const token = await updateToken();
+      queryClient.invalidateQueries({ queryKey: ['userData'] });
+      return token;
+    },
     refetchInterval: 3600000,
     enabled: Boolean(userData?.data),
   });
