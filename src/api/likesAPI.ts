@@ -11,9 +11,13 @@ export const postProductLikes = async (productId: number) => {
 
 export async function getProductLikes({ page, size }: GetProductLikesParams) {
   try {
-    const { data } = await baseAPI.get<ProductLikeResponse>(`/api/v1/likes/products?page=${page}&size=${size}`, {
-      cache: 'no-cache',
-    });
+    const { data } = await baseAPI.get<ProductLikeResponse>(
+      `/api/v1/likes/products?page=${page}&size=${size}`,
+      {
+        cache: 'no-cache',
+      },
+      true,
+    );
     return data;
   } catch (error) {
     throw error;

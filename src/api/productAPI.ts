@@ -12,9 +12,13 @@ const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
 export const getProductDetail = async (productId: number): Promise<ProductType> => {
   try {
-    const { data } = await baseAPI.get<ProductType>(`/api/v1/product/${productId}`, {
-      cache: 'no-cache',
-    });
+    const { data } = await baseAPI.get<ProductType>(
+      `/api/v1/product/${productId}`,
+      {
+        cache: 'no-cache',
+      },
+      true,
+    );
 
     return data;
   } catch (error) {
@@ -24,9 +28,13 @@ export const getProductDetail = async (productId: number): Promise<ProductType> 
 
 export async function getAllProductList({ sort, page, size }: ProductParams) {
   try {
-    const data = await baseAPI.get<ProductDataResponse>(`/api/v1/product/all?&sort=${sort}&page=${page}&size=${size}`, {
-      cache: 'no-cache',
-    });
+    const data = await baseAPI.get<ProductDataResponse>(
+      `/api/v1/product/all?&sort=${sort}&page=${page}&size=${size}`,
+      {
+        cache: 'no-cache',
+      },
+      true,
+    );
 
     return data;
   } catch (error) {
@@ -59,9 +67,13 @@ export async function getCategoryProductList({
 
     const queryString = new URLSearchParams(queryParams).toString();
 
-    const data = await baseAPI.get<ProductDataResponse>(`/api/v1/product/category/${keyword}?${queryString}`, {
-      cache: 'no-cache',
-    });
+    const data = await baseAPI.get<ProductDataResponse>(
+      `/api/v1/product/category/${keyword}?${queryString}`,
+      {
+        cache: 'no-cache',
+      },
+      true,
+    );
     return data;
   } catch (error) {
     throw error;
@@ -99,9 +111,13 @@ export async function getKeydeukBest() {
 
 export const getRecentProducts = async () => {
   try {
-    const { data } = await baseAPI.get<RecentProductType[]>('/api/v1/user/recent-products', {
-      cache: 'no-cache',
-    });
+    const { data } = await baseAPI.get<RecentProductType[]>(
+      '/api/v1/user/recent-products',
+      {
+        cache: 'no-cache',
+      },
+      true,
+    );
 
     return data;
   } catch (error) {

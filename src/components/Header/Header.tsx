@@ -1,15 +1,18 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { getCartData } from '@/api/cartAPI';
+import { offCookieChange, onCookieChange } from '@/api/interceptor/event';
 import { updateToken } from '@/api/interceptor/updateToken';
 import { CustomImage, SignInModal } from '@/components';
 import { ROUTER } from '@/constants/route';
+import { deleteCookie } from '@/libs/manageCookie';
 import { useUser } from '@/hooks/useUser';
 import { LogoIcon, UserIcon } from '@/public/index';
 import type { CartAPIDataType } from '@/types/cartType';
@@ -22,6 +25,7 @@ const cn = classNames.bind(styles);
 export default function Header() {
   const eventSource = useRef<null | EventSource>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -68,6 +72,23 @@ export default function Header() {
 
     setIsModalOpen((prevIsOpen) => !prevIsOpen);
   };
+
+  useEffect(() => {
+    const handleCookieChange = () => {
+      setTimeout(() => {
+        toast.error('세션이 만료되어 로그아웃되었습니다.');
+        deleteCookie('accessToken');
+        deleteCookie('refreshToken');
+        queryClient.removeQueries();
+        if (eventSource.current) {
+          eventSource.current.close();
+          Object.assign(eventSource, { current: null });
+        }
+      }, 100);
+    };
+    onCookieChange(handleCookieChange);
+    return () => offCookieChange(handleCookieChange);
+  }, [queryClient]);
 
   return (
     <>

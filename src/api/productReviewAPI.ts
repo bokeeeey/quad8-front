@@ -11,6 +11,7 @@ export const getProductReviews = async (params: ProductReviewParams) => {
       {
         cache: 'no-store',
       },
+      true,
     );
 
     return data;
@@ -44,6 +45,7 @@ export const getUserProductReviews = async (params: ProductReviewParams) => {
       {
         cache: 'no-store',
       },
+      true,
     );
 
     return data;

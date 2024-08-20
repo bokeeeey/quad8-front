@@ -20,9 +20,13 @@ export const getSearchSuggestion = async () => {
 
 export const getSearchResult = async (keyword: string, page: number, size = 16) => {
   try {
-    const { data } = await baseAPI.get<SearchResultType>(`/api/v1/search?search=${keyword}&size=${size}&page=${page}`, {
-      cache: 'no-cache',
-    });
+    const { data } = await baseAPI.get<SearchResultType>(
+      `/api/v1/search?search=${keyword}&size=${size}&page=${page}`,
+      {
+        cache: 'no-cache',
+      },
+      true,
+    );
     return data;
   } catch (error) {
     throw error;

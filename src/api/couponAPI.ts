@@ -14,9 +14,13 @@ export const postCreateCoupon = async (payload: CreateCouponType) => {
 
 export const getCoupon = async (): Promise<CouponResponse[]> => {
   try {
-    const { data } = await baseAPI.get<CouponResponse[]>('/api/v1/user/coupon', {
-      cache: 'no-cache',
-    });
+    const { data } = await baseAPI.get<CouponResponse[]>(
+      '/api/v1/user/coupon',
+      {
+        cache: 'no-cache',
+      },
+      true,
+    );
 
     return data;
   } catch (error) {

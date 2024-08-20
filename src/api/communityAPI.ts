@@ -15,6 +15,7 @@ export const getAllCommunityPost = async ({ sort, page, size }: CommunityParamsT
       {
         cache: 'no-cache',
       },
+      true,
     );
     return data;
   } catch (error) {
@@ -38,9 +39,13 @@ export const getMyPosts = async ({ sort, page, size }: CommunityParamsType) => {
 
 export const getPostDetail = async (id: number) => {
   try {
-    const data = await baseAPI.get<CommunityPostCardDetailDataType>(`/api/v1/community/${id}`, {
-      cache: 'no-cache',
-    });
+    const data = await baseAPI.get<CommunityPostCardDetailDataType>(
+      `/api/v1/community/${id}`,
+      {
+        cache: 'no-cache',
+      },
+      true,
+    );
     return data;
   } catch (error) {
     throw error;
