@@ -72,6 +72,7 @@ export default function Header() {
         return;
       }
       timerRef.current = setTimeout(() => {
+        toast.dismiss();
         toast.error('세션이 만료되어 로그아웃되었습니다.');
         deleteCookie('accessToken');
         deleteCookie('refreshToken');

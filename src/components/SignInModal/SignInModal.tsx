@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -30,6 +30,7 @@ interface SigninModalProps {
 export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const pathname = usePathname();
   const { mutate: signInMutate } = useMutation({
     mutationFn: (formData: FetchSignInInfoTypes) => postSignin(formData),
     onSuccess: (response) => {
@@ -43,6 +44,9 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
         queryClient.invalidateQueries({ queryKey: ['userData'] }),
         queryClient.invalidateQueries({ queryKey: ['postCardsList'] }),
       ]);
+      if (pathname.startsWith(ROUTER.SHOP.ALL) || pathname.startsWith(ROUTER.SEARCH)) {
+        router.refresh();
+      }
     },
     onError: (error) => {
       toast.error(error.message);
