@@ -1,12 +1,13 @@
-import type { FieldValues } from 'react-hook-form';
 import type { UserAddress } from '@/types/shippingType';
+import type { FieldValues } from 'react-hook-form';
 import { baseAPI } from './interceptor/interceptor';
 
 export const postAddress = async (payload: FieldValues) => {
   try {
-    await baseAPI.post('/api/v1/shipping/address', {
+    const res = await baseAPI.post<UserAddress>('/api/v1/shipping/address', {
       body: JSON.stringify(payload),
     });
+    return res;
   } catch (error) {
     throw error;
   }
