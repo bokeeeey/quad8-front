@@ -134,6 +134,7 @@ export default function CheckoutAddress({ item, onClick, control, isForm, delive
               control={control}
               render={({ field: { onChange, ...field } }) => (
                 <Dropdown
+                  key='deliveryOption'
                   options={DELIVERY_OPTIONS}
                   sizeVariant='sm'
                   placeholder='배송 요청 사항을 선택해 주세요.'
