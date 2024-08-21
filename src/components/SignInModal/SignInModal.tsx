@@ -44,6 +44,7 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
         queryClient.invalidateQueries({ queryKey: ['userData'] }),
         queryClient.invalidateQueries({ queryKey: ['postCardsList'] }),
       ]);
+
       if (pathname.startsWith(ROUTER.SHOP.ALL) || pathname.startsWith(ROUTER.SEARCH)) {
         router.refresh();
       }

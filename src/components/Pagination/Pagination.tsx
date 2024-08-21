@@ -20,6 +20,7 @@ export default function Pagination({
   searchParams,
 }: PaginationProps) {
   const PAGE_RANGE = 6;
+  const currentDate = Date.now();
 
   if (!totalElements || totalPages === 0) {
     return null;
@@ -32,7 +33,7 @@ export default function Pagination({
   const renderPageLink = (pageNum: number, isSelected: boolean) => {
     const linkProps = {
       href: {
-        query: { ...searchParams, page: pageNum - 1 },
+        query: { ...searchParams, page: pageNum - 1, date: currentDate },
       },
       scroll: false,
     };

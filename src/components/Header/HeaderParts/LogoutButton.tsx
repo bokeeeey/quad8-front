@@ -35,6 +35,7 @@ export default function LogoutButton({ eventSource }: LogoutButtonProps) {
     if (pathname.startsWith(ROUTER.MY_PAGE.MY_INFO)) {
       router.push(ROUTER.MAIN);
     }
+
     if (pathname.startsWith(ROUTER.SHOP.ALL) || pathname.startsWith(ROUTER.SEARCH)) {
       router.refresh();
     }

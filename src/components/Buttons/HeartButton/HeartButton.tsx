@@ -8,7 +8,7 @@ import type { CommunityPostCardDataType } from '@/types/communityType';
 import type { Users } from '@/types/userType';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 
 import styles from './HeartButton.module.scss';
 
@@ -29,7 +29,7 @@ interface LikeMutationProps {
 const MAX_COUNT = 99;
 
 export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButtonProps) {
-  const [isChecked, setIsChecked] = useState(isLiked);
+  const [isChecked, setIsChecked] = useState(false);
   const [animate, setAnimate] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 
@@ -163,6 +163,10 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
     return likeCount.toString();
   };
 
+  useEffect(() => {
+    setIsChecked(isLiked);
+  }, [isLiked, userData]);
+
   return (
     <>
       <div
@@ -175,7 +179,7 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
       >
         {usage === 'community' ? (
           <div className={cn('count-wrap')}>
-            <HeartIcon className={cn('heart', isLiked && 'red-heart')} />
+            <HeartIcon className={cn('heart', isChecked && 'red-heart')} />
             <span className={cn('like-count')}>{displayLikeCount()}</span>
           </div>
         ) : (
