@@ -1,6 +1,6 @@
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
-const VALID_URL_PATTERN = /^(https?:\/\/[^\s/$.?#].[^\s]*|\/[^\s]*)$/i;
+const VALID_URL_PATTERN = /^(https?:\/\/[^\s/$.?#].[^\s]*|\/[^\s]*|data:image\/[^\s]*)$/i;
 
 export const isValidImageURL = (src: string | StaticImport) => {
   if (typeof src === 'string') {

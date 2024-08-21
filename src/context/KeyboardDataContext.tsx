@@ -2,7 +2,7 @@
 
 import type { Color } from '@react-three/fiber';
 import { useQueryClient } from '@tanstack/react-query';
-import { redirect, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ROUTER } from '@/constants/route';
@@ -43,7 +43,9 @@ export const KeyboardDataContext = createContext<KeyboardDataContextType>({
 
 export function KeyboardDataContextProvider({ children }: PropsWithChildren) {
   const params = useSearchParams();
+  const router = useRouter();
   const queryClient = useQueryClient();
+
   const [orderId, setOrderId] = useState<number | null>(null);
   const [keyboardData, setKeyboardData] = useState<KeyboardDataType>({
     type: '풀 배열',
@@ -92,7 +94,8 @@ export function KeyboardDataContextProvider({ children }: PropsWithChildren) {
     }
     const customData = data.CUSTOM.find((custom) => custom.id === Number(id));
     if (!customData) {
-      redirect(ROUTER.CUSTOM_KEYBOARD);
+      router.push(ROUTER.CUSTOM_KEYBOARD);
+      return;
     }
     setOrderId(customData.id);
     setKeyboardData({
@@ -108,7 +111,7 @@ export function KeyboardDataContextProvider({ children }: PropsWithChildren) {
       option: [],
       individualColor: customData.individualColor ?? {},
     });
-  }, [queryClient, params]);
+  }, [queryClient, params, router]);
 
   const value = useMemo(
     () => ({

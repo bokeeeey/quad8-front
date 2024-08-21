@@ -1,9 +1,9 @@
 import { getUserData } from '@/api/usersAPI';
-import type { Users } from '@/types/userType';
+import type { UserDataResponseType } from '@/types/userType';
 import { useQuery } from '@tanstack/react-query';
 
 export const useUser = () => {
-  return useQuery<{ data: Users }>({
+  return useQuery<UserDataResponseType | null>({
     queryKey: ['userData'],
     queryFn: getUserData,
   });

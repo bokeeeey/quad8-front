@@ -1,3 +1,5 @@
+'use client';
+
 import useKakaoShare from '@/hooks/useKakaoShare';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { KakaoIcon, LinkCopyIcon } from '@/public/index';

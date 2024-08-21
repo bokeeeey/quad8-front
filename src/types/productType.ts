@@ -20,7 +20,7 @@ export interface ProductType {
   scope: number;
   detailsImg: string;
   thubmnailList: ThumbnailTypes[];
-  optionList: OptionTypes[];
+  optionList: OptionTypes[] | null;
   categoryName: CategoryNameType;
   isLiked: boolean;
 }

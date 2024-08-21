@@ -55,7 +55,7 @@ export default function WritePostButton() {
   };
 
   const handleClickProductList = (i: number) => {
-    setSelectedOrder(orderListData.data[i]);
+    setSelectedOrder(orderListData?.data[i] ?? null);
   };
 
   const closeOrderListModal = () => {

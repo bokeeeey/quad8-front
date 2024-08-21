@@ -62,6 +62,7 @@ export default function WishItem({ productId, productImg, productName, price, ch
             productName,
             price,
           }}
+          isRouteDetailPage
         />
       </div>
       <div className={cn('cart-delete')}>

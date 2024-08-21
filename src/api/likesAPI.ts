@@ -1,56 +1,33 @@
-import { getCookie } from '@/libs/manageCookie';
 import type { GetProductLikesParams, ProductLikeResponse } from '@/types/likeType';
-
-const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
+import { baseAPI } from './interceptor/interceptor';
 
 export const postProductLikes = async (productId: number) => {
-  const token = await getCookie('accessToken');
-
   try {
-    await fetch(`${BASE_URL}/api/v1/likes/${productId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await baseAPI.post(`/api/v1/likes/${productId}`);
   } catch (error) {
     throw error;
   }
 };
 
-export async function getProductLikes({ page, size }: GetProductLikesParams): Promise<ProductLikeResponse> {
-  const token = await getCookie('accessToken');
-
+export async function getProductLikes({ page, size }: GetProductLikesParams) {
   try {
-    const response = await fetch(`${BASE_URL}/api/v1/likes/products?page=${page}&size=${size}`, {
-      cache: 'no-cache',
-      headers: {
-        'Cache-Control': 'no-cache',
-        Authorization: token ? `Bearer ${token}` : '',
+    const { data } = await baseAPI.get<ProductLikeResponse>(
+      `/api/v1/likes/products?page=${page}&size=${size}`,
+      {
+        cache: 'no-cache',
       },
-    });
-    const rawData = await response.json();
-
-    return rawData.data;
+      true,
+    );
+    return data;
   } catch (error) {
     throw error;
   }
 }
 
 export const deleteProductLikes = async (productIds: number[]) => {
-  const token = await getCookie('accessToken');
-
   try {
-    await fetch(`${BASE_URL}/api/v1/likes`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        productIds,
-      }),
+    await baseAPI.delete('/api/v1/likes', {
+      body: JSON.stringify({ productIds }),
     });
   } catch (error) {
     throw error;
@@ -58,64 +35,32 @@ export const deleteProductLikes = async (productIds: number[]) => {
 };
 
 export const postCommunityLikes = async (communityId: number) => {
-  const token = await getCookie('accessToken');
-
   try {
-    await fetch(`${BASE_URL}/api/v1/community/likes/${communityId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await baseAPI.post(`/api/v1/community/likes/${communityId}`);
   } catch (error) {
     throw error;
   }
 };
 
 export const deleteCommunityLikes = async (communityId: number) => {
-  const token = await getCookie('accessToken');
-
   try {
-    await fetch(`${BASE_URL}/api/v1/community/likes/${communityId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await baseAPI.delete(`/api/v1/community/likes/${communityId}`);
   } catch (error) {
     throw error;
   }
 };
 
 export const postReviewLikes = async (reviewId: number) => {
-  const token = await getCookie('accessToken');
-
   try {
-    await fetch(`${BASE_URL}/api/v1/reviews/likes/${reviewId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await baseAPI.post(`/api/v1/reviews/likes/${reviewId}`);
   } catch (error) {
     throw error;
   }
 };
 
 export const deleteReviewLikes = async (reviewId: number) => {
-  const token = await getCookie('accessToken');
-
   try {
-    await fetch(`${BASE_URL}/api/v1/reviews/likes/${reviewId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await baseAPI.delete(`/api/v1/reviews/likes/${reviewId}`);
   } catch (error) {
     throw error;
   }

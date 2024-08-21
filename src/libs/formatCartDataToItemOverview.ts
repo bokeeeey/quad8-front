@@ -40,9 +40,9 @@ export const formatCartDataToItemOverview = (item: CustomCardProps | ShopCardPro
       },
     };
   }
-  const { id, thumbsnail, productTitle, count, optionName, category } = cardData;
+  const { productId, thumbsnail, productTitle, count, optionName, category } = cardData;
   return {
-    productId: id,
+    productId,
     productImgUrl: thumbsnail,
     productName: productTitle,
     quantity: count,
