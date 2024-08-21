@@ -1,63 +1,53 @@
 .container {
-  width: 56.2rem;
+  @include flex-column(0);
+
+  align-items: center;
+  width: 46rem;
   padding: 4rem;
   border-radius: 2.4rem;
   background-color: $white;
 }
 
+.icon {
+  width: 7rem;
+  height: 7rem;
+  margin-bottom: 2rem;
+}
+
 .title {
   @include pretendard-30-700;
 
-  margin-bottom: 8rem;
+  margin-bottom: 3rem;
   text-align: center;
 }
 
 .input-wrapper {
   @include flex-column(4rem);
 
-  margin-bottom: 6.8rem;
-}
-
-.auth-section-wrapper {
-  @include flex-center;
-  @include pretendard-14-400;
-
+  width: 100%;
   margin-bottom: 6rem;
 }
 
-.auth-section {
-  display: flex;
-
-  & > .auth-section-text {
-    color: $gray-50;
-    cursor: pointer;
-  }
-
-  & > .bar {
-    margin: 0 1.2rem;
-    color: $gray-20;
-    cursor: default;
-  }
-}
-
-.button {
-  margin-bottom: 4rem;
-}
-
-.o-auth-wrapper {
+.signup-text {
   @include pretendard-14-400;
-  @include flex-column(2rem);
+  @include flex-center;
 
+  margin-bottom: 3rem;
   color: $gray-50;
-  text-align: center;
+
+  & > strong {
+    @include pretendard-14-600;
+
+    margin-left: 0.5rem;
+    color: $primary;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
-.icons {
-  display: flex;
-  gap: 3.6rem;
-  justify-content: center;
-
-  & > * {
-    cursor: pointer;
-  }
+.spin-icon {
+  height: 7rem;
 }
