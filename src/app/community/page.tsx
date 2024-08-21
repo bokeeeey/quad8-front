@@ -2,6 +2,7 @@ import { getAllCommunityPost } from '@/api/communityAPI';
 import Pagination from '@/components/Pagination/Pagination';
 import type { CommunityParamsType, CommunityPostListResponse } from '@/types/communityType';
 import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import CommunityEmptyCase from './_components/CommunityEmptyCase';
 import PostCardList from './_components/PostCardList';
 
@@ -18,7 +19,7 @@ export default async function CommunityPage({ searchParams }: CommunityPageProps
 
   const queryClient = new QueryClient();
 
-  const posts = await queryClient.fetchQuery<CommunityPostListResponse | null>({
+  const posts = await fetchQueryBonding<CommunityPostListResponse | null>(queryClient, {
     queryKey: ['postCardsList'],
     queryFn: () => getAllCommunityPost(initialParams),
   });

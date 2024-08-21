@@ -2,6 +2,8 @@ import classNames from 'classnames/bind';
 
 import { getMyPosts } from '@/api/communityAPI';
 import { MyInfoEmptyCase, Pagination } from '@/components';
+import { QueryClient } from '@tanstack/react-query';
+import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import MyPostCardList from './_components/MyPostCardList';
 import MyPostsEmptyCase from './_components/MyPostsEmptyCase';
 
@@ -26,7 +28,12 @@ export default async function MyPostsPage({ searchParams }: MyPostsPageProps) {
     size: searchParams.size || '12',
   };
 
-  const myPosts = await getMyPosts(initialParams);
+  const queryClient = new QueryClient();
+
+  const myPosts = await fetchQueryBonding(queryClient, {
+    queryKey: ['myCustomReview', searchParams],
+    queryFn: () => getMyPosts(initialParams),
+  });
 
   if (!myPosts) {
     return <MyPostsEmptyCase />;

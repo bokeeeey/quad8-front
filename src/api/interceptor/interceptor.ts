@@ -1,6 +1,5 @@
 import { getCookie } from '@/libs/manageCookie';
 import { updateToken } from './updateToken';
-import { emitCookieChange } from './event';
 
 interface ResponseAPIType<T> {
   data: T;
@@ -70,7 +69,6 @@ const requestAPI = async <T>(
           }
           return result;
         }
-        emitCookieChange();
       }
       throw new Error(data.message);
     }

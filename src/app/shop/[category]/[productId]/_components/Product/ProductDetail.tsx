@@ -5,6 +5,7 @@ import { ROUTER } from '@/constants/route';
 import { QueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { redirect } from 'next/navigation';
+import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import OptionWithButton from './OptionWithButtons';
 import styles from './ProductDetail.module.scss';
 import Thumbnail from './Thumbnail';
@@ -27,7 +28,7 @@ const POINT_TEXT = {
 
 export default async function ProductDetail({ productId }: ProductDetailProps) {
   const queryClient = new QueryClient();
-  const productData = await queryClient.fetchQuery({
+  const productData = await fetchQueryBonding(queryClient, {
     queryKey: ['product', productId],
     queryFn: () => getProductDetail(productId),
   });
