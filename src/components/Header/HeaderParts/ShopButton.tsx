@@ -35,7 +35,7 @@ export default function ShopButton() {
         <div className={cn('sub-menu-layout')}>
           <div className={cn('sub-menu-wrapper', { black: pathname === '/' })}>
             {MENU_BUTTON.map((element) => (
-              <Link key={element.NAME} className={cn('menu-button')} href={element.HREF}>
+              <Link href={element.HREF} key={element.NAME} className={cn('menu-button')}>
                 <div className={cn('button-text')}>{element.NAME}</div>
               </Link>
             ))}

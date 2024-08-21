@@ -1,3 +1,5 @@
+'use client';
+
 import { ROUTER } from '@/constants/route';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

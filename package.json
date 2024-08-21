@@ -39,7 +39,8 @@
     "sharp": "^0.33.5",
     "swiper": "^11.1.4",
     "three": "^0.165.0",
-    "three-stdlib": "^2.30.3"
+    "three-stdlib": "^2.30.3",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.4.0",

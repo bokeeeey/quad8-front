@@ -51,7 +51,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
 
   const handleChangeOption = (value: string) => {
     if (value !== OPTION_PLACEHOLDER) {
-      const selectedOption = optionList.find((option) => option.optionName === value);
+      const selectedOption = optionList ? optionList.find((option) => option.optionName === value) : undefined;
       if (selectedOption) {
         const { id, optionName } = selectedOption;
 
@@ -101,7 +101,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     return false;
   };
 
-  const handleAddCartProduct = (data: CartProductType) => {
+  const handleAddCartProduct = (data: CartProductType, successFn?: () => void) => {
     addProductToCartMutate(data, {
       onSuccess: () => {
         const cartData = queryClient.getQueryData<CartAPIDataType>(['cartData']) ?? null;
@@ -122,6 +122,9 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
         queryClient.invalidateQueries({ queryKey: ['cartData'] });
         toast.success('상품이 장바구니에 담겼습니다.');
         setSelectedOptions([]);
+        if (successFn) {
+          successFn();
+        }
       },
       onError: () => {
         toast.error('장바구니에 담기를 실패했습니다. 잠시 후 다시 시도해주세요.');
@@ -129,7 +132,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     });
   };
 
-  const handleClickCartButton = () => {
+  const handleClickCartButton = (successFn?: () => void) => {
     if (checkUserAndOptions()) return;
 
     if (!optionList) {
@@ -146,7 +149,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
         count: option.count,
       };
 
-      handleAddCartProduct(data);
+      handleAddCartProduct(data, successFn);
     });
   };
 
@@ -175,8 +178,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
       switchOptionId: option.id,
       quantity: option.count,
     }));
-
-    handleBuyProduct(data);
+    handleClickCartButton(() => handleBuyProduct(data));
   };
 
   const { mutate: addRecentProduct } = useMutation({
@@ -193,7 +195,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     <>
       <div className={cn('option-section')}>
         <h2 className={cn('explain-title')}>상품 선택</h2>
-        {optionList?.length ? (
+        {optionList?.length && optionNames ? (
           <Dropdown options={optionNames} placeholder={OPTION_PLACEHOLDER} value='' onChange={handleChangeOption} />
         ) : (
           <div className={cn('option-count')}>
@@ -218,7 +220,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
         </h1>
       </div>
       <div className={cn('button-section')}>
-        <Button onClick={handleClickCartButton}>장바구니</Button>
+        <Button onClick={() => handleClickCartButton()}>장바구니</Button>
         <Button onClick={handleClickBuyButton}>구매하기</Button>
       </div>
       <SignInModal isOpen={isSignInModalOpen} onClose={() => setIsSignInModalOpen(false)} />

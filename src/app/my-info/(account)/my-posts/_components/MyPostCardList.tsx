@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 
 import { getMyPosts } from '@/api/communityAPI';
 import PostCard from '@/app/community/_components/PostCard';
-import type { CommunityPostCardDataType, CommunityPostCardDetailDataType } from '@/types/communityType';
+import type { CommunityPostCardDataType } from '@/types/communityType';
 import SortDropdown from './SortDropdown';
 
 import styles from './MyPostCardList.module.scss';
@@ -14,7 +14,7 @@ const cn = classNames.bind(styles);
 
 interface MyPostCardListProps {
   searchParams: { [key: string]: string | undefined };
-  initialData: CommunityPostCardDetailDataType[];
+  initialData: CommunityPostCardDataType[];
 }
 
 interface ParamsType {

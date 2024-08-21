@@ -16,7 +16,6 @@
 .content-wrapper {
   @include flex-column(6rem);
 
-  width: 100%;
   margin-top: -2rem;
   padding-left: 0.3rem;
 }

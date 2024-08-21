@@ -8,6 +8,8 @@ import { getCartData } from '@/api/cartAPI';
 import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
 import Script from 'next/script';
+import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
+import { getCookie } from '@/libs/manageCookie';
 import AOSWrapper from './_components/Aos/AOSWrapper';
 import { Providers } from './providers';
 
@@ -31,10 +33,18 @@ export default async function RootLayout({
 }>) {
   const queryClient = new QueryClient();
   const entireQueryClient = new QueryClient();
+  const accessToken = await getCookie('accessToken');
 
-  await queryClient.prefetchQuery({ queryKey: ['userData'], queryFn: getUserData });
-  await queryClient.prefetchQuery({ queryKey: ['communityAlarm'], queryFn: getAlarm });
-  await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
+  if (accessToken) {
+    const userData = await fetchQueryBonding(queryClient, {
+      queryKey: ['userData'],
+      queryFn: getUserData,
+    });
+    if (!userData?.data) {
+      await queryClient.prefetchQuery({ queryKey: ['communityAlarm'], queryFn: getAlarm, retry: false });
+      await entireQueryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData, retry: false });
+    }
+  }
 
   return (
     <html lang='ko'>

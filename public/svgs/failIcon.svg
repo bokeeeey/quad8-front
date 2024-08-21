@@ -5,11 +5,9 @@
       .cls-1 {
         fill: #04002a;
       }
-
       .cls-1, .cls-2 {
         stroke-width: 0px;
       }
-
       .cls-2 {
         fill: #fff;
       }
