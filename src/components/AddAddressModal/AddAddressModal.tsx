@@ -149,7 +149,7 @@ export default function AddAddressModal({ onClick, newAddressData, userAddressDa
       </Label>
 
       <Button className={cn('button')} type='submit' radius={8} paddingVertical={20} disabled={!isValid}>
-        {!isValid ? '변경사항이 없습니다' : '저장'}
+        저장
       </Button>
     </form>
   );
