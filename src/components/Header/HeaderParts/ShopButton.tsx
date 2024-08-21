@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import classNames from 'classnames/bind';
+import { useState } from 'react';
 
 import { ROUTER } from '@/constants/route';
 
@@ -35,11 +35,9 @@ export default function ShopButton() {
         <div className={cn('sub-menu-layout')}>
           <div className={cn('sub-menu-wrapper', { black: pathname === '/' })}>
             {MENU_BUTTON.map((element) => (
-              <div key={element.NAME} className={cn('menu-button')}>
-                <Link href={element.HREF} className={cn('button-text')}>
-                  {element.NAME}
-                </Link>
-              </div>
+              <Link key={element.NAME} className={cn('menu-button')} href={element.HREF}>
+                <div className={cn('button-text')}>{element.NAME}</div>
+              </Link>
             ))}
           </div>
         </div>
