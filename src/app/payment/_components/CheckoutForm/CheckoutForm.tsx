@@ -44,6 +44,10 @@ export default function CheckoutForm() {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (payload) => {
+    if (!payload.shippingAddressId) {
+      return;
+    }
+
     putPaymentMutation(payload, {
       onSuccess: () => {
         setIsPutPaymentSucceed(true);
@@ -114,6 +118,7 @@ export default function CheckoutForm() {
           amountValue={Number(totalPrice)}
           paymentData={paymentResponse?.data}
           isPutPaymentSucceed={isPutPaymentSucceed}
+          hasAddressData={!!selectedAddress?.id}
         />
       </article>
     </form>
