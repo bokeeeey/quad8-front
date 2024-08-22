@@ -1,15 +1,16 @@
 'use client';
 
-import { ReactNode, useRef } from 'react';
 import { QueryClient, QueryClientProvider, isServer } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import classNames from 'classnames/bind';
+import { ReactNode, useRef } from 'react';
 
-import { ToastContainer, Zoom } from 'react-toastify';
 import { ScrollUpButton } from '@/components';
+import { ToastContainer, Zoom } from 'react-toastify';
 
-import 'react-toastify/ReactToastify.min.css';
 import '@/styles/toast/toastContainer.scss';
+import 'react-toastify/ReactToastify.min.css';
+import AdvertisePanel from './event/_components/AdvertisePanel';
 import styles from './providers.module.scss';
 
 const cn = classNames.bind(styles);
@@ -48,6 +49,7 @@ export function Providers({ children }: ProvidersProps) {
       {children}
       <ScrollUpButton headerRef={scrollRef} />
       <div id='modal' />
+      <AdvertisePanel />
       <ReactQueryDevtools initialIsOpen={false} />
       <ToastContainer
         autoClose={2000}
