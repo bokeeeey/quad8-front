@@ -1,3 +1,18 @@
 .container {
+  @include flex-column(2rem);
+
   margin-top: 1rem;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  background-color: $white;
+}
+
+.title {
+  @include pretendard-14-600;
+
+  margin-bottom: 0.3rem;
+}
+
+.content {
+  @include pretendard-12-400;
 }

@@ -295,7 +295,7 @@ export default function SignupForm() {
                   onClick={() => handleClickAgreement({ first: true })}
                 />
               </div>
-              {isAgreementOpen[0] && <TermsAgreement />}
+              {isAgreementOpen[0] && <TermsAgreement type='service' />}
               <div className={cn('content')}>
                 <label htmlFor='check2' className={cn('checkbox-label')}>
                   <input {...registers.check2} type='checkbox' className={cn('checkbox-input')} id='check2' />
@@ -308,7 +308,7 @@ export default function SignupForm() {
                   onClick={() => handleClickAgreement({ second: true })}
                 />
               </div>
-              {isAgreementOpen[1] && <TermsAgreement />}
+              {isAgreementOpen[1] && <TermsAgreement type='privacyPolicy' />}
             </div>
           </div>
         </div>
