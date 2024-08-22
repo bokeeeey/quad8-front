@@ -7,3 +7,13 @@
 .inner {
   @include inner;
 }
+
+.center {
+  @include pretendard-16-400;
+
+  display: block;
+  width: 100%;
+  padding-bottom: 16rem;
+  color: $white;
+  text-align: center;
+}

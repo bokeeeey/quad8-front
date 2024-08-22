@@ -13,6 +13,7 @@ export default function BenefitRoulette() {
       </EventTitle>
       <div className={cn('roulette-zone')}>
         <Wheel />
+        <span className={cn('center')}> 📌 룰렛 쿠폰은 발급일 기준 다음 날 오전 9시까지 사용가능합니다.</span>
       </div>
     </section>
   );

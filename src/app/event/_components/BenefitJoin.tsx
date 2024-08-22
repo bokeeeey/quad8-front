@@ -30,11 +30,15 @@ export default function BenefitJoin() {
       setIsLoginOpen(true);
       return;
     }
+
+    const expiredDate = new Date();
+    expiredDate.setDate(expiredDate.getDate() + 7);
+
     createCoupon({
       name: '웰컴 쿠폰',
       price,
       minPrice: +minPrice.slice(0, 1) * 10000,
-      expiredDate: new Date(),
+      expiredDate,
       isWelcome: true,
     });
   };
@@ -71,6 +75,7 @@ export default function BenefitJoin() {
         <Button className={cn('button')} onClick={handleClickCouponListButton}>
           쿠폰함 가기
         </Button>
+        <span className={cn('center')}> 📌 룰렛 쿠폰은 발급일 기준 일주일 사용가능합니다.</span>
       </div>
       <SignInModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </section>

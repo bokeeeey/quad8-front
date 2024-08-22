@@ -49,6 +49,16 @@
 
 .button {
   max-width: 49.4rem;
-  margin: 0 auto 16rem;
+  margin: 0 auto 5rem;
   background-color: #212530;
+}
+
+.center {
+  @include pretendard-16-400;
+
+  display: block;
+  width: 100%;
+  margin-bottom: 16rem;
+  color: $gray-50;
+  text-align: center;
 }
