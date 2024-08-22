@@ -72,8 +72,12 @@
   color: $gray-50;
 }
 
-.right-arrow {
+.arrow {
   margin-left: auto;
+}
+
+.down {
+  transform: rotate(90deg);
 }
 
 .checkbox-label {

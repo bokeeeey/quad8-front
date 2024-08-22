@@ -3,14 +3,16 @@
 import { useRef, useState, MouseEvent, MutableRefObject } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
+import { useShallow } from 'zustand/react/shallow';
 import classNames from 'classnames/bind';
 
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { NotificationIcon } from '@/public/index';
 import { getAlarm, postAlarmRead, deleteAlarm } from '@/api/alarmAPI';
-import type { AlarmAPIDataType, AlarmDataType, AlarmType } from '@/types/alarmType';
+import type { AlarmAPIDataType, AlarmType } from '@/types/alarmType';
 import { getCurrentAlarm } from '@/libs/getCurrentAlarm';
 import { useEventSource } from '@/hooks/useEventSource';
+import { useEventAlarmStore, useProductAlarmStore } from '@/store/alarmStore';
 import NotificationCard from './NotificationCard';
 
 import styles from './NotificationButton.module.scss';
@@ -39,8 +41,32 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
   const [isRender, setIsRender] = useState(false);
 
   const { data: communityAlarm } = useQuery<AlarmAPIDataType>({ queryKey: ['communityAlarm'], queryFn: getAlarm });
-  const [productAlarm, setProductAlarm] = useState<AlarmDataType[]>([]);
-  const [eventAlarm, setEventAlarm] = useState<AlarmDataType[]>([]);
+  const {
+    alarm: productAlarm,
+    deleteAlarm: deleteProductAlarm,
+    deleteAllAlarm: deleteAllProductAlarm,
+    readAlarm: readProductAlarm,
+  } = useProductAlarmStore(
+    useShallow((state) => ({
+      alarm: state.alarm,
+      deleteAlarm: state.deleteAlarm,
+      deleteAllAlarm: state.deleteAllAlarm,
+      readAlarm: state.readAlarm,
+    })),
+  );
+  const {
+    alarm: eventAlarm,
+    deleteAlarm: deleteEventAlarm,
+    deleteAllAlarm: deleteAllEventAlarm,
+    readAlarm: readEventAlarm,
+  } = useEventAlarmStore(
+    useShallow((state) => ({
+      alarm: state.alarm,
+      deleteAlarm: state.deleteAlarm,
+      deleteAllAlarm: state.deleteAllAlarm,
+      readAlarm: state.readAlarm,
+    })),
+  );
 
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('전체');
 
@@ -66,7 +92,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
   });
 
   const { mutate: deleteAlarmMutate } = useMutation({
-    mutationFn: (id: number) => deleteAlarm(id),
+    mutationFn: (id: number[]) => deleteAlarm(id),
   });
 
   const handleClickButton = () => {
@@ -100,20 +126,16 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
   const handleDeleteButtonClick = () => {
     if (currentCategory === '전체' || currentCategory === '커뮤니티') {
       queryClient.setQueryData(['communityAlarm'], (prev: AlarmAPIDataType) => {
-        prev.alarmDtoList.forEach((alarm) => {
-          deleteAlarmMutate(alarm.id);
-        });
+        deleteAlarmMutate(prev.alarmDtoList.map((alarm) => alarm.id));
         return { count: 0, alarmDtoList: [] };
       });
     }
 
     if (currentCategory === '전체' || currentCategory === '상품') {
-      setProductAlarm([]);
-      /* 상품 알림 전체 삭제 */
+      deleteAllProductAlarm();
     }
     if (currentCategory === '전체' || currentCategory === '이벤트') {
-      setEventAlarm([]);
-      /* 이벤트 알림 전체 삭제 */
+      deleteAllEventAlarm();
     }
   };
 
@@ -127,10 +149,10 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
       return;
     }
     if (type === 'PRODUCT_ORDER') {
-      setProductAlarm((prev) => prev.map((alarm) => (alarm.id === id ? { ...alarm, isRead: true } : alarm)));
+      readProductAlarm(id);
       return;
     }
-    setEventAlarm((prev) => prev.map((alarm) => (alarm.id === id ? { ...alarm, isRead: true } : alarm)));
+    readEventAlarm(id);
   };
 
   const handleAlarmDataToDelete = (id: number, type: AlarmType) => {
@@ -139,17 +161,15 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
         count: prev.count - 1 ?? 0,
         alarmDtoList: prev.alarmDtoList.filter((alarm) => alarm.id !== id),
       }));
-      deleteAlarmMutate(id);
+      deleteAlarmMutate([id]);
       return;
     }
 
     if (type === 'PRODUCT_ORDER') {
-      setProductAlarm((prev) => prev.filter((alarm) => alarm.id !== id));
-      /* 상품 알림 삭제 */
+      deleteProductAlarm(id);
       return;
     }
-    setEventAlarm((prev) => prev.filter((alarm) => alarm.id !== id));
-    /* 이벤트 알림 삭제 */
+    deleteEventAlarm(id);
   };
 
   const handleOpenModal = (value: boolean) => {
@@ -216,6 +236,7 @@ export default function NotificationButton({ isBlack, eventSource }: Notificatio
                           onChangeOpenModal={handleOpenModal}
                           onChangeAlarmDataToRead={handleAlarmDataToRead}
                           onChangeAlarmDataToDelete={handleAlarmDataToDelete}
+                          onCloseAlarmTab={handleClickButton}
                         />
                       ))}
                     </div>

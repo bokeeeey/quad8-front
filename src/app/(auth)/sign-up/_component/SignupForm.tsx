@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -14,6 +14,7 @@ import { changePhoneNumber } from '@/libs/changePhoneNumber';
 import { formatOnInputBirthChange, unFormatBirthDate } from '@/libs/formatBirthDate';
 import { unFormatPhoneNumber } from '@/libs/unFormatPhoneNumber';
 import { CaretRightIcon, CheckboxCircleIcon } from '@/public/index';
+import { TermsAgreement } from './TermsAgreement';
 
 import styles from './SignupForm.module.scss';
 
@@ -38,6 +39,7 @@ const CHECKED = '#4968f6';
 
 export default function SignupForm() {
   const router = useRouter();
+  const [isAgreementOpen, setIsAgreementOpen] = useState<[boolean, boolean]>([false, false]);
 
   const {
     register,
@@ -81,6 +83,18 @@ export default function SignupForm() {
     const inputValue = e.target.value.replace(/\D/g, '');
     const formattedValue = formatOnInputBirthChange(inputValue);
     setValue('birth', formattedValue, { shouldValidate: true });
+  };
+
+  const handleClickAgreement = ({ first, second }: { first?: boolean; second?: boolean }) => {
+    if (first) {
+      setIsAgreementOpen((agree) => [!agree[0], agree[1]]);
+    }
+
+    if (second) {
+      setIsAgreementOpen((agree) => [agree[0], !agree[1]]);
+    }
+
+    console.log(isAgreementOpen);
   };
 
   const registers = {
@@ -275,16 +289,26 @@ export default function SignupForm() {
                   <CheckboxCircleIcon fill={watch('check1') ? CHECKED : NOT_CHECKED} width={15} height={15} />
                   <h3>서비스 이용 약관 동의</h3>
                 </label>
-                <CaretRightIcon className={cn('right-arrow')} stroke='black' />
+                <CaretRightIcon
+                  className={cn('arrow', { down: isAgreementOpen[0] })}
+                  stroke='black'
+                  onClick={() => handleClickAgreement({ first: true })}
+                />
               </div>
+              {isAgreementOpen[0] && <TermsAgreement />}
               <div className={cn('content')}>
                 <label htmlFor='check2' className={cn('checkbox-label')}>
                   <input {...registers.check2} type='checkbox' className={cn('checkbox-input')} id='check2' />
                   <CheckboxCircleIcon fill={watch('check2') ? CHECKED : NOT_CHECKED} width={15} height={15} />
                   <h3>개인정보 처리 방침 동의</h3>
                 </label>
-                <CaretRightIcon className={cn('right-arrow')} stroke='black' />
+                <CaretRightIcon
+                  className={cn('arrow', { down: isAgreementOpen[1] })}
+                  stroke='black'
+                  onClick={() => handleClickAgreement({ second: true })}
+                />
               </div>
+              {isAgreementOpen[1] && <TermsAgreement />}
             </div>
           </div>
         </div>

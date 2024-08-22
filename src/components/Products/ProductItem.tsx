@@ -55,7 +55,7 @@ export default function ProductItem({
               <div className={cn('product-review-wishlist')}>
                 <p className={cn('product-reviews')}>리뷰 {reviewscount > 99 ? '99+' : reviewscount}</p>
                 <div className={cn('product-wishlist')}>
-                  <HeartButton id={id} isLiked={isLiked} />
+                  <HeartButton key={id} id={id} isLiked={isLiked} />
                 </div>
               </div>
             </div>

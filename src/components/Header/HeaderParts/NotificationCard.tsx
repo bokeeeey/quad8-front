@@ -7,6 +7,8 @@ import { DeleteIcon } from '@/public/index';
 
 import Modal from '@/components/Modal/Modal';
 import PostCardDetailModal from '@/app/community/_components/PostCardDetailModal/PostCardDetailModal';
+import { useRouter } from 'next/navigation';
+import { ROUTER } from '@/constants/route';
 import styles from './NotificationCard.module.scss';
 import NotificationCardIcon from './NotificationCardIcon';
 
@@ -18,6 +20,7 @@ interface NotificationCardProps {
   onChangeOpenModal: (value: boolean) => void;
   onChangeAlarmDataToRead: (id: number, type: AlarmType) => void;
   onChangeAlarmDataToDelete: (id: number, type: AlarmType) => void;
+  onCloseAlarmTab: () => void;
 }
 
 const ALARM_TYPE = {
@@ -32,17 +35,28 @@ export default function NotificationCard({
   onChangeOpenModal,
   onChangeAlarmDataToRead,
   onChangeAlarmDataToDelete,
+  onCloseAlarmTab,
 }: NotificationCardProps) {
+  const router = useRouter();
+  const { id, type: alarmType } = alarmData;
   const handleClickWrapper = () => {
     if (!alarmData.isRead) {
-      onChangeAlarmDataToRead(alarmData.id, alarmData.type);
+      onChangeAlarmDataToRead(id, alarmType);
     }
-    onChangeOpenModal(true);
+    onCloseAlarmTab();
+    if (alarmType === 'COMMUNITY') {
+      onChangeOpenModal(true);
+      return;
+    }
+    if (alarmType === 'PRODUCT_ORDER') {
+      router.push(`${ROUTER.MY_PAGE.ORDER_INFO}?orderId=${alarmData.relatedId}`);
+    }
+    router.push(ROUTER.MY_PAGE.COUPONS);
   };
 
   const handleDeleteButtonClick = (e: MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    onChangeAlarmDataToDelete(alarmData.id, alarmData.type);
+    onChangeAlarmDataToDelete(id, alarmType);
   };
 
   return (

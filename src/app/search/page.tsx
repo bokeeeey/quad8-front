@@ -1,4 +1,4 @@
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import { redirect } from 'next/navigation';
 
@@ -33,25 +33,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const count = searchResult?.totalElements ?? 0;
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className={cn('wrapper')}>
-        <div className={cn('search-wrapper')}>
-          <SearchBox isBlack={false} initialValue={keyword} />
-        </div>
-        {searchResult ? (
-          <div className={cn('content-wrapper')}>
-            <div className={cn('title')}>
-              <div className={cn('keyword')}>
-                {`'${keyword}'`} <span className={cn('text')}>{`검색 결과(${count <= 99 ? count : '99+'})`}</span>
-              </div>
-            </div>
-            <CardList cardData={searchResult.content} />
-            <Pagination {...searchResult} searchParams={{ keyword }} />
-          </div>
-        ) : (
-          <NoResult keyword={keyword} />
-        )}
+    <div className={cn('wrapper')}>
+      <div className={cn('search-wrapper')}>
+        <SearchBox isBlack={false} initialValue={keyword} />
       </div>
-    </HydrationBoundary>
+      {searchResult ? (
+        <div className={cn('content-wrapper')}>
+          <div className={cn('title')}>
+            <div className={cn('keyword')}>
+              {`'${keyword}'`} <span className={cn('text')}>{`검색 결과(${count <= 99 ? count : '99+'})`}</span>
+            </div>
+          </div>
+          <CardList cardData={searchResult.content} />
+          <Pagination {...searchResult} searchParams={{ keyword }} />
+        </div>
+      ) : (
+        <NoResult keyword={keyword} />
+      )}
+    </div>
   );
 }

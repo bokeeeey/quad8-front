@@ -9,16 +9,16 @@ import { deletePostCard, getCommentsInfiniteScroll, getPostDetail, postComment }
 import { IMAGE_BLUR } from '@/constants/blurImage';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { addEnterKeyEvent } from '@/libs/addEnterKeyEvent';
-import { formatDateWithDot } from '@/libs/formatDateToString';
 import { communityPopOverOption } from '@/libs/communityPopOverOption';
 import { keydeukImg, SpinLoading } from '@/public/index';
 import type { UserDataResponseType } from '@/types/userType';
-import type { CommunityPostCardDetailDataType, CommentType } from '@/types/communityType';
+import type { CommentType } from '@/types/communityType';
 
 import { Button, CustomOption, InputField, Modal, ModalSkeleton } from '@/components';
 import Dialog from '@/components/Dialog/Dialog';
 import ImageZoom from '@/components/ImageZoom/ImageZoom';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
+import { formatDateToKSTString } from '@/libs/formatDateToKSTString';
 import AuthorCard from '../AuthorCard';
 import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
@@ -27,12 +27,6 @@ import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
 import styles from './PostCardDetailModal.module.scss';
 
 const cn = classNames.bind(styles);
-
-interface PostCardListResponseData {
-  data: CommunityPostCardDetailDataType;
-  status: 'ERROR' | 'SUCCESS';
-  message: string;
-}
 
 interface PostCardDetailModalProps {
   cardId: number;
@@ -83,7 +77,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
 
   const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
 
-  const { data: postCardListData, refetch } = useQuery<PostCardListResponseData>({
+  const { data: postCardListData, refetch } = useQuery({
     queryKey: ['postData', cardId],
     queryFn: () => getPostDetail(cardId),
   });
@@ -209,7 +203,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
     isLiked,
   } = postData;
 
-  const createdDateString = formatDateWithDot(new Date(updatedAt));
+  const createdDateString = formatDateToKSTString(updatedAt);
 
   const handleClickThumbnail = (i: number) => {
     setClickedImage(reviewImages[i].imgUrl);

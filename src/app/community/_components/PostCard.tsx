@@ -146,15 +146,17 @@ export default function PostCard({ cardData, isMine }: PostCardProps) {
           </Suspense>
         </ErrorBoundary>
       </Modal>
-      <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
-        <div onClick={(e) => e.stopPropagation()}>
-          <WriteEditModal
-            reviewType='customReviewEdit'
-            onSuccessReview={handleCloseEditModal}
-            editCustomData={detailData?.data}
-          />
-        </div>
-      </Modal>
+      {detailData && (
+        <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <WriteEditModal
+              reviewType='customReviewEdit'
+              onSuccessReview={handleCloseEditModal}
+              editCustomData={detailData?.data}
+            />
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

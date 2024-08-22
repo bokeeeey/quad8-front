@@ -12,6 +12,7 @@ export interface Product {
 
 export interface KeydeukPickResponse {
   data: Product[];
+  message: string;
 }
 
 export interface ProductDataResponse {
@@ -22,10 +23,6 @@ export interface ProductDataResponse {
   number: number;
   first: boolean;
   last: boolean;
-}
-
-export interface ProductListResponse {
-  data: ProductDataResponse;
 }
 
 export interface ProductParams {

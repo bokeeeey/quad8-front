@@ -25,6 +25,38 @@ export default function PurchaseButton() {
 
   const { data: cartData } = useQuery<CartAPIDataType>({ queryKey: ['cartData'], queryFn: getCartData });
 
+  const customSelectedData =
+    cartData?.CUSTOM.filter((custom) => checkedCustomList[custom.id]).map((element) => ({
+      productId: element.productId,
+      switchOptionId: element.productId,
+      quantity: 1,
+    })) ?? [];
+
+  const shopSelectedData =
+    cartData?.SHOP.filter((shop) => checkedShopList[shop.id]).map((element) => ({
+      productId: element.productId,
+      switchOptionId: element.optionId,
+      quantity: element.count,
+    })) ?? [];
+
+  const selectedData = [...customSelectedData, ...shopSelectedData];
+
+  const customData =
+    cartData?.CUSTOM.map((element) => ({
+      productId: element.productId,
+      switchOptionId: element.productId,
+      quantity: 1,
+    })) ?? [];
+
+  const shopData =
+    cartData?.SHOP.map((element) => ({
+      productId: element.productId,
+      switchOptionId: element.optionId,
+      quantity: element.count,
+    })) ?? [];
+
+  const allData = [...customData, ...shopData];
+
   const { mutate: createOrder } = useMutation({
     mutationFn: postCreateOrder,
     onSuccess: (response: CreateOrderResponseType) => {
@@ -36,22 +68,7 @@ export default function PurchaseButton() {
   });
 
   const handleClickSelectedButton = () => {
-    const customSelectedData =
-      cartData?.CUSTOM.filter((custom) => checkedCustomList[custom.id]).map((element) => ({
-        productId: element.productId,
-        switchOptionId: element.productId,
-        quantity: 1,
-      })) ?? [];
-
-    const shopSelectedData =
-      cartData?.SHOP.filter((shop) => checkedShopList[shop.id]).map((element) => ({
-        productId: element.productId,
-        switchOptionId: element.optionId,
-        quantity: element.count,
-      })) ?? [];
-
-    const orderData = [...customSelectedData, ...shopSelectedData];
-    createOrder(orderData, {
+    createOrder(selectedData, {
       onError: () => {
         toast.error('주문 정보 생성에 실패하였습니다');
       },
@@ -59,22 +76,7 @@ export default function PurchaseButton() {
   };
 
   const handleClickAllButton = () => {
-    const customData =
-      cartData?.CUSTOM.map((element) => ({
-        productId: element.productId,
-        switchOptionId: element.productId,
-        quantity: 1,
-      })) ?? [];
-
-    const shopData =
-      cartData?.SHOP.map((element) => ({
-        productId: element.productId,
-        switchOptionId: element.optionId,
-        quantity: element.count,
-      })) ?? [];
-
-    const orderData = [...customData, ...shopData];
-    createOrder(orderData, {
+    createOrder(allData, {
       onError: () => {
         toast.error('주문 정보 생성에 실패하였습니다');
       },
@@ -84,22 +86,26 @@ export default function PurchaseButton() {
   return (
     <div className={cn('button-wrapper')}>
       <Button
-        backgroundColor='outline-primary'
+        backgroundColor={selectedData.length > 0 ? 'outline-primary' : 'outline-gray-40'}
         width={120}
         paddingVertical={8}
         fontSize={14}
         radius={4}
         onClick={handleClickSelectedButton}
+        hoverColor={selectedData.length > 0 ? 'outline-primary-60' : 'outline-gray-40'}
+        disabled={selectedData.length === 0}
       >
         선택 상품 구매
       </Button>
       <Button
-        backgroundColor='outline-primary'
+        backgroundColor={allData.length > 0 ? 'outline-primary' : 'outline-gray-40'}
         width={120}
         paddingVertical={8}
         fontSize={14}
         radius={4}
         onClick={handleClickAllButton}
+        hoverColor={allData.length > 0 ? 'outline-primary-60' : 'outline-gray-40'}
+        disabled={allData.length === 0}
       >
         전체 상품 구매
       </Button>
