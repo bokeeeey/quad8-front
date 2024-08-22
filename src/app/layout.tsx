@@ -22,6 +22,12 @@ const cn = classNames.bind(styles);
 export const metadata: Metadata = {
   title: '키보드 득템 :: KeyDeuk',
   description: '원하는 컬러, 소리, 타건감, 내 취향을 담은 커스텀 키보드 초보도 쉽게 만들 수 있어요',
+
+  openGraph: {
+    title: '키보드 득템 :: KeyDeuk',
+    description: '원하는 컬러, 소리, 타건감, 내 취향을 담은 커스텀 키보드 초보도 쉽게 만들 수 있어요',
+    images: 'https://keydeuk.com/opengraph-image.png',
+  },
 };
 
 export default async function RootLayout({
