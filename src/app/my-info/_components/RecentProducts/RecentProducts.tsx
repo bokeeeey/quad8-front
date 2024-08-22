@@ -15,7 +15,7 @@ const cn = classNames.bind(styles);
 export default function RecentProducts() {
   const { data: userData } = useUser();
 
-  const userId = userData?.data.id;
+  const userId = userData?.data?.id;
 
   const { data: recentViewProducts } = useQuery<RecentProductType[]>({
     queryKey: ['recent-products', userId],

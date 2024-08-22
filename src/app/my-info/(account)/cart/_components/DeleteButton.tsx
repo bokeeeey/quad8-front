@@ -19,6 +19,11 @@ export default function DeleteButton({ children }: DeleteButtonProps) {
   const [isOpenAlertDialog, setIsOpenAlertDialog] = useState(false);
   const { checkedCustomList, checkedShopList } = useContext(CartDataContext);
 
+  const checkedCustomIdList = Object.keys(checkedCustomList).filter((id) => checkedCustomList[id]);
+  const checkedShopIdList = Object.keys(checkedShopList).filter((id) => checkedShopList[id]);
+
+  const checkedList = [...checkedCustomIdList, ...checkedShopIdList];
+
   const { mutate: deleteCart } = useMutation({ mutationFn: deleteCartData });
 
   const handleConfirmDialog = (value: boolean) => {
@@ -30,10 +35,7 @@ export default function DeleteButton({ children }: DeleteButtonProps) {
   };
 
   const handleDeleteCheckedData = () => {
-    const checkedCustomIdList = Object.keys(checkedCustomList).filter((id) => checkedCustomList[id]);
-    const checkedShopIdList = Object.keys(checkedShopList).filter((id) => checkedShopList[id]);
-
-    deleteCart([...checkedCustomIdList, ...checkedShopIdList], {
+    deleteCart(checkedList, {
       onSuccess: () => {
         handleConfirmDialog(false);
         handleAlertDialog(true);
@@ -48,13 +50,14 @@ export default function DeleteButton({ children }: DeleteButtonProps) {
   return (
     <>
       <Button
-        backgroundColor='outline-primary'
+        backgroundColor={checkedList.length > 0 ? 'outline-primary' : 'outline-gray-40'}
         width={90}
         radius={4}
         paddingVertical={8}
         fontSize={14}
         onClick={() => handleConfirmDialog(true)}
-        hoverColor='outline-primary-60'
+        hoverColor={checkedList.length > 0 ? 'outline-primary-60' : 'outline-gray-40'}
+        disabled={checkedList.length === 0}
       >
         {children}
       </Button>

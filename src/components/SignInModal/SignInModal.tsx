@@ -1,8 +1,8 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -30,6 +30,29 @@ interface SigninModalProps {
 export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const pathname = usePathname();
+  const { mutate: signInMutate } = useMutation({
+    mutationFn: (formData: FetchSignInInfoTypes) => postSignin(formData),
+    onSuccess: (response) => {
+      setCookie('accessToken', response.data.accessToken);
+      setCookie('refreshToken', response.data.refreshToken);
+      onClose();
+      toast.success('로그인이 성공적으로 완료되었습니다.', {
+        autoClose: 2000,
+      });
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['userData'] }),
+        queryClient.invalidateQueries({ queryKey: ['postCardsList'] }),
+      ]);
+
+      if (pathname.startsWith(ROUTER.SHOP.ALL) || pathname.startsWith(ROUTER.SEARCH)) {
+        router.refresh();
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const {
     register,
@@ -53,26 +76,7 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (formData) => {
-    try {
-      const responseData = await postSignin(formData as FetchSignInInfoTypes);
-
-      if (responseData.status === 'SUCCESS') {
-        setCookie('accessToken', responseData.data.accessToken);
-        setCookie('refreshToken', responseData.data.refreshToken);
-        onClose();
-        toast.success('로그인이 성공적으로 완료되었습니다.', {
-          autoClose: 2000,
-        });
-        Promise.all([
-          queryClient.invalidateQueries({ queryKey: ['postCardsList'] }),
-          queryClient.invalidateQueries({ queryKey: ['userData'] }),
-        ]);
-      } else if (responseData.status === 'FAIL') {
-        toast.error(responseData.message);
-      }
-    } catch (error) {
-      toast.error('로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-    }
+    signInMutate(formData as FetchSignInInfoTypes);
   };
 
   const handleKakaoOauth = async (provider: string) => {

@@ -51,7 +51,6 @@ export default function ItemOverview({
     queryFn: () => getProductDetail(item.productId),
     enabled: productName !== '커스텀 키보드' && !item.category,
   });
-
   const category = item.category ?? convertCategory(productData?.categoryName ?? '');
 
   return (

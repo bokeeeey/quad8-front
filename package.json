@@ -21,9 +21,9 @@
     "@tosspayments/tosspayments-sdk": "^2.2.0",
     "aos": "^3.0.0-beta.6",
     "classnames": "^2.5.1",
+    "event-source-polyfill": "^1.0.31",
     "js-confetti": "^0.12.0",
     "lodash": "^4.17.21",
-    "event-source-polyfill": "^1.0.31",
     "next": "14.2.3",
     "plaiceholder": "^3.0.0",
     "query-string": "^9.0.0",
@@ -39,7 +39,8 @@
     "sharp": "^0.33.4",
     "swiper": "^11.1.4",
     "three": "^0.165.0",
-    "three-stdlib": "^2.30.3"
+    "three-stdlib": "^2.30.3",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.4.0",

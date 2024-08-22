@@ -19,7 +19,7 @@ interface SkeletonProps {
 
 export default function Skeleton({
   isPending,
-  interval = 1500,
+  interval = 1000,
   children,
   width,
   height,

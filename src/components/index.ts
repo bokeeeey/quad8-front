@@ -16,6 +16,7 @@ export { default as MyInfoEmptyCase } from './MyInfoEmptyCase/MyInfoEmptyCase';
 export { default as ProductItem } from './Products/ProductItem';
 export { default as ProfileImage } from './ProfileImage/ProfileImage';
 export { default as ReviewItem } from './ReviewItem/ReviewItem';
+export { default as UserRouteProvider } from './UserRouteProvider/UserRouteProvider';
 
 export { default as AddAddressModal } from './AddAddressModal/AddAddressModal';
 export { default as ScrollUpButton } from './Buttons/ScrollUpButton/ScrollUpButton';
