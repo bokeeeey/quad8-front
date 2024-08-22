@@ -118,22 +118,17 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   const handleClickButton = (e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    setAnimate(true);
 
     if (!userData?.data) {
       setIsSignInModalOpen(true);
       return;
     }
 
+    setAnimate(true);
+
     if (usage === 'community') {
-      likeCommunityMutation(
-        { itemId: id, itemIsLiked: isChecked },
-        {
-          onSuccess: () => {
-            setIsChecked((prev) => !prev);
-          },
-        },
-      );
+      setIsChecked((prev) => !prev);
+      likeCommunityMutation({ itemId: id, itemIsLiked: isChecked });
     } else {
       likeProductMutation(
         { itemId: id, itemIsLiked: isChecked },
@@ -150,10 +145,6 @@ export default function HeartButton({ id, usage, isLiked, likeCount }: HeartButt
   const displayLikeCount = () => {
     if (!likeCount || likeCount < 0) {
       return '0';
-    }
-
-    if (likeCount >= 1) {
-      return likeCount;
     }
 
     if (likeCount > MAX_COUNT) {
