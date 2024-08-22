@@ -14,6 +14,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@next/third-parties": "^14.2.6",
     "@react-three/drei": "^9.106.0",
     "@react-three/fiber": "^8.16.7",
     "@tanstack/react-query": "^5.37.1",
@@ -24,7 +25,7 @@
     "event-source-polyfill": "^1.0.31",
     "js-confetti": "^0.12.0",
     "lodash": "^4.17.21",
-    "next": "14.2.3",
+    "next": "^14.2.6",
     "plaiceholder": "^3.0.0",
     "query-string": "^9.0.0",
     "react": "^18",
