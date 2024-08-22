@@ -10,7 +10,7 @@ import type { CouponDataType } from '@/types/couponType';
 import { useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import styles from './BenefitJoin.module.scss';
 import EventTitle from './EventTitle';
@@ -20,12 +20,12 @@ const cn = classNames.bind(styles);
 export default function BenefitJoin() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { mutate: createCoupon } = useCreateCouponMutation();
+  const couponData = queryClient.getQueryData<CouponDataType>(['userData']);
 
   const handleClick = async (price: number, minPrice: string) => {
-    const couponData = queryClient.getQueryData<CouponDataType>(['userData']);
-
     if (!couponData?.data) {
       setIsLoginOpen(true);
       return;
@@ -38,6 +38,16 @@ export default function BenefitJoin() {
       isWelcome: true,
     });
   };
+
+  const handleClickCouponListButton = () => {
+    if (!couponData?.data) {
+      setIsLoginOpen(true);
+      return;
+    }
+
+    router.push(ROUTER.MY_PAGE.COUPONS);
+  };
+
   return (
     <section id='join' className={cn('container')}>
       <EventTitle title='WELCOME 쿠폰' color='black'>
@@ -58,7 +68,7 @@ export default function BenefitJoin() {
             </button>
           ))}
         </div>
-        <Button className={cn('button')} as={Link} href={ROUTER.MY_PAGE.COUPONS}>
+        <Button className={cn('button')} onClick={handleClickCouponListButton}>
           쿠폰함 가기
         </Button>
       </div>
