@@ -7,9 +7,9 @@ import { getAlarm } from '@/api/alarmAPI';
 import { getCartData } from '@/api/cartAPI';
 import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
-import Script from 'next/script';
 import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import { getCookie } from '@/libs/manageCookie';
+import Script from 'next/script';
 import AOSWrapper from './_components/Aos/AOSWrapper';
 import { Providers } from './providers';
 
