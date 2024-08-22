@@ -49,11 +49,15 @@ export default function Wheel() {
           emojiSize: EMOJI_SIZE,
           confettiNumber: CONFETTI_NUMBER,
         });
+
+        const expiredDate = new Date();
+        expiredDate.setDate(expiredDate.getDate() + 1);
+
         createCoupon({
           name: '룰렛 쿠폰',
           price: finalResult,
           minPrice: finalResult * MIN_PRICE_MULTIPLIER,
-          expiredDate: new Date(),
+          expiredDate,
           isWelcome: false,
         });
       }, ANIMATION_DURATION);
