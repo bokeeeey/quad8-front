@@ -47,9 +47,11 @@ export function Providers({ children }: ProvidersProps) {
     <QueryClientProvider client={queryClient}>
       <div ref={scrollRef} className={cn('target')} />
       {children}
-      <ScrollUpButton headerRef={scrollRef} />
       <div id='modal' />
-      <AdvertisePanel />
+      <div className={cn('floating-area')}>
+        <AdvertisePanel />
+        <ScrollUpButton headerRef={scrollRef} />
+      </div>
       <ReactQueryDevtools initialIsOpen={false} />
       <ToastContainer
         autoClose={2000}

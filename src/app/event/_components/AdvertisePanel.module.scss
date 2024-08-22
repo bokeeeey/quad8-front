@@ -1,9 +1,5 @@
 .container {
   display: flex;
-  position: fixed;
-  z-index: $zindex-popover;
-  right: 5rem;
-  bottom: 10rem;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;

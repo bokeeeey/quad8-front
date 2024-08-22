@@ -4,3 +4,15 @@
   width: 100%;
   height: 30rem;
 }
+
+.floating-area {
+  display: flex;
+  position: fixed;
+  gap: 1rem;
+  z-index: $zindex-modal-backdrop - 1;
+  right: 5rem;
+  bottom: 5rem;
+  flex-direction: column;
+  align-items: flex-end;
+  transition: 3s;
+}
