@@ -3,6 +3,7 @@
 import { Button } from '@/components';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { COUPON_LIST } from '@/constants/event';
+import { ROUTER } from '@/constants/route';
 import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
 import { couponDownImg } from '@/public/index';
 import type { CouponDataType } from '@/types/couponType';
@@ -57,7 +58,7 @@ export default function BenefitJoin() {
             </button>
           ))}
         </div>
-        <Button className={cn('button')} as={Link} href='/'>
+        <Button className={cn('button')} as={Link} href={ROUTER.MY_PAGE.COUPONS}>
           쿠폰함 가기
         </Button>
       </div>
