@@ -25,7 +25,11 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   const queryClient = useQueryClient();
   const savedUserInfo = queryClient.getQueryData<Users>(['clickedUserInfo']);
 
-  const { data: userInfo, isFetching } = useQuery({
+  const {
+    data: userInfo,
+    isFetching,
+    isPending,
+  } = useQuery({
     queryKey: ['clickedUserInfo'],
     queryFn: () => getOthersInfo(userId),
   });
@@ -57,11 +61,7 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
     { 'above-profile': isAboveProfile },
   );
 
-  if (savedUserInfo?.id !== userId) {
-    return <div ref={ref} className={CONTAINER_CLASSNAME} />;
-  }
-
-  if (isFetching || !userInfo) {
+  if (isFetching || !userInfo || isPending || savedUserInfo?.id !== userId) {
     return (
       <div ref={ref} className={CONTAINER_CLASSNAME}>
         <SpinLoading />

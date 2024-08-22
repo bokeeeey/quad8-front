@@ -18,6 +18,8 @@ export default async function CouponsPage() {
     queryFn: getCoupon,
   });
 
+  console.log('d');
+
   return (
     <div className={cn('container')}>
       <HydrationBoundary state={dehydrate(queryClient)}>
