@@ -6,7 +6,7 @@ import { COUPON_LIST } from '@/constants/event';
 import { ROUTER } from '@/constants/route';
 import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
 import { couponDownImg } from '@/public/index';
-import type { CouponDataType } from '@/types/couponType';
+import { UserDataResponseType } from '@/types/userType';
 import { useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
@@ -23,10 +23,10 @@ export default function BenefitJoin() {
   const router = useRouter();
 
   const { mutate: createCoupon } = useCreateCouponMutation();
-  const couponData = queryClient.getQueryData<CouponDataType>(['userData']);
+  const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
 
   const handleClick = async (price: number, minPrice: string) => {
-    if (!couponData?.data) {
+    if (!userData?.data) {
       setIsLoginOpen(true);
       return;
     }
@@ -44,7 +44,7 @@ export default function BenefitJoin() {
   };
 
   const handleClickCouponListButton = () => {
-    if (!couponData?.data) {
+    if (!userData?.data) {
       setIsLoginOpen(true);
       return;
     }
