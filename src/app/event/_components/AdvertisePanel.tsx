@@ -16,7 +16,7 @@ export default function AdvertisePanel() {
 
   const getToday = async () => {
     const today = await getCookie('noTouchToday');
-    if (!today) {
+    if (today === 'true') {
       setShowPanel(true);
     }
   };
