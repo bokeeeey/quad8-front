@@ -14,9 +14,9 @@ const cn = classNames.bind(styles);
 export default function AdvertisePanel() {
   const [showPanel, setShowPanel] = useState(false);
 
-  const getToday = async () => {
-    const today = await getCookie('noTouchToday');
-    if (today === 'true') {
+  const getToday = () => {
+    const skipEventBannerForToday = getCookie('skipEventBannerForToday');
+    if (skipEventBannerForToday === 'true') {
       setShowPanel(true);
     }
   };
@@ -31,7 +31,7 @@ export default function AdvertisePanel() {
 
   const handleClickTodayClose = () => {
     const date = new Date(Date.now() + 86400e3).toUTCString();
-    document.cookie = `noTouchToday=true; path=/; expires=${date}`;
+    document.cookie = `skipEventBannerForToday=true; path=/; expires=${date}`;
     setShowPanel(false);
   };
 
