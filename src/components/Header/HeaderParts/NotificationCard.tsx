@@ -50,6 +50,7 @@ export default function NotificationCard({
     }
     if (alarmType === 'PRODUCT_ORDER') {
       router.push(`${ROUTER.MY_PAGE.ORDER_INFO}?orderId=${alarmData.relatedId}`);
+      return;
     }
     router.push(ROUTER.MY_PAGE.COUPONS);
   };
