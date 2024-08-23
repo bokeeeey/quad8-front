@@ -11,7 +11,6 @@ export default async function EventPageLayout({ children }: EventLayoutProps) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({ queryKey: ['coupons'], queryFn: getCoupon });
-  // const couponData = queryClient.getQueryData(['coupons']);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
