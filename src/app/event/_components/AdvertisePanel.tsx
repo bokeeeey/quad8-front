@@ -1,5 +1,6 @@
 'use client';
 
+import { ROUTER } from '@/constants/route';
 import { getCookie } from '@/libs/manageCookie';
 import { eventTopImg } from '@/public/index';
 import classNames from 'classnames/bind';
@@ -37,7 +38,7 @@ export default function AdvertisePanel() {
   return (
     showPanel && (
       <div className={cn('container')}>
-        <Link href='/event' className={cn('image-area')}>
+        <Link href={ROUTER.EVENT} className={cn('image-area')}>
           <Image src={eventTopImg} width={180} height={215} alt='event' />
         </Link>
         <div className={cn('button-area')}>
