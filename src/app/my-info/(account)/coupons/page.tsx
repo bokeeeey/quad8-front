@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { getCoupon } from '@/api/couponAPI';
 import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import CouponList from './_components/CouponList';
-import EmptyCase from './_components/EmptyCase';
+import CouponEmptyCase from './_components/CouponEmptyCase';
 
 import styles from './page.module.scss';
 
@@ -18,8 +18,6 @@ export default async function CouponsPage() {
     queryFn: getCoupon,
   });
 
-  console.log('d');
-
   return (
     <div className={cn('container')}>
       <HydrationBoundary state={dehydrate(queryClient)}>
@@ -27,7 +25,7 @@ export default async function CouponsPage() {
         {coupons && Array.isArray(coupons) && coupons.length > 0 ? (
           <CouponList />
         ) : (
-          <EmptyCase message='보유 중인 쿠폰이 없습니다.' />
+          <CouponEmptyCase message='보유 중인 쿠폰이 없습니다.' />
         )}
       </HydrationBoundary>
     </div>
