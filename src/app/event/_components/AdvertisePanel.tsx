@@ -5,7 +5,7 @@ import { getCookie } from '@/libs/manageCookie';
 import { eventTopImg } from '@/public/index';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styles from './AdvertisePanel.module.scss';
 
@@ -13,10 +13,11 @@ const cn = classNames.bind(styles);
 
 export default function AdvertisePanel() {
   const [showPanel, setShowPanel] = useState(false);
+  const router = useRouter();
 
-  const getToday = () => {
-    const skipEventBannerForToday = getCookie('skipEventBannerForToday');
-    if (skipEventBannerForToday === 'true') {
+  const getToday = async () => {
+    const skipEventBannerForToday = await getCookie('skipEventBannerForToday');
+    if (skipEventBannerForToday !== 'true') {
       setShowPanel(true);
     }
   };
@@ -35,12 +36,17 @@ export default function AdvertisePanel() {
     setShowPanel(false);
   };
 
+  const handleClickImage = () => {
+    setShowPanel(false);
+    router.push(ROUTER.EVENT);
+  };
+
   return (
     showPanel && (
       <div className={cn('container')}>
-        <Link href={ROUTER.EVENT} className={cn('image-area')}>
+        <div className={cn('image-area')} onClick={handleClickImage}>
           <Image src={eventTopImg} width={180} height={215} alt='event' />
-        </Link>
+        </div>
         <div className={cn('button-area')}>
           <button type='button' onClick={handleClickTodayClose}>
             오늘 하루 그만보기
