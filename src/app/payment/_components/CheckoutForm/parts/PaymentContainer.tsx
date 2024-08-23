@@ -18,6 +18,7 @@ interface PaymentContainerProps {
   amountValue: number;
   paymentData?: OrderDetailData;
   isPutPaymentSucceed: boolean;
+  hasAddressData: boolean;
 }
 
 interface WidgetPaymentMethodWidget {
@@ -40,7 +41,12 @@ interface TossPaymentsWidgets {
   }) => Promise<void>;
 }
 
-export default function PaymentContainer({ amountValue, paymentData, isPutPaymentSucceed }: PaymentContainerProps) {
+export default function PaymentContainer({
+  amountValue,
+  paymentData,
+  isPutPaymentSucceed,
+  hasAddressData,
+}: PaymentContainerProps) {
   const [ready, setReady] = useState(isPutPaymentSucceed);
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
 
@@ -115,8 +121,8 @@ export default function PaymentContainer({ amountValue, paymentData, isPutPaymen
         <div className={cn('payment-method')} id='payment-method' />
         <div className={cn('payment-agreement')} id='agreement' />
         <div className={cn('payment-button-wrap')}>
-          <Button className={cn('payment-button')} type='submit' onClick={handlePayment}>
-            결제하기
+          <Button className={cn('payment-button')} type='submit' onClick={handlePayment} disabled={!hasAddressData}>
+            {hasAddressData ? '결제하기' : '배송지를 확인해 주세요'}
           </Button>
         </div>
       </div>

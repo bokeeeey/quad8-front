@@ -52,7 +52,7 @@ export default function AddAddressModal({ onClick, newAddressData, userAddressDa
     getValues,
     formState: { isValid },
   } = useForm({
-    mode: 'all',
+    mode: 'onTouched',
     defaultValues: DEFAULT_VALUES,
   });
 
@@ -131,6 +131,7 @@ export default function AddAddressModal({ onClick, newAddressData, userAddressDa
           placeholder={PLACEHOLDERS.PHONE}
           {...register('phone', {
             required: true,
+            minLength: 11,
             setValueAs: (value) => unFormatPhoneNumber(value),
             onChange: handlePhoneChange,
           })}
