@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button, Dropdown, ItemOverview } from '@/components';
+import { Button, Dropdown, ItemOverview, LogoLoading } from '@/components';
 import { Input, Label } from '@/components/parts';
 import { usePaymentQuery } from '@/hooks/usePaymentQuery';
 import { useSelectedAddress } from '@/hooks/useSelectedAddress';
@@ -22,7 +22,7 @@ const cn = classNames.bind(styles);
 export default function CheckoutForm() {
   const [isPutPaymentSucceed, setIsPutPaymentSucceed] = useState(false);
 
-  const { data: paymentResponse } = usePaymentQuery();
+  const { data: paymentResponse, isPending: isPaymentResponsePending } = usePaymentQuery();
   const { mutate: putPaymentMutation } = useUpdatePaymentInfo();
   const { selectedAddress, onSelectAddress } = useSelectedAddress({ paymentResponse });
 
@@ -44,12 +44,20 @@ export default function CheckoutForm() {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (payload) => {
+    if (!payload.shippingAddressId) {
+      return;
+    }
+
     putPaymentMutation(payload, {
       onSuccess: () => {
         setIsPutPaymentSucceed(true);
       },
     });
   };
+
+  if (isPaymentResponsePending) {
+    return <LogoLoading />;
+  }
 
   return (
     <form className={cn('checkout-form')} onSubmit={handleSubmit(onSubmit)}>
@@ -114,6 +122,7 @@ export default function CheckoutForm() {
           amountValue={Number(totalPrice)}
           paymentData={paymentResponse?.data}
           isPutPaymentSucceed={isPutPaymentSucceed}
+          hasAddressData={!!selectedAddress?.id}
         />
       </article>
     </form>

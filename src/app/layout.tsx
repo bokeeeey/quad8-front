@@ -1,3 +1,4 @@
+import { GoogleTagManager } from '@next/third-parties/google';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import type { Metadata } from 'next';
@@ -7,9 +8,9 @@ import { getAlarm } from '@/api/alarmAPI';
 import { getCartData } from '@/api/cartAPI';
 import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
-import Script from 'next/script';
 import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import { getCookie } from '@/libs/manageCookie';
+import Script from 'next/script';
 import AOSWrapper from './_components/Aos/AOSWrapper';
 import { Providers } from './providers';
 
@@ -21,8 +22,11 @@ const cn = classNames.bind(styles);
 export const metadata: Metadata = {
   title: '키보드 득템 :: KeyDeuk',
   description: '원하는 컬러, 소리, 타건감, 내 취향을 담은 커스텀 키보드 초보도 쉽게 만들 수 있어요',
-  icons: {
-    icon: '/favicon.ico',
+
+  openGraph: {
+    title: '키보드 득템 :: KeyDeuk',
+    description: '원하는 컬러, 소리, 타건감, 내 취향을 담은 커스텀 키보드 초보도 쉽게 만들 수 있어요',
+    images: 'https://keydeuk.com/opengraph-image.png',
   },
 };
 
@@ -48,6 +52,7 @@ export default async function RootLayout({
 
   return (
     <html lang='ko'>
+      <GoogleTagManager gtmId='GTM-T3C6DZC6' />
       <body>
         <Providers>
           <HydrationBoundary state={dehydrate(entireQueryClient)}>

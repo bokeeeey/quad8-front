@@ -12,6 +12,11 @@
 
       width: 34.8rem;
       padding: 2rem 4rem;
+
+      &:disabled {
+        background-color: $gray-40;
+        cursor: not-allowed;
+      }
     }
   }
 }

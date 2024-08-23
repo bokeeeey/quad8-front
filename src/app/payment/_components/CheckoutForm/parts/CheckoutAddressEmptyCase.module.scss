@@ -1,0 +1,15 @@
+.container {
+  @include flex-column(2.2rem);
+  @include pretendard-20-500;
+
+  align-items: center;
+  justify-content: center;
+  height: 21.2rem;
+  padding: 2rem;
+  border-radius: 0.4rem;
+  background: $white;
+
+  .button {
+    width: 16rem;
+  }
+}
