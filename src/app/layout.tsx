@@ -7,10 +7,9 @@ import { getAlarm } from '@/api/alarmAPI';
 import { getCartData } from '@/api/cartAPI';
 import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
-import Script from 'next/script';
 import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import { getCookie } from '@/libs/manageCookie';
-import AOSWrapper from './_components/Aos/AOSWrapper';
+import Script from 'next/script';
 import { Providers } from './providers';
 
 import '@/styles/reset.css';
@@ -55,10 +54,7 @@ export default async function RootLayout({
               <HydrationBoundary state={dehydrate(queryClient)}>
                 <Header />
               </HydrationBoundary>
-              <div className={cn('content-wrapper')}>
-                {' '}
-                <AOSWrapper>{children}</AOSWrapper>
-              </div>
+              <div className={cn('content-wrapper')}> {children}</div>
               <Footer />
             </div>
           </HydrationBoundary>

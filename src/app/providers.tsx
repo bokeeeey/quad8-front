@@ -10,6 +10,7 @@ import { ToastContainer, Zoom } from 'react-toastify';
 
 import '@/styles/toast/toastContainer.scss';
 import 'react-toastify/ReactToastify.min.css';
+import AOSWrapper from './_components/Aos/AOSWrapper';
 import AdvertisePanel from './event/_components/AdvertisePanel';
 import styles from './providers.module.scss';
 
@@ -65,6 +66,7 @@ export function Providers({ children }: ProvidersProps) {
         hideProgressBar
         closeButton={false}
       />
+      <AOSWrapper />
     </QueryClientProvider>
   );
 }
