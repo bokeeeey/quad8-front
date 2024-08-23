@@ -1,4 +1,9 @@
-import type { GetProductLikesParams, ProductLikeResponse } from '@/types/likeType';
+import type {
+  CommunityDeleteLikeResponse,
+  CommunityLikeResponse,
+  GetProductLikesParams,
+  ProductLikeResponse,
+} from '@/types/likeType';
 import { baseAPI } from './interceptor/interceptor';
 
 export const postProductLikes = async (productId: number) => {
@@ -36,7 +41,7 @@ export const deleteProductLikes = async (productIds: number[]) => {
 
 export const postCommunityLikes = async (communityId: number) => {
   try {
-    await baseAPI.post(`/api/v1/community/likes/${communityId}`);
+    await baseAPI.post<CommunityLikeResponse>(`/api/v1/community/likes/${communityId}`);
   } catch (error) {
     throw error;
   }
@@ -44,7 +49,7 @@ export const postCommunityLikes = async (communityId: number) => {
 
 export const deleteCommunityLikes = async (communityId: number) => {
   try {
-    await baseAPI.delete(`/api/v1/community/likes/${communityId}`);
+    await baseAPI.delete<CommunityDeleteLikeResponse>(`/api/v1/community/likes/${communityId}`);
   } catch (error) {
     throw error;
   }

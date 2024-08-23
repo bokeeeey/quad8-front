@@ -19,6 +19,18 @@ export interface ProductLikeResponse {
   last: boolean;
 }
 
+export interface CommunityLikeResponse {
+  id: number;
+  userId: number;
+  communityId: number;
+}
+
+export interface CommunityDeleteLikeResponse {
+  status: string;
+  message: string;
+  data: number;
+}
+
 export interface WishlistPageProps {
   searchParams: { [key: string]: string | undefined };
 }
