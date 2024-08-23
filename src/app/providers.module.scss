@@ -6,13 +6,12 @@
 }
 
 .floating-area {
-  display: flex;
+  @include flex-column(1rem);
+
   position: fixed;
-  gap: 1rem;
   z-index: $zindex-modal-backdrop - 1;
   right: 5rem;
   bottom: 5rem;
-  flex-direction: column;
   align-items: flex-end;
   transition: 3s;
 }
