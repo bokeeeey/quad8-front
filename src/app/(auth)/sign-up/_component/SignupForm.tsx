@@ -93,8 +93,6 @@ export default function SignupForm() {
     if (second) {
       setIsAgreementOpen((agree) => [agree[0], !agree[1]]);
     }
-
-    console.log(isAgreementOpen);
   };
 
   const registers = {
