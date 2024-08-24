@@ -78,9 +78,8 @@ export default forwardRef<HTMLDivElement, CommentProps>(function Comment(
 
   const handleOpenProfile = (e: MouseEvent<HTMLDivElement>) => {
     const { top } = e.currentTarget.getBoundingClientRect();
-    setCommentPositionTop(top);
-
     const timeoutId = setTimeout(() => {
+      setCommentPositionTop(top);
       onOpenProfileCard();
       setIsOpenProfileCard(true);
     }, 300);

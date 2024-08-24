@@ -3,10 +3,8 @@
 import classNames from 'classnames/bind';
 import { useState, MouseEvent, useRef, SyntheticEvent } from 'react';
 import Image, { StaticImageData } from 'next/image';
-
-import { IMAGE_BLUR } from '@/constants/blurImage';
-import { keydeukProfileImg } from '@/public/index';
 import type { Position } from '@/types/zoomViewType';
+import { IMAGE_BLUR } from '@/constants/blurImage';
 import ZoomView from './ZoomView';
 
 import styles from './ImageZoom.module.scss';
@@ -38,7 +36,6 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
-  const [isImageError, setIsImageError] = useState(false);
   const [scannerPosition, setScannerPosition] = useState<Position | null>(null);
   const [viewPosition, setViewPosition] = useState<Position | null>(null);
 
@@ -79,18 +76,27 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
       updatedScannerPosition.top = containerRect.height - SCANNER_SIZE;
     }
 
-    setScannerPosition(updatedScannerPosition);
+    if (
+      !scannerPosition ||
+      scannerPosition.left !== updatedScannerPosition.left ||
+      scannerPosition.top !== updatedScannerPosition.top
+    ) {
+      setScannerPosition(updatedScannerPosition);
 
-    if (imageDimensions.width > imageDimensions.height) {
-      setViewPosition({
-        left: updatedScannerPosition.left * -2.0,
-        top: (updatedScannerPosition.top + SCANNER_SIZE / 2) * -(2 / imageAspectRatio),
-      });
-    } else {
-      setViewPosition({
-        left: updatedScannerPosition.left * -(2 * imageAspectRatio),
-        top: (updatedScannerPosition.top + SCANNER_SIZE / 2) * -2,
-      });
+      const newViewPosition =
+        imageDimensions.width > imageDimensions.height
+          ? {
+              left: updatedScannerPosition.left * -2.0,
+              top: (updatedScannerPosition.top + SCANNER_SIZE / 2) * -(2 / imageAspectRatio),
+            }
+          : {
+              left: updatedScannerPosition.left * -(2 * imageAspectRatio),
+              top: (updatedScannerPosition.top + SCANNER_SIZE / 2) * -2,
+            };
+
+      if (!viewPosition || viewPosition.left !== newViewPosition.left || viewPosition.top !== newViewPosition.top) {
+        setViewPosition(newViewPosition);
+      }
     }
   };
 
@@ -103,13 +109,11 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
     <div style={{ width, height }} className={cn('container')} ref={containerRef}>
       <div className={cn('image-wrapper')} onMouseMove={(e) => handleMouseMove(e)} onMouseLeave={handleMouseLeave}>
         <Image
-          src={isImageError ? keydeukProfileImg : image}
+          src={image}
           alt={alt}
           className={cn('image')}
           fill
           onLoad={handleImageLoadComplete}
-          onError={() => setIsImageError(true)}
-          priority
           placeholder={IMAGE_BLUR.placeholder}
           blurDataURL={IMAGE_BLUR.blurDataURL}
           sizes='(max-width: 768px) 30rem'

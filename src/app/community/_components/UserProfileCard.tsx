@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 
@@ -26,13 +26,17 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   const savedUserInfo = queryClient.getQueryData<Users>(['clickedUserInfo']);
 
   const {
-    data: userInfo,
+    data: rawUserInfo,
     isFetching,
     isPending,
   } = useQuery({
     queryKey: ['clickedUserInfo'],
     queryFn: () => getOthersInfo(userId),
   });
+
+  const userInfo = useMemo(() => {
+    return rawUserInfo;
+  }, [rawUserInfo]);
 
   const [isAboveProfile, setIsAboveProfile] = useState(false);
 
