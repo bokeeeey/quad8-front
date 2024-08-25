@@ -170,6 +170,7 @@ export default function OptionWithButton({ productData }: OptionWithButtonProps)
     if (!optionList) {
       const noOptionData: CreateOrderAPIType = [{ productId, switchOptionId: null, quantity: noOptionCount }];
       handleBuyProduct(noOptionData);
+      handleClickCartButton(() => handleBuyProduct(noOptionData));
       return;
     }
 

@@ -13,16 +13,19 @@ const requestAPI = async <T>(
   retryWithoutToken?: boolean,
 ): Promise<ResponseAPIType<T>> => {
   const accessToken = await getCookie('accessToken');
+  const fetchOption = {
+    ...option,
+    headers: {
+      ...option?.headers,
+    },
+  };
+  if (!(option?.body instanceof FormData)) {
+    Object.assign(fetchOption.headers, { 'Content-Type': 'application/json' });
+  }
 
   if (!accessToken) {
     try {
-      const response = await fetch(baseURL + url, {
-        ...option,
-        headers: {
-          'Content-Type': 'application/json',
-          ...option?.headers,
-        },
-      });
+      const response = await fetch(baseURL + url, fetchOption);
 
       const data: ResponseAPIType<T> = await response.json();
 
@@ -37,11 +40,10 @@ const requestAPI = async <T>(
   }
   try {
     const response = await fetch(baseURL + url, {
-      ...option,
+      ...fetchOption,
       headers: {
-        'Content-Type': 'application/json',
+        ...fetchOption.headers,
         Authorization: `Bearer ${accessToken}`,
-        ...option?.headers,
       },
     });
     const data = await response.json();
@@ -55,14 +57,7 @@ const requestAPI = async <T>(
           return result;
         }
         if (retryWithoutToken) {
-          const res = await fetch(baseURL + url, {
-            ...option,
-            headers: {
-              'Content-Type': 'application/json',
-              ...option?.headers,
-            },
-          });
-
+          const res = await fetch(baseURL + url, fetchOption);
           const result: ResponseAPIType<T> = await res.json();
           if (!res.ok) {
             throw new Error(result.message);
