@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -14,6 +14,7 @@ import { changePhoneNumber } from '@/libs/changePhoneNumber';
 import { formatOnInputBirthChange, unFormatBirthDate } from '@/libs/formatBirthDate';
 import { unFormatPhoneNumber } from '@/libs/unFormatPhoneNumber';
 import { CaretRightIcon, CheckboxCircleIcon } from '@/public/index';
+import { QueryObserver, useQueryClient } from '@tanstack/react-query';
 import { TermsAgreement } from './TermsAgreement';
 
 import styles from './SignupForm.module.scss';
@@ -38,7 +39,23 @@ const NOT_CHECKED = '#A5A5A5';
 const CHECKED = '#4968f6';
 
 export default function SignupForm() {
+  const queryClient = useQueryClient();
   const router = useRouter();
+
+  useEffect(() => {
+    const observer = new QueryObserver(queryClient, { queryKey: ['userData'] });
+
+    const unsubscribe = observer.subscribe((userData) => {
+      if (userData?.data) {
+        router.back();
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [queryClient, router]);
+
   const [isAgreementOpen, setIsAgreementOpen] = useState({
     first: false,
     second: false,
@@ -59,7 +76,7 @@ export default function SignupForm() {
   const handleCheckDuplicatedEmail = async (email: string) => {
     const isDuplicated = await getCheckEmailDuplication(email);
 
-    if (isDuplicated.data === true) {
+    if (isDuplicated) {
       setError('email', {
         message: ERROR_MESSAGE.EMAIL.isDuplicated,
       });
@@ -69,7 +86,7 @@ export default function SignupForm() {
   const handleCheckDuplicatedNickname = async (nickname: string) => {
     const isDuplicated = await getCheckNicknameDuplication(nickname);
 
-    if (isDuplicated.data === true) {
+    if (isDuplicated) {
       setError('nickname', {
         message: ERROR_MESSAGE.NICKNAME.isDuplicated,
       });

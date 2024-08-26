@@ -6,7 +6,7 @@ export const getCheckEmailDuplication = async (emailValue: string) => {
   const url = `${BASE_URL}/api/v1/users/check/email?email=${emailValue}`;
   try {
     const response = await fetch(url);
-    const data = await response.json();
+    const { data } = await response.json();
     if (!response.ok) {
       throw new Error(data.message);
     }
@@ -21,7 +21,7 @@ export const getCheckNicknameDuplication = async (nickname: string) => {
   const url = `${BASE_URL}/api/v1/users/check/nickname?nickname=${nickname}`;
   try {
     const response = await fetch(url);
-    const data = await response.json();
+    const { data } = await response.json();
 
     if (!response.ok) {
       throw new Error(data.message);
