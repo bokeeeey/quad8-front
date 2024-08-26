@@ -79,9 +79,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
   const [rating, setRating] = useState<number>(reviewData ? reviewData.score : 0);
   const [isImageError, setIsImageError] = useState<boolean>(false);
 
-  /**
-   * 커스텀 리뷰 작성 관련 입니다.
-   */
+  /** 커스텀 리뷰 작성 관련 입니다. */
 
   const { mutate: postCreatePostMutation } = useMutation({
     mutationFn: postCreateCustomReview,
@@ -380,19 +378,13 @@ export default function WriteEditModal(props: WriteEditModalProps) {
         />
       </div>
       <div className={cn('button-wrapper')}>
-        {isCustom ? (
-          <Button type='submit' backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}>
-            {reviewType === 'customReview' ? '등록' : '수정'}
-          </Button>
-        ) : (
-          <Button
-            type='submit'
-            disabled={isCustom ? false : rating === 0}
-            backgroundColor={isValid && rating > 0 ? 'background-primary' : 'background-gray-40'}
-          >
-            {reviewType === 'productReview' ? '등록' : '수정'}
-          </Button>
-        )}
+        <Button
+          type='submit'
+          backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}
+          disabled={isCustom ? false : rating === 0}
+        >
+          {reviewType === 'customReview' || reviewType === 'productReview' ? '등록' : '수정'}
+        </Button>
       </div>
     </form>
   );
