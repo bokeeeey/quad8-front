@@ -112,6 +112,9 @@ export const getCustomOrderList = async () => {
 export const postCreateCustomReview = async (formData: FormData) => {
   try {
     await baseAPI.post<PostCustomReviewResponse>('/api/v1/community/create', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: formData,
     });
   } catch (error) {

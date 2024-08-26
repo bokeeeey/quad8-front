@@ -19,7 +19,7 @@ interface CategoryMenuItemProp {
 function CategoryMenuItem({ href, label }: CategoryMenuItemProp) {
   return (
     <li className={cn('menu-item')}>
-      <Link href={href} className={cn('item')}>
+      <Link className={cn('item')} href={href}>
         {label}
       </Link>
     </li>

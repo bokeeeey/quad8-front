@@ -2,7 +2,7 @@ export const ROUTER = {
   MAIN: '/',
   CUSTOM_KEYBOARD: '/custom-keyboard',
   COMMUNITY: '/community',
-  EVEMT: '/event',
+  EVENT: '/event',
 
   SEARCH: '/search',
 

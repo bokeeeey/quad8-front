@@ -25,7 +25,7 @@ export default function CheckoutAddressModal({ onClick }: CheckoutAddressModalPr
         {addresses.length > 0 ? (
           sortedAddresses?.map((item) => <Address item={item} key={item.id} isDisplayOnModal onClick={onClick} />)
         ) : (
-          <AddressesEmptyCase />
+          <AddressesEmptyCase isDisplayOnModal />
         )}
       </div>
     </article>

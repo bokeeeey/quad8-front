@@ -1,5 +1,5 @@
 import { formatKSTSDate } from '@/libs/formatKSTSDate';
-import type { CreateOrderAPIType, Order, OrdersRequest, OrderResponse, OrderDetailData } from '@/types/orderType';
+import type { CreateOrderAPIType, Order, OrderDetailData, OrderResponse, OrdersRequest } from '@/types/orderType';
 import { FieldValues } from 'react-hook-form';
 import { baseAPI } from './interceptor/interceptor';
 
@@ -35,6 +35,7 @@ export const getOrdersData = async ({ page = 0, size = 10, startDate, endDate }:
 export const getOrder = async (orderId: string) => {
   try {
     const data = await baseAPI.get<OrderResponse>(`/api/v1/order/${orderId}`);
+
     return data;
   } catch (error) {
     throw error;
@@ -52,7 +53,7 @@ export const getPayment = async (orderId?: string) => {
 
 export const putPayment = async (orderId?: string, payload?: FieldValues) => {
   try {
-    const data = await baseAPI.put(`/api/v1/order/${orderId}/payment`, {
+    const data = await baseAPI.put<Order>(`/api/v1/order/${orderId}/payment`, {
       body: JSON.stringify(payload),
     });
     return data;

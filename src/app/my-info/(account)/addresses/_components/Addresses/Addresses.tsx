@@ -17,7 +17,11 @@ export default function Addresses() {
 
   return (
     <div className={cn('addresses')}>
-      {addressesData ? sortedAddresses?.map((item) => <Address item={item} key={item.id} />) : <AddressesEmptyCase />}
+      {addresses.length > 0 ? (
+        sortedAddresses?.map((item) => <Address item={item} key={item.id} />)
+      ) : (
+        <AddressesEmptyCase />
+      )}
     </div>
   );
 }

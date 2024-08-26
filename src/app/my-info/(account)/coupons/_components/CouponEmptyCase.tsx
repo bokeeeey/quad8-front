@@ -20,7 +20,7 @@ export default function CouponEmptyCase({ message, isBackgroundColor }: CouponEm
       <p className={cn('empty-case-text')}>{message}</p>
       <Button
         as={Link}
-        href={ROUTER.EVEMT}
+        href={ROUTER.EVENT}
         backgroundColor='background-gray-40'
         className={cn('empty-case-button')}
         paddingVertical={8}
