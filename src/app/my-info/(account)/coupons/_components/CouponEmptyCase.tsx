@@ -8,12 +8,12 @@ import styles from './CouponEmptyCase.module.scss';
 
 const cn = classNames.bind(styles);
 
-interface MyInfoEmptyCaseProps {
+interface CouponEmptyCaseProps {
   message: string;
   isBackgroundColor?: boolean;
 }
 
-export default function CouponEmptyCase({ message, isBackgroundColor }: MyInfoEmptyCaseProps) {
+export default function CouponEmptyCase({ message, isBackgroundColor }: CouponEmptyCaseProps) {
   return (
     <div className={cn('empty-case', { 'background-color': isBackgroundColor })}>
       <AlertIcon className={cn('alert-icon')} />

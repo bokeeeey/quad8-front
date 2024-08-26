@@ -7,6 +7,16 @@
   background-color: $white;
 }
 
+.ol {
+  margin: 0 2rem;
+  list-style-type: decimal;
+}
+
+.ul {
+  margin: 0 1.5rem;
+  list-style: disc;
+}
+
 .title {
   @include pretendard-14-600;
 

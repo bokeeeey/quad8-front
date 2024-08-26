@@ -51,17 +51,14 @@ const SERVICE: AgreementClause[] = [
   },
 ];
 
-const OL_STYLE = { listStyleType: 'decimal', margin: '0rem 2rem' };
-const UL_STYLE = { listStyleType: 'disc', margin: '0rem 1.5rem' };
-
 const PRIVACY_POLICY: AgreementClause[] = [
   {
     title: '제 1조 (수집하는 개인정보의 항목 및 수집 방법)',
     content: (
-      <ol style={OL_STYLE}>
+      <ol className={cn('ol')}>
         <li>
           회사는 서비스 제공을 위해 다음과 같은 개인정보를 수집합니다
-          <ul style={UL_STYLE}>
+          <ul className={cn('ul')}>
             <li>필수 항목: 이름, 이메일 주소, 비밀번호, 휴대전화번호</li>
             <li>선택 항목: 생년월일, 성별</li>
           </ul>
@@ -73,17 +70,17 @@ const PRIVACY_POLICY: AgreementClause[] = [
   {
     title: '제 2조 (개인정보의 수집 및 이용 목적)',
     content: (
-      <ol style={OL_STYLE}>
+      <ol className={cn('ol')}>
         <li>
           서비스 제공 및 회원 관리
-          <ul style={UL_STYLE}>
+          <ul className={cn('ul')}>
             <li>회원 식별 및 본인 확인</li>
             <li>서비스 이용에 따른 본인 인증</li>
           </ul>
         </li>
         <li>
           마케팅 및 광고
-          <ul style={UL_STYLE}>
+          <ul className={cn('ul')}>
             <li>이벤트 정보 제공 및 참여 기회 제공</li>
             <li>맞춤형 서비스 및 광고 제공</li>
           </ul>
@@ -94,7 +91,7 @@ const PRIVACY_POLICY: AgreementClause[] = [
   {
     title: '제 3조 (개인정보의 보유 및 이용 기간)',
     content: (
-      <ol style={OL_STYLE}>
+      <ol className={cn('ol')}>
         <li>회사는 회원 탈퇴 시 개인정보를 즉시 삭제합니다.</li>
         <li>단, 관계 법령에 따라 일정 기간 보관해야 하는 정보는 해당 기간 동안 보관합니다.</li>
       </ol>
@@ -103,7 +100,7 @@ const PRIVACY_POLICY: AgreementClause[] = [
   {
     title: '제 4조 (개인정보의 제3자 제공)',
     content: (
-      <ol style={OL_STYLE}>
+      <ol className={cn('ol')}>
         <li>회사는 이용자의 동의 없이 개인정보를 제3자에게 제공하지 않습니다.</li>
         <li>다만, 법령에 따라 필요한 경우, 이용자의 동의를 받아 제공할 수 있습니다.</li>
       </ol>
@@ -112,7 +109,7 @@ const PRIVACY_POLICY: AgreementClause[] = [
   {
     title: '제 5조 (개인정보의 파기)',
     content: (
-      <ol style={OL_STYLE}>
+      <ol className={cn('ol')}>
         <li>회사는 개인정보의 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다.</li>
         <li>
           파기 방법: 전자적 파일 형태의 정보는 복구 불가능한 방법으로 삭제하고, 종이 문서 형태의 정보는 분쇄하거나
@@ -124,7 +121,7 @@ const PRIVACY_POLICY: AgreementClause[] = [
   {
     title: '제 6조 (이용자의 권리)',
     content: (
-      <ol style={OL_STYLE}>
+      <ol className={cn('ol')}>
         <li>이용자는 언제든지 자신의 개인정보를 조회하거나 수정할 수 있으며, 처리 정지를 요구할 수 있습니다.</li>
         <li>이용자는 개인정보 보호책임자에게 이메일을 통해 문의할 수 있습니다.</li>
       </ol>
@@ -135,7 +132,7 @@ const PRIVACY_POLICY: AgreementClause[] = [
     content: (
       <>
         회사는 개인정보 보호와 관련한 불만 처리 및 상담 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다:
-        <ul style={UL_STYLE}>
+        <ul className={cn('ul')}>
           <li>이름: [개인정보 보호책임자 이름]</li>
           <li>이메일: [개인정보 보호책임자 이메일 주소]</li>
           <li>전화번호: [연락처]</li>
@@ -157,7 +154,7 @@ export function TermsAgreement({ type }: TermsAgreementProps) {
       {CONTENT_LIST.map((terms) => (
         <article key={terms.title}>
           <h2 className={cn('title')}>{terms.title}</h2>
-          <p className={cn('content')}>{terms.content}</p>
+          <div className={cn('content')}>{terms.content}</div>
         </article>
       ))}
     </div>

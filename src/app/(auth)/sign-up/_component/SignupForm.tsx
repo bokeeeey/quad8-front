@@ -39,7 +39,10 @@ const CHECKED = '#4968f6';
 
 export default function SignupForm() {
   const router = useRouter();
-  const [isAgreementOpen, setIsAgreementOpen] = useState<[boolean, boolean]>([false, false]);
+  const [isAgreementOpen, setIsAgreementOpen] = useState({
+    first: false,
+    second: false,
+  });
 
   const {
     register,
@@ -85,14 +88,8 @@ export default function SignupForm() {
     setValue('birth', formattedValue, { shouldValidate: true });
   };
 
-  const handleClickAgreement = ({ first, second }: { first?: boolean; second?: boolean }) => {
-    if (first) {
-      setIsAgreementOpen((agree) => [!agree[0], agree[1]]);
-    }
-
-    if (second) {
-      setIsAgreementOpen((agree) => [agree[0], !agree[1]]);
-    }
+  const handleClickAgreement = (key: 'first' | 'second') => {
+    setIsAgreementOpen((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const registers = {
@@ -288,12 +285,12 @@ export default function SignupForm() {
                   <h3>서비스 이용 약관 동의</h3>
                 </label>
                 <CaretRightIcon
-                  className={cn('arrow', { down: isAgreementOpen[0] })}
+                  className={cn('arrow', { down: isAgreementOpen.first })}
                   stroke='black'
-                  onClick={() => handleClickAgreement({ first: true })}
+                  onClick={() => handleClickAgreement('first')}
                 />
               </div>
-              {isAgreementOpen[0] && <TermsAgreement type='service' />}
+              {isAgreementOpen.first && <TermsAgreement type='service' />}
               <div className={cn('content')}>
                 <label htmlFor='check2' className={cn('checkbox-label')}>
                   <input {...registers.check2} type='checkbox' className={cn('checkbox-input')} id='check2' />
@@ -301,12 +298,12 @@ export default function SignupForm() {
                   <h3>개인정보 처리 방침 동의</h3>
                 </label>
                 <CaretRightIcon
-                  className={cn('arrow', { down: isAgreementOpen[1] })}
+                  className={cn('arrow', { down: isAgreementOpen.second })}
                   stroke='black'
-                  onClick={() => handleClickAgreement({ second: true })}
+                  onClick={() => handleClickAgreement('second')}
                 />
               </div>
-              {isAgreementOpen[1] && <TermsAgreement type='privacyPolicy' />}
+              {isAgreementOpen.second && <TermsAgreement type='privacyPolicy' />}
             </div>
           </div>
         </div>
