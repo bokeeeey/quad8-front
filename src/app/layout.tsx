@@ -11,6 +11,7 @@ import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
 import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import { getCookie } from '@/libs/manageCookie';
+import { pretendard } from '@/public/fonts/pretendard';
 import { Providers } from './providers';
 
 import '@/styles/reset.css';
@@ -50,7 +51,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang='ko'>
+    <html lang='ko' className={pretendard.className}>
       <GoogleTagManager gtmId='GTM-T3C6DZC6' />
       <body>
         <Providers>
