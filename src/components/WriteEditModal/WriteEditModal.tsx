@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
@@ -152,6 +152,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
     watch,
     formState: { isValid },
     reset,
+    control,
   } = useForm<FieldValues>({
     mode: 'onTouched',
   });
@@ -323,7 +324,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
               placeholder={TITLE_PLACEHOLDER}
               maxLength={TITLE_MAX_LENGTH}
               labelSize='lg'
-              currentLength={watch('title')?.length}
+              currentLength={watch('title')?.length || 0}
               {...registers.title}
             />
           </div>
@@ -362,13 +363,29 @@ export default function WriteEditModal(props: WriteEditModalProps) {
           onSaveDeletedImageId={handleSaveDeletedImageId}
           isCustom={isCustom}
         />
-        <TextField
+        <Controller
+          // {...registers.content}
+          name='content'
+          control={control}
+          render={({ field: { onChange, ...field } }) => (
+            <TextField
+              className={cn('text-area-input')}
+              label='내용'
+              placeholder={CONTENT_PLACEHOLDER}
+              sizeVariant='md'
+              minLength={20}
+              required
+              {...field}
+            />
+          )}
+        />
+        {/* <TextField
           label='내용'
           className={cn('text-area-input')}
           placeholder={CONTENT_PLACEHOLDER}
           sizeVariant='md'
           {...registers.content}
-        />
+        /> */}
       </div>
       <div className={cn('button-wrapper')}>
         {isCustom ? (
