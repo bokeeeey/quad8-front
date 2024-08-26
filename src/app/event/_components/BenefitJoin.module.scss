@@ -30,18 +30,16 @@
 
 .discount {
   position: absolute;
-  top: 10rem;
+  top: 7.6rem;
   left: 3.6rem;
   color: $white;
-  font-size: 7.4rem;
-  font-style: normal;
-  font-weight: 900;
-  line-height: 3.2rem;
+  font-size: 6.8rem;
+  font-weight: 700;
 }
 
 .min-price {
   position: absolute;
-  top: 15rem;
+  top: 15.2rem;
   left: 4rem;
   color: $white;
   @include pretendard-24-500;

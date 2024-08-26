@@ -6,7 +6,7 @@ import { COUPON_LIST } from '@/constants/event';
 import { ROUTER } from '@/constants/route';
 import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
 import { couponDownImg } from '@/public/index';
-import { UserDataResponseType } from '@/types/userType';
+import type { UserDataResponseType } from '@/types/userType';
 import { useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
