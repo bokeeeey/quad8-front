@@ -364,7 +364,6 @@ export default function WriteEditModal(props: WriteEditModalProps) {
           isCustom={isCustom}
         />
         <Controller
-          // {...registers.content}
           name='content'
           control={control}
           render={({ field: { onChange, ...field } }) => (
@@ -379,13 +378,6 @@ export default function WriteEditModal(props: WriteEditModalProps) {
             />
           )}
         />
-        {/* <TextField
-          label='내용'
-          className={cn('text-area-input')}
-          placeholder={CONTENT_PLACEHOLDER}
-          sizeVariant='md'
-          {...registers.content}
-        /> */}
       </div>
       <div className={cn('button-wrapper')}>
         {isCustom ? (
