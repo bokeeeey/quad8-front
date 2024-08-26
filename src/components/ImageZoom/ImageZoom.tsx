@@ -1,10 +1,12 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { useState, MouseEvent, useRef, SyntheticEvent } from 'react';
+import { useState, MouseEvent, useRef, SyntheticEvent, useMemo } from 'react';
 import Image, { StaticImageData } from 'next/image';
+
 import type { Position } from '@/types/zoomViewType';
 import { IMAGE_BLUR } from '@/constants/blurImage';
+import { keydeukProfileImg } from '@/public/index';
 import ZoomView from './ZoomView';
 
 import styles from './ImageZoom.module.scss';
@@ -37,6 +39,7 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
 
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   const [scannerPosition, setScannerPosition] = useState<Position | null>(null);
+  const [isImageError, setisImageError] = useState(false);
   const [viewPosition, setViewPosition] = useState<Position | null>(null);
 
   const handleImageLoadComplete = (e: SyntheticEvent<HTMLImageElement>) => {
@@ -105,15 +108,20 @@ export default function ImageZoom({ image, alt, width, height }: ImageZoomProps)
     setViewPosition(null);
   };
 
+  const handleisImageError = useMemo(() => {
+    return () => setisImageError(true);
+  }, []);
+
   return (
     <div style={{ width, height }} className={cn('container')} ref={containerRef}>
       <div className={cn('image-wrapper')} onMouseMove={(e) => handleMouseMove(e)} onMouseLeave={handleMouseLeave}>
         <Image
-          src={image}
+          src={isImageError ? keydeukProfileImg : image}
           alt={alt}
           className={cn('image')}
           fill
           onLoad={handleImageLoadComplete}
+          onError={handleisImageError}
           placeholder={IMAGE_BLUR.placeholder}
           blurDataURL={IMAGE_BLUR.blurDataURL}
           sizes='(max-width: 768px) 30rem'
