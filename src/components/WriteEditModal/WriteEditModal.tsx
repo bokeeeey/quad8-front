@@ -66,7 +66,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
   const queryClient = useQueryClient();
 
   const { reviewType, onSuccessReview } = props;
-  const isCustom = reviewType === 'customReview' || reviewType === 'customReviewEdit';
+  const isCustom = reviewType.includes('customReview');
   const { keyboardInfo } = props as CustomReviewProps;
   const { editCustomData } = props as CustomReviewEditProps;
   const { productData } = (props as ProductReviewProps) || (props as ProductReviewEditProps);
@@ -173,7 +173,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
 
   const registers = {
     title: register('title', {
-      required: isCustom && true,
+      required: !isCustom,
     }),
     content: register('content', {
       required: true,
@@ -364,14 +364,18 @@ export default function WriteEditModal(props: WriteEditModalProps) {
         <Controller
           name='content'
           control={control}
+          rules={{
+            required: true,
+            minLength: { value: 20, message: '최소 20자 이상 입력해주세요' },
+          }}
           render={({ field: { onChange, ...field } }) => (
             <TextField
               className={cn('text-area-input')}
               label='내용'
+              onTextChange={onChange}
               placeholder={CONTENT_PLACEHOLDER}
               sizeVariant='md'
               minLength={20}
-              required
               {...field}
             />
           )}
