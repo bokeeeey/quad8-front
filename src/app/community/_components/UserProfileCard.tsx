@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { getOthersInfo } from '@/api/usersAPI';
 import { SpinLoading, keydeukProfileImg } from '@/public/index';
 import type { Users } from '@/types/userType';
+import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
 
 import styles from './UserProfileCard.module.scss';
 
@@ -74,10 +75,10 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   }
 
   const USER_INFO = [
-    { label: 'email', value: userInfo?.email },
-    { label: 'birthday', value: userInfo?.birth },
-    { label: 'phone', value: userInfo?.phone },
-    { label: 'gender', value: userInfo?.gender },
+    { label: '이메일', value: userInfo?.email },
+    { label: '생년월일', value: userInfo?.birth },
+    { label: '전화번호', value: `010-${formatPhoneNumber(userInfo?.phone)}` },
+    { label: '성별', value: userInfo?.gender === 'MALE' ? '남' : '여' },
   ];
 
   return positionTop && positionTop === 0 ? null : (
