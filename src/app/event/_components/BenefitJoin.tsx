@@ -3,13 +3,14 @@
 import { Button } from '@/components';
 import SignInModal from '@/components/SignInModal/SignInModal';
 import { COUPON_LIST } from '@/constants/event';
+import { ROUTER } from '@/constants/route';
 import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
 import { couponDownImg } from '@/public/index';
-import type { CouponDataType } from '@/types/couponType';
+import type { UserDataResponseType } from '@/types/userType';
 import { useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import styles from './BenefitJoin.module.scss';
 import EventTitle from './EventTitle';
@@ -19,24 +20,38 @@ const cn = classNames.bind(styles);
 export default function BenefitJoin() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { mutate: createCoupon } = useCreateCouponMutation();
+  const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
 
   const handleClick = async (price: number, minPrice: string) => {
-    const couponData = queryClient.getQueryData<CouponDataType>(['userData']);
-
-    if (!couponData?.data) {
+    if (!userData?.data) {
       setIsLoginOpen(true);
       return;
     }
+
+    const expiredDate = new Date();
+    expiredDate.setDate(expiredDate.getDate() + 7);
+
     createCoupon({
       name: '웰컴 쿠폰',
       price,
       minPrice: +minPrice.slice(0, 1) * 10000,
-      expiredDate: new Date(),
+      expiredDate,
       isWelcome: true,
     });
   };
+
+  const handleClickCouponListButton = () => {
+    if (!userData?.data) {
+      setIsLoginOpen(true);
+      return;
+    }
+
+    router.push(ROUTER.MY_PAGE.COUPONS);
+  };
+
   return (
     <section id='join' className={cn('container')}>
       <EventTitle title='WELCOME 쿠폰' color='black'>
@@ -57,9 +72,10 @@ export default function BenefitJoin() {
             </button>
           ))}
         </div>
-        <Button className={cn('button')} as={Link} href='/'>
+        <Button className={cn('button')} onClick={handleClickCouponListButton}>
           쿠폰함 가기
         </Button>
+        <span className={cn('center')}> 📌 룰렛 쿠폰은 발급일 기준 일주일 사용가능합니다.</span>
       </div>
       <SignInModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </section>

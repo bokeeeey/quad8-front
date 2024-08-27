@@ -1,7 +1,7 @@
 'use client';
 
-import { ChangeEvent, FocusEvent, forwardRef, useState, useRef, useImperativeHandle } from 'react';
 import classNames from 'classnames/bind';
+import { ChangeEvent, FocusEvent, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import { CrossIcon, DashIcon } from '@/public/index';
 
@@ -55,6 +55,12 @@ export default forwardRef<HTMLInputElement, CountInputProps>(function CountInput
       onChange(rangeValue);
     }
   };
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setCount(value);
+    }
+  }, [value]);
 
   const handleButtonMouseDown = (type: 'decrease' | 'increase') => {
     timerRef.current = setTimeout(() => {

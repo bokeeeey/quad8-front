@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './BenefitRoulette.module.scss';
 import EventTitle from './EventTitle';
-import Wheel from './Wheel';
+import Roulette from './Roulette';
 
 const cn = classNames.bind(styles);
 
@@ -12,7 +12,8 @@ export default function BenefitRoulette() {
         매일 9시 한번 100% 당첨 <br /> 쿠폰 룰렛 돌리기!
       </EventTitle>
       <div className={cn('roulette-zone')}>
-        <Wheel />
+        <Roulette />
+        <span className={cn('center')}> 📌 룰렛 쿠폰은 발급 시간 기준 24시간 동안 사용가능합니다.</span>
       </div>
     </section>
   );

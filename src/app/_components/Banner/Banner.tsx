@@ -21,7 +21,7 @@ export default function Banner() {
             sizes='(max-width: 600px) 480px, (max-width: 1200px) 800px, 1200px'
           />
         </Link>
-        <Link href={ROUTER.COMMUNITY} className={cn('banner')}>
+        <Link href={ROUTER.EVENT} className={cn('banner')}>
           <Image
             src={banner2Img}
             fill

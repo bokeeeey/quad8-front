@@ -5,6 +5,8 @@ export const ROUTER = {
 
   SEARCH: '/search',
 
+  EVENT: '/event',
+
   AUTH: {
     SIGN_UP: '/sign-up',
   },

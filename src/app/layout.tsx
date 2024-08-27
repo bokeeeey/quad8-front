@@ -2,6 +2,7 @@ import { GoogleTagManager } from '@next/third-parties/google';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { ReactNode } from 'react';
 
 import { getAlarm } from '@/api/alarmAPI';
@@ -10,8 +11,7 @@ import { getUserData } from '@/api/usersAPI';
 import { Footer, Header } from '@/components';
 import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
 import { getCookie } from '@/libs/manageCookie';
-import Script from 'next/script';
-import AOSWrapper from './_components/Aos/AOSWrapper';
+import { pretendard } from '@/public/fonts/pretendard';
 import { Providers } from './providers';
 
 import '@/styles/reset.css';
@@ -51,7 +51,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang='ko'>
+    <html lang='ko' className={pretendard.className}>
       <GoogleTagManager gtmId='GTM-T3C6DZC6' />
       <body>
         <Providers>
@@ -60,10 +60,7 @@ export default async function RootLayout({
               <HydrationBoundary state={dehydrate(queryClient)}>
                 <Header />
               </HydrationBoundary>
-              <div className={cn('content-wrapper')}>
-                {' '}
-                <AOSWrapper>{children}</AOSWrapper>
-              </div>
+              <div className={cn('content-wrapper')}> {children}</div>
               <Footer />
             </div>
           </HydrationBoundary>

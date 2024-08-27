@@ -8,16 +8,17 @@ import SignInModal from '@/components/SignInModal/SignInModal';
 import { ANIMATION_DURATION, CONFETTI_NUMBER, EMOJI_SIZE, MIN_PRICE_MULTIPLIER, REWARDS } from '@/constants/event';
 import { useCreateCouponMutation } from '@/hooks/useCreateCouponMutation';
 import { calculateRotation, getRandomIndex, getTodayDateString, hasRouletteCoupon } from '@/libs/wheelUtils';
-import type { CouponDataType, CouponResponse } from '@/types/couponType';
+import type { CouponResponse } from '@/types/couponType';
+import { UserDataResponseType } from '@/types/userType';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import JSConfetti from 'js-confetti';
 import Image from 'next/image';
-import styles from './Wheel.module.scss';
+import styles from './Roulette.module.scss';
 
 const cn = classNames.bind(styles);
 
-export default function Wheel() {
+export default function Roulette() {
   const [result, setResult] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [rotation, setRotation] = useState(0);
@@ -49,11 +50,15 @@ export default function Wheel() {
           emojiSize: EMOJI_SIZE,
           confettiNumber: CONFETTI_NUMBER,
         });
+
+        const expiredDate = new Date();
+        expiredDate.setDate(expiredDate.getDate() + 1);
+
         createCoupon({
           name: '룰렛 쿠폰',
           price: finalResult,
           minPrice: finalResult * MIN_PRICE_MULTIPLIER,
-          expiredDate: new Date(),
+          expiredDate,
           isWelcome: false,
         });
       }, ANIMATION_DURATION);
@@ -61,9 +66,9 @@ export default function Wheel() {
   }, [isAnimating, createCoupon]);
 
   const startRoulette = async () => {
-    const couponData = queryClient.getQueryData<CouponDataType>(['userData']);
+    const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
 
-    if (!couponData?.data) {
+    if (!userData?.data) {
       setIsLoginOpen(true);
       return;
     }
