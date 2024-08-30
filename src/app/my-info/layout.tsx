@@ -2,6 +2,7 @@ import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query
 import classNames from 'classnames/bind';
 import { ReactNode } from 'react';
 
+import { POST_PARAMS, LIKE_PARAMS, MY_REVIEW_PARAMS } from '@/constants/initialParams';
 import { getOrdersData } from '@/api/orderAPI';
 import { getAddresses } from '@/api/shippingAPI';
 import { getUserData } from '@/api/usersAPI';
@@ -9,7 +10,9 @@ import { getCartData } from '@/api/cartAPI';
 import { getCoupon } from '@/api/couponAPI';
 import { getMyPosts } from '@/api/communityAPI';
 import { getProductLikes } from '@/api/likesAPI';
+import { getUserProductReviews } from '@/api/productReviewAPI';
 import { fetchQueryBonding } from '@/libs/fetchQueryBounding';
+import { formatDateToQueryString } from '@/libs/formatDateToQueryString';
 import type { UserDataResponseType } from '@/types/userType';
 import { UserRouteProvider } from '@/components';
 import { SNB } from './_components';
@@ -30,8 +33,6 @@ export default async function MyInfoLayout({ children }: MyInfoLayoutProps) {
   });
 
   if (userData?.data) {
-    const initialRevieParams = { sort: 'new', page: '0', size: '12' };
-    const initialLikeParams = { page: '0', size: '10' };
     await queryClient.prefetchQuery({ queryKey: ['addressesData'], queryFn: getAddresses });
     await queryClient.prefetchQuery({
       queryKey: ['ordersResponse'],
@@ -40,12 +41,21 @@ export default async function MyInfoLayout({ children }: MyInfoLayoutProps) {
     await queryClient.prefetchQuery({ queryKey: ['cartData'], queryFn: getCartData });
     await queryClient.prefetchQuery({ queryKey: ['coupons'], queryFn: getCoupon });
     await queryClient.prefetchQuery({
-      queryKey: ['myCustomReview', initialRevieParams],
-      queryFn: () => getMyPosts(initialRevieParams),
+      queryKey: ['myCustomReview', POST_PARAMS],
+      queryFn: () => getMyPosts(POST_PARAMS),
     });
     await queryClient.prefetchQuery({
-      queryKey: ['like', 'lists', initialLikeParams],
-      queryFn: () => getProductLikes(initialLikeParams),
+      queryKey: ['like', 'lists', LIKE_PARAMS],
+      queryFn: () => getProductLikes(LIKE_PARAMS),
+    });
+    await queryClient.prefetchQuery({
+      queryKey: ['userProductReviews'],
+      queryFn: () =>
+        getUserProductReviews({
+          startDate: formatDateToQueryString('start', new Date()),
+          endDate: formatDateToQueryString('end', new Date()),
+          ...MY_REVIEW_PARAMS,
+        }),
     });
   }
 
