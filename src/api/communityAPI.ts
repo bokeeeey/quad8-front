@@ -1,8 +1,10 @@
 import type {
+  CommentResponseType,
   CommunityAllPostCardDataType,
   CommunityParamsType,
   CommunityPostCardDetailDataType,
   PostCardDetailModalCustomKeyboardType,
+  PostCustomReviewResponse,
 } from '@/types/communityType';
 import { baseAPI } from './interceptor/interceptor';
 
@@ -77,7 +79,7 @@ export const getCommentsInfiniteScroll = async ({
 
 export const postComment = async ({ id, content }: { id: number; content: string }) => {
   try {
-    await baseAPI.post(`/api/v1/community/comment/${id}`, {
+    await baseAPI.post<CommentResponseType>(`/api/v1/community/comment/${id}`, {
       cache: 'no-cache',
       body: JSON.stringify({ content }),
     });
@@ -88,7 +90,7 @@ export const postComment = async ({ id, content }: { id: number; content: string
 
 export const deleteComment = async (id: number) => {
   try {
-    await baseAPI.delete(`/api/v1/community/comment/${id}`, {
+    await baseAPI.delete<CommentResponseType>(`/api/v1/community/comment/${id}`, {
       cache: 'no-cache',
     });
   } catch (error) {
@@ -109,7 +111,7 @@ export const getCustomOrderList = async () => {
 
 export const postCreateCustomReview = async (formData: FormData) => {
   try {
-    await baseAPI.post('/api/v1/community/create', {
+    await baseAPI.post<PostCustomReviewResponse>('/api/v1/community/create', {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -122,7 +124,7 @@ export const postCreateCustomReview = async (formData: FormData) => {
 
 export const putEditCustomReview = async ({ id, formData }: { id: number; formData: FormData }) => {
   try {
-    await baseAPI.put(`/api/v1/community/update/${id}`, {
+    await baseAPI.put<PostCustomReviewResponse>(`/api/v1/community/update/${id}`, {
       body: formData,
     });
   } catch (error) {
@@ -132,7 +134,7 @@ export const putEditCustomReview = async ({ id, formData }: { id: number; formDa
 
 export const deletePostCard = async (postId: number) => {
   try {
-    const data = await baseAPI.delete(`/api/v1/community/delete/${postId}`);
+    const data = await baseAPI.delete<PostCustomReviewResponse>(`/api/v1/community/delete/${postId}`);
     return data;
   } catch (error) {
     throw error;

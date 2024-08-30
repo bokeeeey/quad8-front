@@ -1,13 +1,14 @@
 'use client';
 
 import classNames from 'classnames/bind';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 
 import { getOthersInfo } from '@/api/usersAPI';
 import { SpinLoading, keydeukProfileImg } from '@/public/index';
 import type { Users } from '@/types/userType';
+import { formatPhoneNumber } from '@/libs/formatPhoneNumber';
 
 import styles from './UserProfileCard.module.scss';
 
@@ -25,10 +26,18 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   const queryClient = useQueryClient();
   const savedUserInfo = queryClient.getQueryData<Users>(['clickedUserInfo']);
 
-  const { data: userInfo, isFetching } = useQuery({
+  const {
+    data: rawUserInfo,
+    isFetching,
+    isPending,
+  } = useQuery({
     queryKey: ['clickedUserInfo'],
     queryFn: () => getOthersInfo(userId),
   });
+
+  const userInfo = useMemo(() => {
+    return rawUserInfo;
+  }, [rawUserInfo]);
 
   const [isAboveProfile, setIsAboveProfile] = useState(false);
 
@@ -57,11 +66,7 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
     { 'above-profile': isAboveProfile },
   );
 
-  if (savedUserInfo?.id !== userId) {
-    return <div ref={ref} className={CONTAINER_CLASSNAME} />;
-  }
-
-  if (isFetching || !userInfo) {
+  if (isFetching || !userInfo || isPending || savedUserInfo?.id !== userId) {
     return (
       <div ref={ref} className={CONTAINER_CLASSNAME}>
         <SpinLoading />
@@ -70,10 +75,10 @@ export default forwardRef<HTMLDivElement, UserProfileCardProps>(function UserPro
   }
 
   const USER_INFO = [
-    { label: 'email', value: userInfo?.email },
-    { label: 'birthday', value: userInfo?.birth },
-    { label: 'phone', value: userInfo?.phone },
-    { label: 'gender', value: userInfo?.gender },
+    { label: '이메일', value: userInfo?.email },
+    { label: '생년월일', value: userInfo?.birth },
+    { label: '전화번호', value: `010-${formatPhoneNumber(userInfo?.phone)}` },
+    { label: '성별', value: userInfo?.gender === 'MALE' ? '남' : '여' },
   ];
 
   return positionTop && positionTop === 0 ? null : (

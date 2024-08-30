@@ -11,6 +11,7 @@ interface TextFieldProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   sizeVariant?: 'md' | 'option';
   label?: string;
   labelSize?: 'sm' | 'md' | 'lg';
+  onTextChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 /**
@@ -29,13 +30,15 @@ interface TextFieldProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
  */
 
 export default forwardRef<HTMLTextAreaElement, TextFieldProps>(function TextField(
-  { id, rows = 7, label, minLength = 20, maxLength = 200, sizeVariant = 'md', labelSize = 'lg', ...rest },
+  { id, rows = 7, label, minLength = 20, maxLength = 200, sizeVariant = 'md', labelSize = 'lg', onTextChange, ...rest },
   ref,
 ) {
   const [currentLength, setCurrentLength] = useState(0);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCurrentLength(e.target.value.length);
+    onTextChange?.(e);
+
     if (rest.onChange) {
       rest.onChange(e);
     }

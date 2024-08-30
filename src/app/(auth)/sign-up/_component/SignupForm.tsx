@@ -2,7 +2,7 @@
 
 import classNames from 'classnames/bind';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -14,6 +14,8 @@ import { changePhoneNumber } from '@/libs/changePhoneNumber';
 import { formatOnInputBirthChange, unFormatBirthDate } from '@/libs/formatBirthDate';
 import { unFormatPhoneNumber } from '@/libs/unFormatPhoneNumber';
 import { CaretRightIcon, CheckboxCircleIcon } from '@/public/index';
+import { QueryObserver, useQueryClient } from '@tanstack/react-query';
+import { TermsAgreement } from './TermsAgreement';
 
 import styles from './SignupForm.module.scss';
 
@@ -37,7 +39,27 @@ const NOT_CHECKED = '#A5A5A5';
 const CHECKED = '#4968f6';
 
 export default function SignupForm() {
+  const queryClient = useQueryClient();
   const router = useRouter();
+
+  useEffect(() => {
+    const observer = new QueryObserver(queryClient, { queryKey: ['userData'] });
+
+    const unsubscribe = observer.subscribe((userData) => {
+      if (userData?.data) {
+        router.back();
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [queryClient, router]);
+
+  const [isAgreementOpen, setIsAgreementOpen] = useState({
+    first: false,
+    second: false,
+  });
 
   const {
     register,
@@ -54,7 +76,7 @@ export default function SignupForm() {
   const handleCheckDuplicatedEmail = async (email: string) => {
     const isDuplicated = await getCheckEmailDuplication(email);
 
-    if (isDuplicated.data === true) {
+    if (isDuplicated) {
       setError('email', {
         message: ERROR_MESSAGE.EMAIL.isDuplicated,
       });
@@ -64,7 +86,7 @@ export default function SignupForm() {
   const handleCheckDuplicatedNickname = async (nickname: string) => {
     const isDuplicated = await getCheckNicknameDuplication(nickname);
 
-    if (isDuplicated.data === true) {
+    if (isDuplicated) {
       setError('nickname', {
         message: ERROR_MESSAGE.NICKNAME.isDuplicated,
       });
@@ -81,6 +103,10 @@ export default function SignupForm() {
     const inputValue = e.target.value.replace(/\D/g, '');
     const formattedValue = formatOnInputBirthChange(inputValue);
     setValue('birth', formattedValue, { shouldValidate: true });
+  };
+
+  const handleClickAgreement = (key: 'first' | 'second') => {
+    setIsAgreementOpen((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const registers = {
@@ -275,16 +301,26 @@ export default function SignupForm() {
                   <CheckboxCircleIcon fill={watch('check1') ? CHECKED : NOT_CHECKED} width={15} height={15} />
                   <h3>서비스 이용 약관 동의</h3>
                 </label>
-                <CaretRightIcon className={cn('right-arrow')} stroke='black' />
+                <CaretRightIcon
+                  className={cn('arrow', { down: isAgreementOpen.first })}
+                  stroke='black'
+                  onClick={() => handleClickAgreement('first')}
+                />
               </div>
+              {isAgreementOpen.first && <TermsAgreement type='service' />}
               <div className={cn('content')}>
                 <label htmlFor='check2' className={cn('checkbox-label')}>
                   <input {...registers.check2} type='checkbox' className={cn('checkbox-input')} id='check2' />
                   <CheckboxCircleIcon fill={watch('check2') ? CHECKED : NOT_CHECKED} width={15} height={15} />
                   <h3>개인정보 처리 방침 동의</h3>
                 </label>
-                <CaretRightIcon className={cn('right-arrow')} stroke='black' />
+                <CaretRightIcon
+                  className={cn('arrow', { down: isAgreementOpen.second })}
+                  stroke='black'
+                  onClick={() => handleClickAgreement('second')}
+                />
               </div>
+              {isAgreementOpen.second && <TermsAgreement type='privacyPolicy' />}
             </div>
           </div>
         </div>

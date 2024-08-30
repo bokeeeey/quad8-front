@@ -13,18 +13,12 @@ import SignInModal from '@/components/SignInModal/SignInModal';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { ROUTER } from '@/constants/route';
 import type { PostCardDetailModalCustomKeyboardType } from '@/types/communityType';
-import type { Users } from '@/types/userType';
+import type { UserDataResponseType } from '@/types/userType';
 import OrderListModal from './OrderListModal';
 
 import styles from './WritePostButton.module.scss';
 
 const cn = classNames.bind(styles);
-
-interface UserDataType {
-  data: Users;
-  status: string;
-  message: string;
-}
 
 export default function WritePostButton() {
   const queryClient = useQueryClient();
@@ -42,7 +36,7 @@ export default function WritePostButton() {
   });
 
   const handleClickButton = () => {
-    const userData = queryClient.getQueryData<UserDataType>(['userData']);
+    const userData = queryClient.getQueryData<UserDataResponseType>(['userData']);
     queryClient.invalidateQueries({ queryKey: ['orderList'] });
 
     if (!userData?.data) {
