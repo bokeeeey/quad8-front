@@ -26,7 +26,7 @@ export default function CouponEmptyCase({ message, isBackgroundColor }: CouponEm
         paddingVertical={8}
         radius={4}
       >
-        이벤트 둘러보기
+        쿠폰 받으러 가기
       </Button>
     </div>
   );

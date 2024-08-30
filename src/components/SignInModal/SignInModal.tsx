@@ -107,7 +107,9 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
         </div>
         <div className={cn('signup-text')}>
           <span>회원이 아니신가요? </span>
-          <strong onClick={() => handleClickLink(ROUTER.AUTH.SIGN_UP)}>회원가입하기</strong>
+          <button type='button' onClick={() => handleClickLink(ROUTER.AUTH.SIGN_UP)} className={cn('button')}>
+            회원가입하기
+          </button>
         </div>
         {isSubmitting ? (
           <SpinLoading className={cn('spin-icon')} />

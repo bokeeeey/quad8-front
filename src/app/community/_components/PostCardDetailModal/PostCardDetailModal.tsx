@@ -20,7 +20,7 @@ import ImageZoom from '@/components/ImageZoom/ImageZoom';
 import WriteEditModal from '@/components/WriteEditModal/WriteEditModal';
 import { formatDateToKSTString } from '@/libs/formatDateToKSTString';
 import AuthorCard from '../AuthorCard';
-import MemoizedCommentComponent from '../Comment';
+import Comment from '../Comment';
 import { PostInteractions } from '../PostInteractions';
 import ErrorFallbackDetailModal from './ErrorFallbackDetailModal';
 
@@ -320,7 +320,7 @@ export default function PostCardDetailModal({ cardId, onClose, isMine, commentCo
               </div>
               <div className={cn('comment-wrapper')}>
                 {visibleComments.map((comment) => (
-                  <MemoizedCommentComponent
+                  <Comment
                     key={comment.id}
                     cardId={cardId}
                     commentData={comment}
