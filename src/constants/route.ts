@@ -2,10 +2,8 @@ export const ROUTER = {
   MAIN: '/',
   CUSTOM_KEYBOARD: '/custom-keyboard',
   COMMUNITY: '/community',
-
-  SEARCH: '/search',
-
   EVENT: '/event',
+  SEARCH: '/search',
 
   AUTH: {
     SIGN_UP: '/sign-up',

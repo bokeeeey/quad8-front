@@ -88,6 +88,12 @@ export interface CommentType {
   userId: number;
 }
 
+export interface CommentResponseType {
+  status: string;
+  message: string;
+  data: CommunityPostCardDetailDataType;
+}
+
 export interface PostCardDetailModalCustomKeyboardType {
   productId: number;
   type: string;
@@ -101,4 +107,10 @@ export interface PostCardDetailModalCustomKeyboardType {
   imgUrl: string;
   price: number;
   individualColor: Record<string, string>;
+}
+
+export interface PostCustomReviewResponse {
+  status: string;
+  message: string;
+  data: CommunityPostCardDetailDataType;
 }

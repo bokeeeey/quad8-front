@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 
 import { getCoupon } from '@/api/couponAPI';
-import { MyInfoEmptyCase } from '@/components';
 import CouponList from './_components/CouponList';
+import CouponEmptyCase from './_components/CouponEmptyCase';
 
 import styles from './page.module.scss';
 
@@ -20,7 +20,7 @@ export default function CouponsPage() {
       {coupons && Array.isArray(coupons) && coupons.length > 0 ? (
         <CouponList />
       ) : (
-        <MyInfoEmptyCase message='보유 중인 쿠폰이 없습니다.' />
+        <CouponEmptyCase message='보유 중인 쿠폰이 없습니다.' />
       )}
     </div>
   );

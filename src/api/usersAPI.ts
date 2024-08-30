@@ -1,5 +1,5 @@
-import type { Users } from '@/types/userType';
 import { getCookie } from '@/libs/manageCookie';
+import type { Users } from '@/types/userType';
 import { baseAPI } from './interceptor/interceptor';
 
 const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;

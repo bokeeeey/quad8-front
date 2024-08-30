@@ -1,0 +1,28 @@
+.container {
+  @include flex-column(2rem);
+
+  margin-top: 1rem;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  background-color: $white;
+}
+
+.ol {
+  margin: 0 2rem;
+  list-style-type: decimal;
+}
+
+.ul {
+  margin: 0 1.5rem;
+  list-style: disc;
+}
+
+.title {
+  @include pretendard-14-600;
+
+  margin-bottom: 0.3rem;
+}
+
+.content {
+  @include pretendard-12-400;
+}

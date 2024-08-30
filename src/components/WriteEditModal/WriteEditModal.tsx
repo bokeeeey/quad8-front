@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import classNames from 'classnames/bind';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { postCreateCustomReview, putEditCustomReview } from '@/api/communityAPI';
@@ -66,7 +66,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
   const queryClient = useQueryClient();
 
   const { reviewType, onSuccessReview } = props;
-  const isCustom = reviewType === 'customReview' || reviewType === 'customReviewEdit';
+  const isCustom = reviewType.includes('customReview');
   const { keyboardInfo } = props as CustomReviewProps;
   const { editCustomData } = props as CustomReviewEditProps;
   const { productData } = (props as ProductReviewProps) || (props as ProductReviewEditProps);
@@ -79,9 +79,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
   const [rating, setRating] = useState<number>(reviewData ? reviewData.score : 0);
   const [isImageError, setIsImageError] = useState<boolean>(false);
 
-  /**
-   * 커스텀 리뷰 작성 관련 입니다.
-   */
+  /** 커스텀 리뷰 작성 관련 입니다. */
 
   const { mutate: postCreatePostMutation } = useMutation({
     mutationFn: postCreateCustomReview,
@@ -152,6 +150,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
     watch,
     formState: { isValid },
     reset,
+    control,
   } = useForm<FieldValues>({
     mode: 'onTouched',
   });
@@ -174,7 +173,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
 
   const registers = {
     title: register('title', {
-      required: isCustom && true,
+      required: !isCustom,
     }),
     content: register('content', {
       required: true,
@@ -323,7 +322,7 @@ export default function WriteEditModal(props: WriteEditModalProps) {
               placeholder={TITLE_PLACEHOLDER}
               maxLength={TITLE_MAX_LENGTH}
               labelSize='lg'
-              currentLength={watch('title')?.length}
+              currentLength={watch('title')?.length || 0}
               {...registers.title}
             />
           </div>
@@ -362,28 +361,34 @@ export default function WriteEditModal(props: WriteEditModalProps) {
           onSaveDeletedImageId={handleSaveDeletedImageId}
           isCustom={isCustom}
         />
-        <TextField
-          label='내용'
-          className={cn('text-area-input')}
-          placeholder={CONTENT_PLACEHOLDER}
-          sizeVariant='md'
-          {...registers.content}
+        <Controller
+          name='content'
+          control={control}
+          rules={{
+            required: true,
+            minLength: { value: 20, message: '최소 20자 이상 입력해주세요' },
+          }}
+          render={({ field: { onChange, ...field } }) => (
+            <TextField
+              className={cn('text-area-input')}
+              label='내용'
+              onTextChange={onChange}
+              placeholder={CONTENT_PLACEHOLDER}
+              sizeVariant='md'
+              minLength={20}
+              {...field}
+            />
+          )}
         />
       </div>
       <div className={cn('button-wrapper')}>
-        {isCustom ? (
-          <Button type='submit' backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}>
-            {reviewType === 'customReview' ? '등록' : '수정'}
-          </Button>
-        ) : (
-          <Button
-            type='submit'
-            disabled={isCustom ? false : rating === 0}
-            backgroundColor={isValid && rating > 0 ? 'background-primary' : 'background-gray-40'}
-          >
-            {reviewType === 'productReview' ? '등록' : '수정'}
-          </Button>
-        )}
+        <Button
+          type='submit'
+          backgroundColor={isValid ? 'background-primary' : 'background-gray-40'}
+          disabled={isCustom ? false : rating === 0}
+        >
+          {reviewType === 'customReview' || reviewType === 'productReview' ? '등록' : '수정'}
+        </Button>
       </div>
     </form>
   );

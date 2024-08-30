@@ -9,8 +9,8 @@ import { toast } from 'react-toastify';
 import { postSignin } from '@/api/authAPI';
 import { ROUTER } from '@/constants/route';
 import { setCookie } from '@/libs/manageCookie';
-import { GitHubIcon, GoogleIcon, KakaoIcon } from '@/public/index';
 import type { FetchSignInInfoTypes } from '@/types/authType';
+import { SpinLoading } from '@/public/index';
 import Button from '../Buttons/Button/Button';
 import InputField from '../InputField/InputField';
 import Modal from '../Modal/Modal';
@@ -18,9 +18,6 @@ import Modal from '../Modal/Modal';
 import styles from './SigninModal.module.scss';
 
 const cn = classNames.bind(styles);
-
-const AUTH_SECTION = ['아이디 찾기', '비밀번호 찾기', '회원가입'];
-const BASE_URL = process.env.NEXT_PUBLIC_KEYDEUK_API_BASE_URL;
 
 interface SigninModalProps {
   isOpen: boolean;
@@ -56,7 +53,7 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
 
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
   } = useForm({
     mode: 'onBlur',
@@ -77,10 +74,6 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
 
   const onSubmit: SubmitHandler<FieldValues> = async (formData) => {
     signInMutate(formData as FetchSignInInfoTypes);
-  };
-
-  const handleKakaoOauth = async (provider: string) => {
-    window.location.href = `${BASE_URL}/oauth2/authorization/${provider}`;
   };
 
   const handleClickLink = (url: string) => {
@@ -112,28 +105,19 @@ export default function SignInModal({ isOpen, onClose }: SigninModalProps) {
             {...registers.password}
           />
         </div>
-        <div className={cn('auth-section-wrapper')}>
-          {AUTH_SECTION.map((text, i) => (
-            <div key={text} className={cn('auth-section')}>
-              <div className={cn('auth-section-text')} onClick={() => handleClickLink(ROUTER.AUTH.SIGN_UP)}>
-                {text}
-              </div>
-              {i === 2 || <div className={cn('bar')}>|</div>}
-            </div>
-          ))}
+        <div className={cn('signup-text')}>
+          <span>회원이 아니신가요? </span>
+          <button type='button' onClick={() => handleClickLink(ROUTER.AUTH.SIGN_UP)} className={cn('button')}>
+            회원가입하기
+          </button>
         </div>
-        <Button className={cn('button')} fontSize={24} type='submit'>
-          로그인
-        </Button>
-
-        <div className={cn('o-auth-wrapper')}>
-          <p>간편 로그인 하기</p>
-          <div className={cn('icons')}>
-            <GitHubIcon onClick={() => handleKakaoOauth('github')} />
-            <GoogleIcon onClick={() => handleKakaoOauth('google')} />
-            <KakaoIcon onClick={() => handleKakaoOauth('kakao')} />
-          </div>
-        </div>
+        {isSubmitting ? (
+          <SpinLoading className={cn('spin-icon')} />
+        ) : (
+          <Button className={cn('button', { loading: isSubmitting })} fontSize={20} type='submit'>
+            로그인
+          </Button>
+        )}
       </form>
     </Modal>
   );

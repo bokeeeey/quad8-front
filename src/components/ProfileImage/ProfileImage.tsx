@@ -6,7 +6,7 @@ import { CameraIcon, keydeukProfileImg } from '@/public/index';
 import classNames from 'classnames/bind';
 
 import Image, { StaticImageData } from 'next/image';
-import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
+import { ChangeEvent, LegacyRef, forwardRef, memo, useEffect, useState } from 'react';
 
 import styles from './ProfileImage.module.scss';
 
@@ -20,9 +20,9 @@ interface ProfileImageProp {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default forwardRef<HTMLInputElement, ProfileImageProp>(function ProfileImage(
-  { profileImage, width = 64, height = 64, isEditable = false, onChange, ...rest },
-  ref,
+function Profile(
+  { profileImage, width = 64, height = 64, isEditable = false, onChange, ...rest }: ProfileImageProp,
+  ref: LegacyRef<HTMLInputElement>,
 ) {
   const [currentImageFile, setCurrentImageFile] = useState<string | StaticImageData>(profileImage || keydeukProfileImg);
   const [isImageError, setIsImageError] = useState<boolean>(false);
@@ -82,4 +82,7 @@ export default forwardRef<HTMLInputElement, ProfileImageProp>(function ProfileIm
       </div>
     </label>
   );
-});
+}
+
+const ProfileImage = memo(forwardRef(Profile));
+export default ProfileImage;
