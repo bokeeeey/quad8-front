@@ -51,17 +51,17 @@ const requestAPI = async <T>(
       const isClient = typeof window !== 'undefined';
       const refreshToken = await getCookie('refreshToken');
       if (response.status === 401) {
-        if (accessToken && refreshToken && isClient) {
-          await updateToken();
-          const result: ResponseAPIType<T> = await requestAPI(baseURL, url, option);
-          return result;
-        }
         if (retryWithoutToken) {
           const res = await fetch(baseURL + url, fetchOption);
           const result: ResponseAPIType<T> = await res.json();
           if (!res.ok) {
             throw new Error(result.message);
           }
+          return result;
+        }
+        if (accessToken && refreshToken && isClient) {
+          await updateToken();
+          const result: ResponseAPIType<T> = await requestAPI(baseURL, url, option);
           return result;
         }
       }

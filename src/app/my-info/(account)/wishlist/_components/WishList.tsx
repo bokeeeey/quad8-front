@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { deleteProductLikes, getProductLikes } from '@/api/likesAPI';
 import { Button, Dialog, LogoLoading, MyInfoEmptyCase, Pagination } from '@/components';
 import { QUERY_KEYS } from '@/constants/queryKey';
-import type { GetProductLikesParams, WishlistPageProps } from '@/types/likeType';
+import type { WishlistPageProps } from '@/types/likeType';
 import WishItem from './WishItem';
 
 import styles from './WishList.module.scss';
@@ -21,13 +21,13 @@ export default function WishList({ searchParams }: WishlistPageProps) {
   const [isDeleteSelectedOpen, setIsDeleteSelectedOpen] = useState(false);
   const [isDeleteAllOpen, setIsDeleteAllOpen] = useState(false);
 
-  const getProductLikesParams: GetProductLikesParams = {
-    page: searchParams.page || '0',
-    size: searchParams.size || '10',
+  const getProductLikesParams = {
+    page: searchParams.page ?? '0',
+    size: searchParams.size ?? '10',
   };
 
   const { data: likeList, isPending } = useQuery({
-    queryKey: [...QUERY_KEYS.LIKE.LISTS(), searchParams],
+    queryKey: ['like', 'lists', getProductLikesParams],
     queryFn: () => getProductLikes(getProductLikesParams),
   });
 
@@ -51,11 +51,7 @@ export default function WishList({ searchParams }: WishlistPageProps) {
 
   const productList = likeList?.likedProductsResponses;
 
-  if (productList?.length === 0) {
-    return <MyInfoEmptyCase message='찜한 상품이 없습니다.' />;
-  }
-
-  if (!likeList) {
+  if (productList?.length === 0 || !likeList) {
     return <MyInfoEmptyCase message='찜한 상품이 없습니다.' />;
   }
 
