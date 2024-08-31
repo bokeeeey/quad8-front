@@ -13,26 +13,14 @@ import styles from './MyPostCardList.module.scss';
 const cn = classNames.bind(styles);
 
 interface MyPostCardListProps {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Record<'sort' | 'page' | 'size', string>;
   initialData: CommunityPostCardDataType[];
 }
 
-interface ParamsType {
-  sort: string;
-  page?: string;
-  size?: string;
-}
-
 export default function MyPostCardList({ searchParams, initialData }: MyPostCardListProps) {
-  const getMyPostCardParams: ParamsType = {
-    sort: searchParams.sort || 'new',
-    page: searchParams.page || '0',
-    size: searchParams.size || '12',
-  };
-
   const { data: myPostData, isLoading } = useQuery({
     queryKey: ['myCustomReview', searchParams],
-    queryFn: () => getMyPosts(getMyPostCardParams),
+    queryFn: () => getMyPosts(searchParams),
   });
 
   const content = isLoading || !myPostData ? initialData : myPostData.content;

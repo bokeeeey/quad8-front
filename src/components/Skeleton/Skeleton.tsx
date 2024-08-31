@@ -27,13 +27,16 @@ export default function Skeleton({
   condition,
   isImage,
 }: SkeletonProps) {
-  const [isTimerCleanUp, setIsTimerCleanUp] = useState(false);
+  const [isFetch, setIsFetch] = useState(false);
   useEffect(() => {
-    setTimeout(() => {
-      setIsTimerCleanUp(true);
-    }, interval);
-  }, [interval]);
-  if ((isTimerCleanUp && !isPending) || condition === false) {
+    if (isPending) {
+      setIsFetch(true);
+      setTimeout(() => {
+        setIsFetch(false);
+      }, interval);
+    }
+  }, [interval, isPending]);
+  if (!isFetch || condition === false) {
     return children;
   }
   return (
