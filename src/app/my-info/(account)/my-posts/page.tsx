@@ -16,9 +16,9 @@ const cn = classNames.bind(styles);
 export default function MyPostsPage() {
   const params = useSearchParams();
   const initialParams = {
-    sort: params.get('sort') ?? 'new',
-    page: params.get('page') ?? '0',
-    size: params.get('size') ?? '12',
+    sort: params.get('sort') || 'new',
+    page: params.get('page') || '0',
+    size: params.get('size') || '12',
   };
 
   const { data: myPosts } = useQuery({

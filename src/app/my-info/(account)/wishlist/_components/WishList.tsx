@@ -22,8 +22,8 @@ export default function WishList({ searchParams }: WishlistPageProps) {
   const [isDeleteAllOpen, setIsDeleteAllOpen] = useState(false);
 
   const getProductLikesParams = {
-    page: searchParams.page ?? '0',
-    size: searchParams.size ?? '10',
+    page: searchParams.page || '0',
+    size: searchParams.size || '10',
   };
 
   const { data: likeList, isPending } = useQuery({
