@@ -31,12 +31,23 @@
 <br>
 
 ## [협업 관련 링크]
-* 📚 [notion](https://www.notion.so/Quad8-Codeit-Sprint-Part4-4-082738892f994e359fcdda15270959c3)
-* 🎨 [figma](https://www.figma.com/design/rih3oM4nsDTygQWnY1Zh03/%ED%82%A4%EB%93%9D_%EC%99%80%EC%9D%B4%EC%96%B4-%ED%94%84%EB%A0%88%EC%9E%84?node-id=0-1&t=uubT134Encs6xNRs-0)
 
-<br><br><br>
+개발 과정과 디자인 소스가 해당 링크에 더 자세하게 나와있습니다.
+<table>
+  <tbody>
+    <tr>
+      <td width="200" align="center"><img src="https://github.com/user-attachments/assets/b28b3396-cef7-4a0a-928c-6a035d8f8e70"></td>
+      <td width="200" align="center"><img src="https://github.com/user-attachments/assets/2d0cef2c-6815-4bd6-a4b8-26fa4e53c871"></td>
+    </tr>
+    <tr>
+      <td align="center"><a href="https://www.notion.so/Quad8-Codeit-Sprint-Part4-4-082738892f994e359fcdda15270959c3">Notion</td>
+      <td align="center"><a href="https://www.figma.com/design/rih3oM4nsDTygQWnY1Zh03/%ED%82%A4%EB%93%9D_%EC%99%80%EC%9D%B4%EC%96%B4-%ED%94%84%EB%A0%88%EC%9E%84?node-id=0-1&t=uubT134Encs6xNRs-0">Figma</td>
+    </tr>
+  </tbody>
+</table>
+<br>
 
-# <img height="30" src="https://github.com/Quad8/quad8-front/assets/110798291/a6ed5540-77a8-4cba-962d-49d143756499">  팀 소개
+# <img height="30" src="https://github.com/Quad8/quad8-front/assets/110798291/a6ed5540-77a8-4cba-962d-49d143756499">  프론트엔드 소개
 <table>
   <tbody>
     <tr>
@@ -150,16 +161,8 @@ https://github.com/user-attachments/assets/6e6b3c7e-8e96-4b60-8b75-dc216e76634a
 <table>
   <tbody>
     <tr>
-      <td width="700" height="500" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
       <td align="center" width="300">커스텀 키보드 만들기 페이지</td>
-    </tr>
-    <tr>
-     <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-      <td align="center"></td>
-    </tr>
-     <tr>
-      <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-       <td align="center"></td>
+      <td width="700" height="400" align="center"></td>
     </tr>
   </tbody>
 </table>
