@@ -102,13 +102,21 @@ https://github.com/user-attachments/assets/b74d1f09-6ee3-4656-981c-76b9f02f3e33
 
 </td>
     </tr>
-    <tr>
-      <td align="center">로그인 페이지</td>
-      <td width="700" height="400" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-    </tr>
      <tr>
        <td align="center">회원가입 페이지</td>
-       <td width="700" height="400" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
+       <td width="700" height="400" align="center">
+
+https://github.com/user-attachments/assets/dedeb598-9f34-4e94-af09-bb94b540ece8
+
+</td>
+    </tr>
+    <tr>
+      <td align="center">로그인 페이지</td>
+      <td width="700" height="400" align="center">
+
+https://github.com/user-attachments/assets/141223ce-addf-47b0-b625-694c754a739b
+
+</td>
     </tr>
   </tbody>
 </table>
@@ -119,16 +127,20 @@ https://github.com/user-attachments/assets/b74d1f09-6ee3-4656-981c-76b9f02f3e33
 <table>
   <tbody>
     <tr>
-     <td width="700" height="500" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
       <td align="center" width="300" >상품 목록 페이지</td>
+     <td width="700" height="400" align="center">
+
+https://github.com/user-attachments/assets/c645d5f5-af08-4736-9fb7-09c9f95571e5
+
+</td>
     </tr>
      <tr>
-       <td width="700" height="500" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-       <td align="center" width="300">상품 상세 페이지</td>
-    </tr><tr>
-       <td width="700" height="500" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-       <td align="center" width="300">상품 리뷰 페이지</td>
-    </tr>
+       <td align="center" width="300">상품 상세 및 리뷰 페이지</td>
+       <td width="700" height="400" align="center">
+
+https://github.com/user-attachments/assets/6e6b3c7e-8e96-4b60-8b75-dc216e76634a
+
+</td>
   </tbody>
 </table>
 
