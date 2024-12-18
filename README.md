@@ -6,22 +6,19 @@
 </div>
 <br><br>
 
-<table>
-  <tbody>
-    <tr>
-      <td>개발 기간</td>
-      <td>2024.05.18 ~ 2024.06.26</td>
-    </tr>
-    <tr>
-      <td>URL</td>
-      <td>https://keydeuk.com</td>
-    </tr>
-  </tbody>
-</table>
+## 🎞 Duration
 
-<br>
+2024.05.18 ~ 2024.06.26
+
+## ☀️ Project Topic
+
+복잡한 커스텀키보드 편리하게 구매 할 수 있도록 돕는 커머스사이트
+
+## 💻 Site
+https://keydeuk.com
+
   
-## [keydeuk 소개]
+## keydeuk 소개
 키득은 '키보드 득템'의 줄임말로 다양한 키보드 제품 뿐만 아니라 키캡, 스위치 등 다양한 부품을 구매할 수 있는 커머스 사이트입니다.
 '커머스 키보드에 대해 잘 알지 못하는 사람들도 쉽게 접근 가능한 사이트를 만들면 어떨까?'라는 생각에서 시작되어, 기획부터 디자인, 개발까지 모두 저희 quad-8 팀이 함께 힘을 합쳐 만든 프로젝트입니다.
 초보자들에 대한 진입 장벽을 낮추고, 커스텀 키보드에 대한 흥미를 가질 수 있도록 Three.js를 통해 사용자가 직접 3D 커스터마이징이 가능하도록 개발하여 키득만의 특성을 살렸습니다.
@@ -30,9 +27,9 @@
 
 <br>
 
-## [협업 관련 링크]
+## 협업 관련 링크
 
-개발 과정과 디자인 소스가 해당 링크에 더 자세하게 나와있습니다.
+좀 더 자세한 개발 과정과 디자인소스가 궁금하다면 아래 링크를 클릭해 확인해주세요!
 <table>
   <tbody>
     <tr>
@@ -157,12 +154,16 @@ https://github.com/user-attachments/assets/6e6b3c7e-8e96-4b60-8b75-dc216e76634a
 
 <br>
 
-### 3. 키보드 3D 커스터마이징 페이지
+### 3. 키보드 3D 커스터마이징 페이지 🌟
 <table>
   <tbody>
     <tr>
       <td align="center" width="300">커스텀 키보드 만들기 페이지</td>
-      <td width="700" height="400" align="center"></td>
+      <td width="700" height="400" align="center">
+
+https://github.com/user-attachments/assets/a8664419-1d7d-40d3-9eb1-5852376f100b
+
+</td>
     </tr>
   </tbody>
 </table>
@@ -173,16 +174,12 @@ https://github.com/user-attachments/assets/6e6b3c7e-8e96-4b60-8b75-dc216e76634a
 <table>
   <tbody>
     <tr>
-      <td width="700" height="500" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
       <td align="center" width="300">커뮤니티 페이지</td>
-    </tr>
-    <tr>
-     <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-      <td align="center">게시글 작성</td>
-    </tr>
-     <tr>
-      <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-       <td align="center">댓글 및 좋아요 기능</td>
+      <td width="700" height="400" align="center">
+
+https://github.com/user-attachments/assets/5fa4344f-ce49-4576-a027-34f0e0894dfb
+
+</td>
     </tr>
   </tbody>
 </table>
@@ -193,30 +190,62 @@ https://github.com/user-attachments/assets/6e6b3c7e-8e96-4b60-8b75-dc216e76634a
 <table>
   <tbody>
     <tr>
-      <td width="700" height="500" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
       <td align="center" width="300">내 정보 수정</td>
+      <td width="700" height="500" align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
     </tr>
     <tr>
-     <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
       <td align="center">배송지 관리</td>
+     <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
     </tr>
      <tr>
-      <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
        <td align="center">장바구니</td>
+      <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
     </tr>
     </tr>
      <tr>
+      <td align="center">주문 및 결제</td>
       <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-       <td align="center">주문 및 결제</td>
     </tr>
     <tr>
+      <td align="center">내 게시글 조회</td>
       <td width=330 height=330 align="center"><img src="https://github.com/Quad8/quad8-front/assets/110798291/c3189734-4015-4373-8ce8-a83d4554e8a7" width="200"></td>
-       <td align="center">내 게시글 조회</td>
     </tr>
   </tbody>
 </table>
 
-<br><br><br>
+<br>
+
+### 6. 이벤트 페이지 (추가기능)
+<table>
+  <tbody>
+    <tr>
+      <td align="center" width="300">이벤트 페이지</td>
+      <td width="700" height="400" align="center">
+
+https://github.com/user-attachments/assets/431bdd96-34fd-4666-a92c-0669f80f3b5b
+
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+### 7. 알림 (추가기능)
+<table>
+  <tbody>
+    <tr>
+      <td align="center" width="300">쿠폰발급 및 구매 완료 알림 기능</td>
+      <td width="700" height="400" align="center">
+
+https://github.com/user-attachments/assets/cd4012e4-265e-46ca-9b35-86c5c2802445
+
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
 
 <!-- 
 
